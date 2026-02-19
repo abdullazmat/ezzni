@@ -2,7 +2,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { 
     Search, Eye, ArrowUpRight, 
-    Star, ChevronDown, User, Filter, ArrowLeft, X
+    Star, ChevronDown, User, ArrowLeft, X
 } from 'lucide-react';
 import { 
     RiderDetailsContent, 
@@ -192,7 +192,7 @@ export const Riders = () => {
     };
 
     // Handler: suspend rider
-    const handleSuspendConfirm = (reason: string, hours: string) => {
+    const handleSuspendConfirm = (_reason: string, _hours: string) => {
         setShowSuspendModal(false);
         closeModal();
         setShowSuspensionBanner(true);

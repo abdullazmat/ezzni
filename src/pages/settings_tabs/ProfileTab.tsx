@@ -1,5 +1,4 @@
-import { useState } from 'react';
-import { Camera, Eye, EyeOff, CheckCircle, Shield } from 'lucide-react';
+import { Camera, Eye, Shield } from 'lucide-react';
 
 export const ProfileTab = () => {
     return (

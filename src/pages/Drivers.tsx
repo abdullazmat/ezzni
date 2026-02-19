@@ -49,13 +49,7 @@ interface Driver {
     };
 }
 
-interface TripCommon {
-    rating: number;
-    customerName: string;
-    date: string;
-    fare: string;
-    status: 'Completed' | 'Cancelled';
-}
+
 
 // --- Mock Data ---
 

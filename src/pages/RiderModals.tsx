@@ -1,7 +1,7 @@
 
 import { useState } from 'react';
 import { 
-    ArrowLeft, Star, MapPin, 
+    Star, MapPin, 
     CheckCircle2, X, ChevronDown
 } from 'lucide-react';
 
@@ -317,7 +317,7 @@ export const SpendingContent = () => {
                 </div>
                 {/* Month labels */}
                 <div style={{ display: 'flex', paddingLeft: '40px', marginTop: '8px' }}>
-                    {months.map((m, i) => (
+                    {months.map((m) => (
                         <div key={m} style={{ flex: 1, textAlign: 'center', fontSize: '10px', color: '#9ca3af' }}>{m}</div>
                     ))}
                 </div>
