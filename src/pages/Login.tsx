@@ -41,6 +41,15 @@ export const Login = ({ onLogin, onForgotPassword }: LoginProps) => {
     e.preventDefault();
     if (validate()) {
       setIsLoading(true);
+      // Hardcoded check for demo purposes (Vercel deployment)
+      if (email === 'admin@ezzni.com' && password === 'admin123') {
+        localStorage.setItem('token', 'demo-token');
+        localStorage.setItem('user', JSON.stringify({ name: 'Admin User', email: 'admin@ezzni.com' }));
+        onLogin();
+        setIsLoading(false);
+        return;
+      }
+
       try {
         const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/auth/login`, {
           method: 'POST',
