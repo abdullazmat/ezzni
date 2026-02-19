@@ -1,0 +1,362 @@
+import { useState, useMemo, useEffect, useRef } from 'react';
+import { 
+  ArrowLeft, 
+  Send, 
+  Paperclip, 
+  Smile, 
+  MoreVertical, 
+  Star 
+} from 'lucide-react';
+
+interface UserInfo {
+  name: string;
+  id: string;
+  type: string;
+  phone: string;
+  city: string;
+  email: string;
+  avatar: string;
+}
+
+interface Message {
+  id: string;
+  sender: 'user' | 'admin';
+  text: string;
+  time: string;
+}
+
+interface ComplaintDetail {
+  id: string;
+  ticketId: string;
+  tripId: string;
+  status: 'Pending' | 'In Progress' | 'New' | 'On Hold' | 'Escalated' | 'Resolved' | 'Closed';
+  dateTime: string;
+  category: string;
+  description: string;
+  user: UserInfo;
+  assignedTo?: string;
+  internalNotes?: string;
+  messages: Message[];
+}
+
+interface SupportModalsProps {
+  isOpen: boolean;
+  onClose: () => void;
+  complaint: ComplaintDetail | null;
+  onUpdate: (updatedComplaint: ComplaintDetail) => void;
+}
+
+export const ComplaintDetailsModal = ({ isOpen, onClose, complaint, onUpdate }: SupportModalsProps) => {
+  if (!isOpen || !complaint) return null;
+
+  const [status, setStatus] = useState(complaint.status);
+  const [assignedTo, setAssignedTo] = useState(complaint.assignedTo || '');
+  const [internalNotes, setInternalNotes] = useState(complaint.internalNotes || '');
+  const [messageInput, setMessageInput] = useState('');
+  
+  // Local state for instant feedback on messages within the modal
+  const [localMessages, setLocalMessages] = useState<Message[]>(complaint.messages);
+  const chatEndRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    setLocalMessages(complaint.messages);
+  }, [complaint]);
+
+  useEffect(() => {
+    chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [localMessages]);
+
+  const statusColors: Record<string, string> = {
+    'New': '#FEF2F2',
+    'Pending': '#FFF7ED',
+    'In Progress': '#EFF6FF',
+    'On Hold': '#F3F4F6',
+    'Escalated': '#FAF5FF',
+    'Resolved': '#F0FDF4',
+    'Closed': '#F9FAFB'
+  };
+
+  const statusTextColors: Record<string, string> = {
+    'New': '#EF4444',
+    'Pending': '#F97316',
+    'In Progress': '#3B82F6',
+    'On Hold': '#6B7280',
+    'Escalated': '#A855F7',
+    'Resolved': '#10B981',
+    'Closed': '#374151'
+  };
+
+  const handleUpdate = () => {
+    onUpdate({
+      ...complaint,
+      status,
+      assignedTo,
+      internalNotes,
+      messages: localMessages // Sync back the chat
+    });
+    onClose();
+  };
+
+  const handleSendMessage = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!messageInput.trim()) return;
+
+    const newMessage: Message = {
+      id: Date.now().toString(),
+      sender: 'admin',
+      text: messageInput,
+      time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false })
+    };
+
+    const updatedMessages = [...localMessages, newMessage];
+    setLocalMessages(updatedMessages);
+    setMessageInput('');
+    
+    // Also notify parent through update to keep stats/lists in sync
+    onUpdate({
+      ...complaint,
+      messages: updatedMessages
+    });
+  };
+
+  return (
+    <div className="modal-overlay" style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, backdropFilter: 'blur(4px)' }} onClick={onClose}>
+      <div className="modal-content" onClick={e => e.stopPropagation()} style={{ width: '1000px', maxWidth: '95vw', padding: 0, borderRadius: '28px', overflow: 'hidden', backgroundColor: 'white', display: 'flex', flexDirection: 'column', height: '85vh' }}>
+        <div style={{ display: 'flex', flex: 1, minHeight: 0 }}>
+          {/* Left Side: Details */}
+          <div style={{ flex: 1, padding: '2.5rem', overflowY: 'auto', borderRight: '1px solid #f3f4f6' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem', marginBottom: '2rem' }}>
+              <button onClick={onClose} style={{ border: '1px solid #e5e7eb', background: 'white', cursor: 'pointer', padding: '0.6rem', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <ArrowLeft size={22} />
+              </button>
+              <div>
+                <h2 style={{ margin: 0, fontSize: '1.75rem', fontWeight: '800', color: '#111827' }}>Complaint Details - {complaint.ticketId}</h2>
+                <p style={{ margin: '0.25rem 0 0', color: '#6B7280', fontSize: '0.925rem' }}>Complete complaint information and management tools</p>
+              </div>
+            </div>
+
+            {/* User Information Box */}
+            <div style={{ marginBottom: '2.5rem' }}>
+              <h3 style={{ fontSize: '1.125rem', fontWeight: '800', marginBottom: '1rem', color: '#111827' }}>User Information</h3>
+              <div style={{ 
+                backgroundColor: '#F9FAFB', 
+                borderRadius: '24px', 
+                padding: '1.5rem', 
+                display: 'flex', 
+                gap: '1.75rem', 
+                alignItems: 'center', 
+                border: '1px solid #f3f4f6',
+                boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.02)'
+              }}>
+                <div style={{ position: 'relative', flexShrink: 0 }}>
+                  <img src={complaint.user.avatar} alt={complaint.user.name} style={{ width: '96px', height: '96px', borderRadius: '50%', objectFit: 'cover', border: '4px solid white', boxShadow: '0 8px 16px -4px rgba(0,0,0,0.1)' }} />
+                  <div style={{ position: 'absolute', bottom: -2, right: -2, backgroundColor: 'white', border: '1px solid #e5e7eb', borderRadius: '14px', padding: '4px 10px', fontSize: '0.8rem', display: 'flex', alignItems: 'center', gap: '4px', fontWeight: '800', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.05)' }}>
+                    <Star size={14} fill="#F59E0B" color="#F59E0B" /> 4.8
+                  </div>
+                </div>
+                
+                <div style={{ flex: 1, display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1.25rem 1rem' }}>
+                  <div style={{ minWidth: 0 }}>
+                    <label style={{ color: '#9CA3AF', fontSize: '10px', display: 'block', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '4px' }}>Full Name</label>
+                    <p style={{ margin: 0, fontWeight: '700', color: '#111827', fontSize: '14px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{complaint.user.name}</p>
+                  </div>
+                  <div style={{ minWidth: 0 }}>
+                    <label style={{ color: '#9CA3AF', fontSize: '10px', display: 'block', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '4px' }}>Phone</label>
+                    <p style={{ margin: 0, fontWeight: '700', color: '#111827', fontSize: '14px' }}>{complaint.user.phone}</p>
+                  </div>
+                  <div style={{ minWidth: 0 }}>
+                    <label style={{ color: '#9CA3AF', fontSize: '10px', display: 'block', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '4px' }}>Account ID</label>
+                    <p style={{ margin: 0, fontWeight: '700', color: '#111827', fontSize: '14px' }}>{complaint.user.id}</p>
+                  </div>
+                  <div style={{ minWidth: 0 }}>
+                    <label style={{ color: '#9CA3AF', fontSize: '10px', display: 'block', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '4px' }}>User Type</label>
+                    <p style={{ margin: 0, fontWeight: '800', color: '#10B981', textTransform: 'uppercase', fontSize: '12px' }}>{complaint.user.type}</p>
+                  </div>
+                  <div style={{ minWidth: 0 }}>
+                    <label style={{ color: '#9CA3AF', fontSize: '10px', display: 'block', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '4px' }}>City</label>
+                    <p style={{ margin: 0, fontWeight: '700', color: '#111827', fontSize: '14px' }}>{complaint.user.city}</p>
+                  </div>
+                  <div style={{ minWidth: 0 }}>
+                    <label style={{ color: '#9CA3AF', fontSize: '10px', display: 'block', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '4px' }}>Email</label>
+                    <p style={{ margin: 0, fontWeight: '700', color: '#111827', fontSize: '14px', wordBreak: 'break-all', display: '-webkit-box', WebkitLineClamp: 1, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{complaint.user.email}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Complaint Info */}
+            <div style={{ marginBottom: '2.5rem' }}>
+              <h3 style={{ fontSize: '1.125rem', fontWeight: '800', marginBottom: '1rem', color: '#111827' }}>Complaint Details</h3>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '1rem', backgroundColor: '#fff', border: '1px solid #f3f4f6', borderRadius: '20px', padding: '1.5rem', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.02)' }}>
+                <div>
+                  <label style={{ color: '#9CA3AF', fontSize: '10px', fontWeight: '800', textTransform: 'uppercase' }}>Ticket ID</label>
+                  <p style={{ fontWeight: '800', margin: '4px 0 0', color: '#111827', fontSize: '13px' }}>{complaint.ticketId}</p>
+                </div>
+                <div>
+                  <label style={{ color: '#9CA3AF', fontSize: '10px', fontWeight: '800', textTransform: 'uppercase' }}>Trip ID</label>
+                  <p style={{ fontWeight: '800', margin: '4px 0 0', color: '#111827', fontSize: '13px' }}>{complaint.tripId}</p>
+                </div>
+                <div>
+                  <label style={{ color: '#9CA3AF', fontSize: '10px', fontWeight: '800', textTransform: 'uppercase' }}>Status</label>
+                  <div style={{ 
+                    backgroundColor: statusColors[complaint.status], 
+                    color: statusTextColors[complaint.status],
+                    padding: '4px 12px',
+                    borderRadius: '8px',
+                    fontSize: '11px',
+                    fontWeight: '800',
+                    display: 'inline-block',
+                    marginTop: '4px'
+                  }}>
+                    {complaint.status}
+                  </div>
+                </div>
+                <div>
+                  <label style={{ color: '#9CA3AF', fontSize: '10px', fontWeight: '800', textTransform: 'uppercase' }}>Date & Time</label>
+                  <p style={{ fontWeight: '700', margin: '4px 0 0', color: '#111827', fontSize: '12px' }}>{complaint.dateTime}</p>
+                </div>
+                <div>
+                  <label style={{ color: '#9CA3AF', fontSize: '10px', fontWeight: '800', textTransform: 'uppercase' }}>Complain</label>
+                  <p style={{ fontWeight: '700', margin: '4px 0 0', display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', color: '#111827' }}>
+                    <span style={{ color: '#10B981', fontWeight: '900', fontSize: '16px' }}>?</span> {complaint.category}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Description Area */}
+            <div style={{ marginBottom: '2.5rem' }}>
+              <h3 style={{ fontSize: '1.125rem', fontWeight: '800', marginBottom: '1rem', color: '#111827' }}>Complaint Description</h3>
+              <div style={{ backgroundColor: '#F9FAFB', borderRadius: '24px', padding: '1.75rem', color: '#4B5563', lineHeight: '1.7', fontSize: '15px', border: '1px solid #f3f4f6' }}>
+                {complaint.description}
+              </div>
+            </div>
+
+            {/* Management Section */}
+            <div>
+              <h3 style={{ fontSize: '1.125rem', fontWeight: '800', marginBottom: '1rem', color: '#111827' }}>Status Management</h3>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', marginBottom: '1.5rem' }}>
+                <div>
+                  <label style={{ fontSize: '13px', fontWeight: '700', display: 'block', marginBottom: '0.75rem', color: '#374151' }}>Update Status</label>
+                  <select 
+                    value={status}
+                    onChange={(e) => setStatus(e.target.value as any)}
+                    style={{ width: '100%', padding: '1rem 1.25rem', borderRadius: '16px', border: '1px solid #e5e7eb', outline: 'none', backgroundColor: '#fff', fontSize: '14px', fontWeight: '600', cursor: 'pointer' }}
+                  >
+                    <option value="New">New</option>
+                    <option value="Pending">Pending</option>
+                    <option value="In Progress">In Progress</option>
+                    <option value="On Hold">On Hold</option>
+                    <option value="Escalated">Escalated</option>
+                    <option value="Resolved">Resolved</option>
+                    <option value="Closed">Closed</option>
+                  </select>
+                </div>
+                <div>
+                  <label style={{ fontSize: '13px', fontWeight: '700', display: 'block', marginBottom: '0.75rem', color: '#374151' }}>Assign Agent</label>
+                  <select 
+                    value={assignedTo}
+                    onChange={(e) => setAssignedTo(e.target.value)}
+                    style={{ width: '100%', padding: '1rem 1.25rem', borderRadius: '16px', border: '1px solid #e5e7eb', outline: 'none', backgroundColor: '#fff', fontSize: '14px', fontWeight: '600', cursor: 'pointer' }}
+                  >
+                    <option value="">Select Team Member</option>
+                    <option value="Ali">Ali</option>
+                    <option value="Ahmed">Ahmed</option>
+                    <option value="Sarah">Sarah</option>
+                  </select>
+                </div>
+              </div>
+              <div style={{ marginBottom: '2rem' }}>
+                <label style={{ fontSize: '13px', fontWeight: '700', display: 'block', marginBottom: '0.75rem', color: '#374151' }}>Internal Admin Notes</label>
+                <textarea 
+                  value={internalNotes}
+                  onChange={(e) => setInternalNotes(e.target.value)}
+                  placeholder="Only admins can see these notes..."
+                  style={{ width: '100%', padding: '1.25rem', borderRadius: '20px', border: '1px solid #e5e7eb', height: '120px', resize: 'none', outline: 'none', fontSize: '14px', lineHeight: '1.6' }}
+                />
+              </div>
+              <div style={{ display: 'flex', gap: '1rem' }}>
+                <button 
+                  onClick={() => {}}
+                  style={{ flex: 1, padding: '1.1rem', borderRadius: '16px', border: '1px solid #374151', background: 'white', fontWeight: '800', cursor: 'pointer', fontSize: '14px', transition: 'all 0.2s' }}
+                >
+                  History & Logs
+                </button>
+                <button 
+                  onClick={handleUpdate}
+                  style={{ flex: 1.5, padding: '1.1rem', borderRadius: '16px', border: 'none', background: '#10B981', color: 'white', fontWeight: '800', cursor: 'pointer', fontSize: '14px', boxShadow: '0 8px 16px -4px rgba(16, 185, 129, 0.3)', transition: 'all 0.2s' }}
+                >
+                  Update & Close Ticket
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Right Side: Chat Sidebar */}
+          <div style={{ width: '400px', display: 'flex', flexDirection: 'column', backgroundColor: 'white' }}>
+            {/* Chat Header */}
+            <div style={{ padding: '1.5rem 2rem', borderBottom: '1px solid #f3f4f6', display: 'flex', alignItems: 'center', gap: '1rem' }}>
+              <div style={{ position: 'relative', flexShrink: 0 }}>
+                <img src={complaint.user.avatar} alt="" style={{ width: '48px', height: '48px', borderRadius: '50%', objectFit: 'cover', border: '2px solid #F0FDF4' }} />
+                <div style={{ position: 'absolute', bottom: '2px', right: '2px', width: '12px', height: '12px', backgroundColor: '#10B981', borderRadius: '50%', border: '2px solid white' }}></div>
+              </div>
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <h4 style={{ margin: 0, fontSize: '15px', fontWeight: '800', color: '#111827', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{complaint.user.name}</h4>
+                <p style={{ margin: 0, fontSize: '11px', color: '#10B981', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '0.05em' }}>{complaint.user.type}</p>
+              </div>
+              <button style={{ border: 'none', background: 'none', cursor: 'pointer', padding: '0.5rem' }}>
+                <MoreVertical size={20} color="#9CA3AF" />
+              </button>
+            </div>
+
+            {/* Chat Messages */}
+            <div style={{ flex: 1, padding: '2rem', overflowY: 'auto', backgroundColor: '#f9fafb', display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+              <div style={{ alignSelf: 'center', backgroundColor: 'white', padding: '6px 16px', borderRadius: '20px', fontSize: '11px', color: '#9CA3AF', border: '1px solid #e5e7eb', fontWeight: '600' }}>Today</div>
+              
+              {localMessages.map(msg => (
+                <div key={msg.id} style={{ alignSelf: msg.sender === 'user' ? 'flex-start' : 'flex-end', maxWidth: '85%' }}>
+                   <div style={{ 
+                     backgroundColor: msg.sender === 'user' ? 'white' : '#10B981', 
+                     color: msg.sender === 'user' ? '#374151' : 'white', 
+                     padding: '1rem 1.25rem', 
+                     borderRadius: '18px', 
+                     borderBottomLeftRadius: msg.sender === 'user' ? 0 : '18px',
+                     borderBottomRightRadius: msg.sender === 'admin' ? 0 : '18px',
+                     boxShadow: '0 1px 3px rgba(0,0,0,0.05)', 
+                     border: msg.sender === 'user' ? '1px solid #f3f4f6' : 'none' 
+                   }}>
+                     <p style={{ margin: 0, fontSize: '14px', lineHeight: '1.5' }}>{msg.text}</p>
+                   </div>
+                   <span style={{ fontSize: '10px', color: '#9CA3AF', marginTop: '6px', textAlign: msg.sender === 'user' ? 'left' : 'right', display: 'block', fontWeight: '600' }}>{msg.time}</span>
+                </div>
+              ))}
+              <div ref={chatEndRef} />
+            </div>
+
+            {/* Chat Input */}
+            <div style={{ padding: '1.5rem 2rem', borderTop: '1px solid #f3f4f6' }}>
+              <form onSubmit={handleSendMessage} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', backgroundColor: '#F3F4F6', padding: '0.6rem 1.2rem', borderRadius: '30px' }}>
+                <button type="button" style={{ border: 'none', background: 'none', color: '#9CA3AF', cursor: 'pointer', padding: '0.4rem' }}>
+                  <Paperclip size={20} />
+                </button>
+                <input 
+                  type="text" 
+                  value={messageInput}
+                  onChange={(e) => setMessageInput(e.target.value)}
+                  placeholder="Type your message..." 
+                  style={{ flex: 1, border: 'none', background: 'none', outline: 'none', padding: '0.6rem 0', fontSize: '0.95rem' }}
+                />
+                <button type="button" style={{ border: 'none', background: 'none', color: '#9CA3AF', cursor: 'pointer', padding: '0.4rem' }}>
+                  <Smile size={20} />
+                </button>
+                <button type="submit" style={{ border: 'none', background: '#10B981', color: 'white', width: '40px', height: '40px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', boxShadow: '0 4px 6px -1px rgba(16, 185, 129, 0.3)', flexShrink: 0 }}>
+                  <Send size={18} />
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
