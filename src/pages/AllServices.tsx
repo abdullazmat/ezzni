@@ -1,27 +1,25 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { 
-  Car, 
-  Bike, 
-  Plane, 
   ArrowUpRight, 
   Eye, 
   CheckCircle2, 
-  XCircle, 
-  Zap, 
-  Clock, 
   ChevronLeft,
   Star,
-  Package,
-  Users
 } from 'lucide-react';
 
-interface ServiceStat {
-  label: string;
-  value: string;
-  trend?: string;
-  color: string;
-  icon: React.ReactNode;
-}
+// Specialized Icons
+import allServicesIcon from '../assets/icons/All Services.png';
+import completedIcon from '../assets/icons/completed.png';
+import cancelledIcon from '../assets/icons/cancelled.png';
+import activeAssignmentsIcon from '../assets/icons/Active Assignments.png';
+import carIcon from '../assets/icons/car.png';
+import bikeIcon from '../assets/icons/bike.png';
+import taxiIcon from '../assets/icons/taxi.png';
+import reservationIcon from '../assets/icons/Reservation.png';
+import deliveryServicesIcon from '../assets/icons/Delivery Services.png';
+import rentalCompaniesIcon from '../assets/icons/Rental Companies.png';
+import ridersIcon from '../assets/icons/Riders.png';
+
 
 interface ServiceMember {
   id: string;
@@ -35,7 +33,7 @@ interface ServiceMember {
   growth: string;
   responseTime: string;
   lastUpdated: string;
-  icon: React.ReactNode;
+  icon: string;
   description: string;
   rating: number;
   completionRate: string;
@@ -50,14 +48,15 @@ interface ServiceMember {
 }
 
 export const AllServices = () => {
+  const [activeStat, setActiveStat] = useState<string>('Enabled');
   const [selectedService, setSelectedService] = useState<ServiceMember | null>(null);
   const [activeChart, setActiveChart] = useState<'revenue' | 'growth' | null>(null);
 
-  const stats: ServiceStat[] = [
-    { label: 'Total Services', value: '12', color: '#ffffff', icon: <Package size={20} color="#22c55e" /> },
-    { label: 'Enabled', value: '30', color: '#22c55e', icon: <CheckCircle2 size={20} color="#ffffff" /> },
-    { label: 'Disabled', value: '32', color: '#ffffff', icon: <XCircle size={20} color="#22c55e" /> },
-    { label: 'Active Requests', value: '348', color: '#ffffff', icon: <Zap size={20} color="#22c55e" /> },
+  const stats = [
+    { label: 'Total Services', value: '12', icon: allServicesIcon },
+    { label: 'Enabled', value: '30', icon: completedIcon },
+    { label: 'Disabled', value: '32', icon: cancelledIcon },
+    { label: 'Active Requests', value: '348', icon: activeAssignmentsIcon },
   ];
 
   const services: ServiceMember[] = [
@@ -73,7 +72,7 @@ export const AllServices = () => {
       growth: '+12%',
       responseTime: '3.2 min',
       lastUpdated: '2025-01-10 15:30',
-      icon: <Car size={24} color="#111827" />,
+      icon: carIcon,
       description: 'Standard point-to-point rides within the city for daily transportation needs',
       rating: 4.7,
       completionRate: '88.1%',
@@ -93,7 +92,7 @@ export const AllServices = () => {
       growth: '+12%',
       responseTime: '3.2 min',
       lastUpdated: '2025-01-10 15:30',
-      icon: <Bike size={24} color="#111827" />,
+      icon: bikeIcon,
       description: 'Quick motorcycle rides to beat traffic in congested urban areas',
       rating: 4.5,
       completionRate: '92.4%',
@@ -113,7 +112,7 @@ export const AllServices = () => {
       growth: '+12%',
       responseTime: '3.2 min',
       lastUpdated: '2025-01-10 15:30',
-      icon: <Plane size={24} color="#111827" />,
+      icon: taxiIcon,
       description: 'Reliable airport transfers with luggage assistance and flight tracking',
       rating: 4.9,
       completionRate: '98.5%',
@@ -133,7 +132,7 @@ export const AllServices = () => {
       growth: '+12%',
       responseTime: '3.2 min',
       lastUpdated: '2025-01-10 15:30',
-      icon: <Clock size={24} color="#111827" />,
+      icon: reservationIcon,
       description: 'Advanced ride scheduling for planned trips and appointments',
       rating: 4.8,
       completionRate: '95.2%',
@@ -153,7 +152,7 @@ export const AllServices = () => {
       growth: '+12%',
       responseTime: '3.2 min',
       lastUpdated: '2025-01-10 15:30',
-      icon: <Car size={24} color="#111827" />, // Should be specialized icon but Car works
+      icon: carIcon,
       description: 'Long-distance travel between different cities with comfort options',
       rating: 4.6,
       completionRate: '90.7%',
@@ -173,7 +172,7 @@ export const AllServices = () => {
       growth: '+12%',
       responseTime: '3.2 min',
       lastUpdated: '2025-01-10 15:30',
-      icon: <Car size={24} color="#111827" />,
+      icon: taxiIcon,
       description: 'Book traditional licensed taxis through the platform',
       rating: 4.3,
       completionRate: '85.4%',
@@ -193,7 +192,7 @@ export const AllServices = () => {
       growth: '+12%',
       responseTime: '3.2 min',
       lastUpdated: '2025-01-10 15:30',
-      icon: <Package size={24} color="#111827" />,
+      icon: deliveryServicesIcon,
       description: 'On-demand package delivery and courier services',
       rating: 4.7,
       completionRate: '94.2%',
@@ -213,7 +212,7 @@ export const AllServices = () => {
       growth: '0%',
       responseTime: 'N/A',
       lastUpdated: '2025-01-10 15:30',
-      icon: <Car size={24} color="#9ca3af" />,
+      icon: rentalCompaniesIcon,
       description: 'Self-drive car rental for flexible periods',
       rating: 4.4,
       completionRate: '0%',
@@ -233,7 +232,7 @@ export const AllServices = () => {
       growth: '0%',
       responseTime: 'N/A',
       lastUpdated: '2025-01-10 15:30',
-      icon: <Users size={24} color="#9ca3af" />,
+      icon: ridersIcon,
       description: 'Carpooling with other passengers heading in the same direction',
       rating: 4.2,
       completionRate: '0%',
@@ -258,8 +257,8 @@ export const AllServices = () => {
     }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1.25rem' }}>
         <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
-          <div style={{ backgroundColor: '#f3f4f6', padding: '0.6rem', borderRadius: '0.75rem' }}>
-            {service.icon}
+          <div style={{ padding: '0px', borderRadius: '0.75rem' }}>
+            <img src={service.icon} alt="" style={{ width: '48px', height: '48px', objectFit: 'contain' }} />
           </div>
           <div>
             <h4 style={{ margin: 0, fontSize: '1rem', fontWeight: '800', color: '#111827' }}>{service.name}</h4>
@@ -281,7 +280,7 @@ export const AllServices = () => {
             style={{ 
               width: '44px', 
               height: '24px', 
-              backgroundColor: service.status === 'Enabled' ? '#22c55e' : '#e5e7eb', 
+              backgroundColor: service.status === 'Enabled' ? '#38AC57' : '#e5e7eb', 
               borderRadius: '12px', 
               position: 'relative', 
               cursor: 'pointer' 
@@ -320,7 +319,7 @@ export const AllServices = () => {
 
       <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', color: '#6b7280', fontWeight: '600', marginBottom: '0.5rem' }}>
         <span onClick={(e) => { e.stopPropagation(); setActiveChart('revenue'); }} style={{ cursor: 'pointer' }}>Revenue: <strong style={{ color: '#111827' }}>{service.revenue}</strong></span>
-        <span onClick={(e) => { e.stopPropagation(); setActiveChart('growth'); }} style={{ cursor: 'pointer' }}>Growth: <strong style={{ color: '#22c55e' }}>{service.growth}</strong></span>
+        <span onClick={(e) => { e.stopPropagation(); setActiveChart('growth'); }} style={{ cursor: 'pointer' }}>Growth: <strong style={{ color: '#38AC57' }}>{service.growth}</strong></span>
         <span>Resp. Time: <strong style={{ color: '#111827' }}>{service.responseTime}</strong></span>
       </div>
 
@@ -329,8 +328,8 @@ export const AllServices = () => {
         <div 
           className={service.status === 'Enabled' ? 'pulsate' : ''}
           style={{ 
-            backgroundColor: service.status === 'Enabled' ? '#f0fdf4' : '#fef2f2', 
-            color: service.status === 'Enabled' ? '#22c55e' : '#ef4444', 
+            backgroundColor: service.status === 'Enabled' ? '#eef7f0' : '#fef2f2', 
+            color: service.status === 'Enabled' ? '#38AC57' : '#ef4444', 
             fontSize: '0.65rem', 
             fontWeight: '700', 
             padding: '0.2rem 0.5rem', 
@@ -340,7 +339,7 @@ export const AllServices = () => {
             gap: '0.3rem'
           }}
         >
-          {service.status === 'Enabled' && <div style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: '#22c55e' }} />}
+          {service.status === 'Enabled' && <div style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: '#38AC57' }} />}
           {service.status === 'Enabled' ? 'Live' : 'Paused'}
         </div>
       </div>
@@ -364,7 +363,7 @@ export const AllServices = () => {
           </button>
           <button 
             onClick={() => alert('Opening Global Service Settings...')}
-            style={{ backgroundColor: '#22c55e', color: 'white', border: 'none', padding: '0.75rem 2rem', borderRadius: '2rem', fontWeight: '700', fontSize: '0.9rem', cursor: 'pointer', boxShadow: '0 4px 6px -1px rgba(34, 197, 94, 0.2)' }}
+            style={{ backgroundColor: '#38AC57', color: 'white', border: 'none', padding: '0.75rem 2rem', borderRadius: '2rem', fontWeight: '700', fontSize: '0.9rem', cursor: 'pointer', boxShadow: '0 4px 6px -1px rgba(56, 172, 87, 0.2)' }}
           >
             Global Settings
           </button>
@@ -373,44 +372,60 @@ export const AllServices = () => {
 
       {/* Stats Cards */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.5rem', marginBottom: '3rem' }}>
-        {stats.map((stat, idx) => (
-          <div key={idx} style={{ 
-            backgroundColor: stat.color, 
-            color: stat.color === '#22c55e' ? 'white' : '#111827',
-            padding: '1.75rem', 
-            borderRadius: '1.5rem',
-            border: stat.color === '#ffffff' ? '1px solid #e5e7eb' : 'none',
-            boxShadow: '0 4px 6px -1px rgba(0,0,0,0.05)',
-            position: 'relative'
-          }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.25rem' }}>
-              <div style={{ 
-                backgroundColor: stat.color === '#22c55e' ? 'rgba(255,255,255,0.2)' : '#f0fdf4', 
-                padding: '0.5rem', 
-                borderRadius: '0.75rem' 
-              }}>
-                {stat.icon}
+        {stats.map((stat, idx) => {
+          const isActive = activeStat === stat.label;
+          return (
+            <div 
+              key={idx} 
+              onClick={() => setActiveStat(stat.label)}
+              style={{ 
+                backgroundColor: isActive ? '#38AC57' : '#ffffff', 
+                color: isActive ? 'white' : '#111827',
+                padding: '1.75rem', 
+                borderRadius: '1.5rem',
+                border: isActive ? 'none' : '1px solid #e5e7eb',
+                boxShadow: isActive ? '0 10px 15px -3px rgba(56, 172, 87, 0.2)' : '0 4px 6px -1px rgba(0,0,0,0.05)',
+                position: 'relative',
+                cursor: 'pointer',
+                transition: 'all 0.2s ease',
+                transform: isActive ? 'scale(1.02)' : 'none'
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.25rem' }}>
+                <div style={{ 
+                  padding: '0px', 
+                  borderRadius: '0.75rem',
+                  backgroundColor: isActive ? 'rgba(255, 255, 255, 0.2)' : 'transparent',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  width: '32px',
+                  height: '32px'
+                }}>
+                  <img src={stat.icon} alt="" style={{ width: '24px', height: '24px', objectFit: 'contain' }} />
+                </div>
+                <span style={{ fontSize: '0.95rem', fontWeight: '700' }}>{stat.label}</span>
               </div>
-              <span style={{ fontSize: '0.95rem', fontWeight: '700' }}>{stat.label}</span>
+              <div style={{ fontSize: '3rem', fontWeight: '900' }}>{stat.value}</div>
+              <div style={{ 
+                position: 'absolute', 
+                right: '1.5rem', 
+                bottom: '1.5rem',
+                backgroundColor: isActive ? '#111827' : '#38AC57',
+                color: 'white',
+                width: '36px',
+                height: '36px',
+                borderRadius: '50%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                transition: 'all 0.2s ease'
+              }}>
+                <ArrowUpRight size={20} />
+              </div>
             </div>
-            <div style={{ fontSize: '3rem', fontWeight: '900' }}>{stat.value}</div>
-            <div style={{ 
-              position: 'absolute', 
-              right: '1.5rem', 
-              bottom: '1.5rem',
-              backgroundColor: stat.color === '#22c55e' ? '#111827' : '#22c55e',
-              color: 'white',
-              width: '36px',
-              height: '36px',
-              borderRadius: '50%',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center'
-            }}>
-              <ArrowUpRight size={20} />
-            </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
       {/* Enabled Services Grid */}
@@ -450,8 +465,8 @@ export const AllServices = () => {
               </div>
               {/* Bars */}
               {[450, 320, 280, 500, 320, 250, 500, 350, 300, 450, 250].map((h, i) => (
-                <div key={i} style={{ flex: 1, backgroundColor: '#22c55e', height: `${(h/600)*100}%`, borderRadius: '4px 4px 0 0', position: 'relative', transition: 'height 0.5s ease-out' }}>
-                  {i === 10 && <div style={{ position: 'absolute', top: '-30px', left: '50%', transform: 'translateX(-50%)', backgroundColor: '#22c55e', color: 'white', padding: '2px 8px', borderRadius: '4px', fontSize: '0.65rem', fontWeight: 'bold' }}>300</div>}
+                <div key={i} style={{ flex: 1, backgroundColor: '#38AC57', height: `${(h/600)*100}%`, borderRadius: '4px 4px 0 0', position: 'relative', transition: 'height 0.5s ease-out' }}>
+                  {i === 10 && <div style={{ position: 'absolute', top: '-30px', left: '50%', transform: 'translateX(-50%)', backgroundColor: '#38AC57', color: 'white', padding: '2px 8px', borderRadius: '4px', fontSize: '0.65rem', fontWeight: 'bold' }}>300</div>}
                 </div>
               ))}
             </div>
@@ -467,7 +482,7 @@ export const AllServices = () => {
             </div>
             {/* Legend */}
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginTop: '1.5rem' }}>
-              <div style={{ width: '12px', height: '12px', borderRadius: '50%', backgroundColor: '#22c55e' }}></div>
+              <div style={{ width: '12px', height: '12px', borderRadius: '50%', backgroundColor: '#38AC57' }}></div>
               <span style={{ fontSize: '0.85rem', fontWeight: '700' }}>45,230 MAD</span>
             </div>
           </div>
@@ -500,7 +515,7 @@ export const AllServices = () => {
                 <path d="M0,250 Q100,200 150,220 T300,100 T400,280 L400,300 L0,300 Z" fill="url(#growthGradient)" />
                 <path d="M0,250 Q100,200 150,220 T300,100 T400,280" stroke="#3b82f6" strokeWidth="3" fill="none" />
                 {/* Additional layers for stylized look */}
-                <path d="M0,260 Q100,210 150,230 T300,110 T400,290 L400,300 L0,300 Z" fill="#22c55e" opacity="0.3" />
+                <path d="M0,260 Q100,210 150,230 T300,110 T400,290 L400,300 L0,300 Z" fill="#38AC57" opacity="0.3" />
                 <path d="M0,270 Q100,220 150,240 T300,120 T400,300 L400,300 L0,300 Z" fill="#f59e0b" opacity="0.3" />
                 <path d="M0,280 Q100,230 150,250 T300,130 T400,300 L400,300 L0,300 Z" fill="#ef4444" opacity="0.3" />
               </svg>
@@ -569,7 +584,7 @@ export const AllServices = () => {
                 <div style={{ backgroundColor: '#f9fafb', padding: '1.5rem', borderRadius: '1.5rem', display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1rem' }}>
                   <div>
                     <div style={{ fontSize: '0.75rem', color: '#6b7280', fontWeight: '600', marginBottom: '0.4rem' }}>Status:</div>
-                    <span style={{ backgroundColor: '#f0fdf4', color: '#22c55e', padding: '0.2rem 0.6rem', borderRadius: '0.4rem', fontSize: '0.75rem', fontWeight: '700' }}>
+                    <span style={{ backgroundColor: '#eef7f0', color: '#38AC57', padding: '0.2rem 0.6rem', borderRadius: '0.4rem', fontSize: '0.75rem', fontWeight: '700' }}>
                       {selectedService.status}
                     </span>
                   </div>
@@ -597,7 +612,7 @@ export const AllServices = () => {
                 <h4 style={{ margin: '0 0 1rem 0', fontSize: '1.1rem', fontWeight: '800' }}>Performance Metrics</h4>
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1rem' }}>
                   {[
-                    { label: 'Growth:', value: selectedService.growth, color: '#22c55e' },
+                    { label: 'Growth:', value: selectedService.growth, color: '#38AC57' },
                     { label: 'Revenue:', value: selectedService.revenue, color: '#111827' },
                     { label: 'Response Time:', value: selectedService.responseTime, color: '#111827' },
                     { label: 'Completion Rate:', value: selectedService.completionRate, color: '#111827' }
@@ -619,11 +634,11 @@ export const AllServices = () => {
               </div>
 
               {/* Service Features Grid */}
-              <div style={{ backgroundColor: '#f0fdf4', padding: '1.5rem', borderRadius: '1.5rem' }}>
+              <div style={{ backgroundColor: '#eef7f0', padding: '1.5rem', borderRadius: '1.5rem' }}>
                 <h4 style={{ margin: '0 0 1rem 0', fontSize: '1.1rem', fontWeight: '800' }}>Service Features</h4>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
                   {selectedService.features.map((feature: string, i: number) => (
-                    <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', fontSize: '0.85rem', fontWeight: '600', color: '#16a34a' }}>
+                    <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', fontSize: '0.85rem', fontWeight: '600', color: '#38AC57' }}>
                       <CheckCircle2 size={16} /> {feature}
                     </div>
                   ))}

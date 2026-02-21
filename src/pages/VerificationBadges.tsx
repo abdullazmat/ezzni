@@ -1,9 +1,13 @@
 import { useState, useRef, useEffect } from 'react';
 import { 
-    Search, Eye, X, Users, ArrowLeft, 
-    Check, ChevronDown, ShieldCheck, 
-    User, CheckCircle, AlertCircle, ArrowUpRight
+    Search, Eye, X, ArrowLeft, 
+    Check, ChevronDown, AlertCircle, ArrowUpRight
 } from 'lucide-react';
+
+// Specialized Icons
+import totalRidersDriversIcon from '../assets/icons/Total Riders  Drivers.png';
+import totalVerifiedIcon from '../assets/icons/Total Verified.png';
+import verifiedBadgeIcon from '../assets/icons/Verified Drivers-Passengers.png';
 
 // --- Types ---
 
@@ -50,21 +54,39 @@ interface BadgeSettings {
 // --- Icons / Sub-components ---
 
 const VerifiedBadge = () => (
-    <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', backgroundColor: '#dcfce7', color: '#166534', padding: '0.25rem 0.5rem', borderRadius: '0.25rem', fontSize: '0.75rem', fontWeight: 'bold' }}>
-        <span>Verified</span>
+    <div style={{ 
+        backgroundColor: '#eef7f0', 
+        color: '#38AC57', 
+        padding: '0.4rem 1rem', 
+        borderRadius: '2rem', 
+        fontSize: '0.8rem', 
+        fontWeight: '600',
+        textAlign: 'center',
+        width: 'fit-content'
+    }}>
+        Verified
     </div>
 );
 
 const UnverifiedBadge = () => (
-    <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', backgroundColor: '#fee2e2', color: '#dc2626', padding: '0.25rem 0.5rem', borderRadius: '0.25rem', fontSize: '0.75rem', fontWeight: 'bold' }}>
-        <span>Unverified</span>
+    <div style={{ 
+        backgroundColor: '#fee2e2', 
+        color: '#ef4444', 
+        padding: '0.4rem 1rem', 
+        borderRadius: '2rem', 
+        fontSize: '0.8rem', 
+        fontWeight: '600',
+        textAlign: 'center',
+        width: 'fit-content'
+    }}>
+        Unverified
     </div>
 );
 
 const UserTypeBadge = ({ type }: { type: 'Driver' | 'Passenger' }) => (
     <div style={{ 
-        backgroundColor: type === 'Driver' ? '#dcfce7' : '#f0fdf4', 
-        color: '#166534', 
+        backgroundColor: type === 'Driver' ? '#eef7f0' : '#eef7f0', 
+        color: '#2d8a46', 
         padding: '0.25rem 0.75rem', 
         borderRadius: '1rem', 
         fontSize: '0.75rem', 
@@ -104,7 +126,7 @@ const Dropdown = ({ label, value, options, onChange }: { label: string, value: s
             {isOpen && (
                 <div style={{ position: 'absolute', top: '120%', left: 0, minWidth: '100%', width: 'max-content', backgroundColor: 'white', borderRadius: '1rem', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.1)', padding: '0.5rem', zIndex: 50, border: '1px solid #f3f4f6' }}>
                     {options.map(opt => (
-                        <div key={opt} onClick={() => { onChange(opt); setIsOpen(false); }} style={{ padding: '0.5rem 1rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer', borderRadius: '0.5rem', backgroundColor: value === opt ? '#f0fdf4' : 'transparent', color: value === opt ? '#166534' : 'inherit' }} className="hover:bg-gray-50">
+                        <div key={opt} onClick={() => { onChange(opt); setIsOpen(false); }} style={{ padding: '0.5rem 1rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer', borderRadius: '0.5rem', backgroundColor: value === opt ? '#eef7f0' : 'transparent', color: value === opt ? '#2d8a46' : 'inherit' }} className="hover:bg-gray-50">
                             {opt}
                             {value === opt && <Check size={14} />}
                         </div>
@@ -246,18 +268,18 @@ export const VerificationBadges = () => {
                 <div 
                     onClick={() => setActiveStat(null)} // Reset
                     style={{ 
-                        padding: '1.5rem', borderRadius: '1.5rem', backgroundColor: !activeStat ? '#f0fdf4' : 'white', 
-                        position: 'relative', boxShadow: !activeStat ? 'inset 0 0 0 2px #22c55e' : '0 1px 3px rgba(0,0,0,0.05)', 
+                        padding: '1.5rem', borderRadius: '1.5rem', backgroundColor: !activeStat ? '#eef7f0' : 'white', 
+                        position: 'relative', boxShadow: !activeStat ? 'inset 0 0 0 2px #38AC57' : '0 1px 3px rgba(0,0,0,0.05)', 
                         display: 'flex', flexDirection: 'column', justifyContent: 'space-between', height: '140px',
                         cursor: 'pointer', transition: 'all 0.2s'
                     }}
                 >
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                        <User size={20} color="#6b7280" />
+                        <img src={totalRidersDriversIcon} alt="" style={{ width: '40px', height: '40px', objectFit: 'contain' }} />
                         <span style={{ fontWeight: '600', fontSize: '0.9rem' }}>Total Riders / Drivers</span>
                     </div>
                     <div style={{ fontSize: '2.5rem', fontWeight: 'bold' }}>{users.length.toString().padStart(3, '0')}</div>
-                    <div style={{ position: 'absolute', bottom: '1rem', right: '1rem', backgroundColor: '#22c55e', borderRadius: '50%', padding: '0.4rem', color: 'white', display: 'flex' }}>
+                    <div style={{ position: 'absolute', bottom: '1rem', right: '1rem', backgroundColor: '#38AC57', borderRadius: '50%', padding: '0.4rem', color: 'white', display: 'flex' }}>
                         <ArrowUpRight size={16} /> 
                     </div>
                 </div>
@@ -266,19 +288,19 @@ export const VerificationBadges = () => {
                     onClick={() => handleStatClick('TotalVerified')}
                     style={{ 
                         padding: '1.5rem', borderRadius: '1.5rem', 
-                        backgroundColor: activeStat === 'TotalVerified' ? '#22c55e' : 'white', 
+                        backgroundColor: activeStat === 'TotalVerified' ? '#38AC57' : 'white', 
                         color: activeStat === 'TotalVerified' ? 'white' : 'black',
-                        position: 'relative', boxShadow: activeStat === 'TotalVerified' ? '0 10px 15px -3px rgba(34, 197, 94, 0.4)' : '0 1px 3px rgba(0,0,0,0.05)', 
+                        position: 'relative', boxShadow: activeStat === 'TotalVerified' ? '0 10px 15px -3px rgba(56, 172, 87, 0.4)' : '0 1px 3px rgba(0,0,0,0.05)', 
                         display: 'flex', flexDirection: 'column', justifyContent: 'space-between', height: '140px',
                         cursor: 'pointer', transition: 'all 0.2s', transform: activeStat === 'TotalVerified' ? 'translateY(-2px)' : 'none'
                     }}
                 >
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                        <Users size={20} color={activeStat === 'TotalVerified' ? 'white' : '#6b7280'} />
+                        <img src={totalVerifiedIcon} alt="" style={{ width: '40px', height: '40px', objectFit: 'contain' }} />
                         <span style={{ fontWeight: '600', fontSize: '0.9rem' }}>Total Verified</span>
                     </div>
                     <div style={{ fontSize: '2.5rem', fontWeight: 'bold' }}>{users.filter(u => u.isVerified).length.toString().padStart(3, '0')}</div>
-                    <div style={{ position: 'absolute', bottom: '1rem', right: '1rem', backgroundColor: activeStat === 'TotalVerified' ? 'white' : '#22c55e', borderRadius: '50%', padding: '0.4rem', color: activeStat === 'TotalVerified' ? '#22c55e' : 'white', display: 'flex' }}>
+                    <div style={{ position: 'absolute', bottom: '1rem', right: '1rem', backgroundColor: activeStat === 'TotalVerified' ? 'white' : '#38AC57', borderRadius: '50%', padding: '0.4rem', color: activeStat === 'TotalVerified' ? '#38AC57' : 'white', display: 'flex' }}>
                          <ArrowUpRight size={16} />
                     </div>
                 </div>
@@ -287,19 +309,19 @@ export const VerificationBadges = () => {
                     onClick={() => handleStatClick('VerifiedDrivers')}
                     style={{ 
                         padding: '1.5rem', borderRadius: '1.5rem', 
-                        backgroundColor: activeStat === 'VerifiedDrivers' ? '#22c55e' : 'white', 
+                        backgroundColor: activeStat === 'VerifiedDrivers' ? '#38AC57' : 'white', 
                         color: activeStat === 'VerifiedDrivers' ? 'white' : 'black',
-                        position: 'relative', boxShadow: activeStat === 'VerifiedDrivers' ? '0 10px 15px -3px rgba(34, 197, 94, 0.4)' : '0 1px 3px rgba(0,0,0,0.05)', 
+                        position: 'relative', boxShadow: activeStat === 'VerifiedDrivers' ? '0 10px 15px -3px rgba(56, 172, 87, 0.4)' : '0 1px 3px rgba(0,0,0,0.05)', 
                         display: 'flex', flexDirection: 'column', justifyContent: 'space-between', height: '140px',
                         cursor: 'pointer', transition: 'all 0.2s', transform: activeStat === 'VerifiedDrivers' ? 'translateY(-2px)' : 'none'
                     }}
                 >
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                        <ShieldCheck size={20} color={activeStat === 'VerifiedDrivers' ? 'white' : '#6b7280'} />
+                        <img src={verifiedBadgeIcon} alt="" style={{ width: '40px', height: '40px', objectFit: 'contain' }} />
                         <span style={{ fontWeight: '600', fontSize: '0.9rem' }}>Verified Drivers</span>
                     </div>
                     <div style={{ fontSize: '2.5rem', fontWeight: 'bold' }}>{users.filter(u => u.isVerified && u.userType === 'Driver').length.toString().padStart(3, '0')}</div>
-                    <div style={{ position: 'absolute', bottom: '1rem', right: '1rem', backgroundColor: activeStat === 'VerifiedDrivers' ? 'white' : '#22c55e', borderRadius: '50%', padding: '0.4rem', color: activeStat === 'VerifiedDrivers' ? '#22c55e' : 'white', display: 'flex' }}>
+                    <div style={{ position: 'absolute', bottom: '1rem', right: '1rem', backgroundColor: activeStat === 'VerifiedDrivers' ? 'white' : '#38AC57', borderRadius: '50%', padding: '0.4rem', color: activeStat === 'VerifiedDrivers' ? '#38AC57' : 'white', display: 'flex' }}>
                         <ArrowUpRight size={16} />
                     </div>
                 </div>
@@ -308,19 +330,19 @@ export const VerificationBadges = () => {
                      onClick={() => handleStatClick('VerifiedPassengers')}
                      style={{ 
                         padding: '1.5rem', borderRadius: '1.5rem', 
-                        backgroundColor: activeStat === 'VerifiedPassengers' ? '#22c55e' : 'white', 
+                        backgroundColor: activeStat === 'VerifiedPassengers' ? '#38AC57' : 'white', 
                         color: activeStat === 'VerifiedPassengers' ? 'white' : 'black',
-                        position: 'relative', boxShadow: activeStat === 'VerifiedPassengers' ? '0 10px 15px -3px rgba(34, 197, 94, 0.4)' : '0 1px 3px rgba(0,0,0,0.05)', 
+                        position: 'relative', boxShadow: activeStat === 'VerifiedPassengers' ? '0 10px 15px -3px rgba(56, 172, 87, 0.4)' : '0 1px 3px rgba(0,0,0,0.05)', 
                         display: 'flex', flexDirection: 'column', justifyContent: 'space-between', height: '140px',
                         cursor: 'pointer', transition: 'all 0.2s', transform: activeStat === 'VerifiedPassengers' ? 'translateY(-2px)' : 'none'
                     }}
                 >
                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                        <ShieldCheck size={20} color={activeStat === 'VerifiedPassengers' ? 'white' : '#6b7280'} />
+                        <img src={verifiedBadgeIcon} alt="" style={{ width: '40px', height: '40px', objectFit: 'contain' }} />
                         <span style={{ fontWeight: '600', fontSize: '0.9rem' }}>Verified Passengers</span>
                     </div>
                     <div style={{ fontSize: '2.5rem', fontWeight: 'bold' }}>{users.filter(u => u.isVerified && u.userType === 'Passenger').length.toString().padStart(3, '0')}</div>
-                    <div style={{ position: 'absolute', bottom: '1rem', right: '1rem', backgroundColor: activeStat === 'VerifiedPassengers' ? 'white' : '#22c55e', borderRadius: '50%', padding: '0.4rem', color: activeStat === 'VerifiedPassengers' ? '#22c55e' : 'white', display: 'flex' }}>
+                    <div style={{ position: 'absolute', bottom: '1rem', right: '1rem', backgroundColor: activeStat === 'VerifiedPassengers' ? 'white' : '#38AC57', borderRadius: '50%', padding: '0.4rem', color: activeStat === 'VerifiedPassengers' ? '#38AC57' : 'white', display: 'flex' }}>
                         <ArrowUpRight size={16} />
                     </div>
                 </div>
@@ -347,7 +369,7 @@ export const VerificationBadges = () => {
                 <button 
                     onClick={() => setShowSettingsModal(true)}
                     style={{ 
-                        backgroundColor: '#22c55e', color: 'white', padding: '0.8rem 2rem', borderRadius: '2rem', 
+                        backgroundColor: '#38AC57', color: 'white', padding: '0.8rem 2rem', borderRadius: '2rem', 
                         fontSize: '0.9rem', fontWeight: '600', border: 'none', cursor: 'pointer', transition: 'all 0.2s' 
                     }}
                 >
@@ -359,7 +381,7 @@ export const VerificationBadges = () => {
             <div className="card" style={{ padding: 0, overflow: 'hidden' }}>
                 <table style={{ width: '100%', borderCollapse: 'collapse' }}>
                     <thead>
-                        <tr style={{ backgroundColor: '#22c55e', color: 'white', textAlign: 'left' }}>
+                        <tr style={{ backgroundColor: '#38AC57', color: 'white', textAlign: 'left' }}>
                             <th style={{ padding: '1rem', fontWeight: '600', borderRadius: '1rem 0 0 0' }}>User Type</th>
                             <th style={{ padding: '1rem', fontWeight: '600' }}>Name ID</th>
                             <th style={{ padding: '1rem', fontWeight: '600' }}>Phone</th>
@@ -377,10 +399,27 @@ export const VerificationBadges = () => {
                                 </td>
                                 <td style={{ padding: '1rem' }}>
                                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.8rem' }}>
-                                        <div style={{ position: 'relative' }}>
-                                            <img src={user.avatar} alt="" style={{ width: '40px', height: '40px', borderRadius: '50%' }} />
-                                            <div style={{ position: 'absolute', bottom: -5, left: '50%', transform: 'translateX(-50%)', backgroundColor: '#fbbf24', padding: '0.1rem 0.3rem', borderRadius: '0.3rem', fontSize: '0.6rem', color: 'white', display: 'flex', alignItems: 'center', gap: '2px', whiteSpace: 'nowrap' }}>★ {user.rating}</div>
-                                        </div>
+                                    <div style={{ position: 'relative' }}>
+                                        <img src={user.avatar} alt="" style={{ width: '40px', height: '40px', borderRadius: '50%', objectFit: 'cover' }} />
+                                        {user.isVerified && (
+                                            <div style={{ 
+                                                position: 'absolute', 
+                                                top: -2, 
+                                                right: -2, 
+                                                backgroundColor: 'black', 
+                                                borderRadius: '50%', 
+                                                width: '14px', 
+                                                height: '14px', 
+                                                display: 'flex', 
+                                                alignItems: 'center', 
+                                                justifyContent: 'center',
+                                                border: '2px solid white'
+                                            }}>
+                                                <Check size={8} color="white" strokeWidth={4} />
+                                            </div>
+                                        )}
+                                        <div style={{ position: 'absolute', bottom: -5, left: '50%', transform: 'translateX(-50%)', backgroundColor: '#fbbf24', padding: '0.1rem 0.3rem', borderRadius: '0.3rem', fontSize: '0.6rem', color: 'white', display: 'flex', alignItems: 'center', gap: '2px', whiteSpace: 'nowrap' }}>★ {user.rating}</div>
+                                    </div>
                                         <div>
                                             <div style={{ fontWeight: '600', fontSize: '0.9rem' }}>{user.name}</div>
                                             <div style={{ fontSize: '0.75rem', color: '#9ca3af' }}>{user.displayId}</div>
@@ -460,7 +499,7 @@ export const VerificationBadges = () => {
                             </button>
                             <button 
                                 onClick={() => setShowSettingsModal(false)}
-                                style={{ padding: '0.8rem 2.5rem', borderRadius: '2rem', border: 'none', backgroundColor: '#22c55e', color: 'white', fontWeight: '600', cursor: 'pointer' }}
+                                style={{ padding: '0.8rem 2.5rem', borderRadius: '2rem', border: 'none', backgroundColor: '#38AC57', color: 'white', fontWeight: '600', cursor: 'pointer' }}
                             >
                                 Save Changes
                             </button>
@@ -472,34 +511,55 @@ export const VerificationBadges = () => {
             {/* Badge Management Modal (Preview) */}
             {selectedUser && (
                 <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.5)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <div className="card" style={{ width: '600px', backgroundColor: '#fdfdfd', borderRadius: '1.5rem', padding: '2rem', maxHeight: '95vh', overflowY: 'auto', position: 'relative' }}>
+                    <div className="card" style={{ width: '950px', backgroundColor: '#fdfdfd', borderRadius: '1.5rem', padding: '2.5rem', maxHeight: '95vh', overflowY: 'auto', position: 'relative', boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1)' }}>
                         <button 
                             onClick={() => setSelectedUser(null)} 
-                            style={{ position: 'absolute', top: '2rem', right: '2rem', background: 'none', border: 'none', cursor: 'pointer' }}
+                            style={{ position: 'absolute', top: '2rem', right: '2rem', background: 'none', border: 'none', cursor: 'pointer', color: 'black' }}
                         >
-                            <X size={24} />
+                            <X size={24} strokeWidth={2.5} />
                         </button>
                         
-                        <div style={{ marginBottom: '2rem' }}>
-                             <h2 style={{ fontSize: '1.4rem', fontWeight: 'bold', margin: '0 0 0.5rem 0' }}>Badge Management - {selectedUser.vehicleId || 'N/A'}</h2>
-                             <p style={{ color: '#6b7280', margin: 0, fontSize: '0.9rem' }}>Review user details and manage verified badge status</p>
+                        <div style={{ marginBottom: '2.5rem' }}>
+                             <h2 style={{ fontSize: '1.6rem', fontWeight: 'bold', margin: '0 0 0.5rem 0' }}>Badge Management - {selectedUser.vehicleId || 'N/A'}</h2>
+                             <p style={{ color: '#6b7280', margin: 0, fontSize: '0.95rem' }}>Review user details and manage verified badge status</p>
                         </div>
                         
-                        <h3 style={{ fontSize: '1.1rem', fontWeight: 'bold', marginBottom: '1rem' }}>{selectedUser.userType} Information</h3>
-                        <div style={{ backgroundColor: 'white', padding: '1.5rem', borderRadius: '1rem', border: '1px solid #f3f4f6', boxShadow: '0 1px 2px rgba(0,0,0,0.05)', marginBottom: '1.5rem' }}>
-                            <div style={{ display: 'flex', gap: '1.5rem' }}>
+                        <h3 style={{ fontSize: '1.2rem', fontWeight: 'bold', marginBottom: '1rem' }}>{selectedUser.userType} Information</h3>
+                        <div style={{ backgroundColor: 'white', padding: '2rem', borderRadius: '1rem', border: '1px solid #f3f4f6', boxShadow: '0 1px 3px rgba(0,0,0,0.05)', marginBottom: '2rem' }}>
+                            <div style={{ display: 'flex', gap: '2.5rem' }}>
                                 <div style={{ position: 'relative', height: 'fit-content' }}>
-                                    <img src={selectedUser.avatar} alt="" style={{ width: '64px', height: '64px', borderRadius: '50%' }} />
-                                    <div style={{ position: 'absolute', bottom: -5, left: '50%', transform: 'translateX(-50%)', backgroundColor: '#fbbf24', padding: '0.1rem 0.5rem', borderRadius: '1rem', fontSize: '0.7rem', color: 'white', display: 'flex', alignItems: 'center', gap: '2px', whiteSpace: 'nowrap' }}>★ {selectedUser.rating}</div>
+                                    <img src={selectedUser.avatar} alt="" style={{ width: '80px', height: '80px', borderRadius: '50%', objectFit: 'cover' }} />
+                                    {selectedUser.isVerified && (
+                                        <div style={{ 
+                                            position: 'absolute', 
+                                            top: -2, 
+                                            right: -2, 
+                                            backgroundColor: 'black', 
+                                            borderRadius: '50%', 
+                                            width: '20px', 
+                                            height: '20px', 
+                                            display: 'flex', 
+                                            alignItems: 'center', 
+                                            justifyContent: 'center',
+                                            border: '2px solid white'
+                                        }}>
+                                            <Check size={12} color="white" strokeWidth={4} />
+                                        </div>
+                                    )}
+                                    <div style={{ position: 'absolute', bottom: -5, left: '50%', transform: 'translateX(-50%)', backgroundColor: '#fbbf24', padding: '0.1rem 0.6rem', borderRadius: '1rem', fontSize: '0.75rem', color: 'white', display: 'flex', alignItems: 'center', gap: '2px', whiteSpace: 'nowrap' }}>★ {selectedUser.rating}</div>
                                 </div>
-                                <div style={{ flex: 1, display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '1.5rem 1rem' }}>
-                                     <div><div style={{ fontSize: '0.75rem', color: '#9ca3af' }}>User ID</div><div style={{ fontWeight: '600', fontSize: '0.9rem' }}>{selectedUser.id}</div></div>
-                                     <div style={{ gridColumn: 'span 2' }}><div style={{ fontSize: '0.75rem', color: '#9ca3af' }}>Full Name:</div><div style={{ fontWeight: '600', fontSize: '0.9rem' }}>{selectedUser.name}</div></div>
-                                     <div><div style={{ fontSize: '0.75rem', color: '#9ca3af' }}>User Type</div><div style={{ fontWeight: '600', fontSize: '0.9rem' }}>{selectedUser.userType}</div></div>
-                                     <div style={{ gridColumn: 'span 2' }}><div style={{ fontSize: '0.75rem', color: '#9ca3af' }}>Phone</div><div style={{ fontWeight: '600', fontSize: '0.9rem' }}>{selectedUser.phone}</div></div>
-                                     <div style={{ gridColumn: 'span 1' }}><div style={{ fontSize: '0.75rem', color: '#9ca3af' }}>City</div><div style={{ fontWeight: '600', fontSize: '0.9rem' }}>{selectedUser.city}</div></div>
-                                     <div style={{ gridColumn: 'span 1' }}><div style={{ fontSize: '0.75rem', color: '#9ca3af' }}>Join Date</div><div style={{ fontWeight: '600', fontSize: '0.9rem' }}>{selectedUser.joinDate}</div></div>
-                                     <div style={{ gridColumn: 'span 1' }}><div style={{ fontSize: '0.75rem', color: '#9ca3af' }}>Email</div><div style={{ fontWeight: '600', fontSize: '0.9rem', wordBreak: 'break-all' }}>{selectedUser.email}</div></div>
+                                <div style={{ flex: 1 }}>
+                                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '2rem', marginBottom: '1.5rem' }}>
+                                        <div><div style={{ fontSize: '0.8rem', color: '#9ca3af', marginBottom: '0.3rem' }}>User ID</div><div style={{ fontWeight: 'bold', fontSize: '1rem' }}>{selectedUser.id}</div></div>
+                                        <div><div style={{ fontSize: '0.8rem', color: '#9ca3af', marginBottom: '0.3rem' }}>Full Name</div><div style={{ fontWeight: 'bold', fontSize: '1rem' }}>{selectedUser.name}</div></div>
+                                        <div><div style={{ fontSize: '0.8rem', color: '#9ca3af', marginBottom: '0.3rem' }}>User Type</div><div style={{ fontWeight: 'bold', fontSize: '1rem' }}>{selectedUser.userType}</div></div>
+                                        <div><div style={{ fontSize: '0.8rem', color: '#9ca3af', marginBottom: '0.3rem' }}>Phone</div><div style={{ fontWeight: 'bold', fontSize: '1rem' }}>{selectedUser.phone}</div></div>
+                                    </div>
+                                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '2rem' }}>
+                                        <div><div style={{ fontSize: '0.8rem', color: '#9ca3af', marginBottom: '0.3rem' }}>City</div><div style={{ fontWeight: 'bold', fontSize: '1rem', display: 'flex', alignItems: 'center', gap: '0.3rem' }}>{selectedUser.city} <ChevronDown size={14} /></div></div>
+                                        <div><div style={{ fontSize: '0.8rem', color: '#9ca3af', marginBottom: '0.3rem' }}>Join Date</div><div style={{ fontWeight: 'bold', fontSize: '1rem' }}>{selectedUser.joinDate}</div></div>
+                                        <div style={{ gridColumn: 'span 2' }}><div style={{ fontSize: '0.8rem', color: '#9ca3af', marginBottom: '0.3rem' }}>Email</div><div style={{ fontWeight: 'bold', fontSize: '1rem' }}>{selectedUser.email}</div></div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -507,76 +567,99 @@ export const VerificationBadges = () => {
                         {/* Vehicle Info - Show only for drivers */}
                         {selectedUser.userType === 'Driver' && (
                         <>
-                            <h3 style={{ fontSize: '1.1rem', fontWeight: 'bold', marginBottom: '1rem' }}>Vehicle Information</h3>
-                            <div style={{ backgroundColor: 'white', padding: '1.5rem', borderRadius: '1rem', border: '1px solid #f3f4f6', boxShadow: '0 1px 2px rgba(0,0,0,0.05)', marginBottom: '1.5rem' }}>
-                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr', gap: '1.5rem 1rem' }}>
-                                    <div><div style={{ fontSize: '0.75rem', color: '#9ca3af' }}>License Plate</div><div style={{ fontWeight: '600', fontSize: '0.9rem' }}>{selectedUser.licensePlate}</div></div>
-                                    <div style={{ gridColumn: 'span 2' }}><div style={{ fontSize: '0.75rem', color: '#9ca3af' }}>Make & Model</div><div style={{ fontWeight: '600', fontSize: '0.9rem' }}>{selectedUser.makeModel}</div></div>
-                                    <div><div style={{ fontSize: '0.75rem', color: '#9ca3af' }}>Transmission</div><div style={{ fontWeight: '600', fontSize: '0.9rem' }}>{selectedUser.transmission}</div></div>
-                                    <div><div style={{ fontSize: '0.75rem', color: '#9ca3af' }}>Year</div><div style={{ fontWeight: '600', fontSize: '0.9rem' }}>{selectedUser.year}</div></div>
-                                    <div style={{ gridColumn: 'span 2' }}><div style={{ fontSize: '0.75rem', color: '#9ca3af' }}>On boarding date</div><div style={{ fontWeight: '600', fontSize: '0.9rem' }}>{selectedUser.onBoardingDate}</div></div>
+                            <h3 style={{ fontSize: '1.2rem', fontWeight: 'bold', marginBottom: '1rem' }}>Vehicle Information</h3>
+                            <div style={{ backgroundColor: 'white', padding: '2rem', borderRadius: '1rem', border: '1px solid #f3f4f6', boxShadow: '0 1px 3px rgba(0,0,0,0.05)', marginBottom: '2rem' }}>
+                                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.5rem', marginBottom: '1.5rem' }}>
+                                    <div><div style={{ fontSize: '0.8rem', color: '#9ca3af', marginBottom: '0.3rem' }}>License Plate</div><div style={{ fontWeight: 'bold', fontSize: '1rem' }}>{selectedUser.licensePlate}</div></div>
+                                    <div><div style={{ fontSize: '0.8rem', color: '#9ca3af', marginBottom: '0.3rem' }}>Make & Model</div><div style={{ fontWeight: 'bold', fontSize: '1rem' }}>{selectedUser.makeModel}</div></div>
+                                    <div><div style={{ fontSize: '0.8rem', color: '#9ca3af', marginBottom: '0.3rem' }}>Transmission</div><div style={{ fontWeight: 'bold', fontSize: '1rem' }}>{selectedUser.transmission}</div></div>
+                                    <div><div style={{ fontSize: '0.8rem', color: '#9ca3af', marginBottom: '0.3rem' }}>Year</div><div style={{ fontWeight: 'bold', fontSize: '1rem' }}>{selectedUser.year}</div></div>
+                                </div>
+                                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.5rem' }}>
+                                    <div><div style={{ fontSize: '0.8rem', color: '#9ca3af', marginBottom: '0.3rem' }}>On boarding date</div><div style={{ fontWeight: 'bold', fontSize: '1rem' }}>{selectedUser.onBoardingDate}</div></div>
                                     <div>
-                                        <div style={{ fontSize: '0.75rem', color: '#9ca3af' }}>Colour</div>
-                                        <div style={{ fontWeight: '600', fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                                            <span style={{ width: '10px', height: '10px', borderRadius: '50%', backgroundColor: selectedUser.color?.toLowerCase(), border: '1px solid #ddd' }}></span>
-                                            {selectedUser.color}
+                                        <div style={{ fontSize: '0.8rem', color: '#9ca3af', marginBottom: '0.3rem' }}>Colour</div>
+                                        <div style={{ fontWeight: 'bold', fontSize: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                            <span style={{ width: '12px', height: '12px', borderRadius: '50%', backgroundColor: selectedUser.color?.toLowerCase(), border: '1px solid #ddd' }}></span>
+                                            {selectedUser.color} <ChevronDown size={14} />
                                         </div>
                                     </div>
                                 </div>
                             </div>
 
-                            <h3 style={{ fontSize: '1.1rem', fontWeight: 'bold', marginBottom: '1rem' }}>Performance Metrics</h3>
-                            <div style={{ backgroundColor: 'white', padding: '1.5rem', borderRadius: '1rem', border: '1px solid #f3f4f6', boxShadow: '0 1px 2px rgba(0,0,0,0.05)', marginBottom: '1.5rem' }}>
-                                <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+                            <h3 style={{ fontSize: '1.2rem', fontWeight: 'bold', marginBottom: '1rem' }}>Performance Metrics</h3>
+                            <div style={{ backgroundColor: 'white', padding: '2rem', borderRadius: '1rem', border: '1px solid #f3f4f6', boxShadow: '0 1px 3px rgba(0,0,0,0.05)', marginBottom: '2rem' }}>
+                                <div style={{ display: 'flex', gap: '2.5rem', alignItems: 'center' }}>
                                      <div style={{ position: 'relative' }}>
-                                        <img src={selectedUser.avatar} alt="" style={{ width: '48px', height: '48px', borderRadius: '50%' }} />
-                                        <div style={{ position: 'absolute', bottom: -5, left: '50%', transform: 'translateX(-50%)', backgroundColor: '#fbbf24', padding: '0.1rem 0.3rem', borderRadius: '0.3rem', fontSize: '0.6rem', color: 'white', display: 'flex', alignItems: 'center', gap: '2px', whiteSpace: 'nowrap' }}>★ {selectedUser.rating}</div>
+                                        <img src={selectedUser.avatar} alt="" style={{ width: '64px', height: '64px', borderRadius: '50%', objectFit: 'cover' }} />
+                                        {selectedUser.isVerified && (
+                                            <div style={{ 
+                                                position: 'absolute', 
+                                                top: -2, 
+                                                right: -2, 
+                                                backgroundColor: 'black', 
+                                                borderRadius: '50%', 
+                                                width: '18px', 
+                                                height: '18px', 
+                                                display: 'flex', 
+                                                alignItems: 'center', 
+                                                justifyContent: 'center',
+                                                border: '2px solid white'
+                                            }}>
+                                                <Check size={10} color="white" strokeWidth={4} />
+                                            </div>
+                                        )}
+                                        <div style={{ position: 'absolute', bottom: -5, left: '50%', transform: 'translateX(-50%)', backgroundColor: '#fbbf24', padding: '0.1rem 0.4rem', borderRadius: '0.3rem', fontSize: '0.7rem', color: 'white', display: 'flex', alignItems: 'center', gap: '2px', whiteSpace: 'nowrap' }}>★ {selectedUser.rating}</div>
                                      </div>
-                                     <div style={{ flex: 1, display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', textAlign: 'center' }}>
-                                         <div><div style={{ fontSize: '0.75rem', color: '#9ca3af' }}>Trip Count</div><div style={{ fontWeight: 'bold' }}>{selectedUser.totalTrips}+</div></div>
-                                         <div><div style={{ fontSize: '0.75rem', color: '#9ca3af' }}>Vehicle Type</div><div style={{ fontWeight: 'bold' }}>{selectedUser.vehicleType}</div></div>
-                                         <div><div style={{ fontSize: '0.75rem', color: '#9ca3af' }}>Vehicle ID</div><div style={{ fontWeight: 'bold' }}>{selectedUser.vehicleId}</div></div>
-                                         <div><div style={{ fontSize: '0.75rem', color: '#9ca3af' }}>Acceptance Rate</div><div style={{ fontWeight: 'bold' }}>{selectedUser.acceptanceRate}</div></div>
-                                         <div><div style={{ fontSize: '0.75rem', color: '#9ca3af' }}>Completion Rate</div><div style={{ fontWeight: 'bold' }}>{selectedUser.completionRate}</div></div>
+                                     <div style={{ flex: 1, display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '1.5rem', textAlign: 'left' }}>
+                                         <div><div style={{ fontSize: '0.8rem', color: '#9ca3af', marginBottom: '0.3rem' }}>Trip count</div><div style={{ fontWeight: 'bold', fontSize: '1.1rem' }}>{selectedUser.totalTrips}+</div></div>
+                                         <div><div style={{ fontSize: '0.8rem', color: '#9ca3af', marginBottom: '0.3rem' }}>Vehicle Type</div><div style={{ fontWeight: 'bold', fontSize: '1.1rem' }}>{selectedUser.vehicleType}</div></div>
+                                         <div><div style={{ fontSize: '0.8rem', color: '#9ca3af', marginBottom: '0.3rem' }}>Vehicle ID</div><div style={{ fontWeight: 'bold', fontSize: '1.1rem' }}>{selectedUser.vehicleId}</div></div>
+                                         <div><div style={{ fontSize: '0.8rem', color: '#9ca3af', marginBottom: '0.3rem' }}>Acceptance Rate</div><div style={{ fontWeight: 'bold', fontSize: '1.1rem' }}>{selectedUser.acceptanceRate}</div></div>
+                                         <div><div style={{ fontSize: '0.8rem', color: '#9ca3af', marginBottom: '0.3rem' }}>Completion Rate</div><div style={{ fontWeight: 'bold', fontSize: '1.1rem' }}>{selectedUser.completionRate}</div></div>
                                      </div>
                                 </div>
                             </div>
                         </>
                         )}
 
-                        <h3 style={{ fontSize: '1.1rem', fontWeight: 'bold', marginBottom: '1rem' }}>Current Badge Status</h3>
-                        <div style={{ backgroundColor: '#f0fdf4', padding: '1.5rem', borderRadius: '1rem', border: '1px solid #dcfce7', marginBottom: '2rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                                {selectedUser.isVerified ? (
-                                    <>
-                                        <CheckCircle size={20} color="#166534" />
-                                        <span style={{ fontWeight: '500', color: '#166534' }}>This user has a verified badge</span>
-                                    </>
-                                ) : (
-                                    <>
-                                        <AlertCircle size={20} color="#9ca3af" />
-                                        <span style={{ fontWeight: '500', color: '#4b5563' }}>This user does not have a verified badge</span>
-                                    </>
-                                )}
+                        <div style={{ backgroundColor: '#eef7f0', padding: '1.5rem 2rem', borderRadius: '1rem', border: '1px solid #eef7f0', marginBottom: '2.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                                <h3 style={{ fontSize: '1.2rem', fontWeight: 'bold', margin:0, color: '#2d8a46' }}>Current Badge Status</h3>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginTop: '0.2rem' }}>
+                                    {selectedUser.isVerified ? (
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                            <div style={{ backgroundColor: 'black', borderRadius: '50%', width: '16px', height: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                                <Check size={10} color="white" strokeWidth={4} />
+                                            </div>
+                                            <span style={{ fontWeight: '500', color: '#2d8a46', fontSize: '0.95rem' }}>This user has a verified badge</span>
+                                        </div>
+                                    ) : (
+                                        <>
+                                            <AlertCircle size={20} color="#9ca3af" />
+                                            <span style={{ fontWeight: '500', color: '#4b5563', fontSize: '0.95rem' }}>This user does not have a verified badge</span>
+                                        </>
+                                    )}
+                                </div>
                             </div>
                             {selectedUser.isVerified && (
-                                <span style={{ fontSize: '0.85rem', color: '#22c55e' }}>Verified on {selectedUser.verifiedDate}</span>
+                                <span style={{ fontSize: '0.9rem', color: '#38AC57', fontWeight: '500' }}>Verified on {selectedUser.verifiedDate}</span>
                             )}
                         </div>
 
-                        <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
+                        <div style={{ display: 'flex', gap: '1.5rem', justifyContent: 'center' }}>
                             <button 
                                 onClick={() => setSelectedUser(null)}
-                                style={{ padding: '0.8rem 2.5rem', borderRadius: '2rem', border: '1px solid #e5e7eb', backgroundColor: 'white', fontWeight: '600', cursor: 'pointer' }}
+                                style={{ padding: '1rem 4rem', borderRadius: '2rem', border: '1px solid #e5e7eb', backgroundColor: 'white', fontWeight: 'bold', cursor: 'pointer', fontSize: '1rem', color: '#374151' }}
                             >
                                 Cancel
                             </button>
                             <button 
                                 onClick={() => handleToggleBadge(selectedUser.id)}
                                 style={{ 
-                                    padding: '0.8rem 2.5rem', borderRadius: '2rem', border: 'none', 
-                                    backgroundColor: selectedUser.isVerified ? '#dc2626' : '#22c55e', 
-                                    color: 'white', fontWeight: '600', cursor: 'pointer' 
+                                    padding: '1rem 3rem', borderRadius: '2rem', border: 'none', 
+                                    backgroundColor: selectedUser.isVerified ? '#ba1a1a' : '#38AC57', 
+                                    color: 'white', fontWeight: 'bold', cursor: 'pointer', fontSize: '1rem'
                                 }}
                             >
                                 {selectedUser.isVerified ? 'Remove Verified Badge' : 'Grant Verified Badge'}

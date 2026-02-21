@@ -1,4 +1,29 @@
-import { ArrowLeft, X, Wallet } from 'lucide-react';
+import { ArrowLeft, X } from 'lucide-react';
+
+// Specialized Icons
+import mastercardIcon from '../assets/icons/mastercard.png';
+import visaIcon from '../assets/icons/visa.png';
+import cashIcon from '../assets/icons/cash.png';
+import walletIcon from '../assets/icons/hezzni wallet.png';
+import cashplusIcon from '../assets/icons/cashplus.png';
+import wafacashIcon from '../assets/icons/wafacash.png';
+
+const PaymentMethodInfo = ({ method }: { method: string }) => {
+    let icon = visaIcon;
+    let width = '32px';
+    let height = '20px';
+
+    if (method === 'Mastercard') { icon = mastercardIcon; height = '32px'; }
+    else if (method === 'Hezzni Wallet') { icon = walletIcon; height = '24px'; width = '24px'; }
+    else if (method === 'Cash') { icon = cashIcon; height = '24px'; width = '24px'; }
+
+    return (
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            <img src={icon} alt={method} style={{ width, height, objectFit: 'contain' }} />
+            <span style={{ fontWeight: '700', fontSize: '0.9rem', color: '#111827' }}>{method}</span>
+        </div>
+    );
+};
 
 interface ModalProps {
     onClose: () => void;
@@ -27,7 +52,7 @@ const InfoItem = ({ label, value, isStatus }: { label: string, value: string | R
         <div style={{ fontSize: '0.75rem', color: '#6b7280', marginBottom: '0.25rem' }}>{label}</div>
         {isStatus ? (
             <div style={{ 
-                backgroundColor: '#dcfce7', color: '#166534', 
+                backgroundColor: '#eef7f0', color: '#2d8a46', 
                 padding: '0.2rem 0.6rem', borderRadius: '0.4rem', 
                 fontSize: '0.75rem', fontWeight: 'bold', display: 'inline-block' 
             }}>
@@ -57,11 +82,7 @@ export const TransactionDetailsModal = ({ onClose, transaction, onProcessRefund,
                     <InfoItem label="Trip ID" value={transaction.tripId} />
                     <InfoItem label="Amount" value={`${transaction.amount.replace(' MAD', '')}.00 MAD`} />
                     
-                    <InfoItem label="Payment Method" value={
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                             <span style={{ fontWeight: 'bold', fontSize: '1rem', color: '#1a1f71', fontStyle: 'italic' }}>{transaction.paymentMethod}</span>
-                        </div>
-                    } />
+                    <InfoItem label="Payment Method" value={<PaymentMethodInfo method={transaction.paymentMethod} />} />
                     <InfoItem label="Date" value={transaction.date} />
                     <InfoItem label="Current Status" value={transaction.status === 'Completed' ? 'Complete' : transaction.status} isStatus />
                     <InfoItem label="Phone" value="+212 6 12 34 56" />
@@ -81,7 +102,7 @@ export const TransactionDetailsModal = ({ onClose, transaction, onProcessRefund,
                         Process Refund
                     </button>
                     <button 
-                        style={{ flex: 1, padding: '0.85rem', borderRadius: '2rem', border: 'none', backgroundColor: '#22c55e', color: 'white', fontWeight: '700', cursor: 'pointer', fontSize: '0.9rem' }}
+                        style={{ flex: 1, padding: '0.85rem', borderRadius: '2rem', border: 'none', backgroundColor: '#38AC57', color: 'white', fontWeight: '700', cursor: 'pointer', fontSize: '0.9rem' }}
                     >
                         Download Receipt
                     </button>
@@ -94,20 +115,21 @@ export const TransactionDetailsModal = ({ onClose, transaction, onProcessRefund,
 // --- Transaction History Modal ---
 export const TransactionHistoryModal = ({ onClose, transaction, onProcessRefund }: ModalProps) => {
     const historyItems = [
-        { method: 'Mastercard', last4: '4532', date: '03 Jun, 2025 at 12:00 PM', amount: '+ 55.66 MAD', icon: '💳' },
-        { method: 'Visa Card', last4: '4532', date: '03 Jun, 2025 at 12:00 PM', amount: '+ 55.66 MAD', icon: '💳' },
-        { method: 'Cashplus', last4: '', date: '03 Jun, 2025 at 12:00 PM', amount: '+ 55.66 MAD', icon: '🟢' },
-        { method: 'Wafacash', last4: '', date: '03 Jun, 2025 at 12:00 PM', amount: '+ 55.66 MAD', icon: '🟡' },
+        { method: 'Mastercard', last4: '4532', date: '03 Jun, 2025 at 12:00 PM', amount: '+ 55.66 MAD', icon: mastercardIcon },
+        { method: 'Visa Card', last4: '4532', date: '03 Jun, 2025 at 12:00 PM', amount: '+ 55.66 MAD', icon: visaIcon },
+        { method: 'Cashplus', last4: '', date: '03 Jun, 2025 at 12:00 PM', amount: '+ 55.66 MAD', icon: cashplusIcon },
+        { method: 'Wafacash', last4: '', date: '03 Jun, 2025 at 12:00 PM', amount: '+ 55.66 MAD', icon: wafacashIcon },
     ];
 
     return (
         <ModalOverlay onClose={onClose}>
-            <div className="card" style={{ width: '640px', backgroundColor: 'white', borderRadius: '1.5rem', padding: '0', position: 'relative', display: 'flex', flexDirection: 'column', maxHeight: '90vh' }}>
-                <div style={{ padding: '2rem' }}>
-                    <button onClick={onClose} style={{ position: 'absolute', right: '1.5rem', top: '1.5rem', background: 'none', border: 'none', cursor: 'pointer' }}>
-                        <X size={24} color="#111827" strokeWidth={3} />
-                    </button>
+            <div className="card" style={{ width: '640px', backgroundColor: 'white', borderRadius: '1.5rem', padding: '1rem', position: 'relative', display: 'flex', flexDirection: 'column', maxHeight: '90vh', gap: '0' }}>
+                <button onClick={onClose} style={{ position: 'absolute', right: '1.5rem', top: '1.5rem', background: 'none', border: 'none', cursor: 'pointer', zIndex: 10 }}>
+                    <X size={24} color="#111827" strokeWidth={3} />
+                </button>
 
+                {/* Scrollable Body */}
+                <div style={{ padding: '1.5rem 1.5rem 0 1.5rem', overflowY: 'auto', flex: 1 }}>
                     <h2 style={{ fontSize: '1.4rem', fontWeight: '800', margin: '0 0 1.5rem 0' }}>Transaction History</h2>
 
                     <h3 style={{ fontSize: '1rem', fontWeight: '700', margin: '0 0 1rem 0' }}>User Information</h3>
@@ -148,47 +170,50 @@ export const TransactionHistoryModal = ({ onClose, transaction, onProcessRefund 
                     </div>
 
                     <div style={{ 
-                        backgroundImage: 'linear-gradient(to right, #22c55e, #10b981)', 
+                        backgroundImage: 'radial-gradient(circle at top right, rgba(255,255,255,0.2) 0%, transparent 60%), linear-gradient(135deg, #38AC57 0%, #38AC57 100%)', 
                         padding: '1.5rem', borderRadius: '1rem', color: 'white', 
                         display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-                        marginBottom: '1.5rem', position: 'relative', overflow: 'hidden'
+                        marginBottom: '1.5rem', position: 'relative'
                     }}>
                         <div>
-                             <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', backgroundColor: 'rgba(255,255,255,0.2)', padding: '0.25rem 0.6rem', borderRadius: '0.5rem', fontSize: '0.7rem', marginBottom: '0.5rem' }}>
+                             <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', backgroundColor: 'rgba(255,255,255,0.2)', padding: '0.25rem 0.6rem', borderRadius: '0.5rem', fontSize: '0.7rem', fontWeight: 'bold', marginBottom: '0.5rem' }}>
                                  <ArrowLeft size={10} style={{ transform: 'rotate(90deg)' }} /> Top up
                              </div>
-                             <div style={{ fontSize: '0.85rem', opacity: 0.9 }}>Wallet Balance</div>
-                             <div style={{ fontSize: '1.8rem', fontWeight: '800' }}>55.66 MAD</div>
-                             <div style={{ fontSize: '0.65rem', opacity: 0.8, maxWidth: '200px', marginTop: '0.5rem' }}>
+                             <div style={{ fontSize: '0.85rem', fontWeight: '500', opacity: 0.9 }}>Wallet Balance</div>
+                             <div style={{ fontSize: '1.8rem', fontWeight: '800', margin: '0.25rem 0' }}>55.66 MAD</div>
+                             <div style={{ fontSize: '0.65rem', opacity: 0.8, maxWidth: '240px', lineHeight: '1.4' }}>
                                  Virtual balance is non-redeemable and can only be used for Hezzni services.
                              </div>
                         </div>
-                        <div style={{ backgroundColor: 'rgba(255,255,255,0.2)', padding: '1rem', borderRadius: '1rem' }}>
-                             <Wallet size={32} />
+                        <div style={{ backgroundColor: 'rgba(255,255,255,0.15)', width: '80px', height: '80px', borderRadius: '1.2rem', display: 'flex', alignItems: 'center', justifyContent: 'center', backdropFilter: 'blur(4px)' }}>
+                             <img src={walletIcon} alt="Wallet" style={{ width: '40px', height: '40px', objectFit: 'contain', filter: 'brightness(0) invert(1)' }} />
                         </div>
                     </div>
 
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', maxHeight: '200px', overflowY: 'auto', paddingRight: '0.5rem' }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '1.5rem' }}>
                         {historyItems.map((item, idx) => (
-                            <div key={idx} style={{ padding: '0.85rem', borderRadius: '1rem', border: '1px solid #f3f4f6', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <div key={idx} style={{ padding: '1rem 1.2rem', borderRadius: '1rem', backgroundColor: 'white', border: '1px solid #f3f4f6', display: 'flex', justifyContent: 'space-between', alignItems: 'center', boxShadow: '0 2px 4px rgba(0,0,0,0.02)' }}>
                                 <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                                    <div style={{ fontSize: '1.2rem' }}>{item.icon}</div>
+                                    <div style={{ width: '38px', height: '38px', borderRadius: '0.6rem', backgroundColor: '#eef7f0', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0.4rem' }}>
+                                        <img src={item.icon} alt={item.method} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+                                    </div>
                                     <div>
-                                        <div style={{ fontWeight: '700', fontSize: '0.85rem' }}>Wallet Top-Up</div>
-                                        <div style={{ fontSize: '0.7rem', color: '#6b7280' }}>via {item.method} {item.last4 && `**** ${item.last4}`}</div>
-                                        <div style={{ fontSize: '0.65rem', color: '#9ca3af' }}>{item.date}</div>
+                                        <div style={{ fontWeight: '800', fontSize: '0.9rem', color: '#111827' }}>Wallet Top-Up</div>
+                                        <div style={{ fontSize: '0.75rem', color: '#6b7280', fontWeight: '500' }}>via {item.method} {item.last4 && `**** ${item.last4}`}</div>
+                                        <div style={{ fontSize: '0.7rem', color: '#9ca3af', marginTop: '1px' }}>{item.date}</div>
                                     </div>
                                 </div>
-                                <div style={{ color: '#22c55e', fontWeight: '700', fontSize: '0.9rem' }}>{item.amount}</div>
+                                <div style={{ color: '#38AC57', fontWeight: '800', fontSize: '1rem' }}>{item.amount}</div>
                             </div>
                         ))}
                     </div>
                 </div>
 
-                <div style={{ padding: '2rem', borderTop: '1px solid #f3f4f6', display: 'flex', gap: '1rem' }}>
+                {/* Fixed Footer */}
+                <div style={{ padding: '1.5rem', borderTop: '1px solid #f3f4f6', display: 'flex', gap: '1rem', backgroundColor: 'white', borderRadius: '0 0 1.5rem 1.5rem' }}>
                     <button style={{ flex: 1, padding: '0.85rem', borderRadius: '2rem', border: '1px solid #e5e7eb', backgroundColor: 'white', fontWeight: '700', cursor: 'pointer', fontSize: '0.9rem' }}>Transaction History</button>
                     <button onClick={onProcessRefund} style={{ flex: 1, padding: '0.85rem', borderRadius: '2rem', border: '1px solid #e5e7eb', backgroundColor: 'white', fontWeight: '700', cursor: 'pointer', fontSize: '0.9rem' }}>Process Refund</button>
-                    <button style={{ flex: 1, padding: '0.85rem', borderRadius: '2rem', border: 'none', backgroundColor: '#22c55e', color: 'white', fontWeight: '700', cursor: 'pointer', fontSize: '0.9rem' }}>Download Receipt</button>
+                    <button style={{ flex: 1, padding: '0.85rem', borderRadius: '2rem', border: 'none', backgroundColor: '#38AC57', color: 'white', fontWeight: '700', cursor: 'pointer', fontSize: '0.9rem' }}>Download Receipt</button>
                 </div>
             </div>
         </ModalOverlay>
@@ -222,7 +247,7 @@ export const ProcessRefundModal = ({ onClose, transaction }: ModalProps) => {
                     </div>
                     <div>
                         <div style={{ fontSize: '0.75rem', color: '#6b7280', marginBottom: '0.25rem' }}>Payment Method:</div>
-                        <div style={{ fontWeight: '700', fontSize: '1rem', color: '#1a1f71', fontStyle: 'italic' }}>VISA</div>
+                        <PaymentMethodInfo method={transaction.paymentMethod} />
                     </div>
                     <div>
                         <div style={{ fontSize: '0.75rem', color: '#6b7280', marginBottom: '0.25rem' }}>Transaction Date & Time:</div>
@@ -290,7 +315,7 @@ export const ProcessRefundModal = ({ onClose, transaction }: ModalProps) => {
                 <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
                     <button style={{ flex: 1, padding: '1rem', borderRadius: '2rem', border: '1px solid #e5e7eb', backgroundColor: 'white', fontWeight: '700', cursor: 'pointer', fontSize: '1rem' }}>Update Status</button>
                     <button onClick={onClose} style={{ flex: 1, padding: '1rem', borderRadius: '2rem', border: 'none', backgroundColor: 'black', color: 'white', fontWeight: '700', cursor: 'pointer', fontSize: '1rem' }}>Process Refund</button>
-                    <button style={{ flex: 1, padding: '1rem', borderRadius: '2rem', border: 'none', backgroundColor: '#22c55e', color: 'white', fontWeight: '700', cursor: 'pointer', fontSize: '1rem' }}>Download Receipt</button>
+                    <button style={{ flex: 1, padding: '1rem', borderRadius: '2rem', border: 'none', backgroundColor: '#38AC57', color: 'white', fontWeight: '700', cursor: 'pointer', fontSize: '1rem' }}>Download Receipt</button>
                 </div>
             </div>
         </ModalOverlay>

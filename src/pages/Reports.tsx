@@ -18,13 +18,15 @@ import {
   FileSpreadsheet, 
   Download, 
   ArrowUpRight, 
-  TrendingUp, 
-  Users, 
-  Truck, 
-  Wallet,
   ChevronRight,
   Star
 } from 'lucide-react';
+
+// Specialized Icons
+import totalTripsIcon from '../assets/icons/Total Trips Today.png';
+import activeDriversIcon from '../assets/icons/Active Drivers.png';
+import revenueIcon from '../assets/icons/Revenue.png';
+import carIcon from '../assets/icons/car.png';
 
 /* --- Dummy Data --- */
 
@@ -49,7 +51,7 @@ const REVENUE_BY_SERVICE_DATA = [
 ];
 
 const REGIONAL_PERFORMANCE_DATA = [
-  { name: 'Casablanca-Settat', value: 35, color: '#22c55e', revenue: '180,000' },
+  { name: 'Casablanca-Settat', value: 35, color: '#38AC57', revenue: '180,000' },
   { name: 'Rabat-Salé-Kénitra', value: 25, color: '#0ea5e9', revenue: '95,000' },
   { name: 'Marrakech-Safi', value: 15, color: '#f97316', revenue: '75,000' },
   { name: 'Fès-Meknès', value: 10, color: '#eab308', revenue: '58,000' },
@@ -79,12 +81,21 @@ export const Reports = () => {
   const [timeFilter, setTimeFilter] = useState('This Month');
   const [activeTab, setActiveTab] = useState<'drivers' | 'riders'>('drivers');
 
+  const [activeStat, setActiveStat] = useState<string>('Total Earning');
+
   /* Handlers */
   const handleExport = (type: string) => {
     alert(`Exporting as ${type}...`);
   };
 
   const currentListData = activeTab === 'drivers' ? DRIVERS_DATA : RIDERS_DATA;
+
+  const statCards = [
+    { label: 'Total Trips', value: '8,547', change: '+12% From Last Month', icon: totalTripsIcon },
+    { label: 'Total Earning', value: '452,300', suffix: 'MAD', change: '+18% From Last Month', icon: revenueIcon },
+    { label: 'Active Drivers', value: '342', change: '+5% From Last Month', icon: activeDriversIcon },
+    { label: 'Fleet Size', value: '458', change: '+3 New Vehicles', icon: carIcon },
+  ];
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem', paddingBottom: '2rem' }}>
@@ -150,68 +161,51 @@ export const Reports = () => {
 
       {/* --- Stats Cards Grid --- */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.5rem' }}>
-        
-        {/* Total Trips */}
-        <div className="stat-card" style={{ position: 'relative' }}>
-          <div className="stat-header">
-            <div className="stat-icon" style={{ backgroundColor: '#f0fdf4' }}>
-              <Truck size={20} color="var(--primary-color)" />
+        {statCards.map((stat) => {
+          const isActive = activeStat === stat.label;
+          return (
+            <div 
+              key={stat.label}
+              className="stat-card" 
+              onClick={() => setActiveStat(stat.label)}
+              style={{ 
+                backgroundColor: isActive ? 'var(--primary-color)' : 'white', 
+                color: isActive ? 'white' : 'inherit',
+                position: 'relative',
+                cursor: 'pointer',
+                transition: 'all 0.2s ease'
+              }}
+            >
+              <div className="stat-header">
+                <div className="stat-icon" style={{ backgroundColor: isActive ? 'rgba(255, 255, 255, 0.2)' : 'rgba(56, 172, 87, 0.1)' }}>
+                  <img src={stat.icon} alt={stat.label} style={{ width: '32px', height: '32px', objectFit: 'contain' }} />
+                </div>
+                <span className="stat-label" style={{ color: isActive ? 'white' : 'inherit', opacity: isActive ? 0.9 : 1 }}>{stat.label}</span>
+                <span style={{ fontSize: '0.75rem', color: isActive ? 'white' : 'var(--primary-color)', marginLeft: 'auto', fontWeight: '600' }}>{stat.change}</span>
+              </div>
+              <div className="stat-value" style={{ display: 'flex', alignItems: 'baseline', gap: '0.5rem' }}>
+                {stat.value} {stat.suffix && <span style={{ fontSize: '1rem', fontWeight: '500' }}>{stat.suffix}</span>}
+              </div>
+              <div 
+                style={{ 
+                  position: 'absolute', 
+                  bottom: '1.5rem', 
+                  right: '1.5rem', 
+                  backgroundColor: isActive ? 'black' : 'transparent',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  borderRadius: '50%',
+                  width: '32px',
+                  height: '32px'
+                }} 
+                className="stat-arrow"
+              >
+                <ArrowUpRight size={20} color={isActive ? 'white' : 'var(--primary-color)'} />
+              </div>
             </div>
-            <span className="stat-label">Total Trips</span>
-            <span style={{ fontSize: '0.75rem', color: 'var(--primary-color)', marginLeft: 'auto', fontWeight: '600' }}>+12% From Last Month</span>
-          </div>
-          <div className="stat-value">8,547</div>
-          <div style={{ position: 'absolute', bottom: '1.5rem', right: '1.5rem' }} className="stat-arrow">
-            <ArrowUpRight size={20} color="var(--primary-color)" />
-          </div>
-        </div>
-
-        {/* Total Earning */}
-        <div className="stat-card" style={{ backgroundColor: 'var(--primary-color)', color: 'white', position: 'relative' }}>
-          <div className="stat-header">
-            <div className="stat-icon" style={{ backgroundColor: 'rgba(255,255,255,0.2)' }}>
-              <Wallet size={20} color="white" />
-            </div>
-            <span className="stat-label" style={{ color: 'white', opacity: 0.9 }}>Total Earning</span>
-            <span style={{ fontSize: '0.75rem', color: 'white', marginLeft: 'auto', fontWeight: '600' }}>+18% From Last Month</span>
-          </div>
-          <div className="stat-value" style={{ display: 'flex', alignItems: 'baseline', gap: '0.5rem' }}>
-            452,300 <span style={{ fontSize: '1rem', fontWeight: '500' }}>MAD</span>
-          </div>
-          <div style={{ position: 'absolute', bottom: '1.5rem', right: '1.5rem', backgroundColor: 'black' }} className="stat-arrow">
-            <ArrowUpRight size={20} color="white" />
-          </div>
-        </div>
-
-        {/* Active Drivers */}
-        <div className="stat-card" style={{ position: 'relative' }}>
-          <div className="stat-header">
-            <div className="stat-icon" style={{ backgroundColor: '#f0fdf4' }}>
-              <Users size={20} color="var(--primary-color)" />
-            </div>
-            <span className="stat-label">Active Drivers</span>
-            <span style={{ fontSize: '0.75rem', color: 'var(--primary-color)', marginLeft: 'auto', fontWeight: '600' }}>+5% From Last Month</span>
-          </div>
-          <div className="stat-value">342</div>
-          <div style={{ position: 'absolute', bottom: '1.5rem', right: '1.5rem' }} className="stat-arrow">
-             <ArrowUpRight size={20} color="var(--primary-color)" />
-          </div>
-        </div>
-
-        {/* Fleet Size */}
-        <div className="stat-card" style={{ position: 'relative' }}>
-          <div className="stat-header">
-            <div className="stat-icon" style={{ backgroundColor: '#f0fdf4' }}>
-              <TrendingUp size={20} color="var(--primary-color)" />
-            </div>
-            <span className="stat-label">Fleet Size</span>
-            <span style={{ fontSize: '0.75rem', color: 'var(--primary-color)', marginLeft: 'auto', fontWeight: '600' }}>+3 New Vehicles</span>
-          </div>
-          <div className="stat-value">458</div>
-          <div style={{ position: 'absolute', bottom: '1.5rem', right: '1.5rem' }} className="stat-arrow">
-             <ArrowUpRight size={20} color="var(--primary-color)" />
-          </div>
-        </div>
+          );
+        })}
       </div>
 
       {/* --- Charts Section Lower --- */}
@@ -225,15 +219,15 @@ export const Reports = () => {
               <AreaChart data={SERVICE_VOLUME_DATA}>
                 <defs>
                   <linearGradient id="colorCar" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#22c55e" stopOpacity={0.1}/>
-                    <stop offset="95%" stopColor="#22c55e" stopOpacity={0}/>
+                    <stop offset="5%" stopColor="#38AC57" stopOpacity={0.1}/>
+                    <stop offset="95%" stopColor="#38AC57" stopOpacity={0}/>
                   </linearGradient>
                 </defs>
                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
                 <XAxis dataKey="time" axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: '#94a3b8' }} />
                 <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: '#94a3b8' }} />
                 <Tooltip />
-                <Area type="monotone" dataKey="Car Ride" stroke="#22c55e" fillOpacity={1} fill="url(#colorCar)" stackId="1" />
+                <Area type="monotone" dataKey="Car Ride" stroke="#38AC57" fillOpacity={1} fill="url(#colorCar)" stackId="1" />
                 <Area type="monotone" dataKey="Motorcycle" stroke="#0ea5e9" fillOpacity={1} fill="url(#colorCar)" stackId="1" />
                 <Area type="monotone" dataKey="Rental Car" stroke="#f97316" fillOpacity={1} fill="url(#colorCar)" stackId="1" />
                 <Area type="monotone" dataKey="Reservation" stroke="#ef4444" fillOpacity={1} fill="url(#colorCar)" stackId="1" />
@@ -243,7 +237,7 @@ export const Reports = () => {
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem', marginTop: '1rem', justifyContent: 'center' }}>
             {['Car Ride', 'Motorcycle', 'Rental Car', 'Reservation', 'City To City', 'Delivery', 'Taxi', 'Group Ride', 'Airport Ride'].map((label, idx) => (
               <div key={label} style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.7rem' }}>
-                <div style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: ['#22c55e', '#0ea5e9', '#f97316', '#ef4444', '#8b5cf6', '#ec4899', '#10b981', '#f59e0b', '#dc2626'][idx] }}></div>
+                <div style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: ['#38AC57', '#0ea5e9', '#f97316', '#ef4444', '#8b5cf6', '#ec4899', '#38AC57', '#f59e0b', '#dc2626'][idx] }}></div>
                 {label}
               </div>
             ))}
@@ -357,7 +351,7 @@ export const Reports = () => {
                 <div style={{ position: 'relative' }}>
                   <img src={`https://ui-avatars.com/api/?name=${item.name}&background=random`} alt={item.name} style={{ width: '44px', height: '44px', borderRadius: '12px' }} />
                   <div style={{ position: 'absolute', top: -3, right: -3 }}>
-                    <div style={{ backgroundColor: '#22c55e', width: '10px', height: '10px', borderRadius: '50%', border: '2px solid white' }}></div>
+                    <div style={{ backgroundColor: '#38AC57', width: '10px', height: '10px', borderRadius: '50%', border: '2px solid white' }}></div>
                   </div>
                 </div>
                 <div style={{ flex: 1 }}>

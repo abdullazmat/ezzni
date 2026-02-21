@@ -45,7 +45,7 @@ export const FareStructure = () => {
                             padding: '0.6rem 1.25rem',
                             borderRadius: '1.25rem',
                             border: 'none',
-                            backgroundColor: activeService === service ? '#22c55e' : 'transparent',
+                            backgroundColor: activeService === service ? '#38AC57' : 'transparent',
                             color: activeService === service ? 'white' : '#64748b',
                             fontWeight: '600',
                             fontSize: '0.85rem',
@@ -92,7 +92,7 @@ export const FareStructure = () => {
                             alert(`Fare structure for ${activeService} updated successfully!`);
                         }}
                         style={{ 
-                            backgroundColor: '#22c55e', 
+                            backgroundColor: '#38AC57', 
                             color: 'white', 
                             border: 'none', 
                             padding: '0.8rem 2.5rem', 
@@ -100,7 +100,7 @@ export const FareStructure = () => {
                             fontWeight: '700',
                             fontSize: '0.95rem',
                             cursor: 'pointer',
-                            boxShadow: '0 4px 6px -1px rgba(34, 197, 94, 0.3)',
+                            boxShadow: '0 4px 6px -1px rgba(56, 172, 87, 0.4)',
                             transition: 'all 0.2s'
                         }}
                         onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-2px)'}

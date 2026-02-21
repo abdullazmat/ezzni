@@ -48,14 +48,14 @@ export const Commission = () => {
                     }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
                             <div style={{ 
-                                backgroundColor: '#f0fdf4', 
+                                backgroundColor: '#eef7f0', 
                                 padding: '0.5rem', 
                                 borderRadius: '50%', 
                                 display: 'flex', 
                                 alignItems: 'center', 
                                 justifyContent: 'center' 
                             }}>
-                                <MapPin size={18} color="#22c55e" />
+                                <MapPin size={18} color="#38AC57" />
                             </div>
                             <span style={{ fontWeight: '500' }}>{city}</span>
                         </div>
@@ -95,7 +95,7 @@ export const Commission = () => {
                                     left: 0,
                                     right: 0,
                                     bottom: 0,
-                                    backgroundColor: '#22c55e',
+                                    backgroundColor: '#38AC57',
                                     transition: '.4s',
                                     borderRadius: '34px'
                                 }}>

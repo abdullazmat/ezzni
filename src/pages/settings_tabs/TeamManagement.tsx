@@ -1,5 +1,10 @@
 import { useState } from 'react';
-import { Plus, ArrowUpRight, Search, CheckCircle2, Filter, ChevronDown, Eye, Edit2, Trash2, Users } from 'lucide-react';
+import { Plus, ArrowUpRight, Search, CheckCircle2, Filter, ChevronDown, Eye, Edit2, Trash2 } from 'lucide-react';
+
+// Specialized Icons
+import activeDriversIcon from '../../assets/icons/Active Drivers.png';
+import waitingCustomersIcon from '../../assets/icons/Waiting Customers.png';
+import completedIcon from '../../assets/icons/completed.png';
 
 export const TeamManagement = () => {
     const [searchTerm, setSearchTerm] = useState('');
@@ -12,10 +17,10 @@ export const TeamManagement = () => {
     ]);
 
     const dynamicStats = [
-        { label: 'Total Members', value: members.length.toString().padStart(2, '0'), color: '#ffffff', textColor: '#111827', iconColor: '#22c55e' },
-        { label: 'Active', value: members.filter(m => m.status === 'Active').length.toString().padStart(2, '0'), color: '#22c55e', textColor: '#ffffff', iconColor: '#ffffff' },
-        { label: 'Pending', value: members.filter(m => m.status === 'Pending').length.toString().padStart(2, '0'), color: '#ffffff', textColor: '#111827', iconColor: '#22c55e' },
-        { label: '2FA Enabled', value: members.filter(m => m.twoFactorAuth).length.toString(), color: '#ffffff', textColor: '#111827', iconColor: '#22c55e' },
+        { label: 'Total Members', value: members.length.toString().padStart(2, '0'), color: '#ffffff', textColor: '#111827', icon: activeDriversIcon },
+        { label: 'Active', value: members.filter(m => m.status === 'Active').length.toString().padStart(2, '0'), color: '#38AC57', textColor: '#ffffff', icon: completedIcon },
+        { label: 'Pending', value: members.filter(m => m.status === 'Pending').length.toString().padStart(2, '0'), color: '#ffffff', textColor: '#111827', icon: waitingCustomersIcon },
+        { label: '2FA Enabled', value: members.filter(m => m.twoFactorAuth).length.toString(), color: '#ffffff', textColor: '#111827', icon: activeDriversIcon },
     ];
 
     const filteredMembers = members.filter(member => {
@@ -73,12 +78,12 @@ export const TeamManagement = () => {
                         key={index} 
                         onClick={() => setActiveFilter(stat.label)}
                         style={{ 
-                            backgroundColor: activeFilter === stat.label ? (stat.color === '#ffffff' ? '#f0fdf4' : stat.color) : (stat.color === '#22c55e' ? '#ffffff' : stat.color), 
+                            backgroundColor: activeFilter === stat.label ? (stat.color === '#ffffff' ? '#eef7f0' : stat.color) : (stat.color === '#38AC57' ? '#ffffff' : stat.color), 
                             padding: '1.5rem', 
                             borderRadius: '1.5rem', 
-                            border: stat.label === activeFilter ? '2px solid #22c55e' : '1px solid #e5e7eb',
-                            boxShadow: activeFilter === stat.label ? '0 10px 15px -3px rgba(34, 197, 94, 0.1)' : '0 4px 6px -1px rgba(0,0,0,0.05)',
-                            color: activeFilter === stat.label ? (stat.color === '#ffffff' ? '#111827' : '#ffffff') : (stat.color === '#22c55e' ? '#22c55e' : stat.textColor),
+                            border: stat.label === activeFilter ? '2px solid #38AC57' : '1px solid #e5e7eb',
+                            boxShadow: activeFilter === stat.label ? '0 10px 15px -3px rgba(56, 172, 87, 0.2)' : '0 4px 6px -1px rgba(0,0,0,0.05)',
+                            color: activeFilter === stat.label ? (stat.color === '#ffffff' ? '#111827' : '#ffffff') : (stat.color === '#38AC57' ? '#38AC57' : stat.textColor),
                             position: 'relative',
                             cursor: 'pointer',
                             transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
@@ -87,11 +92,10 @@ export const TeamManagement = () => {
                     >
                         <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem' }}>
                             <div style={{ 
-                                backgroundColor: (activeFilter === stat.label && stat.color === '#22c55e') ? 'rgba(255,255,255,0.2)' : '#f0fdf4', 
                                 padding: '0.4rem', 
                                 borderRadius: '0.5rem' 
                             }}>
-                                <Users size={18} color={activeFilter === stat.label && stat.color === '#22c55e' ? '#ffffff' : '#22c55e'} />
+                                <img src={stat.icon} alt="" style={{ width: '32px', height: '32px', objectFit: 'contain' }} />
                             </div>
                             <span style={{ fontSize: '0.9rem', fontWeight: '600' }}>{stat.label}</span>
                         </div>
@@ -100,7 +104,7 @@ export const TeamManagement = () => {
                             position: 'absolute', 
                             right: '1.5rem', 
                             bottom: '1.5rem',
-                            backgroundColor: (activeFilter === stat.label && stat.color === '#22c55e') ? '#111827' : '#22c55e',
+                            backgroundColor: (activeFilter === stat.label && stat.color === '#38AC57') ? '#111827' : '#38AC57',
                             color: 'white',
                             width: '32px',
                             height: '32px',
@@ -133,7 +137,7 @@ export const TeamManagement = () => {
                                 outline: 'none',
                                 transition: 'all 0.2s'
                             }} 
-                            onFocus={(e) => e.target.style.borderColor = '#22c55e'}
+                            onFocus={(e) => e.target.style.borderColor = '#38AC57'}
                             onBlur={(e) => e.target.style.borderColor = '#e5e7eb'}
                         />
                         <Search size={18} style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: '#9ca3af' }} />
@@ -164,7 +168,7 @@ export const TeamManagement = () => {
                 <button 
                     onClick={handleAddMember}
                     style={{ 
-                        backgroundColor: '#22c55e', 
+                        backgroundColor: '#38AC57', 
                         color: 'white', 
                         border: 'none', 
                         padding: '0.75rem 1.75rem', 
@@ -174,7 +178,7 @@ export const TeamManagement = () => {
                         gap: '0.5rem',
                         fontWeight: '700',
                         cursor: 'pointer',
-                        boxShadow: '0 4px 6px -1px rgba(34, 197, 94, 0.2)',
+                        boxShadow: '0 4px 6px -1px rgba(56, 172, 87, 0.4)',
                         transition: 'all 0.2s'
                     }}
                     onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-2px)'}
@@ -195,7 +199,7 @@ export const TeamManagement = () => {
                 <div style={{ overflowX: 'auto' }}>
                     <table style={{ width: '100%', borderCollapse: 'separate', borderSpacing: '0 0.75rem' }}>
                         <thead>
-                            <tr style={{ backgroundColor: '#22c55e', color: 'white' }}>
+                            <tr style={{ backgroundColor: '#38AC57', color: 'white' }}>
                                 <th style={{ padding: '1rem', borderTopLeftRadius: '0.75rem', borderBottomLeftRadius: '0.75rem', textAlign: 'left', fontWeight: '600' }}>Member</th>
                                 <th style={{ padding: '1rem', textAlign: 'left', fontWeight: '600' }}>Department</th>
                                 <th style={{ padding: '1rem', textAlign: 'left', fontWeight: '600' }}>Status</th>
@@ -209,11 +213,11 @@ export const TeamManagement = () => {
                                 <tr key={member.id} style={{ backgroundColor: '#ffffff', boxShadow: '0 1px 3px rgba(0,0,0,0.05)' }}>
                                     <td style={{ padding: '1rem' }}>
                                         <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                                            <img src={member.img} alt="" style={{ width: '40px', height: '40px', borderRadius: '50%', objectFit: 'cover', border: '2px solid #f0fdf4' }} />
+                                            <img src={member.img} alt="" style={{ width: '40px', height: '40px', borderRadius: '50%', objectFit: 'cover', border: '2px solid #eef7f0' }} />
                                             <div>
                                                 <div style={{ fontWeight: '700', fontSize: '0.9rem', color: '#111827' }}>{member.name}</div>
                                                 <div style={{ fontSize: '0.75rem', color: '#6b7280', fontWeight: '600' }}>{member.email}</div>
-                                                <div style={{ fontSize: '0.65rem', color: '#22c55e', fontWeight: '600' }}>Super Administrator</div>
+                                                <div style={{ fontSize: '0.65rem', color: '#38AC57', fontWeight: '600' }}>Super Administrator</div>
                                             </div>
                                         </div>
                                     </td>
@@ -222,8 +226,8 @@ export const TeamManagement = () => {
                                     </td>
                                     <td style={{ padding: '1rem' }}>
                                         <span style={{ 
-                                            backgroundColor: member.status === 'Active' ? '#f0fdf4' : '#fff7ed', 
-                                            color: member.status === 'Active' ? '#16a34a' : '#c2410c', 
+                                            backgroundColor: member.status === 'Active' ? '#eef7f0' : '#fff7ed', 
+                                            color: member.status === 'Active' ? '#38AC57' : '#c2410c', 
                                             padding: '0.3rem 0.75rem', 
                                             borderRadius: '0.5rem', 
                                             fontSize: '0.8rem', 
@@ -231,7 +235,7 @@ export const TeamManagement = () => {
                                         }}>{member.status}</span>
                                     </td>
                                     <td style={{ padding: '1rem' }}>
-                                        {member.twoFactorAuth ? <CheckCircle2 size={20} color="#22c55e" fill="#dcfce7" /> : <Users size={18} color="#9ca3af" />}
+                                        {member.twoFactorAuth ? <CheckCircle2 size={20} color="#38AC57" fill="#eef7f0" /> : <div style={{ color: '#9ca3af', fontWeight: 'bold' }}>OFF</div>}
                                     </td>
                                     <td style={{ padding: '1rem' }}>
                                         <div style={{ backgroundColor: '#f3f4f6', padding: '0.4rem 1rem', borderRadius: '0.5rem', display: 'inline-block', fontSize: '0.85rem', fontWeight: '600', color: '#111827' }}>
@@ -251,7 +255,7 @@ export const TeamManagement = () => {
                                             <button 
                                                 onClick={() => handleAction('Editing', member.name)}
                                                 style={{ background: 'white', border: '1px solid #e5e7eb', padding: '0.4rem', borderRadius: '0.5rem', color: '#4b5563', cursor: 'pointer', transition: 'all 0.2s' }}
-                                                onMouseEnter={e => e.currentTarget.style.backgroundColor = '#f0fdf4'}
+                                                onMouseEnter={e => e.currentTarget.style.backgroundColor = '#eef7f0'}
                                                 onMouseLeave={e => e.currentTarget.style.backgroundColor = 'white'}
                                             >
                                                 <Edit2 size={14} />
@@ -295,7 +299,7 @@ export const TeamManagement = () => {
                         animation: 'slideUp 0.3s ease-out',
                         zIndex: 1000
                     }}>
-                        <CheckCircle2 size={18} color="#22c55e" />
+                        <CheckCircle2 size={18} color="#38AC57" />
                         <span style={{ fontWeight: '600', fontSize: '0.9rem' }}>{lastAction}</span>
                     </div>
                 )}

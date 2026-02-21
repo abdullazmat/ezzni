@@ -2,10 +2,20 @@
 import { useState, useRef, useEffect } from 'react';
 import { 
     Search, Filter, ChevronDown, 
-    ArrowUpRight, XCircle, Clock,
-    CreditCard, Download, ExternalLink, CheckCircle
+    ArrowUpRight,
+    Download, ExternalLink
 } from 'lucide-react';
 import { TransactionDetailsModal, TransactionHistoryModal, ProcessRefundModal } from './PaymentModals';
+
+// Specialized Icons
+import totalTransactionsIcon from '../assets/icons/total payments.png';
+import successfulPaymentsIcon from '../assets/icons/successful payments.png';
+import failedPaymentsIcon from '../assets/icons/failed payments.png';
+import pendingRefundsIcon from '../assets/icons/pending payments.png';
+import mastercardIcon from '../assets/icons/mastercard.png';
+import visaIcon from '../assets/icons/visa.png';
+import cashIcon from '../assets/icons/cash.png';
+import walletIcon from '../assets/icons/hezzni wallet.png';
 
 // --- Types ---
 
@@ -42,14 +52,14 @@ const StatusBadge = ({ status, type }: { status: string, type: 'payment' | 'refu
 
     if (type === 'payment') {
         switch (status) {
-            case 'Completed': bgColor = '#dcfce7'; textColor = '#166534'; break;
+            case 'Completed': bgColor = '#eef7f0'; textColor = '#2d8a46'; break;
             case 'Failed': bgColor = '#fee2e2'; textColor = '#991b1b'; break;
-            case 'Pending': bgColor = '#fef3c7'; textColor = '#92400e'; break;
-            case 'Cancelled': bgColor = '#fef08a'; textColor = '#854d0e'; break;
+            case 'Pending': bgColor = '#fef3c7'; textColor = '#38AC57'; break;
+            case 'Cancelled': bgColor = '#fef08a'; textColor = '#2d8a46'; break;
         }
     } else {
         switch (status) {
-            case 'Refunded': bgColor = '#dcfce7'; textColor = '#166534'; break;
+            case 'Refunded': bgColor = '#eef7f0'; textColor = '#2d8a46'; break;
             case 'Refund Failed': bgColor = '#fee2e2'; textColor = '#991b1b'; break;
             case 'Refund Pending': bgColor = '#f3f4f6'; textColor = '#4b5563'; break;
             case 'Under Review': bgColor = '#e0e7ff'; textColor = '#3730a3'; break;
@@ -76,10 +86,11 @@ const StatusBadge = ({ status, type }: { status: string, type: 'payment' | 'refu
 };
 
 const PaymentIcon = ({ method }: { method: string }) => {
-    if (method === 'VISA') return <span style={{ fontWeight: 'bold', fontSize: '1.2rem', color: '#1a1f71', fontStyle: 'italic' }}>VISA</span>;
-    if (method === 'Mastercard') return <div style={{ display: 'flex' }}><div style={{ width: 14, height: 14, borderRadius: '50%', backgroundColor: '#eb001b' }}></div><div style={{ width: 14, height: 14, borderRadius: '50%', backgroundColor: '#f79e1b', marginLeft: '-6px' }}></div></div>;
-    if (method === 'Cash') return <span style={{ backgroundColor: '#22c55e', color: 'white', padding: '2px 4px', borderRadius: '4px', fontSize: '0.7rem' }}>Cash</span>;
-    return <span>💳</span>;
+    if (method === 'VISA') return <img src={visaIcon} alt="VISA" style={{ width: '32px', height: '20px', objectFit: 'contain' }} />;
+    if (method === 'Mastercard') return <img src={mastercardIcon} alt="Mastercard" style={{ width: '32px', height: '32px', objectFit: 'contain' }} />;
+    if (method === 'Hezzni Wallet') return <img src={walletIcon} alt="Hezzni Wallet" style={{ width: '24px', height: '24px', objectFit: 'contain' }} />;
+    if (method === 'Cash') return <img src={cashIcon} alt="Cash" style={{ width: '24px', height: '24px', objectFit: 'contain' }} />;
+    return <img src={totalTransactionsIcon} alt="Payment" style={{ width: '24px', height: '24px', objectFit: 'contain' }} />;
 }
 
 const DropdownItem = ({ label, isActive, onClick }: { label: string, isActive: boolean, onClick: () => void }) => {
@@ -94,8 +105,8 @@ const DropdownItem = ({ label, isActive, onClick }: { label: string, isActive: b
                 cursor: 'pointer',
                 borderRadius: '0.5rem',
                 fontWeight: isActive ? 'bold' : 'normal',
-                backgroundColor: hovered ? '#f3f4f6' : isActive ? '#f0fdf4' : 'transparent',
-                color: isActive ? '#166534' : '#374151',
+                backgroundColor: hovered ? '#f3f4f6' : isActive ? '#eef7f0' : 'transparent',
+                color: isActive ? '#2d8a46' : '#374151',
                 fontSize: '0.85rem',
                 transition: 'background-color 0.15s',
             }}
@@ -127,11 +138,11 @@ const Dropdown = ({ label, options, activeValue, onSelect }: { label: string, op
                 onClick={() => setIsOpen(!isOpen)}
                 style={{ 
                     padding: '0.6rem 1rem', borderRadius: '2rem', 
-                    border: activeValue !== 'All' ? '1px solid #22c55e' : '1px solid #e5e7eb', 
-                    backgroundColor: activeValue !== 'All' ? '#dcfce7' : 'white', 
+                    border: activeValue !== 'All' ? '1px solid #38AC57' : '1px solid #e5e7eb', 
+                    backgroundColor: activeValue !== 'All' ? '#eef7f0' : 'white', 
                     display: 'flex', alignItems: 'center', gap: '0.5rem', 
                     fontSize: '0.85rem', 
-                    color: activeValue !== 'All' ? '#166534' : '#374151', 
+                    color: activeValue !== 'All' ? '#2d8a46' : '#374151', 
                     cursor: 'pointer', whiteSpace: 'nowrap',
                     transition: 'all 0.2s'
                 }}
@@ -212,7 +223,7 @@ export const Payment = () => {
                      <p style={{ color: '#6b7280', margin: 0 }}>Monitor payment transactions, wallet recharges, and manage refunds</p>
                 </div>
                 <div style={{ display: 'flex', gap: '1rem' }}>
-                    <button style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.6rem 1.2rem', borderRadius: '2rem', backgroundColor: '#22c55e', color: 'white', border: 'none', fontWeight: '600', cursor: 'pointer' }}>
+                    <button style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.6rem 1.2rem', borderRadius: '2rem', backgroundColor: '#38AC57', color: 'white', border: 'none', fontWeight: '600', cursor: 'pointer' }}>
                         <Download size={18} /> Export CSV
                     </button>
                     <button style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.6rem 1.2rem', borderRadius: '2rem', backgroundColor: 'white', color: '#374151', border: '1px solid #e5e7eb', fontWeight: '600', cursor: 'pointer' }}>
@@ -231,7 +242,7 @@ export const Payment = () => {
                             padding: '0.6rem 2rem', 
                             borderRadius: '2rem', 
                             border: 'none', 
-                            backgroundColor: activeView === view ? '#22c55e' : 'transparent', 
+                            backgroundColor: activeView === view ? '#38AC57' : 'transparent', 
                             color: activeView === view ? 'white' : '#6b7280', 
                             fontWeight: '600', 
                             cursor: 'pointer',
@@ -246,10 +257,10 @@ export const Payment = () => {
             {/* Stats Cards */}
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.5rem' }}>
                 {[
-                    { id: 'All', label: 'Total Transactions', count: '0100', icon: <CreditCard size={20} /> },
-                    { id: 'Successful', label: 'Successful', count: '005', icon: <CheckCircle size={20} /> },
-                    { id: 'Failed', label: 'Failed', count: '0250', icon: <XCircle size={20} /> },
-                    { id: 'Pending Refunds', label: 'Pending Refunds', count: '0250', icon: <Clock size={20} /> },
+                    { id: 'All', label: 'Total Transactions', count: '0100', icon: totalTransactionsIcon },
+                    { id: 'Successful', label: 'Successful', count: '005', icon: successfulPaymentsIcon },
+                    { id: 'Failed', label: 'Failed', count: '0250', icon: failedPaymentsIcon },
+                    { id: 'Pending Refunds', label: 'Pending Refunds', count: '0250', icon: pendingRefundsIcon },
                 ].map((stat) => {
                     const isActive = activeStat === stat.id;
                     return (
@@ -260,20 +271,20 @@ export const Payment = () => {
                             style={{ 
                                 padding: '1.5rem', 
                                 display: 'flex', flexDirection: 'column', justifyContent: 'space-between', height: '140px',
-                                backgroundColor: isActive ? '#22c55e' : 'white',
+                                backgroundColor: isActive ? '#38AC57' : 'white',
                                 color: isActive ? 'white' : 'inherit',
                                 cursor: 'pointer',
                                 transition: 'all 0.2s',
                                 transform: isActive ? 'translateY(-4px)' : 'none',
-                                boxShadow: isActive ? '0 10px 15px -3px rgba(34, 197, 94, 0.3)' : 'var(--shadow-sm)'
+                                boxShadow: isActive ? '0 10px 15px -3px rgba(56, 172, 87, 0.3)' : 'var(--shadow-sm)'
                             }}
                         >
                             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: isActive ? 'white' : '#6b7280', fontWeight: '600' }}>
-                                {stat.icon} {stat.label}
+                                <img src={stat.icon} alt="" style={{ width: '32px', height: '32px', objectFit: 'contain' }} /> {stat.label}
                             </div>
                             <div style={{ fontSize: '2.5rem', fontWeight: 'bold' }}>{stat.count}</div>
                             <div style={{ textAlign: 'right' }}>
-                                <div style={{ display: 'inline-flex', padding: '0.3rem', borderRadius: '50%', backgroundColor: isActive ? 'black' : '#22c55e', color: 'white' }}>
+                                <div style={{ display: 'inline-flex', padding: '0.3rem', borderRadius: '50%', backgroundColor: isActive ? 'black' : '#38AC57', color: 'white' }}>
                                     <ArrowUpRight size={16} />
                                 </div>
                             </div>
@@ -286,7 +297,7 @@ export const Payment = () => {
              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', flexWrap: 'wrap' }}>
                      <div style={{ position: 'relative', width: '250px', flexShrink: 0 }}>
-                        <Search size={18} color="#9ca3af" style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', zIndex: 1 }} />
+                        <Search size={18} color="#2d8a46" style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', zIndex: 1 }} />
                         <input 
                             type="text" 
                             placeholder="Search transaction..." 
@@ -299,17 +310,17 @@ export const Payment = () => {
                         onClick={() => setShowFilters(!showFilters)}
                         style={{ 
                             padding: '0.6rem 1.2rem', borderRadius: '2rem', 
-                            border: activeFilterCount > 0 ? '1px solid #22c55e' : '1px solid #e5e7eb', 
-                            backgroundColor: activeFilterCount > 0 ? '#dcfce7' : showFilters ? '#f3f4f6' : 'white', 
+                            border: activeFilterCount > 0 ? '1px solid #38AC57' : '1px solid #e5e7eb', 
+                            backgroundColor: activeFilterCount > 0 ? '#eef7f0' : showFilters ? '#f3f4f6' : 'white', 
                             display: 'flex', alignItems: 'center', gap: '0.5rem', 
-                            fontSize: '0.85rem', color: activeFilterCount > 0 ? '#166534' : '#374151', 
+                            fontSize: '0.85rem', color: activeFilterCount > 0 ? '#2d8a46' : '#374151', 
                             cursor: 'pointer', whiteSpace: 'nowrap', flexShrink: 0,
                             transition: 'all 0.2s'
                         }}
                     >
                         <Filter size={14} /> Filters
                         {activeFilterCount > 0 && (
-                            <span style={{ backgroundColor: '#22c55e', color: 'white', borderRadius: '50%', width: 20, height: 20, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.7rem', fontWeight: 'bold' }}>
+                            <span style={{ backgroundColor: '#38AC57', color: 'white', borderRadius: '50%', width: 20, height: 20, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.7rem', fontWeight: 'bold' }}>
                                 {activeFilterCount}
                             </span>
                         )}
@@ -341,7 +352,7 @@ export const Payment = () => {
                         : activeView === 'Wallet Recharges'
                         ? '0.8fr 1.5fr 1fr 1.2fr 1.2fr 1fr 1.2fr 1fr 0.5fr'
                         : '0.8fr 1fr 0.8fr 1fr 1fr 0.8fr 1fr 1fr 0.5fr',
-                    backgroundColor: '#22c55e', color: 'white', padding: '1rem', borderRadius: '1rem', fontWeight: 'bold', fontSize: '0.85rem', alignItems: 'center', marginBottom: '1rem' 
+                    backgroundColor: '#38AC57', color: 'white', padding: '1rem', borderRadius: '1rem', fontWeight: 'bold', fontSize: '0.85rem', alignItems: 'center', marginBottom: '1rem' 
                 }}>
                     {activeView === 'Trip Payments' ? (
                         <>

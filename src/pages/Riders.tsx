@@ -2,8 +2,14 @@
 import { useState, useRef, useEffect } from 'react';
 import { 
     Search, Eye, ArrowUpRight, 
-    Star, ChevronDown, User, ArrowLeft, X
+    Star, ChevronDown, ArrowLeft, X
 } from 'lucide-react';
+
+// Specialized Icons
+import totalRidersIcon from '../assets/icons/total riders.png';
+import avgRatingIcon from '../assets/icons/avg rating.png';
+import activeNowIcon from '../assets/icons/active now.png';
+import totalSpentIcon from '../assets/icons/Total Earnings.png';
 import { 
     RiderDetailsContent, 
     SpendingContent,
@@ -57,8 +63,8 @@ const DropdownItem = ({ label, isActive, onClick }: { label: string, isActive: b
                 cursor: 'pointer',
                 borderRadius: '8px',
                 fontWeight: isActive ? 'bold' : 'normal',
-                backgroundColor: hovered ? '#f3f4f6' : isActive ? '#f0fdf4' : 'transparent',
-                color: isActive ? '#166534' : '#374151',
+                backgroundColor: hovered ? '#f3f4f6' : isActive ? '#eef7f0' : 'transparent',
+                color: isActive ? '#2d8a46' : '#374151',
                 fontSize: '14px',
                 transition: 'background-color 0.15s',
             }}
@@ -91,10 +97,10 @@ const Dropdown = ({ label, options, activeValue, onSelect }: { label: string, op
                 style={{ 
                     display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', 
                     borderRadius: '24px', 
-                    border: activeValue !== 'All' ? '1px solid #22c55e' : '1px solid #e5e7eb', 
-                    backgroundColor: activeValue !== 'All' ? '#dcfce7' : 'white',
+                    border: activeValue !== 'All' ? '1px solid #38AC57' : '1px solid #e5e7eb', 
+                    backgroundColor: activeValue !== 'All' ? '#eef7f0' : 'white',
                     fontSize: '14px', 
-                    color: activeValue !== 'All' ? '#166534' : '#374151',
+                    color: activeValue !== 'All' ? '#2d8a46' : '#374151',
                     cursor: 'pointer', 
                     transition: 'all 0.2s',
                     whiteSpace: 'nowrap'
@@ -212,24 +218,24 @@ export const Riders = () => {
         { 
             key: 'Total Riders', label: 'Total Riders', 
             value: String(totalRiders).padStart(4, '0'), suffix: '',
-            icon: <User size={20} />, bgDefault: 'white', colorDefault: 'black',
+            icon: totalRidersIcon, bgDefault: 'white', colorDefault: 'black',
         },
         { 
             key: 'Avg Rating', label: 'Avg Rating', 
             value: avgRating, suffix: '',
-            icon: <Star size={20} fill="white" stroke="white" />,
+            icon: avgRatingIcon,
             bgDefault: 'var(--primary-color)', colorDefault: 'white', isAlwaysGreen: true,
         },
         { 
             key: 'Active Now', label: 'Active Now', 
             value: String(activeRiders).padStart(4, '0'), suffix: '',
-            icon: <div style={{ width: '20px', height: '20px', backgroundColor: 'var(--primary-color)', borderRadius: '50%' }}></div>,
+            icon: activeNowIcon,
             bgDefault: 'white', colorDefault: 'black',
         },
         { 
             key: 'Total Spent', label: 'Total Spent', 
             value: String(totalSpent).padStart(4, '0'), suffix: 'MAD',
-            icon: <div style={{ fontWeight: 'bold', color: 'var(--primary-color)' }}>$</div>,
+            icon: totalSpentIcon,
             bgDefault: 'white', colorDefault: 'black',
         },
     ];
@@ -261,7 +267,7 @@ export const Riders = () => {
                     const bg = isActive && !isGreenCard ? 'var(--primary-color)' : stat.bgDefault;
                     const color = isActive && !isGreenCard ? 'white' : stat.colorDefault;
                     const shadow = (isActive || isGreenCard) 
-                        ? '0 10px 15px -3px rgba(34, 197, 94, 0.3)' 
+                        ? '0 10px 15px -3px rgba(56, 172, 87, 0.3)' 
                         : 'var(--shadow-sm)';
 
                     return (
@@ -294,15 +300,13 @@ export const Riders = () => {
 
                             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px', position: 'relative' }}>
                                 <div style={{ 
-                                    backgroundColor: (isActive || isGreenCard) ? 'rgba(255,255,255,0.2)' : '#f3f4f6', 
-                                    padding: '8px', borderRadius: '8px' 
+                                    backgroundColor: (isActive || isGreenCard) ? 'rgba(255,255,255,0.2)' : 'transparent', 
+                                    padding: '4px', borderRadius: '8px' 
                                 }}>
-                                    {isGreenCard ? stat.icon : (
-                                        isActive ? 
-                                            <User size={20} color="white" /> : 
-                                            (stat.key === 'Active Now' ? stat.icon : 
-                                             stat.key === 'Total Spent' ? stat.icon :
-                                             <User size={20} color="var(--primary-color)" />)
+                                    {typeof stat.icon === 'string' ? (
+                                        <img src={stat.icon} alt="" style={{ height: '32px', width: 'auto', objectFit: 'contain', filter: (isActive || isGreenCard) ? 'brightness(0) invert(1)' : 'none' }} />
+                                    ) : (
+                                        stat.icon
                                     )}
                                 </div>
                                 <span style={{ fontWeight: '600', color: (isActive || isGreenCard) ? 'white' : 'var(--text-secondary)' }}>
@@ -369,7 +373,7 @@ export const Riders = () => {
                     <div style={{ fontSize: '13px', color: '#6b7280' }}>
                         Showing <strong style={{ color: '#1f2937' }}>{filteredRiders.length}</strong> of <strong style={{ color: '#1f2937' }}>{mockRiders.length}</strong> riders
                         {activeStat !== 'Total Riders' && (
-                            <span style={{ marginLeft: '8px', backgroundColor: '#dcfce7', color: '#166534', padding: '2px 8px', borderRadius: '8px', fontSize: '12px', fontWeight: '600' }}>
+                            <span style={{ marginLeft: '8px', backgroundColor: '#eef7f0', color: '#2d8a46', padding: '2px 8px', borderRadius: '8px', fontSize: '12px', fontWeight: '600' }}>
                                 {activeStat}
                             </span>
                         )}
@@ -382,7 +386,7 @@ export const Riders = () => {
                 <h2 style={{ fontSize: '20px', fontWeight: 'bold', marginBottom: '8px' }}>Rider Management Overview</h2>
                 <p style={{ color: '#6b7280', fontSize: '14px', marginBottom: '24px' }}>Manage driver accounts and generate IDs by vehicle type</p>
 
-                <div style={{ display: 'grid', gridTemplateColumns: 'minmax(250px, 1.5fr) 1.5fr 1fr 1fr 1fr 1fr', padding: '16px 24px', backgroundColor: '#10b981', color: 'white', borderRadius: '12px', fontWeight: 'bold', fontSize: '14px', marginBottom: '16px' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: 'minmax(250px, 1.5fr) 1.5fr 1fr 1fr 1fr 1fr', padding: '16px 24px', backgroundColor: '#38AC57', color: 'white', borderRadius: '12px', fontWeight: 'bold', fontSize: '14px', marginBottom: '16px' }}>
                     <div>Riders</div>
                     <div>Contact</div>
                     <div style={{ textAlign: 'center' }}>Status</div>
@@ -401,7 +405,7 @@ export const Riders = () => {
                                 onClick={clearAllFilters} 
                                 style={{ 
                                     padding: '10px 24px', borderRadius: '24px', border: 'none', 
-                                    backgroundColor: '#22c55e', color: 'white', fontWeight: '600', 
+                                    backgroundColor: '#38AC57', color: 'white', fontWeight: '600', 
                                     cursor: 'pointer', fontSize: '14px' 
                                 }}
                             >
@@ -432,7 +436,7 @@ export const Riders = () => {
                                 <div>
                                     <div style={{ fontWeight: 'bold', fontSize: '14px' }}>{rider.name}</div>
                                     <div style={{ fontSize: '12px', color: '#9ca3af' }}>{rider.location}</div>
-                                    <div style={{ fontSize: '11px', color: '#10b981', fontWeight: '600' }}>ID {rider.id}</div>
+                                    <div style={{ fontSize: '11px', color: '#38AC57', fontWeight: '600' }}>ID {rider.id}</div>
                                 </div>
                             </div>
 
@@ -444,9 +448,9 @@ export const Riders = () => {
                             <div style={{ textAlign: 'center' }}>
                                 <span style={{ 
                                     padding: '4px 12px', borderRadius: '8px', fontSize: '12px', fontWeight: '600',
-                                    backgroundColor: rider.status === 'Active' ? '#f0fdf4' : '#fef2f2',
-                                    color: rider.status === 'Active' ? '#10b981' : '#dc2626',
-                                    border: `1px solid ${rider.status === 'Active' ? '#10b98120' : '#dc262620'}`
+                                    backgroundColor: rider.status === 'Active' ? '#eef7f0' : '#fef2f2',
+                                    color: rider.status === 'Active' ? '#38AC57' : '#dc2626',
+                                    border: `1px solid ${rider.status === 'Active' ? '#38AC5720' : '#dc262620'}`
                                 }}>
                                     {rider.status}
                                 </span>
@@ -470,7 +474,7 @@ export const Riders = () => {
                                         fontSize: '13px', cursor: 'pointer', fontWeight: '600',
                                         transition: 'all 0.2s'
                                     }}
-                                    onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#f0fdf4'; e.currentTarget.style.borderColor = '#22c55e'; }}
+                                    onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#eef7f0'; e.currentTarget.style.borderColor = '#38AC57'; }}
                                     onMouseLeave={e => { e.currentTarget.style.backgroundColor = 'white'; e.currentTarget.style.borderColor = '#e5e7eb'; }}
                                 >
                                     <Eye size={14} /> Preview

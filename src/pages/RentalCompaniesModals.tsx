@@ -92,7 +92,7 @@ export const VehicleDetailModal = ({ vehicle, onClose, onApprove, onReject }: {
                     <h2 style={{ fontSize: '24px', fontWeight: 'bold', margin: '0 0 4px 0' }}>
                         {isEditing ? (
                             <input value={editData.name} onChange={e => setEditData({...editData, name: e.target.value})}
-                                style={{ fontSize: '24px', fontWeight: 'bold', border: '1px solid #22c55e', borderRadius: '8px', padding: '4px 8px', width: '100%', outline: 'none', boxSizing: 'border-box' }} />
+                                style={{ fontSize: '24px', fontWeight: 'bold', border: '1px solid #38AC57', borderRadius: '8px', padding: '4px 8px', width: '100%', outline: 'none', boxSizing: 'border-box' }} />
                         ) : vehicle.name}
                     </h2>
                     <p style={{ color: '#6b7280', fontSize: '14px', margin: 0 }}>Review rental listing details and approve or reject</p>
@@ -116,7 +116,7 @@ export const VehicleDetailModal = ({ vehicle, onClose, onApprove, onReject }: {
 
                 {/* Vehicle Information */}
                 <h3 style={{ fontSize: '18px', fontWeight: 'bold', margin: '0 0 16px 0' }}>Vehicle Information</h3>
-                <div style={{ border: `1px solid ${isEditing ? '#22c55e' : '#f3f4f6'}`, borderRadius: '16px', padding: '20px', marginBottom: '24px', transition: 'border-color 0.2s' }}>
+                <div style={{ border: `1px solid ${isEditing ? '#38AC57' : '#f3f4f6'}`, borderRadius: '16px', padding: '20px', marginBottom: '24px', transition: 'border-color 0.2s' }}>
                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '16px', marginBottom: '16px' }}>
                         <div>
                             <div style={{ color: '#9ca3af', fontSize: '11px', marginBottom: '4px' }}>License Plate:</div>
@@ -179,7 +179,7 @@ export const VehicleDetailModal = ({ vehicle, onClose, onApprove, onReject }: {
                         </div>
                         <div>
                             <div style={{ color: '#9ca3af', fontSize: '11px', marginBottom: '4px' }}>Pricing:</div>
-                            <div style={{ fontWeight: 'bold', fontSize: '15px' }}>Daily Rate: <span style={{ color: '#22c55e' }}>{vehicle.price}</span></div>
+                            <div style={{ fontWeight: 'bold', fontSize: '15px' }}>Daily Rate: <span style={{ color: '#38AC57' }}>{vehicle.price}</span></div>
                         </div>
                         <div>
                             <div style={{ color: '#9ca3af', fontSize: '11px', marginBottom: '4px' }}>Submitted Date:</div>
@@ -190,7 +190,7 @@ export const VehicleDetailModal = ({ vehicle, onClose, onApprove, onReject }: {
 
                 {/* Description */}
                 <h4 style={{ fontSize: '14px', fontWeight: '600', margin: '0 0 8px 0', color: '#374151' }}>Description</h4>
-                <div style={{ backgroundColor: '#f0fdf4', borderRadius: '12px', padding: '16px', marginBottom: '28px', border: '1px solid #dcfce7' }}>
+                <div style={{ backgroundColor: '#eef7f0', borderRadius: '12px', padding: '16px', marginBottom: '28px', border: '1px solid #eef7f0' }}>
                     {isEditing ? (
                         <textarea value={editData.description} onChange={e => setEditData({...editData, description: e.target.value})}
                             style={{ width: '100%', height: '80px', fontSize: '13px', border: '1px solid #d1d5db', borderRadius: '8px', padding: '10px', fontFamily: 'inherit', resize: 'none', outline: 'none', boxSizing: 'border-box' }} />
@@ -208,9 +208,9 @@ export const VehicleDetailModal = ({ vehicle, onClose, onApprove, onReject }: {
                             onMouseLeave={e => e.currentTarget.style.backgroundColor = 'white'}
                         >Cancel</button>
                         <button onClick={() => { setIsEditing(false); alert('Changes saved successfully!'); }}
-                            style={{ flex: 1, padding: '14px', borderRadius: '32px', border: 'none', backgroundColor: '#22c55e', color: 'white', fontWeight: 'bold', fontSize: '15px', cursor: 'pointer', transition: 'background-color 0.2s' }}
-                            onMouseEnter={e => e.currentTarget.style.backgroundColor = '#16a34a'}
-                            onMouseLeave={e => e.currentTarget.style.backgroundColor = '#22c55e'}
+                            style={{ flex: 1, padding: '14px', borderRadius: '32px', border: 'none', backgroundColor: '#38AC57', color: 'white', fontWeight: 'bold', fontSize: '15px', cursor: 'pointer', transition: 'background-color 0.2s' }}
+                            onMouseEnter={e => e.currentTarget.style.backgroundColor = '#2d8a46'}
+                            onMouseLeave={e => e.currentTarget.style.backgroundColor = '#38AC57'}
                         >Save Changes</button>
                     </div>
                 ) : (
@@ -226,9 +226,9 @@ export const VehicleDetailModal = ({ vehicle, onClose, onApprove, onReject }: {
                             onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#dc2626'; e.currentTarget.style.transform = 'none'; }}
                         >Reject</button>
                         <button onClick={onApprove}
-                            style={{ flex: 1, padding: '14px', borderRadius: '32px', border: 'none', backgroundColor: '#22c55e', color: 'white', fontWeight: 'bold', fontSize: '15px', cursor: 'pointer', transition: 'all 0.2s' }}
-                            onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#16a34a'; e.currentTarget.style.transform = 'translateY(-1px)'; }}
-                            onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#22c55e'; e.currentTarget.style.transform = 'none'; }}
+                            style={{ flex: 1, padding: '14px', borderRadius: '32px', border: 'none', backgroundColor: '#38AC57', color: 'white', fontWeight: 'bold', fontSize: '15px', cursor: 'pointer', transition: 'all 0.2s' }}
+                            onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#2d8a46'; e.currentTarget.style.transform = 'translateY(-1px)'; }}
+                            onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#38AC57'; e.currentTarget.style.transform = 'none'; }}
                         >Approve List</button>
                     </div>
                 )}
@@ -391,9 +391,9 @@ export const AddVehicleModal = ({ onClose, onAdd }: { onClose: () => void; onAdd
                     
                     <button 
                         onClick={handleSubmit}
-                        style={{ width: '100%', padding: '16px', backgroundColor: '#22c55e', color: 'white', fontWeight: 'bold', fontSize: '16px', borderRadius: '32px', border: 'none', marginTop: '16px', cursor: 'pointer', transition: 'background-color 0.2s' }}
-                        onMouseEnter={e => e.currentTarget.style.backgroundColor = '#16a34a'}
-                        onMouseLeave={e => e.currentTarget.style.backgroundColor = '#22c55e'}
+                        style={{ width: '100%', padding: '16px', backgroundColor: '#38AC57', color: 'white', fontWeight: 'bold', fontSize: '16px', borderRadius: '32px', border: 'none', marginTop: '16px', cursor: 'pointer', transition: 'background-color 0.2s' }}
+                        onMouseEnter={e => e.currentTarget.style.backgroundColor = '#2d8a46'}
+                        onMouseLeave={e => e.currentTarget.style.backgroundColor = '#38AC57'}
                     >
                         Add Vehicle
                     </button>

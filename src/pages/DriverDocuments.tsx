@@ -1,17 +1,23 @@
 
 import { useState, useRef, useEffect } from 'react';
-import { Search, Eye, ArrowUpRight, ChevronDown, Plus, FileText, Clock, AlertTriangle, CheckCircle } from 'lucide-react';
+import { Search, Eye, ArrowUpRight, ChevronDown, Plus } from 'lucide-react';
 import { ApplicationReviewModal } from './DriverDocumentsModals';
+
+// Specialized Icons
+import driverDocumentsIcon from '../assets/icons/Driver Documents.png';
+import waitingCustomersIcon from '../assets/icons/Waiting Customers.png';
+import pendingIcon from '../assets/icons/Pending.png';
+import cancelledArchiveIcon from '../assets/icons/Cancelled Archive.png';
 
 // --- Status Colors ---
 const statusColors: Record<string, { bg: string; color: string; border: string }> = {
-    'Verified': { bg: '#dcfce7', color: '#16a34a', border: '#bbf7d0' },
+    'Verified': { bg: '#eef7f0', color: '#2d8a46', border: '#eef7f0' },
     'Pending': { bg: '#f3f4f6', color: '#6b7280', border: '#e5e7eb' },
     'Updated': { bg: '#dbeafe', color: '#2563eb', border: '#bfdbfe' },
     'Rejected': { bg: '#fee2e2', color: '#dc2626', border: '#fecaca' },
     'Expired': { bg: '#fef3c7', color: '#d97706', border: '#fde68a' },
     'Under Review': { bg: '#fef9c3', color: '#a16207', border: '#fef08a' },
-    'Completed': { bg: '#dcfce7', color: '#16a34a', border: '#bbf7d0' },
+    'Completed': { bg: '#eef7f0', color: '#2d8a46', border: '#eef7f0' },
 };
 
 interface DocRecord {
@@ -37,7 +43,7 @@ const DropdownItem = ({ label, isActive, onClick }: { label: string; isActive: b
     return (
         <div onClick={onClick} onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}
             style={{ padding: '8px 16px', cursor: 'pointer', borderRadius: '8px', fontWeight: isActive ? 'bold' : 'normal',
-                backgroundColor: hovered ? '#f3f4f6' : isActive ? '#f0fdf4' : 'transparent', color: isActive ? '#166534' : '#374151', fontSize: '14px', transition: '0.15s' }}>
+                backgroundColor: hovered ? '#f3f4f6' : isActive ? '#eef7f0' : 'transparent', color: isActive ? '#2d8a46' : '#374151', fontSize: '14px', transition: '0.15s' }}>
             {label}
         </div>
     );
@@ -56,9 +62,9 @@ const Dropdown = ({ label, options, activeValue, onSelect }: { label: string; op
         <div ref={ref} style={{ position: 'relative', display: 'inline-block' }}>
             <button onClick={() => setIsOpen(!isOpen)} style={{
                 display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '24px',
-                border: activeValue !== 'All' ? '1px solid #22c55e' : '1px solid #e5e7eb',
-                backgroundColor: activeValue !== 'All' ? '#dcfce7' : 'white', fontSize: '14px',
-                color: activeValue !== 'All' ? '#166534' : '#374151', cursor: 'pointer', transition: 'all 0.2s', whiteSpace: 'nowrap'
+                border: activeValue !== 'All' ? '1px solid #38AC57' : '1px solid #e5e7eb',
+                backgroundColor: activeValue !== 'All' ? '#eef7f0' : 'white', fontSize: '14px',
+                color: activeValue !== 'All' ? '#2d8a46' : '#374151', cursor: 'pointer', transition: 'all 0.2s', whiteSpace: 'nowrap'
             }}>
                 {activeValue === 'All' ? label : activeValue}
                 <ChevronDown size={14} style={{ transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.2s' }} />
@@ -116,10 +122,10 @@ export const DriverDocuments = () => {
     });
 
     const statCards = [
-        { key: 'Total Applications', label: 'Total Applications', value: String(totalApps).padStart(2, '0'), icon: <FileText size={20} /> },
-        { key: 'Pending Review', label: 'Pending Review', value: String(pending).padStart(2, '0'), icon: <Clock size={20} /> },
-        { key: 'Under Review', label: 'Under Review', value: String(underReview).padStart(2, '0'), icon: <AlertTriangle size={20} /> },
-        { key: 'Expired', label: 'Under Review', value: String(expired).padStart(2, '0'), icon: <CheckCircle size={20} /> },
+        { key: 'Total Applications', label: 'Total Applications', value: String(totalApps).padStart(2, '0'), icon: driverDocumentsIcon },
+        { key: 'Pending Review', label: 'Pending Review', value: String(pending).padStart(2, '0'), icon: waitingCustomersIcon },
+        { key: 'Under Review', label: 'Under Review', value: String(underReview).padStart(2, '0'), icon: pendingIcon },
+        { key: 'Expired', label: 'Expired Documents', value: String(expired).padStart(2, '0'), icon: cancelledArchiveIcon },
     ];
 
     const tabs = [
@@ -136,14 +142,14 @@ export const DriverDocuments = () => {
             {/* Banner */}
             {banner && (
                 <div style={{
-                    backgroundColor: banner.type === 'approve' ? '#f0fdf4' : '#fef2f2',
-                    border: `1px solid ${banner.type === 'approve' ? '#bbf7d0' : '#fecaca'}`,
+                    backgroundColor: banner.type === 'approve' ? '#eef7f0' : '#fef2f2',
+                    border: `1px solid ${banner.type === 'approve' ? '#eef7f0' : '#fecaca'}`,
                     borderRadius: '12px', padding: '14px 24px', marginBottom: '20px',
                     display: 'flex', alignItems: 'center', justifyContent: 'space-between', animation: 'slideDown 0.3s ease'
                 }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                         <span style={{
-                            backgroundColor: banner.type === 'approve' ? '#10b981' : '#dc2626', color: 'white',
+                            backgroundColor: banner.type === 'approve' ? '#38AC57' : '#dc2626', color: 'white',
                             padding: '4px 12px', borderRadius: '6px', fontSize: '12px', fontWeight: '700'
                         }}>{banner.type === 'approve' ? '✓ Approved' : '✗ Rejected'}</span>
                         <span style={{ fontSize: '14px', color: '#374151' }}>{banner.msg}</span>
@@ -160,15 +166,17 @@ export const DriverDocuments = () => {
                         <div key={stat.key} onClick={() => setActiveStat(isActive ? 'Total Applications' : stat.key)}
                             style={{
                                 backgroundColor: 'white', padding: '24px', borderRadius: '24px', position: 'relative',
-                                cursor: 'pointer', transition: 'all 0.3s ease', boxShadow: isActive ? '0 8px 20px rgba(34,197,94,0.15)' : '0 1px 3px rgba(0,0,0,0.06)',
-                                border: isActive ? '2px solid #22c55e' : '2px solid transparent', transform: isActive ? 'translateY(-2px)' : 'none'
+                                cursor: 'pointer', transition: 'all 0.3s ease', boxShadow: isActive ? '0 8px 20px rgba(56, 172, 87, 0.15)' : '0 1px 3px rgba(0,0,0,0.06)',
+                                border: isActive ? '2px solid #38AC57' : '2px solid transparent', transform: isActive ? 'translateY(-2px)' : 'none'
                             }}>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
-                                <div style={{ backgroundColor: '#f3f4f6', padding: '8px', borderRadius: '8px', color: isActive ? '#22c55e' : '#6b7280' }}>{stat.icon}</div>
+                                <div style={{ padding: '0px', borderRadius: '8px' }}>
+                                    <img src={stat.icon} alt="" style={{ width: '32px', height: '32px', objectFit: 'contain' }} />
+                                </div>
                                 <span style={{ fontWeight: '600', fontSize: '14px', color: '#6b7280' }}>{stat.label}</span>
                             </div>
                             <div style={{ fontSize: '40px', fontWeight: 'bold' }}>{stat.value}</div>
-                            <div style={{ position: 'absolute', bottom: '24px', right: '24px', backgroundColor: '#22c55e', color: 'white', borderRadius: '50%', padding: '6px' }}>
+                            <div style={{ position: 'absolute', bottom: '24px', right: '24px', backgroundColor: '#38AC57', color: 'white', borderRadius: '50%', padding: '6px' }}>
                                 <ArrowUpRight size={16} />
                             </div>
                         </div>
@@ -184,10 +192,10 @@ export const DriverDocuments = () => {
                 </div>
                 <button onClick={() => alert('Add New Driver flow coming soon!')} style={{
                     display: 'flex', alignItems: 'center', gap: '8px', padding: '10px 20px', borderRadius: '24px', border: 'none',
-                    backgroundColor: '#22c55e', color: 'white', fontWeight: '600', fontSize: '14px', cursor: 'pointer', transition: 'background-color 0.2s', whiteSpace: 'nowrap'
+                    backgroundColor: '#38AC57', color: 'white', fontWeight: '600', fontSize: '14px', cursor: 'pointer', transition: 'background-color 0.2s', whiteSpace: 'nowrap'
                 }}
-                onMouseEnter={e => e.currentTarget.style.backgroundColor = '#16a34a'}
-                onMouseLeave={e => e.currentTarget.style.backgroundColor = '#22c55e'}
+                onMouseEnter={e => e.currentTarget.style.backgroundColor = '#2d8a46'}
+                onMouseLeave={e => e.currentTarget.style.backgroundColor = '#38AC57'}
                 ><Plus size={18} /> Add New Drivers</button>
             </div>
 
@@ -196,7 +204,7 @@ export const DriverDocuments = () => {
                 {tabs.map(tab => (
                     <button key={tab.key} onClick={() => setActiveTab(tab.key)} style={{
                         flex: 1, padding: '12px', borderRadius: '28px', border: 'none',
-                        backgroundColor: activeTab === tab.key ? '#22c55e' : 'transparent',
+                        backgroundColor: activeTab === tab.key ? '#38AC57' : 'transparent',
                         color: activeTab === tab.key ? 'white' : '#6b7280',
                         fontWeight: '600', fontSize: '14px', cursor: 'pointer', transition: 'all 0.2s'
                     }}>{tab.label}</button>
@@ -215,7 +223,7 @@ export const DriverDocuments = () => {
             </div>
 
             {/* Table */}
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.5fr 1.5fr 1fr 1fr 0.8fr', padding: '16px 24px', backgroundColor: '#10b981', color: 'white', borderRadius: '12px', fontWeight: 'bold', fontSize: '14px', marginBottom: '16px' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.5fr 1.5fr 1fr 1fr 0.8fr', padding: '16px 24px', backgroundColor: '#38AC57', color: 'white', borderRadius: '12px', fontWeight: 'bold', fontSize: '14px', marginBottom: '16px' }}>
                 <div>Driver ID</div><div>Driver Name</div><div>Document Type</div><div>Upload Date</div><div style={{ textAlign: 'center' }}>Status</div><div style={{ textAlign: 'center' }}>Action</div>
             </div>
 
@@ -256,7 +264,7 @@ export const DriverDocuments = () => {
                                     borderRadius: '20px', border: '1px solid #e5e7eb', backgroundColor: 'white',
                                     fontSize: '13px', cursor: 'pointer', fontWeight: '600', transition: 'all 0.2s'
                                 }}
-                                onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#f0fdf4'; e.currentTarget.style.borderColor = '#22c55e'; }}
+                                onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#eef7f0'; e.currentTarget.style.borderColor = '#38AC57'; }}
                                 onMouseLeave={e => { e.currentTarget.style.backgroundColor = 'white'; e.currentTarget.style.borderColor = '#e5e7eb'; }}
                                 ><Eye size={14} /> Preview</button>
                             </div>

@@ -198,8 +198,8 @@ export const ReviewsModal = ({ isOpen, onClose, review, onUpdate, onDelete }: Re
                         ))}
                         <span style={{ marginLeft: '8px', fontWeight: '800', fontSize: '16px', color: '#111827' }}>{item.rating.toFixed(1)}</span>
                      </div>
-                     <div style={{ width: '20px', height: '20px', borderRadius: '50%', border: '2px solid #10B981', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                        <div style={{ width: '12px', height: '12px', borderRadius: '50%', backgroundColor: '#10B981' }}></div>
+                     <div style={{ width: '20px', height: '20px', borderRadius: '50%', border: '2px solid #38AC57', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        <div style={{ width: '12px', height: '12px', borderRadius: '50%', backgroundColor: '#38AC57' }}></div>
                      </div>
                   </div>
 
@@ -208,11 +208,11 @@ export const ReviewsModal = ({ isOpen, onClose, review, onUpdate, onDelete }: Re
                      <div style={{ flex: 1 }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                            <span style={{ fontWeight: '800', fontSize: '15px' }}>{item.userName}</span>
-                           <span style={{ fontSize: '11px', color: '#10B981', backgroundColor: '#F0FDF4', padding: '2px 8px', borderRadius: '6px', fontWeight: '700' }}>{item.userType}</span>
+                           <span style={{ fontSize: '11px', color: '#38AC57', backgroundColor: '#eef7f0', padding: '2px 8px', borderRadius: '6px', fontWeight: '700' }}>{item.userType}</span>
                         </div>
                         <span style={{ fontSize: '12px', color: '#6B7280' }}>{item.date}</span>
                      </div>
-                     <div style={{ backgroundColor: '#10B981', color: 'white', padding: '6px 16px', borderRadius: '100px', fontSize: '12px', fontWeight: '700' }}>
+                     <div style={{ backgroundColor: '#38AC57', color: 'white', padding: '6px 16px', borderRadius: '100px', fontSize: '12px', fontWeight: '700' }}>
                         {item.status}
                      </div>
                   </div>
@@ -231,7 +231,7 @@ export const ReviewsModal = ({ isOpen, onClose, review, onUpdate, onDelete }: Re
 
                   <div style={{ display: 'flex', gap: '0.75rem' }}>
                     {item.tags.map((tag: string, tIdx: number) => (
-                        <span key={tIdx} style={{ backgroundColor: '#10B981', color: 'white', padding: '6px 14px', borderRadius: '8px', fontSize: '12px', fontWeight: '700' }}>
+                        <span key={tIdx} style={{ backgroundColor: '#38AC57', color: 'white', padding: '6px 14px', borderRadius: '8px', fontSize: '12px', fontWeight: '700' }}>
                            {tag}
                         </span>
                     ))}
@@ -263,7 +263,7 @@ export const ReviewsModal = ({ isOpen, onClose, review, onUpdate, onDelete }: Re
                  onClick={handleSaveEdit}
                  style={{ 
                     flex: 1, 
-                    backgroundColor: '#10B981', 
+                    backgroundColor: '#38AC57', 
                     color: 'white', 
                     border: 'none', 
                     padding: '16px', 
@@ -326,7 +326,7 @@ export const ReviewsModal = ({ isOpen, onClose, review, onUpdate, onDelete }: Re
                       setShowDeleteConfirm(false);
                       onClose();
                   }}
-                  style={{ border: 'none', background: 'none', cursor: 'pointer', fontWeight: '800', color: '#10B981', fontSize: '14px', marginLeft: '1rem' }}
+                  style={{ border: 'none', background: 'none', cursor: 'pointer', fontWeight: '800', color: '#38AC57', fontSize: '14px', marginLeft: '1rem' }}
                >
                   Undo
                </button>

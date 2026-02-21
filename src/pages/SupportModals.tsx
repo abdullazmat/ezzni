@@ -8,6 +8,25 @@ import {
   Star 
 } from 'lucide-react';
 
+// Category Icons
+import rideOrDriverIcon from '../assets/icons/Ride or Driver.png';
+import deliveryIcon from '../assets/icons/Delivery.png';
+import paymentOrRefundIcon from '../assets/icons/Payment or Refund.png';
+import rentalIcon from '../assets/icons/Rental.png';
+import accountOrProfileIcon from '../assets/icons/Account or Profile.png';
+import appIssueIcon from '../assets/icons/App Issue.png';
+import otherIcon from '../assets/icons/Other.png';
+
+const categoryIcons: Record<string, string> = {
+  'Ride or Driver': rideOrDriverIcon,
+  'Delivery': deliveryIcon,
+  'Payment or Refund': paymentOrRefundIcon,
+  'Rental': rentalIcon,
+  'Account or Profile': accountOrProfileIcon,
+  'App Issue': appIssueIcon,
+  'Other': otherIcon
+};
+
 interface UserInfo {
   name: string;
   id: string;
@@ -72,7 +91,7 @@ export const ComplaintDetailsModal = ({ isOpen, onClose, complaint, onUpdate }: 
     'In Progress': '#EFF6FF',
     'On Hold': '#F3F4F6',
     'Escalated': '#FAF5FF',
-    'Resolved': '#F0FDF4',
+    'Resolved': '#eef7f0',
     'Closed': '#F9FAFB'
   };
 
@@ -82,7 +101,7 @@ export const ComplaintDetailsModal = ({ isOpen, onClose, complaint, onUpdate }: 
     'In Progress': '#3B82F6',
     'On Hold': '#6B7280',
     'Escalated': '#A855F7',
-    'Resolved': '#10B981',
+    'Resolved': '#38AC57',
     'Closed': '#374151'
   };
 
@@ -121,7 +140,7 @@ export const ComplaintDetailsModal = ({ isOpen, onClose, complaint, onUpdate }: 
 
   return (
     <div className="modal-overlay" style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, backdropFilter: 'blur(4px)' }} onClick={onClose}>
-      <div className="modal-content" onClick={e => e.stopPropagation()} style={{ width: '1000px', maxWidth: '95vw', padding: 0, borderRadius: '28px', overflow: 'hidden', backgroundColor: 'white', display: 'flex', flexDirection: 'column', height: '85vh' }}>
+      <div className="modal-content" onClick={e => e.stopPropagation()} style={{ width: '1200px', maxWidth: '95vw', padding: 0, borderRadius: '28px', overflow: 'hidden', backgroundColor: 'white', display: 'flex', flexDirection: 'column', height: '85vh' }}>
         <div style={{ display: 'flex', flex: 1, minHeight: 0 }}>
           {/* Left Side: Details */}
           <div style={{ flex: 1, padding: '2.5rem', overflowY: 'auto', borderRight: '1px solid #f3f4f6' }}>
@@ -158,7 +177,7 @@ export const ComplaintDetailsModal = ({ isOpen, onClose, complaint, onUpdate }: 
                 <div style={{ flex: 1, display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1.25rem 1rem' }}>
                   <div style={{ minWidth: 0 }}>
                     <label style={{ color: '#9CA3AF', fontSize: '10px', display: 'block', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '4px' }}>Full Name</label>
-                    <p style={{ margin: 0, fontWeight: '700', color: '#111827', fontSize: '14px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{complaint.user.name}</p>
+                    <p style={{ margin: 0, fontWeight: '700', color: '#111827', fontSize: '14px' }}>{complaint.user.name}</p>
                   </div>
                   <div style={{ minWidth: 0 }}>
                     <label style={{ color: '#9CA3AF', fontSize: '10px', display: 'block', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '4px' }}>Phone</label>
@@ -170,7 +189,7 @@ export const ComplaintDetailsModal = ({ isOpen, onClose, complaint, onUpdate }: 
                   </div>
                   <div style={{ minWidth: 0 }}>
                     <label style={{ color: '#9CA3AF', fontSize: '10px', display: 'block', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '4px' }}>User Type</label>
-                    <p style={{ margin: 0, fontWeight: '800', color: '#10B981', textTransform: 'uppercase', fontSize: '12px' }}>{complaint.user.type}</p>
+                    <p style={{ margin: 0, fontWeight: '800', color: '#38AC57', textTransform: 'uppercase', fontSize: '12px' }}>{complaint.user.type}</p>
                   </div>
                   <div style={{ minWidth: 0 }}>
                     <label style={{ color: '#9CA3AF', fontSize: '10px', display: 'block', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '4px' }}>City</label>
@@ -178,7 +197,7 @@ export const ComplaintDetailsModal = ({ isOpen, onClose, complaint, onUpdate }: 
                   </div>
                   <div style={{ minWidth: 0 }}>
                     <label style={{ color: '#9CA3AF', fontSize: '10px', display: 'block', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '4px' }}>Email</label>
-                    <p style={{ margin: 0, fontWeight: '700', color: '#111827', fontSize: '14px', wordBreak: 'break-all', display: '-webkit-box', WebkitLineClamp: 1, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{complaint.user.email}</p>
+                    <p style={{ margin: 0, fontWeight: '700', color: '#111827', fontSize: '14px', whiteSpace: 'nowrap' }}>{complaint.user.email}</p>
                   </div>
                 </div>
               </div>
@@ -187,7 +206,7 @@ export const ComplaintDetailsModal = ({ isOpen, onClose, complaint, onUpdate }: 
             {/* Complaint Info */}
             <div style={{ marginBottom: '2.5rem' }}>
               <h3 style={{ fontSize: '1.125rem', fontWeight: '800', marginBottom: '1rem', color: '#111827' }}>Complaint Details</h3>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '1rem', backgroundColor: '#fff', border: '1px solid #f3f4f6', borderRadius: '20px', padding: '1.5rem', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.02)' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1.25fr 1.5fr', gap: '1rem', backgroundColor: '#fff', border: '1px solid #f3f4f6', borderRadius: '20px', padding: '1.5rem', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.02)' }}>
                 <div>
                   <label style={{ color: '#9CA3AF', fontSize: '10px', fontWeight: '800', textTransform: 'uppercase' }}>Ticket ID</label>
                   <p style={{ fontWeight: '800', margin: '4px 0 0', color: '#111827', fontSize: '13px' }}>{complaint.ticketId}</p>
@@ -217,8 +236,11 @@ export const ComplaintDetailsModal = ({ isOpen, onClose, complaint, onUpdate }: 
                 </div>
                 <div>
                   <label style={{ color: '#9CA3AF', fontSize: '10px', fontWeight: '800', textTransform: 'uppercase' }}>Complain</label>
-                  <p style={{ fontWeight: '700', margin: '4px 0 0', display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', color: '#111827' }}>
-                    <span style={{ color: '#10B981', fontWeight: '900', fontSize: '16px' }}>?</span> {complaint.category}
+                  <p style={{ fontWeight: '700', margin: '4px 0 0', display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px', color: '#111827' }}>
+                    <div style={{ width: '20px', height: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <img src={categoryIcons[complaint.category] || otherIcon} alt="" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+                    </div>
+                    {complaint.category}
                   </p>
                 </div>
               </div>
@@ -284,7 +306,7 @@ export const ComplaintDetailsModal = ({ isOpen, onClose, complaint, onUpdate }: 
                 </button>
                 <button 
                   onClick={handleUpdate}
-                  style={{ flex: 1.5, padding: '1.1rem', borderRadius: '16px', border: 'none', background: '#10B981', color: 'white', fontWeight: '800', cursor: 'pointer', fontSize: '14px', boxShadow: '0 8px 16px -4px rgba(16, 185, 129, 0.3)', transition: 'all 0.2s' }}
+                  style={{ flex: 1.5, padding: '1.1rem', borderRadius: '16px', border: 'none', background: '#38AC57', color: 'white', fontWeight: '800', cursor: 'pointer', fontSize: '14px', boxShadow: '0 8px 16px -4px rgba(56, 172, 87, 0.3)', transition: 'all 0.2s' }}
                 >
                   Update & Close Ticket
                 </button>
@@ -297,12 +319,12 @@ export const ComplaintDetailsModal = ({ isOpen, onClose, complaint, onUpdate }: 
             {/* Chat Header */}
             <div style={{ padding: '1.5rem 2rem', borderBottom: '1px solid #f3f4f6', display: 'flex', alignItems: 'center', gap: '1rem' }}>
               <div style={{ position: 'relative', flexShrink: 0 }}>
-                <img src={complaint.user.avatar} alt="" style={{ width: '48px', height: '48px', borderRadius: '50%', objectFit: 'cover', border: '2px solid #F0FDF4' }} />
-                <div style={{ position: 'absolute', bottom: '2px', right: '2px', width: '12px', height: '12px', backgroundColor: '#10B981', borderRadius: '50%', border: '2px solid white' }}></div>
+                <img src={complaint.user.avatar} alt="" style={{ width: '48px', height: '48px', borderRadius: '50%', objectFit: 'cover', border: '2px solid #eef7f0' }} />
+                <div style={{ position: 'absolute', bottom: '2px', right: '2px', width: '12px', height: '12px', backgroundColor: '#38AC57', borderRadius: '50%', border: '2px solid white' }}></div>
               </div>
               <div style={{ flex: 1, minWidth: 0 }}>
                 <h4 style={{ margin: 0, fontSize: '15px', fontWeight: '800', color: '#111827', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{complaint.user.name}</h4>
-                <p style={{ margin: 0, fontSize: '11px', color: '#10B981', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '0.05em' }}>{complaint.user.type}</p>
+                <p style={{ margin: 0, fontSize: '11px', color: '#38AC57', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '0.05em' }}>{complaint.user.type}</p>
               </div>
               <button style={{ border: 'none', background: 'none', cursor: 'pointer', padding: '0.5rem' }}>
                 <MoreVertical size={20} color="#9CA3AF" />
@@ -316,7 +338,7 @@ export const ComplaintDetailsModal = ({ isOpen, onClose, complaint, onUpdate }: 
               {localMessages.map(msg => (
                 <div key={msg.id} style={{ alignSelf: msg.sender === 'user' ? 'flex-start' : 'flex-end', maxWidth: '85%' }}>
                    <div style={{ 
-                     backgroundColor: msg.sender === 'user' ? 'white' : '#10B981', 
+                     backgroundColor: msg.sender === 'user' ? 'white' : '#38AC57', 
                      color: msg.sender === 'user' ? '#374151' : 'white', 
                      padding: '1rem 1.25rem', 
                      borderRadius: '18px', 
@@ -349,7 +371,7 @@ export const ComplaintDetailsModal = ({ isOpen, onClose, complaint, onUpdate }: 
                 <button type="button" style={{ border: 'none', background: 'none', color: '#9CA3AF', cursor: 'pointer', padding: '0.4rem' }}>
                   <Smile size={20} />
                 </button>
-                <button type="submit" style={{ border: 'none', background: '#10B981', color: 'white', width: '40px', height: '40px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', boxShadow: '0 4px 6px -1px rgba(16, 185, 129, 0.3)', flexShrink: 0 }}>
+                <button type="submit" style={{ border: 'none', background: '#38AC57', color: 'white', width: '40px', height: '40px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', boxShadow: '0 4px 6px -1px rgba(56, 172, 87, 0.3)', flexShrink: 0 }}>
                   <Send size={18} />
                 </button>
               </form>

@@ -1,10 +1,22 @@
 import { useState } from 'react';
 import { 
     Search, Eye, ArrowLeft, 
-    Check, X, Clock, 
-    ArrowUpRight, Car, 
+    ArrowUpRight, 
     Filter, ChevronDown
 } from 'lucide-react';
+
+// Icons
+import totalDeliveriesIcon from '../assets/icons/Total Deliveries.png';
+import pendingIcon from '../assets/icons/Pending.png';
+import acceptedIcon from '../assets/icons/completed.png';
+import cancelledIcon from '../assets/icons/cancelled.png';
+
+// UI Specific Icons
+import carIcon from '../assets/icons/car.png';
+import visaIcon from '../assets/icons/visa.png';
+import mastercardIcon from '../assets/icons/mastercard.png';
+import cashIcon from '../assets/icons/cash.png';
+import taxiIcon from '../assets/icons/taxi.png';
 
 // --- Types ---
 
@@ -133,10 +145,10 @@ const StatusBadge = ({ status }: { status: string }) => {
         case 'Accepted': bg = '#ccfbf1'; color = '#0f766e'; break;
         case 'Pending': bg = '#fef3c7'; color = '#b45309'; break; 
         case 'Arriving': bg = '#e0f2fe'; color = '#0369a1'; break;
-        case 'Arrived': bg = '#dcfce7'; color = '#15803d'; break; 
-        case 'Started': bg = '#ede9fe'; color = '#7e22ce'; break; 
-        case 'In_progress': bg = '#f3e8ff'; color = '#6d28d9'; break; 
-        case 'Completed': bg = '#dcfce7'; color = '#15803d'; break; 
+        case 'Arrived': bg = '#eef7f0'; color = '#38AC57'; break;
+        case 'Started': bg = '#ede9fe'; color = '#7e22ce'; break;
+        case 'In_progress': bg = '#f3e8ff'; color = '#6d28d9'; break;
+        case 'Completed': bg = '#eef7f0'; color = '#38AC57'; break;
         case 'Cancelled': bg = '#fee2e2'; color = '#b91c1c'; break;
     }
 
@@ -153,7 +165,7 @@ const Dropdown = ({ label, options, activeValue, onSelect }: { label: string, op
         <div style={{ position: 'relative', display: 'inline-block' }}>
             <button 
                 onClick={() => setIsOpen(!isOpen)}
-                style={{ padding: '0.6rem 1rem', borderRadius: '2rem', border: '1px solid #e5e7eb', backgroundColor: activeValue !== 'All' && activeValue !== label ? '#dcfce7' : 'white', display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.85rem', color: activeValue !== 'All' && activeValue !== label ? '#166534' : '#374151', cursor: 'pointer' }}
+                style={{ padding: '0.6rem 1rem', borderRadius: '2rem', border: '1px solid #e5e7eb', backgroundColor: activeValue !== 'All' && activeValue !== label ? '#eef7f0' : 'white', display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.85rem', color: activeValue !== 'All' && activeValue !== label ? '#2d8a46' : '#374151', cursor: 'pointer' }}
             >
                 {activeValue === 'All' ? label : activeValue}
                 <ChevronDown size={14} />
@@ -232,10 +244,10 @@ export const DeliveryServices = () => {
             {/* Stats Cards */}
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.5rem' }}>
                 {[
-                    { label: 'Total Deliveries', count: '068', icon: <Car size={20} />, activeName: 'Total Deliveries' },
-                    { label: 'Pending', count: '045', icon: <Clock size={20} />, activeName: 'Pending' },
-                    { label: 'Accepted', count: '036', icon: <Check size={20} />, activeName: 'Accepted' },
-                    { label: 'Cancelled', count: '075', icon: <X size={20} />, activeName: 'Cancelled' },
+                    { label: 'Total Deliveries', count: '068', icon: totalDeliveriesIcon, activeName: 'Total Deliveries' },
+                    { label: 'Pending', count: '045', icon: pendingIcon, activeName: 'Pending' },
+                    { label: 'Accepted', count: '036', icon: acceptedIcon, activeName: 'Accepted' },
+                    { label: 'Cancelled', count: '075', icon: cancelledIcon, activeName: 'Cancelled' },
                 ].map((stat) => {
                     const isActive = activeStat === stat.activeName;
                     return (
@@ -244,20 +256,26 @@ export const DeliveryServices = () => {
                             onClick={() => setActiveStat(stat.activeName)}
                             style={{ 
                                 padding: '1.5rem', borderRadius: '1.5rem', 
-                                backgroundColor: isActive ? '#22c55e' : 'white', 
+                                backgroundColor: isActive ? '#38AC57' : 'white', 
                                 color: isActive ? 'white' : 'black',
                                 position: 'relative', 
-                                boxShadow: isActive ? '0 10px 15px -3px rgba(34, 197, 94, 0.4)' : '0 1px 3px rgba(0,0,0,0.05)', 
+                                boxShadow: isActive ? '0 10px 15px -3px rgba(56, 172, 87, 0.4)' : '0 1px 3px rgba(0,0,0,0.05)', 
                                 display: 'flex', flexDirection: 'column', justifyContent: 'space-between', height: '140px', cursor: 'pointer',
                                 transition: 'all 0.2s', transform: isActive ? 'translateY(-2px)' : 'none'
                             }}
                         >
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                                {isActive ? <div style={{color: 'white'}}>{stat.icon}</div> : <div style={{color: '#6b7280'}}>{stat.icon}</div>}
-                                <span style={{ fontWeight: '600', fontSize: '0.9rem' }}>{stat.label}</span>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.8rem' }}>
+                                <img 
+                                    src={stat.icon} 
+                                    alt="" 
+                                    style={{ 
+                                        width: '28px', height: '28px', objectFit: 'contain'
+                                    }} 
+                                />
+                                <span style={{ fontWeight: '600', fontSize: '0.95rem' }}>{stat.label}</span>
                             </div>
                             <div style={{ fontSize: '2.5rem', fontWeight: 'bold' }}>{stat.count}</div>
-                            <div style={{ position: 'absolute', bottom: '1rem', right: '1rem', backgroundColor: isActive ? 'white' : '#22c55e', borderRadius: '50%', padding: '0.4rem', color: isActive ? '#22c55e' : 'white', display: 'flex' }}>
+                            <div style={{ position: 'absolute', bottom: '1rem', right: '1rem', backgroundColor: isActive ? 'white' : '#38AC57', borderRadius: '50%', padding: '0.4rem', color: isActive ? '#38AC57' : 'white', display: 'flex', boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }}>
                                 <ArrowUpRight size={16} /> 
                             </div>
                         </div>
@@ -296,7 +314,7 @@ export const DeliveryServices = () => {
             {/* Table */}
             <div className="card" style={{ padding: 0, overflow: 'hidden', border: 'none', boxShadow: 'none', backgroundColor: 'transparent' }}>
                 {/* Header Row */}
-                <div style={{ display: 'grid', gridTemplateColumns: '0.8fr 1fr 2fr 2fr 1fr 1fr 1fr 1fr', backgroundColor: '#22c55e', color: 'white', padding: '1rem', borderRadius: '1rem', alignItems: 'center', fontWeight: 'bold', fontSize: '0.9rem', marginBottom: '1rem' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: '0.8fr 1fr 2fr 2fr 1fr 1fr 1fr 1fr', backgroundColor: '#38AC57', color: 'white', padding: '1rem', borderRadius: '1rem', alignItems: 'center', fontWeight: 'bold', fontSize: '0.9rem', marginBottom: '1rem' }}>
                     <div>Trip ID</div>
                     <div>Service</div>
                     <div>Rider</div>
@@ -313,7 +331,7 @@ export const DeliveryServices = () => {
                         <div key={idx} style={{ display: 'grid', gridTemplateColumns: '0.8fr 1fr 2fr 2fr 1fr 1fr 1fr 1fr', backgroundColor: 'white', padding: '1rem', borderRadius: '1rem', alignItems: 'center', boxShadow: '0 1px 2px rgba(0,0,0,0.05)' }}>
                             <div style={{ fontWeight: '600' }}>{item.id}</div>
                             <div>
-                                <span style={{ backgroundColor: '#dcfce7', color: '#166534', padding: '0.2rem 0.6rem', borderRadius: '1rem', fontSize: '0.7rem', fontWeight: '600' }}>
+                                <span style={{ backgroundColor: '#eef7f0', color: '#2d8a46', padding: '0.2rem 0.6rem', borderRadius: '1rem', fontSize: '0.7rem', fontWeight: '600' }}>
                                     {item.serviceType}
                                 </span>
                             </div>
@@ -337,16 +355,18 @@ export const DeliveryServices = () => {
                                     <div style={{ fontSize: '0.7rem', color: '#9ca3af' }}>{item.driver.id}</div>
                                 </div>
                             </div>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.85rem', fontWeight: '600' }}>
-                                <Car size={18} /> {item.vehicleType}
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.8rem', fontSize: '0.85rem', fontWeight: '600' }}>
+                                <img src={carIcon} alt="" style={{ width: '32px', height: '22px', objectFit: 'contain' }} /> {item.vehicleType}
                             </div>
                             <div>
                                 <StatusBadge status={item.status} />
                             </div>
                             <div>
                                 <div style={{ fontWeight: 'bold', fontSize: '0.9rem' }}>{item.fare.toFixed(2)} {item.currency}</div>
-                                <div style={{ fontSize: '0.7rem', fontWeight: 'bold', color: item.paymentMethod === 'Visa' ? '#1d4ed8' : '#ea580c' }}>
-                                    {item.paymentMethod.toUpperCase()}
+                                <div style={{ marginTop: '4px', display: 'flex', alignItems: 'center' }}>
+                                    {item.paymentMethod === 'Visa' && <img src={visaIcon} alt="Visa" style={{ height: '10px', objectFit: 'contain' }} />}
+                                    {item.paymentMethod === 'Mastercard' && <img src={mastercardIcon} alt="Mastercard" style={{ height: '14px', objectFit: 'contain' }} />}
+                                    {item.paymentMethod === 'Cash' && <img src={cashIcon} alt="Cash" style={{ height: '14px', objectFit: 'contain' }} />}
                                 </div>
                             </div>
                             <div style={{ textAlign: 'center' }}>
@@ -369,7 +389,7 @@ export const DeliveryServices = () => {
                         onClick={() => setViewMode('Drivers')}
                         style={{ 
                             padding: '0.5rem 1.5rem', borderRadius: '1.5rem', border: 'none', cursor: 'pointer', fontWeight: '600', fontSize: '0.9rem',
-                            backgroundColor: viewMode === 'Drivers' ? '#22c55e' : 'transparent', color: viewMode === 'Drivers' ? 'white' : '#6b7280'
+                            backgroundColor: viewMode === 'Drivers' ? '#38AC57' : 'transparent', color: viewMode === 'Drivers' ? 'white' : '#6b7280'
                         }}
                    >
                        Drivers
@@ -378,13 +398,13 @@ export const DeliveryServices = () => {
                         onClick={() => setViewMode('Riders')}
                         style={{ 
                             padding: '0.5rem 1.5rem', borderRadius: '1.5rem', border: 'none', cursor: 'pointer', fontWeight: '600', fontSize: '0.9rem',
-                            backgroundColor: viewMode === 'Riders' ? '#22c55e' : 'transparent', color: viewMode === 'Riders' ? 'white' : '#6b7280'
+                            backgroundColor: viewMode === 'Riders' ? '#38AC57' : 'transparent', color: viewMode === 'Riders' ? 'white' : '#6b7280'
                         }}
                    >
                        Rider
                    </button>
                </div>
-               <a href="#" style={{ color: '#22c55e', fontWeight: '600', textDecoration: 'underline', fontSize: '0.9rem' }}>View All</a>
+               <a href="#" style={{ color: '#38AC57', fontWeight: '600', textDecoration: 'underline', fontSize: '0.9rem' }}>View All</a>
             </div>
 
             {/* Driver/Rider Cards Grid */}
@@ -405,7 +425,7 @@ export const DeliveryServices = () => {
                            </div>
                        </div>
                        {person.vehicleIcon && (
-                           <Car size={20} color="#374151" />
+                           <img src={carIcon} alt="" style={{ width: '28px', height: '18px', objectFit: 'contain' }} />
                        )}
                    </div>
                 ))}
@@ -414,7 +434,7 @@ export const DeliveryServices = () => {
             {/* Modal */}
             {selectedDelivery && (
                 <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.5)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                     <div className="card" style={{ width: '650px', backgroundColor: 'white', borderRadius: '1.5rem', padding: '2rem', maxHeight: '95vh', overflowY: 'auto', position: 'relative' }}>
+                     <div className="card" style={{ width: '900px', backgroundColor: 'white', borderRadius: '1.5rem', padding: '2rem', maxHeight: '95vh', overflowY: 'auto', position: 'relative' }}>
                         
                         {/* Header */}
                         <div style={{ marginBottom: '1.5rem' }}>
@@ -424,50 +444,107 @@ export const DeliveryServices = () => {
                         </div>
 
                         {/* Customer Info */}
-                        <h3 style={{ fontSize: '1.1rem', fontWeight: 'bold', marginBottom: '1rem' }}>Customer Information</h3>
-                        <div style={{ border: '1px solid #f3f4f6', borderRadius: '1rem', padding: '1.5rem', marginBottom: '1.5rem' }}>
-                            <div style={{ display: 'flex', gap: '1rem' }}>
+                        <h3 style={{ fontSize: '1.25rem', fontWeight: '800', marginBottom: '1.25rem', color: '#1e293b' }}>Customer Information</h3>
+                        <div style={{ border: '1px solid #f3f4f6', borderRadius: '1.5rem', padding: '1.5rem', marginBottom: '2rem', backgroundColor: 'white' }}>
+                            <div style={{ display: 'flex', gap: '2rem', alignItems: 'center' }}>
                                 <div style={{ position: 'relative', flexShrink: 0 }}>
-                                    <img src={selectedDelivery.rider.avatar} alt="" style={{ width: 48, height: 48, borderRadius: '50%' }} />
-                                    <div style={{ position: 'absolute', bottom: -5, left: '50%', transform: 'translateX(-50%)', backgroundColor: '#fbbf24', padding: '0 0.3rem', borderRadius: '0.3rem', fontSize: '0.6rem', color: 'white' }}>★ {selectedDelivery.rider.rating}</div>
+                                    <img src={selectedDelivery.rider.avatar} alt="" style={{ width: '72px', height: '72px', borderRadius: '50%', objectFit: 'cover' }} />
+                                    <div style={{ 
+                                        position: 'absolute', bottom: -5, left: '50%', transform: 'translateX(-50%)', 
+                                        backgroundColor: '#fbbf24', padding: '0.2rem 0.6rem', borderRadius: '1rem', 
+                                        fontSize: '0.75rem', color: 'white', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '2px',
+                                        boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+                                    }}>★ {selectedDelivery.rider.rating}</div>
                                 </div>
-                                <div style={{ flex: 1, display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', columnGap: '1rem', rowGap: '0.5rem' }}>
-                                    <div><div style={{ fontSize: '0.7rem', color: '#9ca3af' }}>Full Name</div><div style={{ fontWeight: '600', fontSize: '0.85rem' }}>{selectedDelivery.rider.name}</div></div>
-                                    <div><div style={{ fontSize: '0.7rem', color: '#9ca3af' }}>Customer ID</div><div style={{ fontWeight: '600', fontSize: '0.85rem' }}>{selectedDelivery.rider.id}</div></div>
-                                    <div style={{ gridColumn: 'span 2' }}><div style={{ fontSize: '0.7rem', color: '#9ca3af' }}>Category</div><div style={{ fontWeight: '600', fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '0.3rem' }}><Car size={14}/> {selectedDelivery.rider.category}</div></div>
-                                    
-                                    <div style={{ gridColumn: 'span 2' }}><div style={{ fontSize: '0.7rem', color: '#9ca3af' }}>Email</div><div style={{ fontWeight: '600', fontSize: '0.85rem' }}>{selectedDelivery.rider.email}</div></div>
-                                    <div><div style={{ fontSize: '0.7rem', color: '#9ca3af' }}>Phone</div><div style={{ fontWeight: '600', fontSize: '0.85rem' }}>{selectedDelivery.rider.phone.replace(/\s/g, '')}</div></div>
+                                <div style={{ flex: 1, display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', columnGap: '1.5rem', rowGap: '1.25rem' }}>
                                     <div>
-                                         <div style={{ display: 'flex', gap: '1rem' }}>
-                                            <div><div style={{ fontSize: '0.7rem', color: '#9ca3af' }}>city</div><div style={{ fontWeight: '600', fontSize: '0.85rem' }}>{selectedDelivery.rider.city}</div></div>
-                                            <div><div style={{ fontSize: '0.7rem', color: '#9ca3af' }}>Gender</div><div style={{ fontWeight: '600', fontSize: '0.85rem' }}>♂ {selectedDelivery.rider.gender}</div></div>
-                                         </div>
+                                        <div style={{ fontSize: '0.75rem', color: '#94a3b8', fontWeight: '500', marginBottom: '0.4rem' }}>Full Name</div>
+                                        <div style={{ fontWeight: '700', fontSize: '1rem' }}>{selectedDelivery.rider.name}</div>
+                                    </div>
+                                    <div>
+                                        <div style={{ fontSize: '0.75rem', color: '#94a3b8', fontWeight: '500', marginBottom: '0.4rem' }}>Customer ID</div>
+                                        <div style={{ fontWeight: '700', fontSize: '1rem' }}>{selectedDelivery.rider.id}</div>
+                                    </div>
+                                    <div style={{ gridColumn: 'span 2' }}>
+                                        <div style={{ fontSize: '0.75rem', color: '#94a3b8', fontWeight: '500', marginBottom: '0.4rem' }}>Category</div>
+                                        <div style={{ fontWeight: '700', fontSize: '1rem', display: 'flex', alignItems: 'center', gap: '12px' }}>
+                                            <img src={carIcon} alt="" style={{ width: '38px', height: '38px', objectFit: 'contain' }}/> {selectedDelivery.rider.category || 'Hezzni Standard'}
+                                        </div>
+                                    </div>
+                                    
+                                    <div>
+                                        <div style={{ fontSize: '0.75rem', color: '#94a3b8', fontWeight: '500', marginBottom: '0.4rem' }}>Email</div>
+                                        <div style={{ fontWeight: '700', fontSize: '1rem' }}>{selectedDelivery.rider.name.toLowerCase().replace(' ', '')}@gmail.com</div>
+                                    </div>
+                                    <div>
+                                        <div style={{ fontSize: '0.75rem', color: '#94a3b8', fontWeight: '500', marginBottom: '0.4rem' }}>Phone</div>
+                                        <div style={{ fontWeight: '700', fontSize: '1rem' }}>{selectedDelivery.rider.phone}</div>
+                                    </div>
+                                    <div>
+                                        <div style={{ fontSize: '0.75rem', color: '#94a3b8', fontWeight: '500', marginBottom: '0.4rem' }}>City</div>
+                                        <div style={{ fontWeight: '700', fontSize: '1rem', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                                            casablanca <ChevronDown size={14} color="#94a3b8" />
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div style={{ fontSize: '0.75rem', color: '#94a3b8', fontWeight: '500', marginBottom: '0.4rem' }}>Gender</div>
+                                        <div style={{ fontWeight: '700', fontSize: '1rem', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                            <span style={{ fontSize: '1.2rem' }}>♂</span> Male
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
                         {/* Driver Info */}
-                        <h3 style={{ fontSize: '1.1rem', fontWeight: 'bold', marginBottom: '1rem' }}>Driver Information</h3>
-                         <div style={{ border: '1px solid #f3f4f6', borderRadius: '1rem', padding: '1.5rem', marginBottom: '1.5rem' }}>
-                            <div style={{ display: 'flex', gap: '1rem' }}>
+                        <h3 style={{ fontSize: '1.25rem', fontWeight: '800', marginBottom: '1.25rem', color: '#1e293b' }}>Driver Information</h3>
+                        <div style={{ border: '1px solid #f3f4f6', borderRadius: '1.5rem', padding: '1.5rem', marginBottom: '2rem', backgroundColor: 'white' }}>
+                            <div style={{ display: 'flex', gap: '2rem', alignItems: 'center' }}>
                                 <div style={{ position: 'relative', flexShrink: 0 }}>
-                                    <img src={selectedDelivery.driver.avatar} alt="" style={{ width: 48, height: 48, borderRadius: '50%' }} />
-                                    <div style={{ position: 'absolute', bottom: -5, left: '50%', transform: 'translateX(-50%)', backgroundColor: '#fbbf24', padding: '0 0.3rem', borderRadius: '0.3rem', fontSize: '0.6rem', color: 'white' }}>★ {selectedDelivery.driver.rating}</div>
+                                    <img src={selectedDelivery.driver.avatar} alt="" style={{ width: '72px', height: '72px', borderRadius: '50%', objectFit: 'cover' }} />
+                                    <div style={{ 
+                                        position: 'absolute', bottom: -5, left: '50%', transform: 'translateX(-50%)', 
+                                        backgroundColor: '#fbbf24', padding: '0.2rem 0.6rem', borderRadius: '1rem', 
+                                        fontSize: '0.75rem', color: 'white', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '2px',
+                                        boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+                                    }}>★ {selectedDelivery.driver.rating}</div>
                                 </div>
-                                <div style={{ flex: 1, display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', columnGap: '1rem', rowGap: '0.5rem' }}>
-                                    <div><div style={{ fontSize: '0.7rem', color: '#9ca3af' }}>Name</div><div style={{ fontWeight: '600', fontSize: '0.85rem' }}>{selectedDelivery.driver.name}</div></div>
-                                    <div><div style={{ fontSize: '0.7rem', color: '#9ca3af' }}>Vehicle Type</div><div style={{ fontWeight: '600', fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '0.3rem' }}><Car size={14}/> Taxi</div></div>
-                                    <div style={{ gridColumn: 'span 2' }}><div style={{ fontSize: '0.7rem', color: '#9ca3af' }}>Phone</div><div style={{ fontWeight: '600', fontSize: '0.85rem' }}>{selectedDelivery.driver.phone.replace(/\s/g, ' ')}</div></div>
+                                <div style={{ flex: 1, display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', columnGap: '1.5rem', rowGap: '1.25rem' }}>
+                                    <div>
+                                        <div style={{ fontSize: '0.75rem', color: '#94a3b8', fontWeight: '500', marginBottom: '0.4rem' }}>Name</div>
+                                        <div style={{ fontWeight: '700', fontSize: '1rem' }}>{selectedDelivery.driver.name}</div>
+                                    </div>
+                                    <div>
+                                        <div style={{ fontSize: '0.75rem', color: '#94a3b8', fontWeight: '500', marginBottom: '0.4rem' }}>Vehicle Type</div>
+                                        <div style={{ fontWeight: '700', fontSize: '1rem', display: 'flex', alignItems: 'center', gap: '12px' }}>
+                                            <img src={taxiIcon} alt="" style={{ width: '38px', height: '38px', objectFit: 'contain' }}/> Taxi
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div style={{ fontSize: '0.75rem', color: '#94a3b8', fontWeight: '500', marginBottom: '0.4rem' }}>Phone</div>
+                                        <div style={{ fontWeight: '700', fontSize: '1rem' }}>{selectedDelivery.driver.phone}</div>
+                                    </div>
+                                    <div></div>
                                     
-                                    <div style={{ gridColumn: 'span 2' }}><div style={{ fontSize: '0.7rem', color: '#9ca3af' }}>Email</div><div style={{ fontWeight: '600', fontSize: '0.85rem' }}>{selectedDelivery.driver.email}</div></div>
-                                    <div><div style={{ fontSize: '0.7rem', color: '#9ca3af' }}>Driver ID</div><div style={{ fontWeight: '600', fontSize: '0.85rem' }}>{selectedDelivery.driver.id}</div></div>
-                                     <div>
-                                         <div style={{ display: 'flex', gap: '1rem' }}>
-                                            <div><div style={{ fontSize: '0.7rem', color: '#9ca3af' }}>city</div><div style={{ fontWeight: '600', fontSize: '0.85rem' }}>{selectedDelivery.driver.city}</div></div>
-                                            <div><div style={{ fontSize: '0.7rem', color: '#9ca3af' }}>Gender</div><div style={{ fontWeight: '600', fontSize: '0.85rem' }}>♂ {selectedDelivery.driver.gender}</div></div>
-                                         </div>
+                                    <div>
+                                        <div style={{ fontSize: '0.75rem', color: '#94a3b8', fontWeight: '500', marginBottom: '0.4rem' }}>Email</div>
+                                        <div style={{ fontWeight: '700', fontSize: '1rem' }}>{selectedDelivery.driver.name.toLowerCase().replace(' ', '')}@gmail.com</div>
+                                    </div>
+                                    <div>
+                                        <div style={{ fontSize: '0.75rem', color: '#94a3b8', fontWeight: '500', marginBottom: '0.4rem' }}>Driver ID</div>
+                                        <div style={{ fontWeight: '700', fontSize: '1rem' }}>{selectedDelivery.driver.id}</div>
+                                    </div>
+                                    <div>
+                                        <div style={{ fontSize: '0.75rem', color: '#94a3b8', fontWeight: '500', marginBottom: '0.4rem' }}>City</div>
+                                        <div style={{ fontWeight: '700', fontSize: '1rem', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                                            casablanca
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div style={{ fontSize: '0.75rem', color: '#94a3b8', fontWeight: '500', marginBottom: '0.4rem' }}>Gender</div>
+                                        <div style={{ fontWeight: '700', fontSize: '1rem', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                            <span style={{ fontSize: '1.2rem' }}>♂</span> Male
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -483,45 +560,63 @@ export const DeliveryServices = () => {
                         </div>
 
                         {/* Vehicle Info */}
-                        <h3 style={{ fontSize: '1.1rem', fontWeight: 'bold', marginBottom: '1rem' }}>Vehicle Information</h3>
-                         <div style={{ border: '1px solid #f3f4f6', borderRadius: '1rem', padding: '1.5rem', marginBottom: '1.5rem' }}>
-                             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1rem' }}>
-                                 <div><div style={{ fontSize: '0.7rem', color: '#9ca3af' }}>Vehicle</div><div style={{ fontWeight: '600', fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '0.3rem' }}><Car size={14}/> {selectedDelivery.vehicleInfo.brand}</div></div>
-                                 <div><div style={{ fontSize: '0.7rem', color: '#9ca3af' }}>License Plate</div><div style={{ fontWeight: '600', fontSize: '0.85rem' }}>{selectedDelivery.vehicleInfo.plate}</div></div>
-                                 <div><div style={{ fontSize: '0.7rem', color: '#9ca3af' }}>Transmission</div><div style={{ fontWeight: '600', fontSize: '0.85rem' }}>{selectedDelivery.vehicleInfo.transmission}</div></div>
-                                 <div><div style={{ fontSize: '0.7rem', color: '#9ca3af' }}>Make & Model</div><div style={{ fontWeight: '600', fontSize: '0.85rem' }}>{selectedDelivery.vehicleInfo.model}</div></div>
+                        <h3 style={{ fontSize: '1.25rem', fontWeight: '800', marginBottom: '1.25rem', color: '#1e293b' }}>Vehicle Information</h3>
+                        <div style={{ border: '1px solid #f3f4f6', borderRadius: '1.5rem', padding: '1.5rem', marginBottom: '2rem', backgroundColor: 'white' }}>
+                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', columnGap: '1.5rem', rowGap: '1.25rem' }}>
+                                <div>
+                                    <div style={{ fontSize: '0.75rem', color: '#94a3b8', fontWeight: '500', marginBottom: '0.4rem' }}>Vehicle</div>
+                                    <div style={{ fontWeight: '700', fontSize: '1rem', display: 'flex', alignItems: 'center', gap: '12px' }}>
+                                        <img src={carIcon} alt="" style={{ width: '45px', height: '45px', objectFit: 'contain' }}/> {selectedDelivery.vehicleInfo.brand}
+                                    </div>
+                                </div>
+                                <div>
+                                    <div style={{ fontSize: '0.75rem', color: '#94a3b8', fontWeight: '500', marginBottom: '0.4rem' }}>License Plate</div>
+                                    <div style={{ fontWeight: '700', fontSize: '1rem' }}>{selectedDelivery.vehicleInfo.plate}</div>
+                                </div>
+                                <div>
+                                    <div style={{ fontSize: '0.75rem', color: '#94a3b8', fontWeight: '500', marginBottom: '0.4rem' }}>Transmission</div>
+                                    <div style={{ fontWeight: '700', fontSize: '1rem' }}>{selectedDelivery.vehicleInfo.transmission}</div>
+                                </div>
+                                <div>
+                                    <div style={{ fontSize: '0.75rem', color: '#94a3b8', fontWeight: '500', marginBottom: '0.4rem' }}>Make & Model</div>
+                                    <div style={{ fontWeight: '700', fontSize: '1rem' }}>{selectedDelivery.vehicleInfo.model}</div>
+                                </div>
 
-                                 <div>
-                                     <div style={{ fontSize: '0.7rem', color: '#9ca3af' }}>On boarding date</div>
-                                     <div style={{ fontWeight: '600', fontSize: '0.85rem' }}>12 Mar 2026</div> {/* Hardcoded from screenshot or mock if desired */}
-                                 </div>
-                                 <div style={{ gridColumn: 'span 2' }}>
-                                      <div style={{ fontSize: '0.7rem', color: '#9ca3af' }}>Colour</div>
-                                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontWeight: '600', fontSize: '0.85rem' }}>
-                                          <div style={{ width: 12, height: 12, borderRadius: '50%', border: '1px solid #ccc', backgroundColor: 'white' }}></div>
-                                          {selectedDelivery.vehicleInfo.color}
-                                      </div>
-                                 </div>
-                                  <div><div style={{ fontSize: '0.7rem', color: '#9ca3af' }}>Year</div><div style={{ fontWeight: '600', fontSize: '0.85rem' }}>{selectedDelivery.vehicleInfo.year}</div></div>
-                             </div>
-                         </div>
+                                <div>
+                                    <div style={{ fontSize: '0.75rem', color: '#94a3b8', fontWeight: '500', marginBottom: '0.4rem' }}>On boarding date</div>
+                                    <div style={{ fontWeight: '700', fontSize: '1rem' }}>12 Mar 2026</div>
+                                </div>
+                                <div>
+                                    <div style={{ fontSize: '0.75rem', color: '#94a3b8', fontWeight: '500', marginBottom: '0.4rem' }}>Colour</div>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', fontWeight: '700', fontSize: '1rem' }}>
+                                        <div style={{ width: 14, height: 14, borderRadius: '50%', border: '1px solid #e5e7eb', backgroundColor: 'white' }}></div>
+                                        {selectedDelivery.vehicleInfo.color}
+                                    </div>
+                                </div>
+                                <div></div>
+                                <div>
+                                    <div style={{ fontSize: '0.75rem', color: '#94a3b8', fontWeight: '500', marginBottom: '0.4rem' }}>Year</div>
+                                    <div style={{ fontWeight: '700', fontSize: '1rem' }}>{selectedDelivery.vehicleInfo.year}</div>
+                                </div>
+                            </div>
+                        </div>
                         
                         {/* Route Details */}
                         <h3 style={{ fontSize: '1.1rem', fontWeight: 'bold', marginBottom: '1rem' }}>Route Details</h3>
                         <div style={{ border: '1px solid #f3f4f6', borderRadius: '1rem', padding: '1rem', marginBottom: '1.5rem', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                                <div style={{ width: 12, height: 12, borderRadius: '50%', border: '4px solid #dcfce7', backgroundColor: '#22c55e', flexShrink: 0 }}></div>
+                                <div style={{ width: 12, height: 12, borderRadius: '50%', border: '4px solid #eef7f0', backgroundColor: '#38AC57', flexShrink: 0 }}></div>
                                 <div><div style={{ fontSize: '0.75rem', color: '#9ca3af' }}>Pickup</div><div style={{ fontWeight: '600' }}>{selectedDelivery.pickup}</div></div>
                             </div>
                             
                             <div style={{ paddingLeft: 18 }}>
                                 <div style={{ width: 30, height: 30, borderRadius: '50%', border: '1px solid #f3f4f6', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                    <span style={{ color: '#22c55e', fontSize: '0.8rem' }}>⇅</span>
+                                    <span style={{ color: '#38AC57', fontSize: '0.8rem' }}>⇅</span>
                                 </div>
                             </div>
 
                             <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                                <div style={{ width: 12, height: 12, borderRadius: '50%', border: '2px solid #22c55e', flexShrink: 0 }}></div>
+                                <div style={{ width: 12, height: 12, borderRadius: '50%', border: '2px solid #38AC57', flexShrink: 0 }}></div>
                                 <div><div style={{ fontSize: '0.75rem', color: '#9ca3af' }}>Destination</div><div style={{ fontWeight: '600' }}>{selectedDelivery.destination}</div></div>
                             </div>
                         </div>
@@ -539,10 +634,12 @@ export const DeliveryServices = () => {
                              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', textAlign: 'center' }}>
                                 <div><div style={{ fontSize: '0.75rem', color: '#9ca3af' }}>TVA</div><div style={{ fontWeight: '600' }}>{selectedDelivery.tva}</div></div>
                                 <div><div style={{ fontSize: '0.75rem', color: '#9ca3af' }}>Service fee</div><div style={{ fontWeight: '600' }}>{selectedDelivery.serviceFee.toFixed(2)} MAD</div></div>
-                                <div>
+                                 <div>
                                     <div style={{ fontSize: '0.75rem', color: '#9ca3af' }}>Payment Method</div>
-                                    <div style={{ fontWeight: '600', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.2rem' }}>
-                                        <div style={{ width: 24, height: 16, backgroundColor: '#ea580c', borderRadius: 2 }}></div>
+                                    <div style={{ fontWeight: '600', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.2rem', marginTop: '4px' }}>
+                                        {selectedDelivery.paymentMethod === 'Visa' && <img src={visaIcon} alt="Visa" style={{ height: '12px', objectFit: 'contain' }} />}
+                                        {selectedDelivery.paymentMethod === 'Mastercard' && <img src={mastercardIcon} alt="Mastercard" style={{ height: '16px', objectFit: 'contain' }} />}
+                                        {selectedDelivery.paymentMethod === 'Cash' && <img src={cashIcon} alt="Cash" style={{ height: '16px', objectFit: 'contain' }} />}
                                     </div>
                                 </div>
                                 <div><div style={{ fontSize: '0.75rem', color: '#9ca3af' }}>Discount</div><div style={{ fontWeight: '600' }}>{selectedDelivery.discount}</div></div>
@@ -551,7 +648,7 @@ export const DeliveryServices = () => {
                         </div>
                         
                         {/* Trip Summary */}
-                        <h3 style={{ fontSize: '1.1rem', fontWeight: 'bold', marginBottom: '1rem' }}>Trip Summay</h3>
+                        <h3 style={{ fontSize: '1.1rem', fontWeight: 'bold', marginBottom: '1rem' }}>Trip Summary</h3>
                         <div style={{ border: '1px solid #f3f4f6', borderRadius: '1rem', padding: '1rem', display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)' }}>
                              <div><div style={{ fontSize: '0.7rem', color: '#9ca3af' }}>Start Time</div><div style={{ fontWeight: '600', fontSize: '0.85rem' }}>{selectedDelivery.startTime}</div></div>
                              <div><div style={{ fontSize: '0.7rem', color: '#9ca3af' }}>End Time</div><div style={{ fontWeight: '600', fontSize: '0.85rem' }}>{selectedDelivery.endTime}</div></div>

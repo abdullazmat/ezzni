@@ -85,7 +85,7 @@ export const Settings = ({ onNavigate }: SettingsProps) => {
                     position: 'absolute', 
                     right: '4px', 
                     top: '4px', 
-                    backgroundColor: '#22c55e', 
+                    backgroundColor: '#38AC57', 
                     color: 'white', 
                     border: 'none', 
                     padding: '0.5rem 1.5rem', 
@@ -104,7 +104,7 @@ export const Settings = ({ onNavigate }: SettingsProps) => {
                 style={{ position: 'relative', cursor: 'pointer' }}
             >
                <Bell size={24} color="#6b7280" />
-               <span style={{ position: 'absolute', top: '-2px', right: '-2px', width: '10px', height: '10px', backgroundColor: '#22c55e', borderRadius: '50%', border: '2px solid white' }}></span>
+               <span style={{ position: 'absolute', top: '-2px', right: '-2px', width: '10px', height: '10px', backgroundColor: '#38AC57', borderRadius: '50%', border: '2px solid white' }}></span>
             </div>
 
             <div 
@@ -114,7 +114,7 @@ export const Settings = ({ onNavigate }: SettingsProps) => {
                <img src="https://i.pravatar.cc/150?u=paityn" alt="User" style={{ width: '36px', height: '36px', borderRadius: '50%' }} />
                <div>
                   <div style={{ fontSize: '0.85rem', fontWeight: '700', color: '#111827' }}>Paityn Calzo</div>
-                  <div style={{ fontSize: '0.7rem', color: '#22c55e', fontWeight: '600' }}>Admin</div>
+                  <div style={{ fontSize: '0.7rem', color: '#38AC57', fontWeight: '600' }}>Admin</div>
                </div>
             </div>
           </div>
@@ -124,7 +124,7 @@ export const Settings = ({ onNavigate }: SettingsProps) => {
             <button 
                 onClick={() => onNavigate ? onNavigate('report') : alert('Loading Platform Analytics...')}
                 style={{ 
-                    backgroundColor: '#22c55e', 
+                    backgroundColor: '#38AC57', 
                     color: 'white', 
                     border: 'none', 
                     padding: '0.75rem 1.75rem', 
@@ -132,7 +132,7 @@ export const Settings = ({ onNavigate }: SettingsProps) => {
                     fontWeight: '600',
                     fontSize: '0.9rem',
                     cursor: 'pointer',
-                    boxShadow: '0 4px 6px -1px rgba(34, 197, 94, 0.2)',
+                    boxShadow: '0 4px 6px -1px rgba(56, 172, 87, 0.2)',
                     transition: 'all 0.2s'
                 }}
             >
@@ -163,7 +163,7 @@ export const Settings = ({ onNavigate }: SettingsProps) => {
                 padding: '0.75rem 1.75rem',
                 borderRadius: '2rem',
                 border: 'none',
-                backgroundColor: activeTab === tab.id ? '#22c55e' : 'transparent',
+                backgroundColor: activeTab === tab.id ? '#38AC57' : 'transparent',
                 color: activeTab === tab.id ? 'white' : '#64748b',
                 fontWeight: '600',
                 fontSize: '0.9rem',

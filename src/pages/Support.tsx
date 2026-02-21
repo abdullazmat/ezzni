@@ -5,16 +5,38 @@ import {
   Filter, 
   Eye, 
   MessageSquare, 
-  Clock, 
-  CheckCircle2, 
-  AlertCircle,
-  ArrowUpRight,
   MoreVertical,
   Paperclip,
   Smile,
-  Send
+  Send,
+  ArrowUpRight,
 } from 'lucide-react';
 import { ComplaintDetailsModal } from './SupportModals';
+
+// Specialized Icons
+import totalComplaintsIcon from '../assets/icons/Total Reservations.png';
+import openIcon from '../assets/icons/Scheduled.png';
+import inProgressIcon from "../assets/icons/Today's Bookings.png";
+import resolvedIcon from '../assets/icons/successful payments.png';
+
+// Category Icons
+import rideOrDriverIcon from '../assets/icons/Ride or Driver.png';
+import deliveryIcon from '../assets/icons/Delivery.png';
+import paymentOrRefundIcon from '../assets/icons/Payment or Refund.png';
+import rentalIcon from '../assets/icons/Rental.png';
+import accountOrProfileIcon from '../assets/icons/Account or Profile.png';
+import appIssueIcon from '../assets/icons/App Issue.png';
+import otherIcon from '../assets/icons/Other.png';
+
+const categoryIcons: Record<string, string> = {
+  'Ride or Driver': rideOrDriverIcon,
+  'Delivery': deliveryIcon,
+  'Payment or Refund': paymentOrRefundIcon,
+  'Rental': rentalIcon,
+  'Account or Profile': accountOrProfileIcon,
+  'App Issue': appIssueIcon,
+  'Other': otherIcon
+};
 
 interface UserInfo {
   name: string;
@@ -213,7 +235,7 @@ export const Support = () => {
       case 'Pending': return { backgroundColor: '#FFF7ED', color: '#F97316' };
       case 'On Hold': return { backgroundColor: '#F3F4F6', color: '#6B7280' };
       case 'Escalated': return { backgroundColor: '#FAF5FF', color: '#A855F7' };
-      case 'Resolved': return { backgroundColor: '#F0FDF4', color: '#10B981' };
+      case 'Resolved': return { backgroundColor: '#eef7f0', color: '#38AC57' };
       case 'Closed': return { backgroundColor: '#F9FAFB', color: '#374151' };
       default: return { backgroundColor: '#F3F4F6', color: '#6B7280' };
     }
@@ -227,13 +249,13 @@ export const Support = () => {
           onClick={() => setFilterStats('all')}
           style={{ 
             cursor: 'pointer', 
-            border: filterStats === 'all' ? '2px solid #10B981' : '1px solid #e5e7eb',
-            backgroundColor: filterStats === 'all' ? '#F0FDF4' : 'white'
+            border: filterStats === 'all' ? '2px solid #38AC57' : '1px solid #e5e7eb',
+            backgroundColor: filterStats === 'all' ? '#eef7f0' : 'white'
           }}
         >
           <div className="stat-header">
-            <div className="stat-icon" style={{ backgroundColor: '#F0FDF4' }}>
-              <Clock size={20} color="#10B981" />
+            <div className="stat-icon" style={{ padding: 0 }}>
+              <img src={totalComplaintsIcon} alt="" style={{ width: '32px', height: '32px', objectFit: 'contain' }} />
             </div>
             <span className="stat-label">Total Complaints</span>
           </div>
@@ -250,13 +272,13 @@ export const Support = () => {
           onClick={() => setFilterStats('open')}
           style={{ 
             cursor: 'pointer', 
-            backgroundColor: filterStats === 'open' ? '#10B981' : 'white', 
+            backgroundColor: filterStats === 'open' ? '#38AC57' : 'white', 
             border: filterStats === 'open' ? 'none' : '1px solid #e5e7eb' 
           }}
         >
           <div className="stat-header">
-            <div className="stat-icon" style={{ backgroundColor: filterStats === 'open' ? 'rgba(255,255,255,0.2)' : '#F0FDF4' }}>
-              <AlertCircle size={20} color={filterStats === 'open' ? 'white' : '#10B981'} />
+            <div className="stat-icon" style={{ padding: 0 }}>
+              <img src={openIcon} alt="" style={{ width: '32px', height: '32px', objectFit: 'contain' }} />
             </div>
             <span className="stat-label" style={{ color: filterStats === 'open' ? 'white' : 'var(--text-secondary)' }}>Open</span>
           </div>
@@ -273,13 +295,13 @@ export const Support = () => {
           onClick={() => setFilterStats('in-progress')}
           style={{ 
             cursor: 'pointer', 
-            border: filterStats === 'in-progress' ? '2px solid #10B981' : '1px solid #e5e7eb',
-            backgroundColor: filterStats === 'in-progress' ? '#F0FDF4' : 'white'
+            border: filterStats === 'in-progress' ? '2px solid #38AC57' : '1px solid #e5e7eb',
+            backgroundColor: filterStats === 'in-progress' ? '#eef7f0' : 'white'
           }}
         >
           <div className="stat-header">
-            <div className="stat-icon" style={{ backgroundColor: '#F0FDF4' }}>
-              <Clock size={20} color="#10B981" />
+            <div className="stat-icon" style={{ padding: 0 }}>
+              <img src={inProgressIcon} alt="" style={{ width: '32px', height: '32px', objectFit: 'contain' }} />
             </div>
             <span className="stat-label">In Progress</span>
           </div>
@@ -296,13 +318,13 @@ export const Support = () => {
           onClick={() => setFilterStats('resolved')}
           style={{ 
             cursor: 'pointer', 
-            border: filterStats === 'resolved' ? '2px solid #10B981' : '1px solid #e5e7eb',
-            backgroundColor: filterStats === 'resolved' ? '#F0FDF4' : 'white'
+            border: filterStats === 'resolved' ? '2px solid #38AC57' : '1px solid #e5e7eb',
+            backgroundColor: filterStats === 'resolved' ? '#eef7f0' : 'white'
           }}
         >
           <div className="stat-header">
-            <div className="stat-icon" style={{ backgroundColor: '#F0FDF4' }}>
-              <CheckCircle2 size={20} color="#10B981" />
+            <div className="stat-icon" style={{ padding: 0 }}>
+              <img src={resolvedIcon} alt="" style={{ width: '32px', height: '32px', objectFit: 'contain' }} />
             </div>
             <span className="stat-label">Resolved</span>
           </div>
@@ -395,13 +417,15 @@ export const Support = () => {
                     <div>
                       <div style={{ fontWeight: '700', fontSize: '13px' }}>{item.user.name}</div>
                       <div style={{ fontSize: '11px', color: '#6B7280' }}>{item.user.id}</div>
-                      <div style={{ fontSize: '11px', color: '#10B981', fontWeight: 'bold', textTransform: 'uppercase' }}>{item.user.type}</div>
+                      <div style={{ fontSize: '11px', color: '#38AC57', fontWeight: 'bold', textTransform: 'uppercase' }}>{item.user.type}</div>
                     </div>
                   </div>
                 </td>
                 <td>
                   <div className="flex items-center gap-2" style={{ fontSize: '13px' }}>
-                    <MessageSquare size={16} color="#10B981" />
+                    <div style={{ width: '24px', height: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                      <img src={categoryIcons[item.category] || otherIcon} alt="" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+                    </div>
                     {item.category}
                   </div>
                 </td>
@@ -479,7 +503,7 @@ export const Support = () => {
                 padding: '1.25rem 1.5rem', 
                 borderBottom: '1px solid #f3f4f6', 
                 cursor: 'pointer',
-                backgroundColor: selectedChatId === complaint.id ? '#F0FDF4' : 'transparent',
+                backgroundColor: selectedChatId === complaint.id ? '#eef7f0' : 'transparent',
                 display: 'flex',
                 gap: '1rem',
                 transition: 'background-color 0.2s'
@@ -487,7 +511,7 @@ export const Support = () => {
             >
               <div className="relative" style={{ flexShrink: 0 }}>
                 <img src={complaint.user.avatar} style={{ width: '48px', height: '48px', borderRadius: '50%', objectFit: 'cover' }} alt="" />
-                <div style={{ position: 'absolute', bottom: '2px', right: '2px', width: '12px', height: '12px', backgroundColor: '#10B981', borderRadius: '50%', border: '2px solid white' }}></div>
+                <div style={{ position: 'absolute', bottom: '2px', right: '2px', width: '12px', height: '12px', backgroundColor: '#38AC57', borderRadius: '50%', border: '2px solid white' }}></div>
               </div>
               <div style={{ flex: 1, minWidth: 0 }}>
                 <div className="flex justify-between" style={{ marginBottom: '4px' }}>
@@ -502,7 +526,7 @@ export const Support = () => {
                   <p style={{ margin: 0, fontSize: '12px', color: '#6B7280', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                     {complaint.messages.length > 0 ? complaint.messages[complaint.messages.length - 1].text : 'Start a conversation'}
                   </p>
-                  {complaint.status === 'New' && <div style={{ backgroundColor: '#10B981', color: 'white', width: '18px', height: '18px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '10px', fontWeight: 'bold', flexShrink: 0, marginLeft: '8px' }}>1</div>}
+                  {complaint.status === 'New' && <div style={{ backgroundColor: '#38AC57', color: 'white', width: '18px', height: '18px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '10px', fontWeight: 'bold', flexShrink: 0, marginLeft: '8px' }}>1</div>}
                 </div>
               </div>
             </div>
@@ -520,7 +544,7 @@ export const Support = () => {
                     <div style={{ flex: 1 }}>
                         <div className="flex items-center gap-2">
                           <h4 style={{ margin: 0, fontSize: '15px', fontWeight: 'bold' }}>{activeChat.user.name}</h4>
-                          <div style={{ width: '10px', height: '10px', backgroundColor: '#10B981', borderRadius: '50%', border: '2px solid white' }}></div>
+                          <div style={{ width: '10px', height: '10px', backgroundColor: '#38AC57', borderRadius: '50%', border: '2px solid white' }}></div>
                         </div>
                         <p style={{ margin: 0, fontSize: '11px', color: '#6B7280' }}>{activeChat.user.type}</p>
                     </div>
@@ -536,7 +560,7 @@ export const Support = () => {
                     {activeChat.messages.map(msg => (
                       <div key={msg.id} style={{ alignSelf: msg.sender === 'user' ? 'flex-start' : 'flex-end', maxWidth: '75%' }}>
                           <div style={{ 
-                            backgroundColor: msg.sender === 'user' ? 'white' : '#10B981', 
+                            backgroundColor: msg.sender === 'user' ? 'white' : '#38AC57', 
                             color: msg.sender === 'user' ? '#374151' : 'white', 
                             padding: '1rem', 
                             borderRadius: '16px', 
@@ -569,7 +593,7 @@ export const Support = () => {
                         <button type="button" style={{ border: 'none', background: 'none', color: '#9CA3AF', cursor: 'pointer', padding: '0.4rem' }}>
                             <Smile size={20} />
                         </button>
-                        <button type="submit" style={{ border: 'none', background: '#10B981', color: 'white', width: '42px', height: '42px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', boxShadow: '0 4px 6px -1px rgba(16, 185, 129, 0.3)', flexShrink: 0 }}>
+                        <button type="submit" style={{ border: 'none', background: '#38AC57', color: 'white', width: '42px', height: '42px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', boxShadow: '0 4px 6px -1px rgba(56, 172, 87, 0.3)', flexShrink: 0 }}>
                             <Send size={18} />
                         </button>
                     </form>
@@ -578,7 +602,7 @@ export const Support = () => {
         ) : (
           <div className="flex h-full items-center justify-center p-8 text-center" style={{ flexDirection: 'column', color: '#9CA3AF' }}>
             <div style={{ backgroundColor: '#f9fafb', padding: '3.5rem', borderRadius: '50%', marginBottom: '2rem', border: '1px solid #f3f4f6' }}>
-                <MessageSquare size={80} strokeWidth={1} style={{ color: '#10B981', opacity: 0.6 }} />
+                <MessageSquare size={80} strokeWidth={1} style={{ color: '#38AC57', opacity: 0.6 }} />
             </div>
             <h3 style={{ margin: 0, fontSize: '1.75rem', fontWeight: '800', color: '#374151' }}>No Conversation Selected</h3>
             <p style={{ margin: '1rem 0 0', color: '#6B7280', maxWidth: '340px', lineHeight: '1.6' }}>Select a user from the conversation list on the left to start exchanging messages.</p>
@@ -597,7 +621,7 @@ export const Support = () => {
         </div>
         <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
             <div style={{ display: 'flex', gap: '0.75rem' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '10px 18px', backgroundColor: '#F0FDF4', borderRadius: '14px', fontSize: '13px', color: '#10B981', border: '1px solid #DCFCE7', fontWeight: '700' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '10px 18px', backgroundColor: '#eef7f0', borderRadius: '14px', fontSize: '13px', color: '#38AC57', border: '1px solid #eef7f0', fontWeight: '700' }}>
                    <span>{stats.total >= 3 ? 3 : stats.total} Unread Messages</span>
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '10px 18px', backgroundColor: '#FFF7ED', borderRadius: '14px', fontSize: '13px', color: '#F97316', border: '1px solid #FFEDD5', fontWeight: '700' }}>
@@ -620,8 +644,8 @@ export const Support = () => {
           Live Chat 
           <span style={{ 
             fontSize: '11px', 
-            backgroundColor: activeTab === 'Live Chat' ? 'white' : '#10B981', 
-            color: activeTab === 'Live Chat' ? '#10B981' : 'white', 
+            backgroundColor: activeTab === 'Live Chat' ? 'white' : '#38AC57', 
+            color: activeTab === 'Live Chat' ? '#38AC57' : 'white', 
             width: '20px', 
             height: '20px', 
             borderRadius: '50%', 

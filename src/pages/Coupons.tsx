@@ -102,7 +102,7 @@ export const Coupons = () => {
         <button 
           onClick={() => setIsCreateModalOpen(true)}
           style={{ 
-            backgroundColor: '#10B981', 
+            backgroundColor: '#38AC57', 
             color: 'white', 
             border: 'none', 
             padding: '12px 32px', 
@@ -113,7 +113,7 @@ export const Coupons = () => {
             alignItems: 'center',
             gap: '12px',
             fontSize: '1.1rem',
-            boxShadow: '0 4px 12px rgba(16, 185, 129, 0.2)'
+            boxShadow: '0 4px 12px rgba(56, 172, 87, 0.2)'
           }}
         >
           <Plus size={24} strokeWidth={3} /> Create Promotion
@@ -142,7 +142,7 @@ export const Coupons = () => {
       <div style={{ backgroundColor: 'white', borderRadius: '16px', overflow: 'hidden', border: '1px solid #e5e7eb', boxShadow: '0 1px 3px rgba(0,0,0,0.05)' }}>
         <table style={{ width: '100%', borderCollapse: 'collapse' }}>
           <thead>
-            <tr style={{ backgroundColor: '#10B981', color: 'white' }}>
+            <tr style={{ backgroundColor: '#38AC57', color: 'white' }}>
               <th style={{ padding: '1rem 1.5rem', textAlign: 'left', fontWeight: '600', fontSize: '15px' }}>Promotion Name</th>
               <th style={{ padding: '1rem 1.5rem', textAlign: 'left', fontWeight: '600', fontSize: '15px' }}>Code</th>
               <th style={{ padding: '1rem 1.5rem', textAlign: 'left', fontWeight: '600', fontSize: '15px' }}>Discount</th>
@@ -160,7 +160,7 @@ export const Coupons = () => {
                   <div style={{ fontSize: '12px', color: '#6B7280', fontWeight: '700' }}>{promo.id}</div>
                 </td>
                 <td style={{ padding: '1rem 1.5rem', fontSize: '15px', color: '#6B7280', fontWeight: '600' }}>{promo.code}</td>
-                <td style={{ padding: '1rem 1.5rem', fontSize: '15px', color: '#10B981', fontWeight: '800' }}>{promo.discount}</td>
+                <td style={{ padding: '1rem 1.5rem', fontSize: '15px', color: '#38AC57', fontWeight: '800' }}>{promo.discount}</td>
                 <td style={{ padding: '1rem 1.5rem', fontSize: '14px', color: '#374151', fontWeight: '700' }}>{promo.validUntil}</td>
                 <td style={{ padding: '1rem 1.5rem' }}>
                   <div style={{ fontWeight: '800', fontSize: '16px', color: '#111827' }}>{promo.usageCount}</div>
@@ -172,8 +172,8 @@ export const Coupons = () => {
                     borderRadius: '8px', 
                     fontSize: '13px', 
                     fontWeight: '700', 
-                    backgroundColor: promo.status === 'Active' ? '#F0FDF4' : '#FEF2F2', 
-                    color: promo.status === 'Active' ? '#10B981' : '#EF4444' 
+                    backgroundColor: promo.status === 'Active' ? '#eef7f0' : '#FEF2F2', 
+                    color: promo.status === 'Active' ? '#38AC57' : '#EF4444' 
                   }}>
                     {promo.status}
                   </span>

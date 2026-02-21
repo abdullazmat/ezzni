@@ -4,8 +4,6 @@ import {
   Filter, 
   Eye, 
   ArrowUpRight, 
-  TrendingUp, 
-  TrendingDown, 
   Star, 
   ChevronDown,
   X,
@@ -13,6 +11,12 @@ import {
 } from 'lucide-react';
 import { Review } from './ReviewTypes';
 import { ReviewsModal } from './ReviewManagementModals';
+
+// Specialized Icons
+import totalReviewsIcon from '../assets/icons/Daily Bonus Earned.png';
+import visibleIcon from '../assets/icons/Verified Drivers-Passengers.png';
+import highRatedIcon from '../assets/icons/Active Drivers.png';
+import lowRatedIcon from '../assets/icons/active now.png';
 
 const MOCK_REVIEWS: Review[] = [
   {
@@ -182,7 +186,7 @@ export const ReviewManagement = () => {
         <button 
           onClick={() => setShowAnalytics(true)}
           style={{ 
-            backgroundColor: '#10B981', 
+            backgroundColor: '#38AC57', 
             color: 'white', 
             border: 'none', 
             padding: '12px 24px', 
@@ -212,12 +216,12 @@ export const ReviewManagement = () => {
                  </div>
                  <div style={{ backgroundColor: '#f9fafb', padding: '1.5rem', borderRadius: '20px', border: '1px solid #e5e7eb' }}>
                     <p style={{ margin: '0 0 0.5rem 0', color: '#6B7280', fontSize: '0.875rem', fontWeight: '600' }}>Growth Rate</p>
-                    <h3 style={{ margin: 0, fontSize: '2.5rem', fontWeight: '800', color: '#10B981' }}>+15%</h3>
+                    <h3 style={{ margin: 0, fontSize: '2.5rem', fontWeight: '800', color: '#38AC57' }}>+15%</h3>
                  </div>
               </div>
               <div style={{ marginTop: '2rem', height: '180px', backgroundColor: '#f9fafb', borderRadius: '20px', border: '1px solid #e5e7eb', display: 'flex', alignItems: 'flex-end', gap: '12px', padding: '1.5rem' }}>
                   {[30, 60, 45, 80, 55, 90, 70, 40].map((h, i) => (
-                      <div key={i} style={{ flex: 1, backgroundColor: '#10B981', height: `${h}%`, borderRadius: '6px' }}></div>
+                      <div key={i} style={{ flex: 1, backgroundColor: '#38AC57', height: `${h}%`, borderRadius: '6px' }}></div>
                   ))}
               </div>
            </div>
@@ -228,64 +232,72 @@ export const ReviewManagement = () => {
         <div 
           onClick={() => setFilterStats('total')}
           style={{ 
-            backgroundColor: 'white', padding: '1.5rem', borderRadius: '24px', cursor: 'pointer', border: filterStats === 'total' ? '2px solid #10B981' : '1px solid #e5e7eb', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.05)'
+            backgroundColor: 'white', padding: '1.5rem', borderRadius: '24px', cursor: 'pointer', border: filterStats === 'total' ? '2px solid #38AC57' : '1px solid #e5e7eb', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.05)'
           }}
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '1.5rem' }}>
-             <Star size={18} color="#10B981" />
+             <div style={{ width: '32px', height: '32px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <img src={totalReviewsIcon} alt="" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+             </div>
              <span style={{ fontSize: '0.875rem', fontWeight: '600', color: '#374151' }}>Total Reviews</span>
           </div>
           <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between' }}>
              <span style={{ fontSize: '2.5rem', fontWeight: '800', color: '#111827' }}>{stats.total}</span>
-             <ArrowUpRight size={24} color="#10B981" />
+             <ArrowUpRight size={24} color="#38AC57" />
           </div>
         </div>
 
         <div 
           onClick={() => setFilterStats('visible')}
           style={{ 
-            backgroundColor: filterStats === 'visible' ? '#10B981' : 'white', padding: '1.5rem', borderRadius: '24px', cursor: 'pointer', border: filterStats === 'visible' ? 'none' : '1px solid #e5e7eb', boxShadow: '0 4px 6px -1px rgba(16, 185, 129, 0.1)'
+            backgroundColor: filterStats === 'visible' ? '#38AC57' : 'white', padding: '1.5rem', borderRadius: '24px', cursor: 'pointer', border: filterStats === 'visible' ? 'none' : '1px solid #e5e7eb', boxShadow: '0 4px 6px -1px rgba(16, 185, 129, 0.1)'
           }}
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '1.5rem' }}>
-             <TrendingUp size={18} color={filterStats === 'visible' ? 'white' : '#10B981'} />
+             <div style={{ width: '32px', height: '32px', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: filterStats === 'visible' ? 'rgba(255,255,255,0.2)' : 'transparent', borderRadius: '8px', padding: '4px' }}>
+                <img src={visibleIcon} alt="" style={{ width: '100%', height: '100%', objectFit: 'contain', filter: filterStats === 'visible' ? 'brightness(0) invert(1)' : 'none' }} />
+             </div>
              <span style={{ fontSize: '0.875rem', fontWeight: '600', color: filterStats === 'visible' ? 'white' : '#374151' }}>Visible</span>
           </div>
           <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between' }}>
              <span style={{ fontSize: '2.5rem', fontWeight: '800', color: filterStats === 'visible' ? 'white' : '#111827' }}>{stats.visible}</span>
-             <TrendingUp size={24} color={filterStats === 'visible' ? 'white' : '#10B981'} />
+             <ArrowUpRight size={24} color={filterStats === 'visible' ? 'white' : '#38AC57'} />
           </div>
         </div>
 
         <div 
           onClick={() => setFilterStats('high')}
           style={{ 
-            backgroundColor: 'white', padding: '1.5rem', borderRadius: '24px', cursor: 'pointer', border: filterStats === 'high' ? '2px solid #10B981' : '1px solid #e5e7eb', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.05)'
+            backgroundColor: 'white', padding: '1.5rem', borderRadius: '24px', cursor: 'pointer', border: filterStats === 'high' ? '2px solid #38AC57' : '1px solid #e5e7eb', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.05)'
           }}
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '1.5rem' }}>
-             <Star size={18} color="#10B981" />
+             <div style={{ width: '32px', height: '32px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <img src={highRatedIcon} alt="" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+             </div>
              <span style={{ fontSize: '0.875rem', fontWeight: '600', color: '#374151' }}>High Rated</span>
           </div>
           <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between' }}>
              <span style={{ fontSize: '2.5rem', fontWeight: '800', color: '#111827' }}>{stats.highRated}</span>
-             <ArrowUpRight size={24} color="#10B981" />
+             <ArrowUpRight size={24} color="#38AC57" />
           </div>
         </div>
 
         <div 
           onClick={() => setFilterStats('low')}
           style={{ 
-            backgroundColor: 'white', padding: '1.5rem', borderRadius: '24px', cursor: 'pointer', border: filterStats === 'low' ? '2px solid #10B981' : '1px solid #e5e7eb', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.05)'
+            backgroundColor: 'white', padding: '1.5rem', borderRadius: '24px', cursor: 'pointer', border: filterStats === 'low' ? '2px solid #38AC57' : '1px solid #e5e7eb', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.05)'
           }}
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '1.5rem' }}>
-             <TrendingDown size={18} color="#10B981" />
+             <div style={{ width: '32px', height: '32px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <img src={lowRatedIcon} alt="" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+             </div>
              <span style={{ fontSize: '0.875rem', fontWeight: '600', color: '#374151' }}>Low Rated</span>
           </div>
           <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between' }}>
              <span style={{ fontSize: '2.5rem', fontWeight: '800', color: '#111827' }}>{stats.lowRated}</span>
-             <ArrowUpRight size={24} color="#10B981" />
+             <ArrowUpRight size={24} color="#38AC57" />
           </div>
         </div>
       </div>
@@ -366,7 +378,7 @@ export const ReviewManagement = () => {
       <div style={{ backgroundColor: 'white', borderRadius: '24px', overflow: 'hidden', border: '1px solid #e5e7eb', boxShadow: '0 1px 3px rgba(0,0,0,0.05)' }}>
         <table style={{ width: '100%', borderCollapse: 'collapse' }}>
           <thead>
-            <tr style={{ backgroundColor: '#10B981', color: 'white' }}>
+            <tr style={{ backgroundColor: '#38AC57', color: 'white' }}>
               <th style={{ padding: '1.25rem 1.5rem', textAlign: 'left', fontWeight: '600' }}>User Type</th>
               <th style={{ padding: '1.25rem 1.5rem', textAlign: 'left', fontWeight: '600' }}>Name ID</th>
               <th style={{ padding: '1.25rem 1.5rem', textAlign: 'left', fontWeight: '600' }}>Review Date</th>
@@ -378,7 +390,7 @@ export const ReviewManagement = () => {
             {filteredReviews.map((review) => (
               <tr key={review.id} style={{ borderBottom: '1px solid #f3f4f6' }}>
                 <td style={{ padding: '1rem 1.5rem' }}>
-                  <span style={{ padding: '6px 16px', borderRadius: '8px', fontSize: '12px', fontWeight: '700', backgroundColor: '#F0FDF4', color: '#10B981', border: '1px solid #DCFCE7' }}>{review.userType}</span>
+                  <span style={{ padding: '6px 16px', borderRadius: '8px', fontSize: '12px', fontWeight: '700', backgroundColor: '#eef7f0', color: '#38AC57', border: '1px solid #eef7f0' }}>{review.userType}</span>
                 </td>
                 <td style={{ padding: '1rem 1.5rem' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>

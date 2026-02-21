@@ -15,12 +15,12 @@ interface ModalProps {
 const VehicleIcon = ({ type, selected }: { type: string, selected: boolean }) => (
     <div style={{ 
         width: 48, height: 48, 
-        backgroundColor: '#f3f4f6', 
+        backgroundColor: '#eef7f0', 
         borderRadius: '50%', 
         display: 'flex', alignItems: 'center', justifyContent: 'center',
         marginRight: '1rem'
     }}>
-        {type === 'Motorcycle' ? <Bike size={24} color={selected ? "#166534" : "#374151"} /> : <Car size={24} color={selected ? "#166534" : "#374151"} />}
+        {type === 'Motorcycle' ? <Bike size={24} color={selected ? "#2d8a46" : "#374151"} /> : <Car size={24} color={selected ? "#2d8a46" : "#374151"} />}
     </div>
 );
 
@@ -67,7 +67,7 @@ export const ChangeCategoryModal = ({ onClose, driver }: ModalProps) => {
                                     onClick={() => setSelectedCategory(cat.id)}
                                     style={{ 
                                         display: 'flex', alignItems: 'center', padding: '1rem', 
-                                        borderRadius: '1rem', border: isSelected ? '1px solid #22c55e' : '1px solid #e5e7eb',
+                                        borderRadius: '1rem', border: isSelected ? '1px solid #38AC57' : '1px solid #e5e7eb',
                                         cursor: 'pointer', position: 'relative'
                                     }}
                                 >
@@ -76,7 +76,7 @@ export const ChangeCategoryModal = ({ onClose, driver }: ModalProps) => {
                                         <div style={{ fontWeight: 'bold' }}>{cat.label}</div>
                                         <div style={{ fontSize: '0.8rem', color: '#6b7280' }}>{cat.desc}</div>
                                     </div>
-                                    {isSelected && <div style={{ width: 18, height: 18, borderRadius: '50%', border: '4px solid #22c55e', backgroundColor: 'white' }}></div>}
+                                    {isSelected && <div style={{ width: 18, height: 18, borderRadius: '50%', border: '4px solid #38AC57', backgroundColor: 'white' }}></div>}
                                 </div>
                              );
                         })}
@@ -87,7 +87,7 @@ export const ChangeCategoryModal = ({ onClose, driver }: ModalProps) => {
                     onClick={onClose}
                     style={{ 
                         width: '100%', padding: '1rem', borderRadius: '2rem', border: 'none', 
-                        backgroundColor: '#22c55e', color: 'white', fontWeight: 'bold', fontSize: '1rem',
+                        backgroundColor: '#38AC57', color: 'white', fontWeight: 'bold', fontSize: '1rem',
                         cursor: 'pointer'
                     }}
                 >
@@ -117,7 +117,7 @@ export const RidePreferencesModal = ({ onClose }: ModalProps) => {
                 <div 
                     style={{ 
                         display: 'flex', alignItems: 'center', padding: '1rem', 
-                        borderRadius: '1rem', border: '1px solid #22c55e',
+                        borderRadius: '1rem', border: '1px solid #38AC57',
                         marginBottom: '2rem'
                     }}
                 >
@@ -126,7 +126,7 @@ export const RidePreferencesModal = ({ onClose }: ModalProps) => {
                         <div style={{ fontWeight: 'bold' }}>Motorcycle</div>
                         <div style={{ fontSize: '0.8rem', color: '#6b7280' }}>Affordable everyday rides</div>
                     </div>
-                    <div style={{ width: 18, height: 18, borderRadius: '50%', border: '4px solid #22c55e', backgroundColor: 'white' }}></div>
+                    <div style={{ width: 18, height: 18, borderRadius: '50%', border: '4px solid #38AC57', backgroundColor: 'white' }}></div>
                 </div>
             </div>
         </div>
@@ -270,7 +270,7 @@ export const TripSummaryModal = ({ onClose, trip }: ModalProps) => {
                              </div>
                              <div>
                                  <div style={{ fontSize: '0.7rem', color: '#6b7280' }}>Price</div>
-                                 <div style={{ fontWeight: 'bold', color: '#22c55e' }}>{mockTripData.price}</div>
+                                 <div style={{ fontWeight: 'bold', color: '#38AC57' }}>{mockTripData.price}</div>
                              </div>
                         </div>
                     </div>
@@ -291,7 +291,7 @@ export const TripSummaryModal = ({ onClose, trip }: ModalProps) => {
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.8rem' }}>
-                                     <div style={{ width: 10, height: 10, borderRadius: '50%', border: '3px solid #22c55e' }}></div>
+                                     <div style={{ width: 10, height: 10, borderRadius: '50%', border: '3px solid #38AC57' }}></div>
                                      <div style={{ fontSize: '0.9rem', fontWeight: '600' }}>{mockTripData.pickup.location}</div>
                                  </div>
                                  <div style={{ fontSize: '0.7rem', color: '#6b7280' }}>{mockTripData.pickup.time}</div>
@@ -299,7 +299,7 @@ export const TripSummaryModal = ({ onClose, trip }: ModalProps) => {
                             <div style={{ paddingLeft: '4px' }}><div style={{ height: '20px', borderLeft: '2px dashed #e5e7eb' }}></div></div>
                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.8rem' }}>
-                                     <MapPin size={18} fill="#22c55e" color="#22c55e" />
+                                     <MapPin size={18} fill="#38AC57" color="#38AC57" />
                                      <div style={{ fontSize: '0.9rem', fontWeight: '600' }}>{mockTripData.dropoff.location}</div>
                                  </div>
                                  <div style={{ fontSize: '0.7rem', color: '#6b7280' }}>{mockTripData.dropoff.time}</div>
@@ -317,7 +317,7 @@ export const TripSummaryModal = ({ onClose, trip }: ModalProps) => {
                          <p style={{ fontSize: '0.85rem', color: '#374151', margin: '0 0 1rem 0' }}>{mockTripData.reviewGiven}</p>
                          <div style={{ display: 'flex', gap: '0.5rem' }}>
                              {['On time pickup', 'Clean Car', 'Safe Driving'].map(tag => (
-                                 <span key={tag} style={{ backgroundColor: '#22c55e', color: 'white', padding: '0.3rem 0.8rem', borderRadius: '0.3rem', fontSize: '0.7rem', fontWeight: '600' }}>{tag}</span>
+                                 <span key={tag} style={{ backgroundColor: '#38AC57', color: 'white', padding: '0.3rem 0.8rem', borderRadius: '0.3rem', fontSize: '0.7rem', fontWeight: '600' }}>{tag}</span>
                              ))}
                          </div>
                     </div>
@@ -332,7 +332,7 @@ export const TripSummaryModal = ({ onClose, trip }: ModalProps) => {
                          <p style={{ fontSize: '0.85rem', color: '#374151', margin: '0 0 1rem 0' }}>{mockTripData.reviewReceived}</p>
                          <div style={{ display: 'flex', gap: '0.5rem' }}>
                              {['Ready on time', 'Polite & Friendly'].map(tag => (
-                                 <span key={tag} style={{ backgroundColor: '#22c55e', color: 'white', padding: '0.3rem 0.8rem', borderRadius: '0.3rem', fontSize: '0.7rem', fontWeight: '600' }}>{tag}</span>
+                                 <span key={tag} style={{ backgroundColor: '#38AC57', color: 'white', padding: '0.3rem 0.8rem', borderRadius: '0.3rem', fontSize: '0.7rem', fontWeight: '600' }}>{tag}</span>
                              ))}
                          </div>
                     </div>
@@ -340,7 +340,7 @@ export const TripSummaryModal = ({ onClose, trip }: ModalProps) => {
 
                 {/* Footer */}
                 <div style={{ padding: '1.5rem', borderTop: '1px solid #e5e7eb' }}>
-                    <button style={{ width: '100%', padding: '1rem', borderRadius: '2rem', border: 'none', backgroundColor: '#22c55e', color: 'white', fontWeight: 'bold', fontSize: '1rem', cursor: 'pointer', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '0.5rem' }}>
+                    <button style={{ width: '100%', padding: '1rem', borderRadius: '2rem', border: 'none', backgroundColor: '#38AC57', color: 'white', fontWeight: 'bold', fontSize: '1rem', cursor: 'pointer', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '0.5rem' }}>
                         Download Receipt
                     </button>
                 </div>

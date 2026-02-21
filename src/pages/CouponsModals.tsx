@@ -2,13 +2,14 @@ import { useState, useEffect } from 'react';
 import { 
   X, 
   ArrowLeft,
-  Car,
-  Truck,
-  Bike,
-  Info,
-  Key
+  Info
 } from 'lucide-react';
 import { Promotion } from './CouponTypes';
+import carIcon from '../assets/icons/car.png';
+import deliveryIcon from '../assets/icons/Delivery Services.png';
+import motorcycleIcon from '../assets/icons/bike.png';
+import rentalCarIcon from '../assets/icons/rental car.png';
+import taxiIcon from '../assets/icons/taxi.png';
 
 interface CouponsModalProps {
   isOpen: boolean;
@@ -55,11 +56,11 @@ export const CouponsModal = ({ isOpen, onClose, promotion, onUpdate, onDelete }:
   };
 
   const services = [
-    { id: 'Rides', label: 'Rides', icon: Car },
-    { id: 'Deliveries', label: 'Deliveries', icon: Truck },
-    { id: 'Motorcycle', label: 'Motorcycle', icon: Bike },
-    { id: 'Rental Car', label: 'Rental Car', icon: Key },
-    { id: 'Taxi', label: 'Taxi', icon: Car }
+    { id: 'Rides', label: 'Rides', icon: carIcon },
+    { id: 'Deliveries', label: 'Deliveries', icon: deliveryIcon },
+    { id: 'Motorcycle', label: 'Motorcycle', icon: motorcycleIcon },
+    { id: 'Rental Car', label: 'Rental Car', icon: rentalCarIcon },
+    { id: 'Taxi', label: 'Taxi', icon: taxiIcon }
   ];
 
   const inputStyle: React.CSSProperties = {
@@ -128,8 +129,8 @@ export const CouponsModal = ({ isOpen, onClose, promotion, onUpdate, onDelete }:
               </select>
             ) : (
               <span style={{ 
-                backgroundColor: editedPromo.status === 'Active' ? '#DCFCE7' : '#FEE2E2',
-                color: editedPromo.status === 'Active' ? '#10B981' : '#EF4444',
+                backgroundColor: editedPromo.status === 'Active' ? '#eef7f0' : '#FEE2E2',
+                color: editedPromo.status === 'Active' ? '#38AC57' : '#EF4444',
                 padding: '4px 12px', borderRadius: '8px', fontSize: '12px', fontWeight: '800'
               }}>
                 {editedPromo.status}
@@ -209,7 +210,9 @@ export const CouponsModal = ({ isOpen, onClose, promotion, onUpdate, onDelete }:
           readOnly={!isEditing}
           onChange={(e) => setEditedPromo({...editedPromo, description: e.target.value})}
           style={{ 
-            width: '100%', backgroundColor: '#f9fafb', border: isEditing ? '1px solid #10B981' : '1px solid #f3f4f6',
+            width: '100%',
+            backgroundColor: '#f9fafb',
+            border: isEditing ? '1px solid #38AC57' : '1px solid #f3f4f6',
             borderRadius: '16px', padding: '1.5rem', fontSize: '15px', color: '#4B5563',
             minHeight: '100px', marginBottom: '2rem', outline: 'none', resize: 'none'
           }}
@@ -222,15 +225,15 @@ export const CouponsModal = ({ isOpen, onClose, promotion, onUpdate, onDelete }:
               key={service.id}
               onClick={() => handleToggleService(service.id)}
               style={{ 
-                border: editedPromo.eligibleServices.includes(service.id) ? '2px solid #10B981' : '1px solid #e5e7eb', 
-                backgroundColor: editedPromo.eligibleServices.includes(service.id) ? '#F0FDF4' : 'white',
+                border: editedPromo.eligibleServices.includes(service.id) ? '2px solid #38AC57' : '1px solid #e5e7eb', 
+                backgroundColor: editedPromo.eligibleServices.includes(service.id) ? '#eef7f0' : 'white',
                 padding: '8px 20px', borderRadius: '100px', display: 'flex', alignItems: 'center', gap: '8px',
                 fontSize: '14px', fontWeight: '700', color: '#374151',
                 cursor: isEditing ? 'pointer' : 'default',
                 transition: 'all 0.2s'
               }}
             >
-              <service.icon size={16} color={editedPromo.eligibleServices.includes(service.id) ? '#10B981' : '#374151'} /> {service.label}
+              <img src={service.icon} alt="" style={{ width: '24px', height: '24px', objectFit: 'contain' }} /> {service.label}
             </button>
           ))}
         </div>
@@ -240,7 +243,7 @@ export const CouponsModal = ({ isOpen, onClose, promotion, onUpdate, onDelete }:
             <button 
               onClick={handleSave}
               style={{ 
-                flex: 1, backgroundColor: '#10B981', color: 'white', border: 'none',
+                flex: 1, backgroundColor: '#38AC57', color: 'white', border: 'none',
                 padding: '16px', borderRadius: '100px', fontWeight: '800', fontSize: '1.1rem', cursor: 'pointer'
               }}
             >
@@ -316,11 +319,11 @@ export const CreatePromotionModal = ({ isOpen, onClose, onCreate }: CreatePromot
   };
 
   const services = [
-    { id: 'Rides', label: 'Car Ride', icon: Car },
-    { id: 'Motorcycle', label: 'Motorcycle', icon: Bike },
-    { id: 'Rental Car', label: 'Rental Car', icon: Key },
-    { id: 'Taxi', label: 'Taxi', icon: Car },
-    { id: 'Deliveries', label: 'Delivery', icon: Truck }
+    { id: 'Rides', label: 'Rides', icon: carIcon },
+    { id: 'Deliveries', label: 'Deliveries', icon: deliveryIcon },
+    { id: 'Motorcycle', label: 'Motorcycle', icon: motorcycleIcon },
+    { id: 'Rental Car', label: 'Rental Car', icon: rentalCarIcon },
+    { id: 'Taxi', label: 'Taxi', icon: taxiIcon }
   ];
 
   const handleToggleService = (serviceId: string) => {
@@ -458,14 +461,14 @@ export const CreatePromotionModal = ({ isOpen, onClose, onCreate }: CreatePromot
               key={service.id}
               onClick={() => handleToggleService(service.id)}
               style={{ 
-                flex: 1, padding: '1.5rem 1rem', borderRadius: '16px', border: formData.eligibleServices?.includes(service.id) ? '2px solid #10B981' : '1px solid #f3f4f6',
+                flex: 1, padding: '1.5rem 1rem', borderRadius: '16px', border: formData.eligibleServices?.includes(service.id) ? '2px solid #38AC57' : '1px solid #f3f4f6',
                 display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px', cursor: 'pointer',
-                transition: 'all 0.2s', backgroundColor: formData.eligibleServices?.includes(service.id) ? '#F0FDF4' : 'white',
+                transition: 'all 0.2s', backgroundColor: formData.eligibleServices?.includes(service.id) ? '#eef7f0' : 'white',
                 minWidth: '100px'
               }}
             >
-              <div style={{ padding: '12px', backgroundColor: '#f9fafb', borderRadius: '12px' }}>
-                <service.icon size={32} color={formData.eligibleServices?.includes(service.id) ? '#10B981' : '#374151'} />
+              <div style={{ padding: '4px', backgroundColor: '#f9fafb', borderRadius: '12px' }}>
+                <img src={service.icon} alt="" style={{ width: '48px', height: '48px', objectFit: 'contain' }} />
               </div>
               <span style={{ fontSize: '13px', fontWeight: '700', color: '#374151', textAlign: 'center' }}>{service.label}</span>
             </div>
@@ -486,7 +489,7 @@ export const CreatePromotionModal = ({ isOpen, onClose, onCreate }: CreatePromot
             onClick={handleCreate}
             style={{ 
               padding: '16px 64px', borderRadius: '100px', border: 'none',
-              backgroundColor: '#10B981', color: 'white', fontWeight: '800', fontSize: '1rem', cursor: 'pointer'
+              backgroundColor: '#38AC57', color: 'white', fontWeight: '800', fontSize: '1rem', cursor: 'pointer'
             }}
           >
             Create Promotion

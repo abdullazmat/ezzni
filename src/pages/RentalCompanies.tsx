@@ -1,12 +1,19 @@
 
 import { useState, useRef, useEffect } from 'react';
-import { Search, Eye, Plus, ChevronDown, Filter, Calendar, Fuel, Settings, Palette, MoreVertical } from 'lucide-react';
+import { Search, Eye, Plus, ChevronDown, Filter, Calendar, Fuel, Settings, Palette, MoreVertical, ArrowLeft } from 'lucide-react';
 import { VehicleDetailModal, VehicleListing, AddVehicleModal } from './RentalCompaniesModals';
+
+// Specialized Icons
+import availableIcon from '../assets/available rental companies.png';
+import pendingIcon from '../assets/pending rental companies.png';
+import underReviewIcon from '../assets/under review rental companies.png';
+import rejectedIcon from '../assets/rejected rental companies.png';
+import companyLogoAsset from '../assets/rental companies logo.jpg';
 
 // Status colors
 const statusColors: Record<string, { bg: string; color: string; border: string }> = {
-    'Available': { bg: '#dcfce7', color: '#16a34a', border: '#bbf7d0' },
-    'Approved': { bg: '#dcfce7', color: '#16a34a', border: '#bbf7d0' },
+    'Available': { bg: '#eef7f0', color: '#2d8a46', border: '#eef7f0' },
+    'Approved': { bg: '#eef7f0', color: '#2d8a46', border: '#eef7f0' },
     'Pending': { bg: '#fef3c7', color: '#d97706', border: '#fde68a' },
     'Pending Review': { bg: '#fef3c7', color: '#d97706', border: '#fde68a' },
     'Rejected': { bg: '#fee2e2', color: '#dc2626', border: '#fecaca' },
@@ -41,9 +48,9 @@ const mockCompanies: CompanyRecord[] = [
 
 // Vehicle listings data
 const mockVehicles: VehicleListing[] = [
-    { id: 'T2345-A-6', name: 'Mercedes G Wagon', price: '380 MAD/day', year: '2025', transmission: 'Automatic', fuel: 'Petrol', color: 'Black', status: 'Approved', company: 'Makao Car Rental', companyLogo: '⚫', carsAvailable: 28, licensePlate: '12345-A-6', seats: 5, submittedDate: '2025-01-08 14:30', description: 'Luxury SUV with premium features. Ideal for business trips and special occasions. Fully equipped with latest technology.' },
-    { id: 'T2345-A-6', name: 'Dacia Logan', price: '380 MAD/day', year: '2025', transmission: 'Automatic', fuel: 'Petrol', color: 'Black', status: 'Approved', company: 'Makao Car Rental', companyLogo: '⚫', carsAvailable: 28, licensePlate: '12345-A-6', seats: 5, submittedDate: '2025-01-08 14:30', description: 'Reliable and affordable sedan. Perfect for daily commutes and city driving. Excellent fuel economy.' },
-    { id: 'T2345-A-6', name: 'BMW 5 Series', price: '380 MAD/day', year: '2025', transmission: 'Automatic', fuel: 'Petrol', color: 'Black', status: 'Pending Review', company: 'Makao Car Rental', companyLogo: '⚫', carsAvailable: 28, licensePlate: '12345-A-6', seats: 5, submittedDate: '2025-01-08 14:30', description: 'Luxury sedan with premium features. Ideal for business trips and special occasions. Fully equipped with latest technology.' },
+    { id: 'T2345-A-6', name: 'Mercedes G Wagon', price: '380 MAD/day', year: '2025', transmission: 'Automatic', fuel: 'Petrol', color: 'Black', status: 'Approved', company: 'Atlas Fleet Services', companyLogo: '⚫', carsAvailable: 28, licensePlate: '12345-A-6', seats: 5, submittedDate: '2025-01-08 14:30', description: 'Luxury SUV with premium features. Ideal for business trips and special occasions. Fully equipped with latest technology.' },
+    { id: 'T2345-A-6', name: 'Dacia Logan', price: '380 MAD/day', year: '2025', transmission: 'Automatic', fuel: 'Petrol', color: 'Black', status: 'Approved', company: 'Atlas Fleet Services', companyLogo: '⚫', carsAvailable: 28, licensePlate: '12345-A-6', seats: 5, submittedDate: '2025-01-08 14:30', description: 'Reliable and affordable sedan. Perfect for daily commutes and city driving. Excellent fuel economy.' },
+    { id: 'T2345-A-6', name: 'BMW 5 Series', price: '380 MAD/day', year: '2025', transmission: 'Automatic', fuel: 'Petrol', color: 'Black', status: 'Pending Review', company: 'Atlas Fleet Services', companyLogo: '⚫', carsAvailable: 28, licensePlate: '12345-A-6', seats: 5, submittedDate: '2025-01-08 14:30', description: 'Luxury sedan with premium features. Ideal for business trips and special occasions. Fully equipped with latest technology.' },
     { id: 'T2345-A-6', name: 'Mercedes G Wagon', price: '380 MAD/day', year: '2025', transmission: 'Automatic', fuel: 'Petrol', color: 'Black', status: 'Pending Review', company: 'Makao Car Rental', companyLogo: '⚫', carsAvailable: 28, licensePlate: '12345-A-6', seats: 5, submittedDate: '2025-01-08 14:30', description: 'Luxury SUV with premium features. Ideal for business trips and special occasions. Fully equipped with latest technology.' },
     { id: 'T2345-A-6', name: 'Mercedes G Wagon', price: '380 MAD/day', year: '2025', transmission: 'Automatic', fuel: 'Petrol', color: 'Black', status: 'Rejected', company: 'Makao Car Rental', companyLogo: '⚫', carsAvailable: 28, licensePlate: '12345-A-6', seats: 5, submittedDate: '2025-01-08 14:30', description: 'Luxury SUV with premium features. Ideal for business trips and special occasions.' },
     { id: 'T2345-A-6', name: 'Dacia Logan', price: '380 MAD/day', year: '2025', transmission: 'Automatic', fuel: 'Petrol', color: 'Black', status: 'Approved', company: 'Makao Car Rental', companyLogo: '⚫', carsAvailable: 28, licensePlate: '12345-A-6', seats: 5, submittedDate: '2025-01-08 14:30', description: 'Reliable and affordable sedan. Perfect for daily commutes and city driving.' },
@@ -74,9 +81,9 @@ const Dropdown = ({ label, options, activeValue, onSelect }: { label: string; op
                 <div style={{ position: 'absolute', top: '120%', left: 0, backgroundColor: 'white', border: '1px solid #e5e7eb', borderRadius: '12px', boxShadow: '0 10px 25px rgba(0,0,0,0.15)', zIndex: 50, minWidth: '160px', padding: '6px' }}>
                     {['All', ...options].map(o => (
                         <div key={o} onClick={() => { onSelect(o); setIsOpen(false); }}
-                            style={{ padding: '8px 14px', cursor: 'pointer', borderRadius: '8px', fontSize: '14px', fontWeight: activeValue === o ? 'bold' : 'normal', backgroundColor: activeValue === o ? '#f0fdf4' : 'transparent', color: activeValue === o ? '#166534' : '#374151' }}
+                            style={{ padding: '8px 14px', cursor: 'pointer', borderRadius: '8px', fontSize: '14px', fontWeight: activeValue === o ? 'bold' : 'normal', backgroundColor: activeValue === o ? '#eef7f0' : 'transparent', color: activeValue === o ? '#2d8a46' : '#374151' }}
                             onMouseEnter={e => e.currentTarget.style.backgroundColor = '#f3f4f6'}
-                            onMouseLeave={e => e.currentTarget.style.backgroundColor = activeValue === o ? '#f0fdf4' : 'transparent'}
+                            onMouseLeave={e => e.currentTarget.style.backgroundColor = activeValue === o ? '#eef7f0' : 'transparent'}
                         >{o}</div>
                     ))}
                 </div>
@@ -92,6 +99,7 @@ export const RentalCompanies = () => {
     const [activeTab, setActiveTab] = useState('All Listings');
     const [activeStat, setActiveStat] = useState('');
     const [selectedVehicle, setSelectedVehicle] = useState<VehicleListing | null>(null);
+    const [selectedCompany, setSelectedCompany] = useState<CompanyRecord | null>(null);
     const [banner, setBanner] = useState<{ type: 'approve' | 'reject'; msg: string } | null>(null);
 
     const [vehicles, setVehicles] = useState<VehicleListing[]>(mockVehicles);
@@ -102,16 +110,17 @@ export const RentalCompanies = () => {
     const rejected = vehicles.filter(v => v.status === 'Rejected').length;
 
     const statCards = [
-        { key: 'Available', label: 'Available', value: String(available).padStart(2, '0'), emoji: '🚗✅' },
-        { key: 'Approved', label: viewMode === 'table' ? 'Booked' : 'Approved', value: String(available).padStart(2, '0'), emoji: '🚙👍' },
-        { key: 'Pending', label: viewMode === 'table' ? 'Under Review' : 'Pending', value: String(pending).padStart(2, '0'), emoji: '🚗⏳' },
-        { key: 'Rejected', label: 'Rejected', value: String(rejected).padStart(2, '0'), emoji: '🚗❌' },
+        { key: 'Available', label: 'Available', value: String(available).padStart(2, '0'), icon: availableIcon },
+        { key: 'Approved', label: viewMode === 'table' ? 'Booked' : 'Approved', value: String(available).padStart(2, '0'), icon: pendingIcon },
+        { key: 'Pending', label: viewMode === 'table' ? 'Under Review' : 'Pending', value: String(pending).padStart(2, '0'), icon: underReviewIcon },
+        { key: 'Rejected', label: 'Rejected', value: String(rejected).padStart(2, '0'), icon: rejectedIcon },
     ];
 
     const tabs = ['All Listings', 'Pending', 'Approved', 'Rejected'];
 
     // Filter vehicles
     const filteredVehicles = vehicles.filter(v => {
+        if (selectedCompany && v.company !== selectedCompany.name) return false;
         if (searchTerm && !v.name.toLowerCase().includes(searchTerm.toLowerCase()) && !v.company.toLowerCase().includes(searchTerm.toLowerCase())) return false;
         
         // Tab filters
@@ -197,7 +206,7 @@ export const RentalCompanies = () => {
                     position: 'fixed', bottom: '24px', right: '24px', zIndex: 2000,
                     backgroundColor: 'white', borderRadius: '12px', padding: '14px 24px',
                     boxShadow: '0 10px 30px rgba(0,0,0,0.15)', display: 'flex', alignItems: 'center', gap: '12px',
-                    border: `1px solid ${banner.type === 'approve' ? '#bbf7d0' : '#fecaca'}`,
+                    border: `1px solid ${banner.type === 'approve' ? '#a5d6a7' : '#fecaca'}`,
                     animation: 'slideUp 0.3s ease'
                 }}>
                     <div style={{ width: '28px', height: '28px', borderRadius: '50%', backgroundColor: banner.type === 'approve' ? '#dbeafe' : '#fee2e2', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '14px' }}>
@@ -211,22 +220,32 @@ export const RentalCompanies = () => {
             {/* Header */}
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
                 <div>
-                    <h1 style={{ fontSize: '28px', fontWeight: 'bold', margin: 0 }}>Rental Companies</h1>
-                    <p style={{ color: '#6b7280', margin: '4px 0 0 0', fontSize: '14px' }}>Manage rental company partnerships and fleet integrations</p>
+                    <h1 style={{ fontSize: '28px', fontWeight: 'bold', margin: 0 }}>
+                        {viewMode === 'table' ? 'Rental Companies' : selectedCompany ? `${selectedCompany.name} Fleet` : 'All Vehicles'}
+                    </h1>
+                    <p style={{ color: '#6b7280', margin: '4px 0 0 0', fontSize: '14px' }}>
+                        {viewMode === 'table' ? 'Manage rental company partnerships and fleet integrations' : `Viewing vehicle fleet ${selectedCompany ? `for ${selectedCompany.name}` : 'across all companies'}`}
+                    </p>
                 </div>
                 <div style={{ display: 'flex', gap: '12px' }}>
-                    <button onClick={() => setViewMode(viewMode === 'table' ? 'grid' : 'table')} style={{
-                        padding: '10px 20px', borderRadius: '24px', border: '1px solid #e5e7eb', backgroundColor: 'white', fontWeight: '600', fontSize: '14px', cursor: 'pointer', transition: 'all 0.2s'
+                    <button onClick={() => { 
+                        if (viewMode === 'grid') setSelectedCompany(null);
+                        setViewMode(viewMode === 'table' ? 'grid' : 'table');
+                    }} style={{
+                        display: 'flex', alignItems: 'center', gap: '8px', padding: '10px 20px', borderRadius: '24px', border: '1px solid #e5e7eb', backgroundColor: 'white', fontWeight: '600', fontSize: '14px', cursor: 'pointer', transition: 'all 0.2s'
                     }}
-                    onMouseEnter={e => e.currentTarget.style.borderColor = '#22c55e'}
+                    onMouseEnter={e => e.currentTarget.style.borderColor = '#38AC57'}
                     onMouseLeave={e => e.currentTarget.style.borderColor = '#e5e7eb'}
-                    >{viewMode === 'table' ? 'View All' : 'View All'}</button>
+                    >
+                        {viewMode === 'grid' ? <ArrowLeft size={16} /> : null}
+                        {viewMode === 'table' ? 'View All Vehicles' : 'Back to Companies'}
+                    </button>
                     <button onClick={() => setIsAddModalOpen(true)} style={{
                         display: 'flex', alignItems: 'center', gap: '8px', padding: '10px 20px', borderRadius: '24px', border: 'none',
-                        backgroundColor: '#22c55e', color: 'white', fontWeight: '600', fontSize: '14px', cursor: 'pointer', transition: 'background-color 0.2s'
+                        backgroundColor: '#38AC57', color: 'white', fontWeight: '600', fontSize: '14px', cursor: 'pointer', transition: 'background-color 0.2s'
                     }}
-                    onMouseEnter={e => e.currentTarget.style.backgroundColor = '#16a34a'}
-                    onMouseLeave={e => e.currentTarget.style.backgroundColor = '#22c55e'}
+                    onMouseEnter={e => e.currentTarget.style.backgroundColor = '#2d8a46'}
+                    onMouseLeave={e => e.currentTarget.style.backgroundColor = '#38AC57'}
                     ><Plus size={18} /> Add Vehicle</button>
                 </div>
             </div>
@@ -239,13 +258,15 @@ export const RentalCompanies = () => {
                         <div key={stat.key} onClick={() => setActiveStat(isActive ? '' : stat.key)}
                             style={{
                                 backgroundColor: 'white', padding: '24px', borderRadius: '24px', position: 'relative',
-                                cursor: 'pointer', transition: 'all 0.3s', boxShadow: isActive ? '0 8px 20px rgba(34,197,94,0.15)' : '0 1px 3px rgba(0,0,0,0.06)',
-                                border: isActive ? '2px solid #22c55e' : '2px solid transparent', transform: isActive ? 'translateY(-2px)' : 'none',
+                                cursor: 'pointer', transition: 'all 0.3s', boxShadow: isActive ? '0 8px 20px rgba(56, 172, 87, 0.15)' : '0 1px 3px rgba(0,0,0,0.06)',
+                                border: isActive ? '2px solid #38AC57' : '2px solid transparent', transform: isActive ? 'translateY(-2px)' : 'none',
                                 overflow: 'hidden'
                             }}>
                             <div style={{ fontWeight: '600', fontSize: '14px', color: '#6b7280', marginBottom: '4px' }}>{stat.label}</div>
                             <div style={{ fontSize: '48px', fontWeight: 'bold' }}>{stat.value}</div>
-                            <div style={{ position: 'absolute', right: '16px', bottom: '16px', fontSize: '40px', opacity: 0.7 }}>{stat.emoji}</div>
+                            <div style={{ position: 'absolute', right: '16px', bottom: '16px', opacity: 1.0 }}>
+                                <img src={stat.icon} alt="" style={{ width: '64px', height: '64px', objectFit: 'contain' }} />
+                            </div>
                         </div>
                     );
                 })}
@@ -279,7 +300,7 @@ export const RentalCompanies = () => {
             {/* ====== TABLE VIEW ====== */}
             {viewMode === 'table' && (
                 <>
-                    <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1.2fr 0.8fr 0.8fr 1.2fr 0.8fr', padding: '16px 24px', backgroundColor: '#10b981', color: 'white', borderRadius: '12px', fontWeight: 'bold', fontSize: '13px', marginBottom: '16px' }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1.2fr 0.8fr 0.8fr 1.2fr 0.8fr', padding: '16px 24px', backgroundColor: '#38AC57', color: 'white', borderRadius: '12px', fontWeight: 'bold', fontSize: '13px', marginBottom: '16px' }}>
                         <div>Company Details</div><div>Location</div><div>Fleet Info</div><div style={{ textAlign: 'center' }}>Documents</div><div style={{ textAlign: 'center' }}>Status</div><div style={{ textAlign: 'center' }}>Submitted</div><div style={{ textAlign: 'center' }}>Action</div>
                     </div>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
@@ -296,7 +317,9 @@ export const RentalCompanies = () => {
                                     onMouseLeave={e => { e.currentTarget.style.boxShadow = '0 1px 2px rgba(0,0,0,0.05)'; e.currentTarget.style.transform = 'none'; }}
                                 >
                                     <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                                        <div style={{ width: '40px', height: '40px', backgroundColor: '#fee2e2', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '18px', flexShrink: 0 }}>{c.logo}</div>
+                                        <div style={{ width: '40px', height: '40px', borderRadius: '50%', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                                            <img src={companyLogoAsset} alt="Company Logo" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                        </div>
                                         <div>
                                             <div style={{ fontWeight: '600', fontSize: '14px' }}>{c.name}</div>
                                             <div style={{ fontSize: '11px', color: '#9ca3af' }}>{c.email}</div>
@@ -309,8 +332,8 @@ export const RentalCompanies = () => {
                                     <div style={{ textAlign: 'center' }}>{statusBadge(c.status)}</div>
                                     <div style={{ textAlign: 'center' }}><div style={{ fontSize: '13px', fontWeight: '600' }}>{c.submitted}</div><div style={{ fontSize: '11px', color: '#9ca3af' }}>Contract: {c.contract}</div></div>
                                     <div style={{ textAlign: 'center' }}>
-                                        <button onClick={() => setViewMode('grid')} style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '6px 16px', borderRadius: '20px', border: '1px solid #e5e7eb', backgroundColor: 'white', fontSize: '13px', cursor: 'pointer', fontWeight: '600', transition: 'all 0.2s' }}
-                                            onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#f0fdf4'; e.currentTarget.style.borderColor = '#22c55e'; }}
+                                        <button onClick={() => { setSelectedCompany(c); setViewMode('grid'); }} style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '6px 16px', borderRadius: '20px', border: '1px solid #e5e7eb', backgroundColor: 'white', fontSize: '13px', cursor: 'pointer', fontWeight: '600', transition: 'all 0.2s' }}
+                                            onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#eef7f0'; e.currentTarget.style.borderColor = '#38AC57'; }}
                                             onMouseLeave={e => { e.currentTarget.style.backgroundColor = 'white'; e.currentTarget.style.borderColor = '#e5e7eb'; }}
                                         ><Eye size={14} /> Preview</button>
                                     </div>
@@ -349,7 +372,7 @@ export const RentalCompanies = () => {
                                 <div style={{ padding: '16px' }}>
                                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
                                         <h3 style={{ fontSize: '16px', fontWeight: 'bold', margin: 0 }}>{v.name}</h3>
-                                        <span style={{ backgroundColor: '#22c55e', color: 'white', padding: '3px 10px', borderRadius: '6px', fontSize: '11px', fontWeight: '700' }}>{v.price}</span>
+                                        <span style={{ backgroundColor: '#38AC57', color: 'white', padding: '3px 10px', borderRadius: '6px', fontSize: '11px', fontWeight: '700' }}>{v.price}</span>
                                     </div>
                                     <div style={{ fontSize: '12px', color: '#9ca3af', marginBottom: '12px' }}>{v.id}</div>
                                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '6px', marginBottom: '14px', fontSize: '12px', color: '#6b7280' }}>

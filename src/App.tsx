@@ -22,6 +22,7 @@ import { Coupons } from './pages/Coupons';
 import { Notifications } from './pages/Notifications';
 import { Reports } from './pages/Reports';
 import { AllServices } from './pages/AllServices';
+import { Profile } from './pages/Profile';
 import './index.css';
 
 function App() {
@@ -53,6 +54,8 @@ function App() {
     window.addEventListener('hashchange', handleHashChange);
     return () => window.removeEventListener('hashchange', handleHashChange);
   }, [currentPage]);
+
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const renderPage = () => {
     switch (currentPage) {
@@ -94,6 +97,8 @@ function App() {
         return <Settings onNavigate={setCurrentPage} />;
       case 'all-services':
         return <AllServices />;
+      case 'profile':
+        return <Profile />;
       default:
         return (
           <div style={{ padding: '2rem', textAlign: 'center' }}>
@@ -103,8 +108,6 @@ function App() {
         );
     }
   };
-
-
 
   if (!isAuthenticated) {
     if (authView === 'login') {
@@ -125,7 +128,19 @@ function App() {
 
   return (
     <div className="dashboard-grid">
-      <Sidebar activePage={currentPage} onNavigate={setCurrentPage} />
+      <div 
+        className={`sidebar-overlay ${isSidebarOpen ? 'open' : ''}`} 
+        onClick={() => setIsSidebarOpen(false)} 
+      />
+      <Sidebar 
+        activePage={currentPage} 
+        onNavigate={(page) => {
+          setCurrentPage(page);
+          setIsSidebarOpen(false);
+        }} 
+        isOpen={isSidebarOpen}
+        onClose={() => setIsSidebarOpen(false)}
+      />
       <main className="main-content">
         <Header 
           onLogout={() => {
@@ -134,6 +149,8 @@ function App() {
             setIsAuthenticated(false);
             setAuthView('login');
           }}
+          onToggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
+          onNavigate={setCurrentPage}
         />
         {renderPage()}
       </main>

@@ -1,5 +1,10 @@
 import { Moon } from 'lucide-react';
 
+// Vehicle Icons
+import carIcon from '../../assets/icons/car.png';
+import taxiIcon from '../../assets/icons/taxi.png';
+import bikeIcon from '../../assets/icons/bike.png';
+
 export const SurgeControl = () => {
     const surgeItems = Array(24).fill({
         title: 'Weekend Nights',
@@ -8,11 +13,11 @@ export const SurgeControl = () => {
     });
 
     const reservationFees = [
-        { type: 'Motorcycle', city: '+5 MAD', intercity: '+25 MAD', airport: '+40 MAD', icon: '🏍️' },
-        { type: 'Standard Car', city: '+10 MAD', intercity: '+35 MAD', airport: '+40 MAD', icon: '🚗' },
-        { type: 'Comfort Car', city: '+15 MAD', intercity: '+50 MAD', airport: '+40 MAD', icon: '🚙' },
-        { type: 'XL', city: '+20 MAD', intercity: '+25 MAD', airport: '+40 MAD', icon: '🚐' },
-        { type: 'Taxi', city: '+5 MAD', intercity: '+35 MAD', airport: '+40 MAD', icon: '🚖' },
+        { type: 'Motorcycle', city: '+5 MAD', intercity: '+25 MAD', airport: '+40 MAD', icon: bikeIcon },
+        { type: 'Standard Car', city: '+10 MAD', intercity: '+35 MAD', airport: '+40 MAD', icon: carIcon },
+        { type: 'Comfort Car', city: '+15 MAD', intercity: '+50 MAD', airport: '+40 MAD', icon: carIcon },
+        { type: 'XL', city: '+20 MAD', intercity: '+25 MAD', airport: '+40 MAD', icon: carIcon },
+        { type: 'Taxi', city: '+5 MAD', intercity: '+35 MAD', airport: '+40 MAD', icon: taxiIcon },
         { type: 'Express Delivery', city: '+10 MAD', intercity: '+50 MAD', airport: '+40 MAD', icon: '📦' },
         { type: 'City to City', city: '+15 MAD', intercity: '+25 MAD', airport: '+40 MAD', icon: '🏬' },
         { type: 'Group Ride', city: '+20 MAD', intercity: '+35 MAD', airport: '+40 MAD', icon: '👥' },
@@ -56,14 +61,14 @@ export const SurgeControl = () => {
                     }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
                             <div style={{ 
-                                backgroundColor: '#f0fdf4', 
+                                backgroundColor: '#eef7f0', 
                                 padding: '0.5rem', 
                                 borderRadius: '50%', 
                                 display: 'flex', 
                                 alignItems: 'center', 
                                 justifyContent: 'center' 
                             }}>
-                                <Moon size={18} color="#22c55e" />
+                                <Moon size={18} color="#38AC57" />
                             </div>
                             <div>
                                 <div style={{ fontWeight: '500', fontSize: '0.9rem' }}>{item.title}</div>
@@ -98,7 +103,7 @@ export const SurgeControl = () => {
                                     position: 'absolute',
                                     cursor: 'pointer',
                                     top: 0, left: 0, right: 0, bottom: 0,
-                                    backgroundColor: '#22c55e',
+                                    backgroundColor: '#38AC57',
                                     transition: '.4s',
                                     borderRadius: '34px'
                                 }}>
@@ -128,7 +133,7 @@ export const SurgeControl = () => {
             <div style={{ overflowX: 'auto' }}>
                 <table style={{ width: '100%', borderCollapse: 'separate', borderSpacing: '0 0.75rem' }}>
                     <thead>
-                        <tr style={{ backgroundColor: '#22c55e', color: 'white' }}>
+                        <tr style={{ backgroundColor: '#38AC57', color: 'white' }}>
                             <th style={{ padding: '1rem', borderTopLeftRadius: '0.5rem', borderBottomLeftRadius: '0.5rem', textAlign: 'left' }}>Service Type</th>
                             <th style={{ padding: '1rem', textAlign: 'left' }}>City</th>
                             <th style={{ padding: '1rem', textAlign: 'left' }}>Intercity</th>
@@ -140,7 +145,11 @@ export const SurgeControl = () => {
                             <tr key={index} style={{ backgroundColor: 'white', borderBottom: '1px solid #f3f4f6', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }}>
                                 <td style={{ padding: '1rem', borderTopLeftRadius: '0.5rem', borderBottomLeftRadius: '0.5rem' }}>
                                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                                        <span style={{ fontSize: '1.25rem' }}>{fee.icon}</span>
+                                        {typeof fee.icon === 'string' && fee.icon.includes('.') ? (
+                                            <img src={fee.icon} alt="" style={{ height: '24px', width: 'auto' }} />
+                                        ) : (
+                                            <span style={{ fontSize: '1.25rem' }}>{fee.icon}</span>
+                                        )}
                                         <span style={{ fontWeight: '500' }}>{fee.type}</span>
                                     </div>
                                 </td>

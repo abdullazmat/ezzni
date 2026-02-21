@@ -1,10 +1,17 @@
 import { useState, useRef, useEffect } from 'react';
 import { 
     Search, Eye, ArrowLeft, 
-    ArrowUpRight, Car, 
+    ArrowUpRight, 
     Filter, ChevronDown,
     Star, Plus
 } from 'lucide-react';
+
+// Vehicle Icons
+import carIcon from '../assets/icons/car.png';
+import taxiIcon from '../assets/icons/taxi.png';
+import bikeIcon from '../assets/icons/bike.png';
+
+
 import { ChangeCategoryModal, RidePreferencesModal, SuspendDriverModal, TripSummaryModal } from './DriverModals';
 // We'll mock the chart if library not installed, or use simple div bars
 
@@ -75,8 +82,8 @@ const StatusBadge = ({ status }: { status: string }) => {
     const isSuspended = status === 'Suspended';
     return (
         <span style={{ 
-            backgroundColor: isSuspended ? '#fee2e2' : '#dcfce7', 
-            color: isSuspended ? '#ef4444' : '#166534', 
+            backgroundColor: isSuspended ? '#fee2e2' : '#eef7f0', 
+            color: isSuspended ? '#ef4444' : '#2d8a46', 
             padding: '0.4rem 1rem', 
             borderRadius: '0.5rem', 
             fontSize: '0.8rem', 
@@ -102,8 +109,8 @@ const DropdownItem = ({ label, isActive, onClick }: { label: string, isActive: b
                 cursor: 'pointer',
                 borderRadius: '0.5rem',
                 fontWeight: isActive ? 'bold' : 'normal',
-                backgroundColor: hovered ? '#f3f4f6' : isActive ? '#f0fdf4' : 'transparent',
-                color: isActive ? '#166534' : '#374151',
+                backgroundColor: hovered ? '#f3f4f6' : isActive ? '#eef7f0' : 'transparent',
+                color: isActive ? '#2d8a46' : '#374151',
                 fontSize: '0.85rem',
                 transition: 'background-color 0.15s',
             }}
@@ -136,11 +143,11 @@ const Dropdown = ({ label, options, activeValue, onSelect }: { label: string, op
                 onClick={() => setIsOpen(!isOpen)}
                 style={{ 
                     padding: '0.6rem 1rem', borderRadius: '2rem', 
-                    border: activeValue !== 'All' ? '1px solid #22c55e' : '1px solid #e5e7eb', 
-                    backgroundColor: activeValue !== 'All' ? '#dcfce7' : 'white', 
+                    border: activeValue !== 'All' ? '1px solid #38AC57' : '1px solid #e5e7eb', 
+                    backgroundColor: activeValue !== 'All' ? '#eef7f0' : 'white', 
                     display: 'flex', alignItems: 'center', gap: '0.5rem', 
                     fontSize: '0.85rem', 
-                    color: activeValue !== 'All' ? '#166534' : '#374151', 
+                    color: activeValue !== 'All' ? '#2d8a46' : '#374151', 
                     cursor: 'pointer', whiteSpace: 'nowrap',
                     transition: 'all 0.2s'
                 }}
@@ -191,7 +198,7 @@ const EarningsModalContent = () => {
                  <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', height: '200px', gap: '10px' }}>
                      {data.bars.map((h, i) => (
                          <div key={i} style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem' }}>
-                              <div style={{ width: '12px', height: `${h}%`, backgroundColor: i === data.highlight ? '#22c55e' : '#bbf7d0', borderRadius: '20px', position: 'relative', transition: 'height 0.4s ease' }}>
+                              <div style={{ width: '12px', height: `${h}%`, backgroundColor: i === data.highlight ? '#38AC57' : '#bbf7d0', borderRadius: '20px', position: 'relative', transition: 'height 0.4s ease' }}>
                                  {i === data.highlight && <div style={{ position: 'absolute', top: '-35px', left: '50%', transform: 'translateX(-50%)', backgroundColor: 'black', color: 'white', padding: '0.3rem', borderRadius: '0.3rem', fontSize: '0.7rem', whiteSpace: 'nowrap' }}>{data.highlightVal}</div>}
                               </div>
                               <div style={{ fontSize: '0.6rem', color: '#9ca3af' }}>{['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'][i]}</div>
@@ -251,13 +258,13 @@ const TripsHistoryModalContent = ({ onViewTripSummary }: { onViewTripSummary: (t
                     <div style={{ textAlign: 'center', padding: '2rem', color: '#9ca3af' }}>No {activeTab.toLowerCase()} trips found.</div>
                 )}
                 {filteredTrips.map((trip) => (
-                    <div key={trip.id} onClick={() => onViewTripSummary(trip.id)} style={{ border: '1px solid #e5e7eb', borderRadius: '1rem', padding: '1rem', cursor: 'pointer', transition: 'all 0.2s', boxShadow: '0 1px 2px rgba(0,0,0,0.03)' }} onMouseEnter={(e) => { (e.currentTarget as HTMLDivElement).style.boxShadow = '0 4px 12px rgba(0,0,0,0.08)'; (e.currentTarget as HTMLDivElement).style.borderColor = '#22c55e'; }} onMouseLeave={(e) => { (e.currentTarget as HTMLDivElement).style.boxShadow = '0 1px 2px rgba(0,0,0,0.03)'; (e.currentTarget as HTMLDivElement).style.borderColor = '#e5e7eb'; }}>
+                    <div key={trip.id} onClick={() => onViewTripSummary(trip.id)} style={{ border: '1px solid #e5e7eb', borderRadius: '1rem', padding: '1rem', cursor: 'pointer', transition: 'all 0.2s', boxShadow: '0 1px 2px rgba(0,0,0,0.03)' }} onMouseEnter={(e) => { (e.currentTarget as HTMLDivElement).style.boxShadow = '0 4px 12px rgba(0,0,0,0.08)'; (e.currentTarget as HTMLDivElement).style.borderColor = '#38AC57'; }} onMouseLeave={(e) => { (e.currentTarget as HTMLDivElement).style.boxShadow = '0 1px 2px rgba(0,0,0,0.03)'; (e.currentTarget as HTMLDivElement).style.borderColor = '#e5e7eb'; }}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1rem' }}>
                              <div style={{ display: 'flex', gap: '0.5rem' }}>
                                  {Array(5).fill(0).map((_, j) => <Star key={j} size={14} fill={j < Math.floor(trip.rating) ? '#fbbf24' : '#e5e7eb'} stroke="none" />)}
                                  <span style={{ fontSize: '0.8rem', fontWeight: 'bold' }}>{trip.rating}</span>
                              </div>
-                             <span style={{ backgroundColor: trip.status === 'Cancelled' ? '#fee2e2' : '#22c55e', color: trip.status === 'Cancelled' ? '#b91c1c' : 'white', fontSize: '0.65rem', padding: '0.2rem 0.5rem', borderRadius: '1rem', fontWeight: 'bold' }}>
+                             <span style={{ backgroundColor: trip.status === 'Cancelled' ? '#fee2e2' : '#38AC57', color: trip.status === 'Cancelled' ? '#b91c1c' : 'white', fontSize: '0.65rem', padding: '0.2rem 0.5rem', borderRadius: '1rem', fontWeight: 'bold' }}>
                                 {trip.status}
                              </span>
                         </div>
@@ -277,14 +284,14 @@ const TripsHistoryModalContent = ({ onViewTripSummary }: { onViewTripSummary: (t
 
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                                <div style={{ width: 10, height: 10, borderRadius: '50%', backgroundColor: '#22c55e20', border: '3px solid #22c55e' }}></div>
+                                <div style={{ width: 10, height: 10, borderRadius: '50%', backgroundColor: '#38AC5720', border: '3px solid #38AC57' }}></div>
                                 <div>
                                     <div style={{ fontSize: '0.65rem', color: '#9ca3af' }}>From</div>
                                     <div style={{ fontSize: '0.8rem', fontWeight: 'bold' }}>Current Location, Marrakech</div>
                                 </div>
                             </div>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                                 <div style={{ width: 10, height: 10, borderRadius: '50%', border: '2px solid #22c55e' }}></div>
+                                 <div style={{ width: 10, height: 10, borderRadius: '50%', border: '2px solid #38AC57' }}></div>
                                  <div>
                                     <div style={{ fontSize: '0.65rem', color: '#9ca3af' }}>To</div>
                                     <div style={{ fontSize: '0.8rem', fontWeight: 'bold' }}>Current Location, Marrakech</div>
@@ -414,7 +421,7 @@ const EditDriverModalContent = ({ driver, onSave }: { driver: Driver, onSave: ()
                 }}
                 style={{
                     width: '100%', padding: '1rem', borderRadius: '2rem', border: 'none',
-                    backgroundColor: '#22c55e', color: 'white', fontWeight: 'bold', fontSize: '1rem',
+                    backgroundColor: '#38AC57', color: 'white', fontWeight: 'bold', fontSize: '1rem',
                     cursor: 'pointer'
                 }}
             >
@@ -428,7 +435,7 @@ const EditDriverModalContent = ({ driver, onSave }: { driver: Driver, onSave: ()
 
 export const Drivers = () => {
     // Top Level State
-    const [activeStat, setActiveStat] = useState('All Drivers');
+    const [activeStat, setActiveStat] = useState('Rental Company');
     const [searchTerm, setSearchTerm] = useState('');
     
     // Filters
@@ -498,7 +505,7 @@ export const Drivers = () => {
                     <h1 style={{ fontSize: '1.8rem', fontWeight: 'bold', margin: '0 0 0.5rem 0' }}>Driver</h1>
                     <p style={{ color: '#6b7280', margin: 0 }}>Manage driver accounts and generate IDs by vehicle type</p>
                 </div>
-                <button onClick={() => alert('Add New Driver form coming soon!')} style={{ backgroundColor: '#22c55e', color: 'white', border: 'none', padding: '0.8rem 1.5rem', borderRadius: '2rem', display: 'flex', alignItems: 'center', gap: '0.5rem', fontWeight: '600', cursor: 'pointer', fontSize: '1rem' }}>
+                <button onClick={() => alert('Add New Driver form coming soon!')} style={{ backgroundColor: '#38AC57', color: 'white', border: 'none', padding: '0.8rem 1.5rem', borderRadius: '2rem', display: 'flex', alignItems: 'center', gap: '0.5rem', fontWeight: '600', cursor: 'pointer', fontSize: '1rem' }}>
                     <Plus size={20} /> Add New Drivers
                 </button>
             </div>
@@ -506,34 +513,36 @@ export const Drivers = () => {
             {/* Stats Cards */}
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.5rem' }}>
                 {[
-                    { label: 'Taxi Drivers', count: String(mockDrivers.filter(d => d.vehicleType === 'Taxi').length).padStart(4, '0'), icon: <Car size={20} />, activeName: 'Taxi Drivers' },
-                    { label: 'Motorcycle Drivers', count: String(mockDrivers.filter(d => d.vehicleType === 'Motorcycle').length).padStart(4, '0'), icon: <Car size={20} />, activeName: 'Motorcycle Drivers' },
-                    { label: 'Car Drivers', count: String(mockDrivers.filter(d => d.vehicleType === 'Car').length).padStart(4, '0'), icon: <Car size={20} />, activeName: 'Car Drivers' },
-                    { label: 'All Drivers', count: String(mockDrivers.length).padStart(4, '0'), icon: <Car size={20} />, activeName: 'All Drivers' },
+                    { label: 'Taxi Drivers', count: String(mockDrivers.filter(d => d.vehicleType === 'Taxi').length).padStart(4, '0'), icon: taxiIcon, activeName: 'Taxi Drivers' },
+                    { label: 'Motorcycle Drivers', count: String(mockDrivers.filter(d => d.vehicleType === 'Motorcycle').length).padStart(4, '0'), icon: bikeIcon, activeName: 'Motorcycle Drivers' },
+                    { label: 'Car Drivers', count: String(mockDrivers.filter(d => d.vehicleType === 'Car').length).padStart(4, '0'), icon: carIcon, activeName: 'Car Drivers' },
+                    { label: 'Rental Company', count: String(mockDrivers.length).padStart(4, '0'), icon: carIcon, activeName: 'Rental Company' },
                 ].map((stat) => {
                     const isActive = activeStat === stat.activeName;
                     return (
                         <div 
                             key={stat.activeName}
-                            onClick={() => setActiveStat(isActive ? 'All Drivers' : stat.activeName)}
+                            onClick={() => setActiveStat(isActive ? 'Rental Company' : stat.activeName)}
                             style={{ 
                                 padding: '1.5rem', borderRadius: '1.5rem', 
-                                backgroundColor: isActive ? '#22c55e' : 'white', 
+                                backgroundColor: isActive ? '#38AC57' : 'white', 
                                 color: isActive ? 'white' : 'black',
                                 position: 'relative', 
-                                boxShadow: isActive ? '0 10px 15px -3px rgba(34, 197, 94, 0.4)' : '0 1px 3px rgba(0,0,0,0.05)', 
+                                boxShadow: isActive ? '0 10px 15px -3px rgba(56, 172, 87, 0.4)' : '0 1px 3px rgba(0,0,0,0.05)', 
                                 display: 'flex', flexDirection: 'column', justifyContent: 'space-between', height: '140px', cursor: 'pointer',
                                 transition: 'all 0.2s', transform: isActive ? 'translateY(-2px)' : 'none'
                             }}
                         >
                             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                                <div style={{color: isActive ? 'white' : '#6b7280'}}>{stat.icon}</div>
+                                <div style={{color: isActive ? 'white' : '#6b7280'}}>
+                                    <img src={stat.icon} alt="" style={{ height: '32px', width: 'auto', objectFit: 'contain', filter: isActive ? 'brightness(0) invert(1)' : 'none' }} />
+                                </div>
                                 <span style={{ fontWeight: '600', fontSize: '0.9rem' }}>{stat.label}</span>
                             </div>
                             <div style={{ fontSize: '2.5rem', fontWeight: 'bold' }}>{stat.count}</div>
                              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '0.5rem' }}>
                                  <span style={{ fontSize: '0.7rem', textDecoration: 'underline', cursor: 'pointer' }}>View Details</span>
-                                 <div style={{ backgroundColor: isActive ? 'white' : '#22c55e', borderRadius: '50%', padding: '0.4rem', color: isActive ? '#22c55e' : 'white', display: 'flex' }}>
+                                 <div style={{ backgroundColor: isActive ? 'white' : '#38AC57', borderRadius: '50%', padding: '0.4rem', color: isActive ? '#38AC57' : 'white', display: 'flex' }}>
                                     <ArrowUpRight size={16} /> 
                                 </div>
                              </div>
@@ -559,17 +568,17 @@ export const Drivers = () => {
                         onClick={() => setShowFilters(!showFilters)}
                         style={{ 
                             padding: '0.6rem 1.2rem', borderRadius: '2rem', 
-                            border: activeFilterCount > 0 ? '1px solid #22c55e' : '1px solid #e5e7eb', 
-                            backgroundColor: activeFilterCount > 0 ? '#dcfce7' : showFilters ? '#f3f4f6' : 'white', 
+                            border: activeFilterCount > 0 ? '1px solid #38AC57' : '1px solid #e5e7eb', 
+                            backgroundColor: activeFilterCount > 0 ? '#eef7f0' : showFilters ? '#f3f4f6' : 'white', 
                             display: 'flex', alignItems: 'center', gap: '0.5rem', 
-                            fontSize: '0.85rem', color: activeFilterCount > 0 ? '#166534' : '#374151', 
+                            fontSize: '0.85rem', color: activeFilterCount > 0 ? '#2d8a46' : '#374151', 
                             cursor: 'pointer', whiteSpace: 'nowrap', flexShrink: 0,
                             transition: 'all 0.2s'
                         }}
                     >
                         <Filter size={14} /> Filters
                         {activeFilterCount > 0 && (
-                            <span style={{ backgroundColor: '#22c55e', color: 'white', borderRadius: '50%', width: 20, height: 20, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.7rem', fontWeight: 'bold' }}>
+                            <span style={{ backgroundColor: '#38AC57', color: 'white', borderRadius: '50%', width: 20, height: 20, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.7rem', fontWeight: 'bold' }}>
                                 {activeFilterCount}
                             </span>
                         )}
@@ -607,7 +616,7 @@ export const Drivers = () => {
 
                  <div className="card" style={{ padding: 0, overflow: 'hidden', border: 'none', boxShadow: 'none', backgroundColor: 'transparent' }}>
                     {/* Header */}
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr 2fr 1.5fr 1fr 1fr 1fr', backgroundColor: '#22c55e', color: 'white', padding: '1rem', borderRadius: '1rem', fontWeight: 'bold', fontSize: '0.9rem', alignItems: 'center', marginBottom: '1rem' }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr 2fr 1.5fr 1fr 1fr 1fr', backgroundColor: '#38AC57', color: 'white', padding: '1rem', borderRadius: '1rem', fontWeight: 'bold', fontSize: '0.9rem', alignItems: 'center', marginBottom: '1rem' }}>
                         <div>Driver ID</div>
                         <div>Driver</div>
                         <div>Contact</div>
@@ -624,7 +633,7 @@ export const Drivers = () => {
                                  <div style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>🔍</div>
                                  <h3 style={{ fontSize: '1.1rem', fontWeight: 'bold', margin: '0 0 0.5rem 0' }}>No drivers found</h3>
                                  <p style={{ color: '#6b7280', margin: '0 0 1rem 0' }}>Try adjusting your search or filter criteria</p>
-                                 <button onClick={clearAllFilters} style={{ padding: '0.6rem 1.5rem', borderRadius: '2rem', border: 'none', backgroundColor: '#22c55e', color: 'white', fontWeight: '600', cursor: 'pointer' }}>
+                                 <button onClick={clearAllFilters} style={{ padding: '0.6rem 1.5rem', borderRadius: '2rem', border: 'none', backgroundColor: '#38AC57', color: 'white', fontWeight: '600', cursor: 'pointer' }}>
                                      Clear Filters
                                  </button>
                              </div>
@@ -648,8 +657,9 @@ export const Drivers = () => {
                                      <div style={{ fontSize: '0.7rem', color: '#6b7280' }}>{driver.email}</div>
                                  </div>
                                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.9rem', fontWeight: '600' }}>
-                                     {driver.vehicleType === 'Car' ? <Car size={18} /> : 
-                                      driver.vehicleType === 'Taxi' ? <Car size={18} /> : <div style={{ fontWeight: 'bold' }}>🏍</div>} {/* Simplified motorcycle icon */}
+                                     {driver.vehicleType === 'Car' ? <img src={carIcon} alt="" style={{ height: '20px', width: 'auto' }} /> : 
+                                      driver.vehicleType === 'Taxi' ? <img src={taxiIcon} alt="" style={{ height: '20px', width: 'auto' }} /> : 
+                                      <img src={bikeIcon} alt="" style={{ height: '20px', width: 'auto' }} />}
                                      {driver.vehicleType}
                                  </div>
                                  <div style={{ textAlign: 'center', fontWeight: 'bold', fontSize: '1rem' }}>{driver.totalTrips}</div>
@@ -673,7 +683,7 @@ export const Drivers = () => {
             {/* Main Modal */}
             {selectedDriver && (
                 <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.5)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <div className="card" style={{ width: '600px', backgroundColor: 'white', borderRadius: '1.5rem', maxHeight: '95vh', overflowY: 'auto', position: 'relative', padding: 0 }}>
+                    <div className="card" style={{ width: '850px', backgroundColor: 'white', borderRadius: '1.5rem', maxHeight: '95vh', overflowY: 'auto', position: 'relative', padding: 0 }}>
                         {/* Modal Navigation/Header */}
                         <div style={{ padding: '2rem 2rem 1rem 2rem' }}>
                             <button onClick={modalSubView === 'Details' ? () => setSelectedDriver(null) : () => setModalSubView('Details')} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, marginBottom: '1rem' }}>
@@ -693,7 +703,7 @@ export const Drivers = () => {
                                                 <img src={selectedDriver.avatar} style={{ width: 64, height: 64, borderRadius: '50%' }} />
                                                 <div style={{ position: 'absolute', bottom: -5, left: '50%', transform: 'translateX(-50%)', backgroundColor: '#fbbf24', padding: '0 0.4rem', borderRadius: '0.3rem', fontSize: '0.7rem', fontWeight: 'bold' }}>★ {selectedDriver.rating}</div>
                                             </div>
-                                            <div style={{ flex: 1, display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', rowGap: '1rem', columnGap: '0.5rem' }}>
+                                            <div style={{ flex: 1, display: 'grid', gridTemplateColumns: '1.2fr 1.8fr 1.2fr 1fr', rowGap: '1.5rem', columnGap: '1.5rem' }}>
                                                  <div style={{ gridColumn: 'span 1' }}><div style={{ fontSize: '0.75rem', color: '#9ca3af' }}>Full Name</div><div style={{ fontWeight: 'bold', fontSize: '0.9rem' }}>{selectedDriver.name}</div></div>
                                                  <div style={{ gridColumn: 'span 1' }}><div style={{ fontSize: '0.75rem', color: '#9ca3af' }}>Region</div><div style={{ fontWeight: 'bold', fontSize: '0.9rem' }}>{selectedDriver.region}</div></div>
                                                  <div style={{ gridColumn: 'span 1' }}><div style={{ fontSize: '0.75rem', color: '#9ca3af' }}>City</div><div style={{ fontWeight: 'bold', fontSize: '0.9rem' }}>{selectedDriver.city}</div></div>
@@ -711,26 +721,36 @@ export const Drivers = () => {
                                     
                                     <h3 style={{ fontSize: '1.2rem', fontWeight: 'bold', marginTop: '1.5rem', marginBottom: '1rem' }}>Vehicle Information</h3>
                                     <div style={{ border: '1px solid #f3f4f6', borderRadius: '1rem', padding: '1.5rem' }}>
-                                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1rem' }}>
+                                        <div style={{ display: 'grid', gridTemplateColumns: '1.5fr 1fr 1.2fr 1.2fr', rowGap: '1.5rem', columnGap: '1.5rem' }}>
                                              <div><div style={{ fontSize: '0.75rem', color: '#9ca3af' }}>Driver ID</div><div style={{ fontWeight: 'bold' }}>{selectedDriver.driverId}</div></div>
-                                             <div><div style={{ fontSize: '0.75rem', color: '#9ca3af' }}>Vehicle Colour</div><div style={{ fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '0.3rem' }}><div style={{width:10,height:10,borderRadius:'50%',border:'1px solid #ccc'}}></div> {selectedDriver.vehicleDetails.color}</div></div>
+                                             <div><div style={{ fontSize: '0.75rem', color: '#9ca3af' }}>Vehicle Colour</div><div style={{ fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '0.3rem' }}><div style={{width:10,height:10,borderRadius:'50%',border:'1px solid #ccc', backgroundColor: selectedDriver.vehicleDetails.color}}></div> {selectedDriver.vehicleDetails.color}</div></div>
                                              <div><div style={{ fontSize: '0.75rem', color: '#9ca3af' }}>Licence Plate Num</div><div style={{ fontWeight: 'bold' }}>{selectedDriver.vehicleDetails.plate}</div></div>
                                              <div><div style={{ fontSize: '0.75rem', color: '#9ca3af' }}>Make & Mode</div><div style={{ fontWeight: 'bold' }}>{selectedDriver.vehicleDetails.model}</div></div>
                                              
-                                             <div><div style={{ fontSize: '0.75rem', color: '#9ca3af' }}>Vehicle Type</div><div style={{ fontWeight: 'bold', display: 'flex', gap: '0.3rem' }}><Car size={16}/> {selectedDriver.vehicleDetails.brand}</div></div>
+                                             <div style={{ gridColumn: 'span 2' }}><div style={{ fontSize: '0.75rem', color: '#9ca3af' }}>Vehicle Type</div><div style={{ fontWeight: 'bold', display: 'flex', gap: '0.3rem', alignItems: 'center' }}>
+                                                 {selectedDriver.vehicleType === 'Car' ? <img src={carIcon} alt="" style={{ height: '32px', width: 'auto' }} /> : 
+                                                  selectedDriver.vehicleType === 'Taxi' ? <img src={taxiIcon} alt="" style={{ height: '32px', width: 'auto' }} /> : 
+                                                  <img src={bikeIcon} alt="" style={{ height: '32px', width: 'auto' }} />} 
+                                                 {selectedDriver.vehicleDetails.brand}
+                                             </div></div>
                                              <div><div style={{ fontSize: '0.75rem', color: '#9ca3af' }}>Year</div><div style={{ fontWeight: 'bold' }}>{selectedDriver.vehicleDetails.year}</div></div>
                                         </div>
                                     </div>
 
-                                    <div style={{ backgroundColor: '#dcfce7', borderRadius: '1rem', padding: '1.5rem', marginTop: '1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                    <div style={{ backgroundColor: '#eef7f0', borderRadius: '1rem', padding: '1.5rem', marginTop: '1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                           <div>
                                               <h3 style={{ fontSize: '1rem', fontWeight: 'bold', margin: '0 0 0.5rem 0' }}>Hezzni Service Category</h3>
-                                              <div style={{ fontSize: '0.8rem', color: '#166534', marginBottom: '0.5rem' }}>Current Category:</div>
-                                              <div style={{ fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '0.5rem' }}><Car size={18}/> {selectedDriver.vehicleType === 'Car' ? 'Car' : 'Hezzni Standard'}</div>
+                                              <div style={{ fontSize: '0.8rem', color: '#2d8a46', marginBottom: '0.5rem' }}>Current Category:</div>
+                                              <div style={{ fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                                  {selectedDriver.vehicleType === 'Car' ? <img src={carIcon} alt="" style={{ height: '20px', width: 'auto' }} /> : 
+                                                   selectedDriver.vehicleType === 'Taxi' ? <img src={taxiIcon} alt="" style={{ height: '20px', width: 'auto' }} /> : 
+                                                   <img src={bikeIcon} alt="" style={{ height: '20px', width: 'auto' }} />} 
+                                                  {selectedDriver.vehicleType === 'Car' ? 'Car' : 'Hezzni Standard'}
+                                              </div>
                                           </div>
                                           <div style={{ textAlign: 'right' }}>
-                                              <button onClick={() => { if (selectedDriver.vehicleType === 'Motorcycle') { setShowRidePreferencesModal(true); } else { setShowChangeCategoryModal(true); } }} style={{ backgroundColor: 'white', border: '1px solid #22c55e', padding: '0.5rem 1rem', borderRadius: '2rem', fontSize: '0.7rem', fontWeight: 'bold', cursor: 'pointer', marginBottom: '0.5rem' }}>Change Category</button>
-                                              <div style={{ fontSize: '0.7rem', color: '#166534', maxWidth: '200px' }}>Category determines pricing and service level for this driver</div>
+                                              <button onClick={() => { if (selectedDriver.vehicleType === 'Motorcycle') { setShowRidePreferencesModal(true); } else { setShowChangeCategoryModal(true); } }} style={{ backgroundColor: 'white', border: '1px solid #38AC57', padding: '0.5rem 1rem', borderRadius: '2rem', fontSize: '0.7rem', fontWeight: 'bold', cursor: 'pointer', marginBottom: '0.5rem' }}>Change Category</button>
+                                              <div style={{ fontSize: '0.7rem', color: '#2d8a46', maxWidth: '200px' }}>Category determines pricing and service level for this driver</div>
                                           </div>
                                     </div>
 
@@ -765,7 +785,7 @@ export const Drivers = () => {
                                     <div style={{ display: 'flex', gap: '1rem', justifyContent: 'space-between', alignItems: 'center' }}>
                                         <button onClick={() => setModalSubView('Edit')} style={{ flex: 1, padding: '0.8rem', borderRadius: '2rem', border: '1px solid #e5e7eb', backgroundColor: 'white', fontWeight: 'bold', cursor: 'pointer' }}>Edit</button>
                                         <button onClick={() => setModalSubView('Earnings')} style={{ flex: 1, padding: '0.8rem', borderRadius: '2rem', border: 'none', backgroundColor: 'black', color: 'white', fontWeight: 'bold', cursor: 'pointer' }}>Earning</button>
-                                        <button onClick={() => setModalSubView('History')} style={{ flex: 1, padding: '0.8rem', borderRadius: '2rem', border: 'none', backgroundColor: '#22c55e', color: 'white', fontWeight: 'bold', cursor: 'pointer' }}>Trips history</button>
+                                        <button onClick={() => setModalSubView('History')} style={{ flex: 1, padding: '0.8rem', borderRadius: '2rem', border: 'none', backgroundColor: '#38AC57', color: 'white', fontWeight: 'bold', cursor: 'pointer' }}>Trips history</button>
                                         <button onClick={() => { if (selectedDriver.status !== 'Suspended') { setShowSuspendModal(true); } else { /* Unsuspend logic - could toggle status in a real app */ alert('Driver has been unsuspended.'); } }} style={{ flex: 1, padding: '0.8rem', borderRadius: '2rem', border: 'none', backgroundColor: '#b91c1c', color: 'white', fontWeight: 'bold', cursor: 'pointer' }}>{selectedDriver.status === 'Suspended' ? 'Unsuspend Driver' : 'Suspend Driver'}</button>
                                     </div>
                                 </>

@@ -1,29 +1,37 @@
-import { Bell, LogOut } from 'lucide-react';
+import { Menu, LogOut, Bell, Check } from 'lucide-react';
 import { useState } from 'react';
 
+// Import custom icons
+import bellIcon from '../assets/icons/notification-bell.png';
+
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export const Header = ({ onLogout }: { onLogout: () => void }) => {
+export const Header = ({ onLogout, onToggleSidebar, onNavigate }: { onLogout: () => void, onToggleSidebar: () => void, onNavigate: (page: string) => void }) => {
   const [user] = useState(() => {
     const savedUser = localStorage.getItem('user');
-    return savedUser ? JSON.parse(savedUser) : { name: 'Admin', email: 'admin@hezzni.com' };
+    return savedUser ? JSON.parse(savedUser) : { name: 'Paityn Calzo', email: 'paityn@ezzni.com' };
   });
 
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState<any[]>([]);
+  const [showNotifications, setShowNotifications] = useState(false);
 
   const dummyData = [
-    { id: 1, name: 'Ahmed Hassan', type: 'Customer', phone: '+212 6 12 34 56', code: 'C-00045', img: 'https://i.pravatar.cc/150?u=1' },
-    { id: 2, name: 'Ali Raza', type: 'Driver', phone: '+212 6 12 34 56', code: 'D-00001', img: 'https://i.pravatar.cc/150?u=2' },
-    { id: 3, name: 'Ayaan Khan', type: 'Customer', phone: '+212 6 12 34 56', code: 'C-00045', img: 'https://i.pravatar.cc/150?u=3' },
-    { id: 4, name: 'Asad Mahmood', type: 'Customer', phone: '+212 6 12 34 56', code: 'C-00045', img: 'https://i.pravatar.cc/150?u=4' },
-    { id: 5, name: 'Amir Farooq', type: 'Driver', phone: '+212 6 12 34 56', code: 'D-00001', img: 'https://i.pravatar.cc/150?u=5' },
+    { id: 1, name: 'Ahmed Hassan', type: 'Customer', phone: '+212 6 12 34 56', code: 'R-00045', img: 'https://i.pravatar.cc/150?u=1', rating: '4.8' },
+    { id: 2, name: 'Ali Raza', type: 'Driver', phone: '+212 6 12 34 56', code: 'C-00001', img: 'https://i.pravatar.cc/150?u=2', rating: '4.8' },
+    { id: 3, name: 'Ayaan Khan', type: 'Customer', phone: '+212 6 12 34 56', code: 'R-00045', img: 'https://i.pravatar.cc/150?u=3', rating: '4.8' },
+    { id: 4, name: 'Asad Mahmood', type: 'Customer', phone: '+212 6 12 34 56', code: 'R-00045', img: 'https://i.pravatar.cc/150?u=4', rating: '4.8' },
+    { id: 5, name: 'Amir Farooq', type: 'Driver', phone: '+212 6 12 34 56', code: 'C-00001', img: 'https://i.pravatar.cc/150?u=5', rating: '4.8' },
   ];
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     const query = e.target.value;
     setSearchQuery(query);
     if (query.trim()) {
-        const filtered = dummyData.filter(item => item.name.toLowerCase().includes(query.toLowerCase()));
+        const filtered = dummyData.filter(item => 
+            item.name.toLowerCase().includes(query.toLowerCase()) || 
+            item.phone.includes(query) || 
+            item.code.toLowerCase().includes(query.toLowerCase())
+        );
         setSearchResults(filtered);
     } else {
         setSearchResults([]);
@@ -31,41 +39,65 @@ export const Header = ({ onLogout }: { onLogout: () => void }) => {
   };
 
   return (
-    <header style={{ 
+    <header className="header-container" style={{ 
       display: 'flex', 
       justifyContent: 'space-between', 
       alignItems: 'center', 
       marginBottom: '2rem',
+      gap: '1rem',
+      position: 'relative'
     }}>
-      {/* Search Bar - Taking significant width as per design */}
-      <div style={{ flex: 1, paddingRight: '4rem' }}>
-         <div style={{ position: 'relative', maxWidth: '600px' }}>
+      <style dangerouslySetInnerHTML={{ __html: `
+        @media (max-width: 1024px) {
+          .header-container {
+            flex-direction: column-reverse;
+            align-items: stretch !important;
+          }
+          .header-actions {
+            justify-content: space-between;
+            margin-bottom: 1rem;
+          }
+          .search-wrapper {
+            padding-right: 0 !important;
+          }
+          .menu-toggle {
+            display: flex !important;
+          }
+        }
+      `}} />
+      {/* Search Bar */}
+      <div className="search-wrapper" style={{ flex: 1, maxWidth: '750px', marginRight: '2rem' }}>
+         <div style={{ position: 'relative', width: '100%' }}>
             <input 
                 type="text" 
-                placeholder="Type here..." 
+                placeholder="search by name, phone, or id" 
                 value={searchQuery}
                 onChange={handleSearch}
                 style={{ 
                     width: '100%', 
-                    padding: '0.8rem 1rem', 
-                    borderRadius: '2rem', 
-                    border: '1px solid var(--border-color)', 
+                    padding: '1.2rem 1.5rem', 
+                    borderRadius: '3rem', 
+                    border: '1px solid #e5e7eb', 
                     backgroundColor: 'white',
                     outline: 'none',
+                    paddingRight: '8rem',
+                    fontSize: '1rem',
+                    boxShadow: '0 2px 4px rgba(0,0,0,0.02)'
                 }}
             />
             <button style={{ 
                 position: 'absolute', 
-                right: '5px', 
-                top: '5px', 
-                bottom: '5px', 
+                right: '8px', 
+                top: '8px', 
+                bottom: '8px', 
                 backgroundColor: 'var(--primary-color)', 
                 color: 'white', 
-                padding: '0 1.5rem', 
-                borderRadius: '1.5rem',
+                padding: '0 2.5rem', 
+                borderRadius: '2.5rem',
                 border: 'none',
                 cursor: 'pointer',
-                fontWeight: '500'
+                fontWeight: '700',
+                fontSize: '1rem'
             }}>
                 Search
             </button>
@@ -74,7 +106,7 @@ export const Header = ({ onLogout }: { onLogout: () => void }) => {
             {searchQuery && (
                 <div style={{
                     position: 'absolute',
-                    top: '110%',
+                    top: '120%',
                     left: 0,
                     right: 0,
                     backgroundColor: 'white',
@@ -82,45 +114,82 @@ export const Header = ({ onLogout }: { onLogout: () => void }) => {
                     boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
                     zIndex: 50,
                     padding: '0.5rem',
-                    border: '1px solid var(--border-color)'
+                    border: '1px solid #f1f5f9'
                 }}>
                     {searchResults.length > 0 ? (
-                         searchResults.map(result => (
+                         searchResults.map((result, idx) => (
                             <div key={result.id} style={{
                                 display: 'flex',
                                 alignItems: 'center',
-                                gap: '1rem',
-                                padding: '0.75rem',
+                                gap: '1.25rem',
+                                padding: '1rem 0.75rem',
                                 cursor: 'pointer',
-                                borderRadius: '0.5rem',
-                                transition: 'background-color 0.2s',
+                                transition: 'all 0.2s',
+                                borderBottom: idx === searchResults.length - 1 ? 'none' : '1px solid #f1f5f9'
                             }}
                             onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#f8fafc'}
                             onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
-                            onClick={() => alert(`Selected ${result.name}`)}
                             >
                                 <div style={{ position: 'relative' }}>
-                                    <img src={result.img} alt={result.name} style={{ width: '40px', height: '40px', borderRadius: '50%' }} />
-                                    <div style={{ position: 'absolute', bottom: 0, right: 0, width: '12px', height: '12px', backgroundColor: '#000', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '8px', color: 'white' }}>✔</div>
+                                    <img src={result.img} alt={result.name} style={{ width: '56px', height: '56px', borderRadius: '50%', objectFit: 'cover' }} />
+                                    {/* Black Checkmark Badge */}
+                                    <div style={{ 
+                                        position: 'absolute', 
+                                        top: '2px', 
+                                        right: '-2px', 
+                                        width: '18px', 
+                                        height: '18px', 
+                                        backgroundColor: 'black', 
+                                        borderRadius: '50%', 
+                                        display: 'flex', 
+                                        alignItems: 'center', 
+                                        justifyContent: 'center', 
+                                        fontSize: '10px', 
+                                        color: 'white', 
+                                        border: '2px solid white' 
+                                    }}>
+                                        <Check size={10} strokeWidth={4} />
+                                    </div>
+                                    {/* Rating Badge */}
+                                    <div style={{ 
+                                        position: 'absolute', 
+                                        bottom: '-4px', 
+                                        left: '50%', 
+                                        transform: 'translateX(-50%)',
+                                        backgroundColor: 'white',
+                                        borderRadius: '1rem',
+                                        padding: '1px 8px',
+                                        fontSize: '10px',
+                                        fontWeight: '800',
+                                        boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+                                        whiteSpace: 'nowrap',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        gap: '2px'
+                                    }}>
+                                        <span style={{ color: '#fbbf24' }}>★</span> {result.rating}
+                                    </div>
                                 </div>
-                                <div>
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                                        <div style={{ fontWeight: 'bold' }}>{result.name}</div>
+                                <div style={{ flex: 1 }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                                        <div style={{ fontWeight: '800', fontSize: '1.1rem', color: '#111827' }}>{result.name}</div>
                                         <span style={{ 
-                                            fontSize: '0.75rem', 
-                                            color: result.type === 'Driver' ? 'var(--primary-color)' : 'var(--success-color)' 
+                                            fontSize: '0.85rem', 
+                                            fontWeight: '600',
+                                            color: '#38AC57'
                                         }}>
                                             {result.type}
                                         </span>
                                     </div>
-                                    <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>
-                                        {result.phone} <span style={{ color: '#94a3b8' }}>{result.code}</span>
+                                    <div style={{ fontSize: '1rem', color: '#111827', marginTop: '0.2rem', fontWeight: '800', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                                        {result.phone}
+                                        <span style={{ color: '#38AC57', fontSize: '0.8rem', fontWeight: '500' }}>{result.code}</span>
                                     </div>
                                 </div>
                             </div>
                         ))
                     ) : (
-                        <div style={{ padding: '1rem', textAlign: 'center', color: 'var(--text-secondary)' }}>
+                        <div style={{ padding: '1.5rem', textAlign: 'center', color: '#9ca3af', fontWeight: '500' }}>
                             No results found
                         </div>
                     )}
@@ -130,34 +199,122 @@ export const Header = ({ onLogout }: { onLogout: () => void }) => {
       </div>
       
       {/* Right Side Actions */}
-      <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'center' }}>
-        <button style={{ background: 'none', border: 'none', cursor: 'pointer', position: 'relative' }}>
-          <Bell size={24} color="var(--primary-color)" fill="var(--primary-color)" />
-          <span style={{ 
-              position: 'absolute', 
-              top: '-5px', 
-              right: '-2px', 
-              width: '10px', 
-              height: '10px', 
-              borderRadius: '50%', 
-              backgroundColor: 'red', 
-              border: '2px solid white' 
-          }}></span>
+      <div className="header-actions" style={{ display: 'flex', gap: '1.5rem', alignItems: 'center' }}>
+        <button 
+          onClick={onToggleSidebar}
+          className="menu-toggle"
+          style={{ 
+            background: 'white', 
+            border: '1px solid #f1f5f9', 
+            cursor: 'pointer',
+            display: 'none',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: '12px',
+            borderRadius: '1rem',
+            boxShadow: '0 2px 4px rgba(0,0,0,0.02)'
+          }}
+        >
+          <Menu size={24} color="var(--primary-color)" />
         </button>
-        
-        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-            <img 
-                src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" 
-                alt="Profile" 
-                style={{ width: '48px', height: '48px', borderRadius: '50%', objectFit: 'cover' }}
-            />
-            <div>
-                <div style={{ fontWeight: 'bold', fontSize: '1rem' }}>{user.name || 'Paityn Calzo'}</div>
-                <div style={{ fontSize: '0.875rem', color: 'var(--text-secondary)' }}>User</div>
+
+        <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'center', flex: 1, justifyContent: 'flex-end' }}>
+            <div style={{ position: 'relative' }}>
+                <button 
+                  onClick={() => setShowNotifications(!showNotifications)}
+                  style={{ background: 'none', border: 'none', cursor: 'pointer', position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0.5rem' }}
+                >
+                    <img src={bellIcon} alt="Notifications" style={{ width: '28px', height: '28px', objectFit: 'contain' }} />
+                    <span style={{ 
+                        position: 'absolute', 
+                        top: '8px', 
+                        right: '8px', 
+                        width: '10px', 
+                        height: '10px', 
+                        borderRadius: '50%', 
+                        backgroundColor: '#ef4444', 
+                        border: '2px solid white' 
+                    }}></span>
+                </button>
+
+                {/* Notification Dropdown */}
+                {showNotifications && (
+                    <div style={{
+                        position: 'absolute',
+                        top: '120%',
+                        right: 0,
+                        width: '320px',
+                        backgroundColor: 'white',
+                        borderRadius: '1.25rem',
+                        boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1)',
+                        zIndex: 100,
+                        border: '1px solid #f1f5f9',
+                        overflow: 'hidden'
+                    }}>
+                        <div style={{ padding: '1.25rem', borderBottom: '1px solid #f1f5f9', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <div style={{ fontWeight: '800', color: '#111827' }}>Notifications</div>
+                            <span style={{ fontSize: '0.75rem', color: 'var(--primary-color)', fontWeight: '700', cursor: 'pointer' }}>Mark all as read</span>
+                        </div>
+                        <div style={{ maxHeight: '300px', overflowY: 'auto' }}>
+                            {[
+                                { id: 1, title: 'New Driver Registration', time: '2 mins ago', unread: true },
+                                { id: 2, title: 'Platform Update Successful', time: '1 hour ago', unread: false },
+                                { id: 3, title: 'Weekly Reports Ready', time: '5 hours ago', unread: false },
+                            ].map(notif => (
+                                <div key={notif.id} style={{ padding: '1rem 1.25rem', borderBottom: '1px solid #f8fafc', backgroundColor: notif.unread ? '#eef7f0' : 'transparent', display: 'flex', gap: '1rem', alignItems: 'start' }}>
+                                    <div style={{ width: '40px', height: '40px', borderRadius: '50%', backgroundColor: notif.unread ? '#38AC57' : '#f1f5f9', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                        {notif.unread ? <Bell size={18} color="white" /> : <Check size={18} color="#94a3b8" />}
+                                    </div>
+                                    <div>
+                                        <div style={{ fontSize: '0.875rem', fontWeight: '700', color: '#111827' }}>{notif.title}</div>
+                                        <div style={{ fontSize: '0.75rem', color: '#64748b', marginTop: '0.25rem' }}>{notif.time}</div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                        <div style={{ padding: '1rem', textAlign: 'center', backgroundColor: '#f8fafc' }}>
+                            <button style={{ border: 'none', background: 'none', color: '#64748b', fontSize: '0.875rem', fontWeight: '700', cursor: 'pointer' }}>View all notifications</button>
+                        </div>
+                    </div>
+                )}
             </div>
-             <button onClick={onLogout} style={{ background: 'none', border: 'none', color: 'var(--text-secondary)', cursor: 'pointer' }}>
-                <LogOut size={16} />
-             </button>
+            
+            <div style={{ height: '32px', width: '1px', backgroundColor: '#e2e8f0', margin: '0 0.25rem' }}></div>
+            
+            <div 
+                style={{ display: 'flex', alignItems: 'center', gap: '1.25rem', cursor: 'pointer' }}
+                onClick={() => onNavigate('profile')}
+            >
+                <img 
+                    src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" 
+                    alt="Profile" 
+                    style={{ width: '56px', height: '56px', borderRadius: '50%', objectFit: 'cover', border: '2px solid white', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.1)' }}
+                />
+                <div className="user-info" style={{ display: 'block' }}>
+                    <div style={{ fontWeight: '800', fontSize: '1.125rem', color: '#111827', whiteSpace: 'nowrap' }}>{user.name}</div>
+                    <div style={{ fontSize: '0.875rem', color: '#64748b' }}>User</div>
+                </div>
+                <button 
+                    onClick={onLogout} 
+                    title="Logout"
+                    style={{ 
+                        background: '#f1f5f9', 
+                        border: 'none', 
+                        cursor: 'pointer', 
+                        padding: '10px', 
+                        borderRadius: '0.75rem', 
+                        display: 'flex', 
+                        alignItems: 'center', 
+                        justifyContent: 'center',
+                        transition: 'all 0.2s',
+                        color: '#64748b'
+                    }}
+                    onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#fee2e2'}
+                    onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#f1f5f9'}
+                >
+                    <LogOut size={20} />
+                </button>
+            </div>
         </div>
       </div>
     </header>

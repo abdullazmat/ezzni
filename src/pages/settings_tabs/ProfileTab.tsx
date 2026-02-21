@@ -11,7 +11,7 @@ export const ProfileTab = () => {
 
             {/* Profile Cover & Avatar */}
             <div style={{ position: 'relative', marginBottom: '4rem' }}>
-                <div style={{ height: '180px', backgroundColor: '#22c55e', borderRadius: '1rem' }}></div>
+                <div style={{ height: '180px', backgroundColor: '#38AC57', borderRadius: '1rem' }}></div>
                 <div style={{ position: 'absolute', bottom: '-40px', left: '30px', display: 'flex', alignItems: 'flex-end', gap: '1.5rem' }}>
                     <div style={{ position: 'relative' }}>
                         <img 
@@ -87,7 +87,7 @@ export const ProfileTab = () => {
                 </div>
 
                 <div style={{ display: 'flex', gap: '1rem' }}>
-                    <button style={{ backgroundColor: '#22c55e', color: 'white', border: 'none', padding: '0.75rem 2.5rem', borderRadius: '2rem', fontWeight: '600', cursor: 'pointer' }}>Save</button>
+                    <button style={{ backgroundColor: '#38AC57', color: 'white', border: 'none', padding: '0.75rem 2.5rem', borderRadius: '2rem', fontWeight: '600', cursor: 'pointer' }}>Save</button>
                     <button style={{ backgroundColor: 'white', border: '1px solid #374151', color: '#374151', padding: '0.75rem 2.5rem', borderRadius: '2rem', fontWeight: '600', cursor: 'pointer' }}>Reset</button>
                 </div>
             </div>
@@ -111,7 +111,7 @@ export const ProfileTab = () => {
                         <label style={{ display: 'block', fontWeight: '600', marginBottom: '0.5rem', fontSize: '0.9rem' }}>Confirm Password</label>
                         <input type="password" placeholder="Confirm Your New Password" style={{ ...inputStyle, borderRadius: '0.75rem' }} />
                     </div>
-                    <button style={{ backgroundColor: '#22c55e', color: 'white', border: 'none', padding: '0.75rem 2.5rem', borderRadius: '2rem', fontWeight: '600', cursor: 'pointer', width: 'fit-content' }}>Update Password</button>
+                    <button style={{ backgroundColor: '#38AC57', color: 'white', border: 'none', padding: '0.75rem 2.5rem', borderRadius: '2rem', fontWeight: '600', cursor: 'pointer', width: 'fit-content' }}>Update Password</button>
                 </div>
             </div>
         </div>

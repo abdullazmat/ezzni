@@ -39,7 +39,7 @@ export const CommissionRules = () => {
                                     style={{ 
                                         width: '40px', 
                                         height: '22px', 
-                                        backgroundColor: item.enabled ? '#22c55e' : '#e5e7eb', 
+                                        backgroundColor: item.enabled ? '#38AC57' : '#e5e7eb', 
                                         borderRadius: '11px', 
                                         position: 'relative', 
                                         cursor: 'pointer',
@@ -85,7 +85,7 @@ export const CommissionRules = () => {
                             alert('Commission configuration saved successfully!');
                         }}
                         style={{ 
-                            backgroundColor: '#22c55e', 
+                            backgroundColor: '#38AC57', 
                             color: 'white', 
                             border: 'none', 
                             padding: '0.8rem 2.5rem', 
@@ -93,7 +93,7 @@ export const CommissionRules = () => {
                             fontWeight: '700',
                             fontSize: '0.95rem',
                             cursor: 'pointer',
-                            boxShadow: '0 4px 6px -1px rgba(34, 197, 94, 0.3)',
+                            boxShadow: '0 4px 6px -1px rgba(56, 172, 87, 0.4)',
                             transition: 'all 0.2s'
                         }}
                         onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-2px)'}

@@ -1,4 +1,9 @@
-import { MoreVertical, Car, Bike, Plane, Globe, Users } from 'lucide-react';
+import { MoreVertical, Plane, Globe, Users } from 'lucide-react';
+
+// Vehicle Icons
+import carIcon from '../../assets/icons/car.png';
+import taxiIcon from '../../assets/icons/taxi.png';
+import bikeIcon from '../../assets/icons/bike.png';
 
 export const ServiceRegions = () => {
     const regions = [
@@ -17,9 +22,9 @@ export const ServiceRegions = () => {
     ];
 
     const services = [
-        { icon: <Car size={14} />, label: 'Ride' },
-        { icon: <Bike size={14} />, label: 'Moto' },
-        { icon: <Car size={14} />, label: 'Taxi' },
+        { icon: <img src={carIcon} alt="Ride" style={{ height: '18px', width: 'auto' }} />, label: 'Ride' },
+        { icon: <img src={bikeIcon} alt="Moto" style={{ height: '18px', width: 'auto' }} />, label: 'Moto' },
+        { icon: <img src={taxiIcon} alt="Taxi" style={{ height: '18px', width: 'auto' }} />, label: 'Taxi' },
         { icon: <Plane size={14} />, label: 'Airport' },
         { icon: <Globe size={14} />, label: 'Intercity' },
         { icon: <Users size={14} />, label: 'Group' },
@@ -57,8 +62,8 @@ export const ServiceRegions = () => {
                             <div>
                                 <h3 style={{ fontSize: '1.1rem', fontWeight: '700', margin: '0 0 0.5rem 0' }}>{region.name}</h3>
                                 <span style={{ 
-                                    backgroundColor: region.status === 'Active' ? '#f0fdf4' : '#f3f4f6', 
-                                    color: region.status === 'Active' ? '#16a34a' : '#6b7280', 
+                                    backgroundColor: region.status === 'Active' ? '#eef7f0' : '#f3f4f6', 
+                                    color: region.status === 'Active' ? '#38AC57' : '#6b7280', 
                                     padding: '0.25rem 0.75rem', 
                                     borderRadius: '1rem', 
                                     fontSize: '0.75rem', 
@@ -102,7 +107,7 @@ export const ServiceRegions = () => {
                             </div>
                             <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem' }}>
                                 <span style={{ color: '#6b7280' }}>Custom Commission:</span>
-                                <span style={{ fontWeight: '700', color: '#22c55e' }}>{region.commission}</span>
+                                <span style={{ fontWeight: '700', color: '#38AC57' }}>{region.commission}</span>
                             </div>
                         </div>
 
@@ -111,7 +116,7 @@ export const ServiceRegions = () => {
                             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '0.5rem' }}>
                                 {services.map((service, i) => (
                                     <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.75rem', color: '#4b5563', fontWeight: '500' }}>
-                                        <div style={{ color: '#22c55e' }}>{service.icon}</div>
+                                        <div style={{ color: '#38AC57' }}>{service.icon}</div>
                                         {service.label}
                                     </div>
                                 ))}

@@ -27,7 +27,7 @@ export const CreateNotificationModal = ({ isOpen, onClose }: ModalProps) => {
 
   return (
     <div className="modal-overlay">
-      <div className="modal-content" style={{ width: '600px', backgroundColor: 'white', position: 'relative' }}>
+      <div className="modal-content" style={{ width: '600px', backgroundColor: 'white', position: 'relative', maxHeight: '90vh', overflowY: 'auto' }}>
         <button onClick={onClose} style={{ position: 'absolute', top: '24px', left: '24px', border: 'none', background: 'none', cursor: 'pointer' }}>
           <ArrowLeft size={24} />
         </button>
@@ -45,7 +45,7 @@ export const CreateNotificationModal = ({ isOpen, onClose }: ModalProps) => {
                 padding: '10px', 
                 borderRadius: '8px', 
                 border: 'none', 
-                backgroundColor: step === 1 ? '#10B981' : 'transparent',
+                backgroundColor: step === 1 ? '#38AC57' : 'transparent',
                 color: step === 1 ? 'white' : '#6B7280',
                 fontWeight: '700',
                 cursor: 'pointer'
@@ -60,7 +60,7 @@ export const CreateNotificationModal = ({ isOpen, onClose }: ModalProps) => {
                 padding: '10px', 
                 borderRadius: '8px', 
                 border: 'none', 
-                backgroundColor: step === 2 ? '#10B981' : 'transparent',
+                backgroundColor: step === 2 ? '#38AC57' : 'transparent',
                 color: step === 2 ? 'white' : '#6B7280',
                 fontWeight: '700',
                 cursor: 'pointer'
@@ -96,7 +96,7 @@ export const CreateNotificationModal = ({ isOpen, onClose }: ModalProps) => {
               <div style={{ backgroundColor: '#F9FAFB', borderRadius: '16px', padding: '1.5rem', border: '1px solid #E5E7EB' }}>
                 <p style={{ margin: '0 0 1rem 0', fontWeight: '700', color: '#374151' }}>Mobile App Preview</p>
                 <div style={{ backgroundColor: 'white', borderRadius: '12px', padding: '1rem', display: 'flex', gap: '1rem', border: '1px solid #E5E7EB' }}>
-                  <div style={{ width: '40px', height: '40px', borderRadius: '8px', backgroundColor: '#10B981', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                  <div style={{ width: '40px', height: '40px', borderRadius: '8px', backgroundColor: '#38AC57', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                     <Bell color="white" size={20} />
                   </div>
                   <div style={{ flex: 1 }}>
@@ -179,7 +179,7 @@ export const CreateNotificationModal = ({ isOpen, onClose }: ModalProps) => {
 
               <div style={{ backgroundColor: '#F9FAFB', borderRadius: '16px', padding: '1.25rem', border: '1px solid #E5E7EB', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-                  <div style={{ width: '48px', height: '48px', borderRadius: '12px', backgroundColor: '#10B981', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <div style={{ width: '48px', height: '48px', borderRadius: '12px', backgroundColor: '#38AC57', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     <Users color="white" size={24} />
                   </div>
                   <div>
@@ -213,7 +213,7 @@ export const CreateNotificationModal = ({ isOpen, onClose }: ModalProps) => {
             )}
             <button 
               onClick={() => step === 1 ? setStep(2) : onClose()}
-              style={{ flex: 1, padding: '14px', borderRadius: '30px', border: 'none', backgroundColor: '#10B981', color: 'white', fontWeight: '800', cursor: 'pointer' }}
+              style={{ flex: 1, padding: '14px', borderRadius: '30px', border: 'none', backgroundColor: '#38AC57', color: 'white', fontWeight: '800', cursor: 'pointer' }}
             >
               {step === 1 ? 'Next' : 'Create'}
             </button>
@@ -237,7 +237,7 @@ export const TeamNotificationModal = ({ isOpen, onClose }: ModalProps) => {
 
   return (
     <div className="modal-overlay">
-      <div className="modal-content" style={{ width: '600px', backgroundColor: 'white', position: 'relative' }}>
+      <div className="modal-content" style={{ width: '600px', backgroundColor: 'white', position: 'relative', maxHeight: '90vh', overflowY: 'auto' }}>
          <button onClick={onClose} style={{ position: 'absolute', top: '24px', left: '24px', border: 'none', background: 'none', cursor: 'pointer' }}>
           <ArrowLeft size={24} />
         </button>
@@ -274,7 +274,7 @@ export const TeamNotificationModal = ({ isOpen, onClose }: ModalProps) => {
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '0.75rem' }}>
                 {departments.map(dept => (
                   <label key={dept} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', backgroundColor: '#F9FAFB', padding: '10px 12px', borderRadius: '10px', fontSize: '0.9rem', fontWeight: '600' }}>
-                    <input type="checkbox" style={{ accentColor: '#10B981' }} />
+                    <input type="checkbox" style={{ accentColor: '#38AC57' }} />
                     {dept}
                   </label>
                 ))}
@@ -336,7 +336,7 @@ export const TeamNotificationModal = ({ isOpen, onClose }: ModalProps) => {
             <div style={{ backgroundColor: '#F9FAFB', borderRadius: '16px', padding: '1.25rem', border: '1px solid #E5E7EB' }}>
                 <p style={{ margin: '0 0 1rem 0', fontWeight: '700', color: '#374151' }}>Dashboard Preview</p>
                 <div style={{ backgroundColor: 'white', borderRadius: '12px', padding: '1rem', display: 'flex', gap: '1rem', border: '1px solid #E5E7EB' }}>
-                  <div style={{ width: '40px', height: '40px', borderRadius: '8px', backgroundColor: '#10B981', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                  <div style={{ width: '40px', height: '40px', borderRadius: '8px', backgroundColor: '#38AC57', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                     <Bell color="white" size={20} />
                   </div>
                   <div style={{ flex: 1 }}>
@@ -360,7 +360,7 @@ export const TeamNotificationModal = ({ isOpen, onClose }: ModalProps) => {
             </button>
             <button 
               onClick={onClose}
-              style={{ flex: 1.5, padding: '14px', borderRadius: '30px', border: 'none', backgroundColor: '#10B981', color: 'white', fontWeight: '800', cursor: 'pointer' }}
+              style={{ flex: 1.5, padding: '14px', borderRadius: '30px', border: 'none', backgroundColor: '#38AC57', color: 'white', fontWeight: '800', cursor: 'pointer' }}
             >
               Send
             </button>
@@ -389,7 +389,7 @@ export const NotificationDetailsModal = ({ isOpen, onClose, notification }: Moda
               <h3 style={{ fontSize: '1.25rem', fontWeight: '800', margin: '0 0 0.75rem 0' }}>{notification.title}</h3>
               <div style={{ display: 'flex', gap: '0.5rem' }}>
                 <span style={{ padding: '4px 12px', borderRadius: '6px', backgroundColor: '#EFF6FF', color: '#3B82F6', fontSize: '0.8rem', fontWeight: '700' }}>Announcement</span>
-                <span style={{ padding: '4px 12px', borderRadius: '6px', backgroundColor: '#F0FDF4', color: '#10B981', fontSize: '0.8rem', fontWeight: '700' }}>Sent</span>
+                <span style={{ padding: '4px 12px', borderRadius: '6px', backgroundColor: '#eef7f0', color: '#38AC57', fontSize: '0.8rem', fontWeight: '700' }}>Sent</span>
               </div>
             </div>
 
@@ -449,8 +449,8 @@ export const SystemStatusModal = ({ isOpen, onClose }: ModalProps) => {
           <p style={{ margin: '0 0 2rem 0', color: '#6B7280', fontWeight: '600' }}>Real-time health monitoring of notification services</p>
           
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-            <div style={{ backgroundColor: '#F0FDF4', border: '1px solid #BBF7D0', borderRadius: '16px', padding: '1.5rem', display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1rem' }}>
-              <div style={{ width: '12px', height: '12px', borderRadius: '50%', backgroundColor: '#10B981', boxShadow: '0 0 0 4px rgba(16, 185, 129, 0.2)' }}></div>
+            <div style={{ backgroundColor: '#eef7f0', border: '1px solid #BBF7D0', borderRadius: '16px', padding: '1.5rem', display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1rem' }}>
+              <div style={{ width: '12px', height: '12px', borderRadius: '50%', backgroundColor: '#38AC57', boxShadow: '0 0 0 4px rgba(16, 185, 129, 0.2)' }}></div>
               <div>
                 <p style={{ margin: 0, fontWeight: '800', color: '#065F46', fontSize: '1.1rem' }}>All Systems Operational</p>
                 <p style={{ margin: 0, fontSize: '0.85rem', color: '#059669', fontWeight: '700' }}>Last checked: Just now</p>
@@ -464,7 +464,7 @@ export const SystemStatusModal = ({ isOpen, onClose }: ModalProps) => {
                   <span style={{ fontSize: '0.8rem', color: '#6B7280', fontWeight: '700' }}>Latency: {service.latency}</span>
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <div style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#10B981' }}></div>
+                  <div style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#38AC57' }}></div>
                   <span style={{ fontSize: '0.85rem', fontWeight: '700', color: '#059669' }}>{service.status}</span>
                 </div>
               </div>
@@ -473,7 +473,7 @@ export const SystemStatusModal = ({ isOpen, onClose }: ModalProps) => {
 
           <button 
             onClick={onClose}
-            style={{ width: '100%', marginTop: '2.5rem', padding: '14px', borderRadius: '30px', border: 'none', backgroundColor: '#10B981', color: 'white', fontWeight: '800', cursor: 'pointer' }}
+            style={{ width: '100%', marginTop: '2.5rem', padding: '14px', borderRadius: '30px', border: 'none', backgroundColor: '#38AC57', color: 'white', fontWeight: '800', cursor: 'pointer' }}
           >
             Close Status Report
           </button>

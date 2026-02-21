@@ -10,8 +10,8 @@ const StatusBadge = ({ status }: { status: string }) => {
     const isActive = status.toLowerCase() === 'active';
     return (
         <span style={{ 
-            backgroundColor: isActive ? '#dcfce7' : '#fee2e2', 
-            color: isActive ? '#10b981' : '#ef4444', 
+            backgroundColor: isActive ? '#eef7f0' : '#fee2e2', 
+            color: isActive ? '#38AC57' : '#ef4444', 
             padding: '4px 12px', 
             borderRadius: '6px', 
             fontSize: '12px', 
@@ -103,12 +103,7 @@ export const RiderDetailsContent = ({ rider, onViewSpending, onViewHistory, onSu
                 <div style={{ width: '1px', backgroundColor: '#e5e7eb' }}></div>
                 <div>
                     <div style={{ fontSize: '36px', fontWeight: 'bold' }}>{rider.totalSpent ? rider.totalSpent.replace(',', '') : '45321'}</div>
-                    <div style={{ fontSize: '14px', color: '#6b7280' }}>Earnings (MAD)</div>
-                </div>
-                <div style={{ width: '1px', backgroundColor: '#e5e7eb' }}></div>
-                <div>
-                    <div style={{ fontSize: '36px', fontWeight: 'bold' }}>20%</div>
-                    <div style={{ fontSize: '14px', color: '#6b7280' }}>Commission</div>
+                    <div style={{ fontSize: '14px', color: '#6b7280' }}>Spending (MAD)</div>
                 </div>
             </div>
 
@@ -191,12 +186,12 @@ export const RiderDetailsContent = ({ rider, onViewSpending, onViewHistory, onSu
                     onClick={onViewHistory}
                     style={{ 
                         flex: 1, padding: '12px', borderRadius: '24px', 
-                        border: 'none', backgroundColor: '#10b981', color: 'white', 
+                        border: 'none', backgroundColor: '#38AC57', color: 'white', 
                         fontWeight: '600', cursor: 'pointer', fontSize: '14px',
                         transition: 'all 0.2s'
                     }}
-                    onMouseEnter={e => e.currentTarget.style.backgroundColor = '#059669'}
-                    onMouseLeave={e => e.currentTarget.style.backgroundColor = '#10b981'}
+                    onMouseEnter={e => e.currentTarget.style.backgroundColor = '#2d8a46'}
+                    onMouseLeave={e => e.currentTarget.style.backgroundColor = '#38AC57'}
                 >
                     Trips history
                 </button>
@@ -205,12 +200,12 @@ export const RiderDetailsContent = ({ rider, onViewSpending, onViewHistory, onSu
                         onClick={onActivate}
                         style={{ 
                             flex: 1, padding: '12px', borderRadius: '24px', 
-                            border: 'none', backgroundColor: '#10b981', color: 'white', 
+                            border: 'none', backgroundColor: '#38AC57', color: 'white', 
                             fontWeight: '600', cursor: 'pointer', fontSize: '14px',
                             transition: 'all 0.2s'
                         }}
-                        onMouseEnter={e => e.currentTarget.style.backgroundColor = '#059669'}
-                        onMouseLeave={e => e.currentTarget.style.backgroundColor = '#10b981'}
+                        onMouseEnter={e => e.currentTarget.style.backgroundColor = '#2d8a46'}
+                        onMouseLeave={e => e.currentTarget.style.backgroundColor = '#38AC57'}
                     >
                         Activate Rider
                     </button>
@@ -275,7 +270,7 @@ export const SpendingContent = () => {
 
             {/* Chart Area */}
             <div style={{ border: '1px solid #e5e7eb', borderRadius: '16px', padding: '24px', marginBottom: '24px' }}>
-                <div style={{ fontSize: '13px', color: '#6b7280', marginBottom: '4px' }}>Total Earnings</div>
+                <div style={{ fontSize: '13px', color: '#6b7280', marginBottom: '4px' }}>Total Spending</div>
                 <div style={{ fontSize: '28px', fontWeight: 'bold', marginBottom: '32px' }}>{data.total}</div>
                 
                 {/* Y-axis labels + bars */}
@@ -294,7 +289,7 @@ export const SpendingContent = () => {
                                 <div style={{ 
                                     width: '16px', 
                                     height: `${Math.max(h, 3)}%`, 
-                                    backgroundColor: i === data.highlight ? '#22c55e' : '#bbf7d0', 
+                                    backgroundColor: i === data.highlight ? '#38AC57' : '#eef7f0', 
                                     borderRadius: '4px 4px 0 0', 
                                     position: 'relative', 
                                     transition: 'height 0.4s ease',
@@ -406,7 +401,7 @@ export const TripsHistoryContent = ({ onViewSummary }: { onViewSummary: (tripId:
                             cursor: 'pointer', transition: 'all 0.2s',
                             boxShadow: '0 1px 2px rgba(0,0,0,0.03)'
                         }}
-                        onMouseEnter={e => { e.currentTarget.style.borderColor = '#10b981'; e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.08)'; }}
+                        onMouseEnter={e => { e.currentTarget.style.borderColor = '#38AC57'; e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.08)'; }}
                         onMouseLeave={e => { e.currentTarget.style.borderColor = '#f3f4f6'; e.currentTarget.style.boxShadow = '0 1px 2px rgba(0,0,0,0.03)'; }}
                     >
                         <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '12px' }}>
@@ -417,7 +412,7 @@ export const TripsHistoryContent = ({ onViewSummary }: { onViewSummary: (tripId:
                                 <span style={{ fontSize: '12px', fontWeight: 'bold', marginLeft: '4px' }}>{trip.rating || '0.0'}</span>
                             </div>
                             <span style={{ 
-                                backgroundColor: trip.status === 'Completed' ? '#10b981' : '#dc2626',
+                                backgroundColor: trip.status === 'Completed' ? '#38AC57' : '#dc2626',
                                 color: 'white', fontSize: '10px', fontWeight: 'bold', padding: '2px 10px', borderRadius: '10px'
                             }}>
                                 {trip.status.toUpperCase()}
@@ -437,14 +432,14 @@ export const TripsHistoryContent = ({ onViewSummary }: { onViewSummary: (tripId:
 
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                                <div style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#10b98120', border: '2px solid #10b981' }}></div>
+                                <div style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#38AC5720', border: '2px solid #38AC57' }}></div>
                                 <div style={{ fontSize: '12px' }}>
                                     <span style={{ color: '#9ca3af', marginRight: '4px' }}>From</span>
                                     <span style={{ fontWeight: '600' }}>Current Location, Marrakech</span>
                                 </div>
                             </div>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                                <div style={{ width: '8px', height: '8px', borderRadius: '50%', border: '2px solid #10b981' }}></div>
+                                <div style={{ width: '8px', height: '8px', borderRadius: '50%', border: '2px solid #38AC57' }}></div>
                                 <div style={{ fontSize: '12px' }}>
                                     <span style={{ color: '#9ca3af', marginRight: '4px' }}>To</span>
                                     <span style={{ fontWeight: '600' }}>Current Location, Marrakech</span>
@@ -495,7 +490,7 @@ export const TripSummaryContent = () => {
                     </div>
                     <div>
                         <div style={{ fontSize: '10px', color: '#9ca3af' }}>Price</div>
-                        <div style={{ fontWeight: 'bold', color: '#10b981' }}>74 MAD</div>
+                        <div style={{ fontWeight: 'bold', color: '#38AC57' }}>74 MAD</div>
                     </div>
                 </div>
             </div>
@@ -517,14 +512,14 @@ export const TripSummaryContent = () => {
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                            <div style={{ width: '10px', height: '10px', borderRadius: '50%', backgroundColor: '#10b98120', border: '3px solid #10b981' }}></div>
+                            <div style={{ width: '10px', height: '10px', borderRadius: '50%', backgroundColor: '#38AC5720', border: '3px solid #38AC57' }}></div>
                             <div style={{ fontSize: '14px', fontWeight: '600' }}>Current Location, Marrakech</div>
                         </div>
                         <div style={{ fontSize: '12px', color: '#9ca3af' }}>7:15 PM</div>
                     </div>
                     <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                            <MapPin size={18} color="#10b981" />
+                            <MapPin size={18} color="#38AC57" />
                             <div style={{ fontSize: '14px', fontWeight: '600' }}>Current Location, Marrakech</div>
                         </div>
                         <div style={{ fontSize: '12px', color: '#9ca3af' }}>8:30 PM</div>
@@ -544,7 +539,7 @@ export const TripSummaryContent = () => {
                 </p>
                 <div style={{ display: 'flex', gap: '8px' }}>
                     {['On time pickup', 'Clean Car', 'Safe Driving'].map(tag => (
-                        <span key={tag} style={{ backgroundColor: '#10b981', color: 'white', padding: '4px 12px', borderRadius: '6px', fontSize: '11px', fontWeight: '600' }}>
+                        <span key={tag} style={{ backgroundColor: '#38AC57', color: 'white', padding: '4px 12px', borderRadius: '6px', fontSize: '11px', fontWeight: '600' }}>
                             {tag}
                         </span>
                     ))}
@@ -563,7 +558,7 @@ export const TripSummaryContent = () => {
                 </p>
                 <div style={{ display: 'flex', gap: '8px' }}>
                     {['Ready on time', 'Polite & Friendly'].map(tag => (
-                        <span key={tag} style={{ backgroundColor: '#10b981', color: 'white', padding: '4px 12px', borderRadius: '6px', fontSize: '11px', fontWeight: '600' }}>
+                        <span key={tag} style={{ backgroundColor: '#38AC57', color: 'white', padding: '4px 12px', borderRadius: '6px', fontSize: '11px', fontWeight: '600' }}>
                             {tag}
                         </span>
                     ))}
@@ -574,12 +569,12 @@ export const TripSummaryContent = () => {
                 onClick={() => alert('Receipt downloaded!')}
                 style={{ 
                     width: '100%', padding: '16px', borderRadius: '32px', border: 'none', 
-                    backgroundColor: '#10b981', color: 'white', fontWeight: 'bold', fontSize: '16px', 
+                    backgroundColor: '#38AC57', color: 'white', fontWeight: 'bold', fontSize: '16px', 
                     cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
                     transition: 'background-color 0.2s'
                 }}
-                onMouseEnter={e => e.currentTarget.style.backgroundColor = '#059669'}
-                onMouseLeave={e => e.currentTarget.style.backgroundColor = '#10b981'}
+                onMouseEnter={e => e.currentTarget.style.backgroundColor = '#2d8a46'}
+                onMouseLeave={e => e.currentTarget.style.backgroundColor = '#38AC57'}
             >
                 Download Receipt
             </button>
@@ -681,11 +676,11 @@ export const EditRiderContent = ({ rider, onSave }: { rider: any, onSave: () => 
                 }}
                 style={{
                     width: '100%', padding: '14px', borderRadius: '32px', border: 'none',
-                    backgroundColor: '#22c55e', color: 'white', fontWeight: 'bold', fontSize: '16px',
+                    backgroundColor: '#38AC57', color: 'white', fontWeight: 'bold', fontSize: '16px',
                     cursor: 'pointer', transition: 'background-color 0.2s'
                 }}
-                onMouseEnter={e => e.currentTarget.style.backgroundColor = '#16a34a'}
-                onMouseLeave={e => e.currentTarget.style.backgroundColor = '#22c55e'}
+                onMouseEnter={e => e.currentTarget.style.backgroundColor = '#2d8a46'}
+                onMouseLeave={e => e.currentTarget.style.backgroundColor = '#38AC57'}
             >
                 Save Changes
             </button>
@@ -829,14 +824,14 @@ export const SuspensionBanner = ({ onClose }: { onClose: () => void }) => {
 export const ActivationBanner = ({ onClose }: { onClose: () => void }) => {
     return (
         <div style={{ 
-            backgroundColor: '#f0fdf4', border: '1px solid #bbf7d0', 
+            backgroundColor: '#eef7f0', border: '1px solid #bbf7d0', 
             borderRadius: '12px', padding: '16px 24px', marginBottom: '20px',
             display: 'flex', alignItems: 'center', justifyContent: 'space-between',
             animation: 'slideDown 0.3s ease'
         }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                 <span style={{ 
-                    backgroundColor: '#10b981', color: 'white', 
+                    backgroundColor: '#38AC57', color: 'white', 
                     padding: '4px 12px', borderRadius: '6px', 
                     fontSize: '12px', fontWeight: '700' 
                 }}>

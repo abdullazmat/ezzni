@@ -26,17 +26,17 @@ export const ForgotPassword = ({ onBackToLogin }: ForgotPasswordProps) => {
     <div style={{ height: '100vh', width: '100vw', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', backgroundColor: '#fff', color: '#333' }}>
       
       {/* Centered Card Content */}
-      <div style={{ width: '100%', maxWidth: '500px', padding: '2rem', textAlign: 'center' }}>
-        <div style={{ marginBottom: '2rem', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '0.75rem' }}>
+      <div className="forgot-password-container" style={{ width: '100%', maxWidth: '450px', padding: '2rem', textAlign: 'center' }}>
+        <div style={{ marginBottom: '2.5rem', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '0' }}>
           <img src={logo} alt="Hezzni Logo" style={{ height: '40px', width: 'auto' }} />
-          <span style={{ fontSize: '2rem', fontWeight: '800', color: '#0f172a', letterSpacing: '-0.02em' }}>ezzni</span>
+          <span style={{ fontSize: '2.2rem', fontWeight: '900', color: '#0D4463', letterSpacing: '-0.04em', lineHeight: 1, marginLeft: '-10px' }}>ezzni</span>
         </div>
 
-        <h2 style={{ fontSize: '2.5rem', fontWeight: 'bold', marginBottom: '3rem', color: '#000' }}>Forgot Password?</h2>
+        <h2 style={{ fontSize: '2.25rem', fontWeight: '800', marginBottom: '2.5rem', color: '#111827' }}>Forgot Password?</h2>
 
-        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', textAlign: 'left' }}>
+        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem', textAlign: 'left' }}>
           <div>
-            <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500' }}>Enter your email</label>
+            <label style={{ display: 'block', marginBottom: '0.6rem', fontWeight: '600', fontSize: '0.9rem', color: '#374151' }}>Enter your email</label>
             <input
               type="email"
               value={email}
@@ -44,40 +44,47 @@ export const ForgotPassword = ({ onBackToLogin }: ForgotPasswordProps) => {
               placeholder="you@hezzni.com"
               style={{
                 width: '100%',
-                padding: '1rem',
-                borderRadius: '0.5rem',
-                border: error ? '1px solid #ef4444' : '1px solid #e2e8f0',
-                backgroundColor: '#f8fafc',
+                padding: '0.875rem 1rem',
+                borderRadius: '0.75rem',
+                border: error ? '1px solid #ef4444' : '1px solid #e5e7eb',
+                backgroundColor: '#f9fafb',
                 fontSize: '1rem',
                 outline: 'none',
-                color: '#333'
+                color: '#111827',
+                transition: 'border-color 0.2s, box-shadow 0.2s',
               }}
+              onFocus={(e) => e.target.style.boxShadow = '0 0 0 3px rgba(56, 172, 87, 0.1)'}
+              onBlur={(e) => e.target.style.boxShadow = 'none'}
             />
-            {error && <span style={{ color: '#ef4444', fontSize: '0.875rem', marginTop: '0.25rem', display: 'block' }}>{error}</span>}
+            {error && <span style={{ color: '#ef4444', fontSize: '0.8rem', marginTop: '0.4rem', display: 'block' }}>{error}</span>}
           </div>
 
           <button
             type="submit"
             style={{
-              backgroundColor: '#10b981',
+              backgroundColor: '#38AC57',
               color: 'white',
-              padding: '1rem',
-              borderRadius: '2rem',
+              padding: '0.875rem',
+              borderRadius: '9999px',
               border: 'none',
               fontSize: '1rem',
-              fontWeight: '600',
+              fontWeight: '700',
               cursor: 'pointer',
-              marginTop: '1rem'
+              marginTop: '1.5rem',
+              boxShadow: '0 4px 6px -1px rgba(56, 172, 87, 0.2)',
+              transition: 'background-color 0.2s'
             }}
+            onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#2d8a46'}
+            onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#38AC57'}
           >
             Send Reset Link
           </button>
         </form>
 
-        <div style={{ marginTop: '2rem' }}>
+        <div style={{ marginTop: '2.5rem' }}>
           <button 
             onClick={onBackToLogin}
-            style={{ background: 'none', border: 'none', color: '#10b981', textDecoration: 'underline', cursor: 'pointer' }}
+            style={{ background: 'none', border: 'none', color: '#111827', fontWeight: '600', textDecoration: 'underline', cursor: 'pointer', fontSize: '0.9rem' }}
           >
             Back to Login
           </button>
@@ -119,6 +126,14 @@ export const ForgotPassword = ({ onBackToLogin }: ForgotPasswordProps) => {
         @keyframes slideIn {
           from { transform: translateY(100%); opacity: 0; }
           to { transform: translateY(0); opacity: 1; }
+        }
+        @media (max-width: 480px) {
+           h2 {
+             font-size: 1.75rem !important;
+           }
+           .forgot-password-container {
+             padding: 1rem !important;
+           }
         }
       `}</style>
     </div>

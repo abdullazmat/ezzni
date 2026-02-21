@@ -1,8 +1,15 @@
 import { useState } from 'react';
-import { Gift, ArrowUpRight, MoreVertical } from 'lucide-react';
+import { ArrowUpRight, MoreVertical } from 'lucide-react';
+
+// Specialized Icons
+import dailyBonusIcon from '../../assets/icons/Daily Bonus Earned.png';
+import totalTripsIcon from '../../assets/icons/Total Trips Today.png';
+import revenueIcon from '../../assets/icons/Revenue.png';
 
 export const DailyBonus = () => {
   const [dailyBonusEnabled, setDailyBonusEnabled] = useState(true);
+
+  const [selectedCard, setSelectedCard] = useState<string>('Daily Ride Target');
 
   const statsCards = [
     { 
@@ -10,10 +17,7 @@ export const DailyBonus = () => {
       value: '7.5', 
       unit: 'MAD', 
       subtitle: '30 rides * 0.25 MAD', 
-      color: '#ffffff',
-      textColor: '#111827',
-      iconBg: '#f0fdf4',
-      iconColor: '#22c55e',
+      icon: revenueIcon,
       trend: 'up'
     },
     { 
@@ -21,10 +25,7 @@ export const DailyBonus = () => {
       value: '30', 
       unit: '', 
       subtitle: 'Rides Per Day', 
-      color: '#22c55e',
-      textColor: '#ffffff',
-      iconBg: 'rgba(255,255,255,0.2)',
-      iconColor: '#ffffff',
+      icon: totalTripsIcon,
       trend: 'down'
     },
     { 
@@ -32,10 +33,7 @@ export const DailyBonus = () => {
       value: '0.25', 
       unit: 'MAD', 
       subtitle: 'Per Completed Ride', 
-      color: '#ffffff',
-      textColor: '#111827',
-      iconBg: '#f0fdf4',
-      iconColor: '#22c55e',
+      icon: dailyBonusIcon,
       trend: 'up'
     },
     { 
@@ -43,10 +41,7 @@ export const DailyBonus = () => {
       value: '2x', 
       unit: '', 
       subtitle: 'During Peak Hours', 
-      color: '#ffffff',
-      textColor: '#111827',
-      iconBg: '#f0fdf4',
-      iconColor: '#22c55e',
+      icon: dailyBonusIcon,
       trend: 'up'
     },
   ];
@@ -62,50 +57,68 @@ export const DailyBonus = () => {
     <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
       {/* Stats Grid */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1.5rem' }}>
-        {statsCards.map((card, index) => (
-          <div key={index} style={{ 
-            backgroundColor: card.color, 
-            padding: '1.5rem', 
-            borderRadius: '1.5rem', 
-            border: card.color === '#ffffff' ? '1px solid #e5e7eb' : 'none',
-            boxShadow: '0 4px 6px -1px rgba(0,0,0,0.05)',
-            color: card.textColor,
-            position: 'relative',
-            overflow: 'hidden'
-          }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1rem' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                <div style={{ backgroundColor: card.iconBg, padding: '0.5rem', borderRadius: '0.75rem' }}>
-                   <Gift size={20} color={card.iconColor} />
+        {statsCards.map((card, index) => {
+          const isActive = selectedCard === card.title;
+          return (
+            <div 
+              key={index} 
+              onClick={() => setSelectedCard(card.title)}
+              style={{ 
+                backgroundColor: isActive ? '#38AC57' : '#ffffff', 
+                padding: '1.5rem', 
+                borderRadius: '1.5rem', 
+                border: isActive ? 'none' : '1px solid #e5e7eb',
+                boxShadow: '0 4px 6px -1px rgba(0,0,0,0.05)',
+                color: isActive ? '#ffffff' : '#111827',
+                position: 'relative',
+                overflow: 'hidden',
+                cursor: 'pointer',
+                transition: 'all 0.2s ease'
+              }}
+            >
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1rem' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                  <div style={{ 
+                    width: '32px', 
+                    height: '32px', 
+                    backgroundColor: isActive ? 'rgba(255,255,255,0.2)' : 'transparent',
+                    borderRadius: '8px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                  }}>
+                    <img src={card.icon} alt="" style={{ width: '24px', height: '24px', objectFit: 'contain' }} />
+                  </div>
+                  <span style={{ fontSize: '0.9rem', fontWeight: '600', opacity: 0.9 }}>{card.title}</span>
                 </div>
-                <span style={{ fontSize: '0.9rem', fontWeight: '600', opacity: 0.9 }}>{card.title}</span>
+              </div>
+              
+              <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.5rem', marginBottom: '0.25rem' }}>
+                 <span style={{ fontSize: '2.5rem', fontWeight: '800' }}>{card.value}</span>
+                 {card.unit && <span style={{ fontSize: '0.9rem', fontWeight: '600' }}>{card.unit}</span>}
+              </div>
+              
+              <div style={{ fontSize: '0.85rem', opacity: 0.7, fontWeight: '500' }}>{card.subtitle}</div>
+  
+              <div style={{ 
+                position: 'absolute', 
+                right: '1.5rem', 
+                bottom: '1.5rem',
+                backgroundColor: isActive ? '#111827' : (card.trend === 'up' ? '#38AC57' : '#111827'),
+                color: 'white',
+                width: '32px',
+                height: '32px',
+                borderRadius: '50%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                transition: 'all 0.2s ease'
+              }}>
+                {card.trend === 'up' ? <ArrowUpRight size={18} /> : <ArrowUpRight size={18} style={{ transform: 'rotate(90deg)' }} />}
               </div>
             </div>
-            
-            <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.5rem', marginBottom: '0.25rem' }}>
-               <span style={{ fontSize: '2.5rem', fontWeight: '800' }}>{card.value}</span>
-               {card.unit && <span style={{ fontSize: '0.9rem', fontWeight: '600' }}>{card.unit}</span>}
-            </div>
-            
-            <div style={{ fontSize: '0.85rem', opacity: 0.7, fontWeight: '500' }}>{card.subtitle}</div>
-
-            <div style={{ 
-              position: 'absolute', 
-              right: '1.5rem', 
-              bottom: '1.5rem',
-              backgroundColor: card.trend === 'up' ? '#22c55e' : '#111827',
-              color: 'white',
-              width: '32px',
-              height: '32px',
-              borderRadius: '50%',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center'
-            }}>
-              {card.trend === 'up' ? <ArrowUpRight size={18} /> : <ArrowUpRight size={18} style={{ transform: 'rotate(90deg)' }} />}
-            </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
       {/* Configuration Section */}
@@ -124,7 +137,7 @@ export const DailyBonus = () => {
                style={{ 
                  width: '50px', 
                  height: '26px', 
-                 backgroundColor: dailyBonusEnabled ? '#22c55e' : '#e5e7eb', 
+                 backgroundColor: dailyBonusEnabled ? '#38AC57' : '#e5e7eb', 
                  borderRadius: '13px', 
                  position: 'relative', 
                  cursor: 'pointer',
@@ -201,7 +214,7 @@ export const DailyBonus = () => {
         <div style={{ overflowX: 'auto' }}>
           <table style={{ width: '100%', borderCollapse: 'separate', borderSpacing: '0 0.75rem' }}>
             <thead>
-               <tr style={{ backgroundColor: '#22c55e', color: 'white' }}>
+               <tr style={{ backgroundColor: '#38AC57', color: 'white' }}>
                   <th style={{ padding: '1rem', borderTopLeftRadius: '0.75rem', borderBottomLeftRadius: '0.75rem', textAlign: 'left', fontWeight: '600' }}>Action</th>
                   <th style={{ padding: '1rem', textAlign: 'left', fontWeight: '600' }}>Bonus Amount</th>
                   <th style={{ padding: '1rem', textAlign: 'left', fontWeight: '600' }}>User Type</th>
@@ -233,7 +246,7 @@ export const DailyBonus = () => {
                        <div style={{ 
                          width: '44px', 
                          height: '24px', 
-                         backgroundColor: rule.status ? '#22c55e' : '#e5e7eb', 
+                         backgroundColor: rule.status ? '#38AC57' : '#e5e7eb', 
                          borderRadius: '12px', 
                          position: 'relative',
                          cursor: 'pointer'

@@ -4,13 +4,13 @@ import { ArrowLeft, ChevronDown, ChevronLeft, ChevronRight, Eye, Car, Bike, Down
 
 // Status badge colors
 const statusColors: Record<string, { bg: string; color: string; border: string }> = {
-    'Verified': { bg: '#dcfce7', color: '#16a34a', border: '#bbf7d0' },
+    'Verified': { bg: '#eef7f0', color: '#2d8a46', border: '#bbf7d0' },
     'Pending': { bg: '#f3f4f6', color: '#6b7280', border: '#e5e7eb' },
     'Updated': { bg: '#dbeafe', color: '#2563eb', border: '#bfdbfe' },
     'Rejected': { bg: '#fee2e2', color: '#dc2626', border: '#fecaca' },
     'Expired': { bg: '#fef3c7', color: '#d97706', border: '#fde68a' },
     'Under Review': { bg: '#fef9c3', color: '#a16207', border: '#fef08a' },
-    'Completed': { bg: '#dcfce7', color: '#16a34a', border: '#bbf7d0' },
+    'Completed': { bg: '#eef7f0', color: '#2d8a46', border: '#bbf7d0' },
 };
 
 const StatusBadge = ({ status }: { status: string }) => {
@@ -49,7 +49,7 @@ export const SelectCategoryModal = ({ onClose, onConfirm }: { onClose: () => voi
                         return (
                             <div key={cat.id} onClick={() => setSelected(cat.id)} style={{
                                 display: 'flex', alignItems: 'center', padding: '16px', borderRadius: '16px',
-                                border: isSelected ? '2px solid #22c55e' : '2px solid #e5e7eb', cursor: 'pointer', transition: 'all 0.2s'
+                                border: isSelected ? '2px solid #38AC57' : '2px solid #e5e7eb', cursor: 'pointer', transition: 'all 0.2s'
                             }}>
                                 <div style={{ width: 48, height: 48, backgroundColor: '#f3f4f6', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', marginRight: '16px', flexShrink: 0 }}>
                                     {cat.icon === 'Bike' ? <Bike size={24} color="#374151" /> : <Car size={24} color="#374151" />}
@@ -58,7 +58,7 @@ export const SelectCategoryModal = ({ onClose, onConfirm }: { onClose: () => voi
                                     <div style={{ fontWeight: 'bold', fontSize: '15px' }}>{cat.id}</div>
                                     <div style={{ fontSize: '13px', color: '#6b7280' }}>{cat.desc}</div>
                                 </div>
-                                <div style={{ width: 20, height: 20, borderRadius: '50%', border: isSelected ? '5px solid #22c55e' : '2px solid #d1d5db', backgroundColor: 'white', flexShrink: 0 }}></div>
+                                <div style={{ width: 20, height: 20, borderRadius: '50%', border: isSelected ? '5px solid #38AC57' : '2px solid #d1d5db', backgroundColor: 'white', flexShrink: 0 }}></div>
                             </div>
                         );
                     })}
@@ -66,10 +66,10 @@ export const SelectCategoryModal = ({ onClose, onConfirm }: { onClose: () => voi
 
                 <button onClick={() => { onConfirm(selected); onClose(); }} style={{
                     width: '100%', padding: '14px', borderRadius: '32px', border: 'none',
-                    backgroundColor: '#22c55e', color: 'white', fontWeight: 'bold', fontSize: '16px', cursor: 'pointer', transition: 'background-color 0.2s'
+                    backgroundColor: '#38AC57', color: 'white', fontWeight: 'bold', fontSize: '16px', cursor: 'pointer', transition: 'background-color 0.2s'
                 }}
-                onMouseEnter={e => e.currentTarget.style.backgroundColor = '#16a34a'}
-                onMouseLeave={e => e.currentTarget.style.backgroundColor = '#22c55e'}
+                onMouseEnter={e => e.currentTarget.style.backgroundColor = '#2d8a46'}
+                onMouseLeave={e => e.currentTarget.style.backgroundColor = '#38AC57'}
                 >Confirm</button>
             </div>
         </div>
@@ -102,8 +102,8 @@ const documentImages: Record<string, string[]> = {
         makeDocSvg('CARTE NATIONALE D\'IDENTITÉ', 'Verso • Informations personnelles', '#1e40af', '🪪', 'Back Side'),
     ],
     "Driver's License": [
-        makeDocSvg('PERMIS DE CONDUIRE', 'Royaume du Maroc • رخصة السياقة', '#166534', '🚗', 'Front Side'),
-        makeDocSvg('PERMIS DE CONDUIRE', 'Catégories • Validité', '#166534', '🚗', 'Back Side'),
+        makeDocSvg('PERMIS DE CONDUIRE', 'Royaume du Maroc • رخصة السياقة', '#2d8a46', '🚗', 'Front Side'),
+        makeDocSvg('PERMIS DE CONDUIRE', 'Catégories • Validité', '#2d8a46', '🚗', 'Back Side'),
     ],
     'Pro Driver Card / Carte Professionnelle': [
         makeDocSvg('CARTE PROFESSIONNELLE', 'Chauffeur Professionnel • بطاقة مهنية', '#7c3aed', '🏷️', 'Front Side'),
@@ -201,7 +201,7 @@ export const DocumentPreviewModal = ({ docName, onClose }: { docName: string; on
                                 onClick={() => setImgIndex(i)}
                                 style={{ 
                                     width: imgIndex === i ? '20px' : '8px', height: '8px', borderRadius: '4px', border: 'none',
-                                    backgroundColor: imgIndex === i ? '#22c55e' : '#d1d5db', cursor: 'pointer',
+                                    backgroundColor: imgIndex === i ? '#38AC57' : '#d1d5db', cursor: 'pointer',
                                     transition: 'all 0.2s', padding: 0
                                 }} 
                             />
@@ -225,12 +225,12 @@ export const DocumentPreviewModal = ({ docName, onClose }: { docName: string; on
                     >Cancel</button>
                     <button onClick={() => alert('Document downloaded!')} style={{
                         flex: 1, padding: '12px', borderRadius: '24px', border: 'none',
-                        backgroundColor: '#22c55e', color: 'white', fontWeight: '600', cursor: 'pointer', fontSize: '14px',
+                        backgroundColor: '#38AC57', color: 'white', fontWeight: '600', cursor: 'pointer', fontSize: '14px',
                         display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px',
                         transition: 'background-color 0.2s'
                     }}
-                    onMouseEnter={e => e.currentTarget.style.backgroundColor = '#16a34a'}
-                    onMouseLeave={e => e.currentTarget.style.backgroundColor = '#22c55e'}
+                    onMouseEnter={e => e.currentTarget.style.backgroundColor = '#2d8a46'}
+                    onMouseLeave={e => e.currentTarget.style.backgroundColor = '#38AC57'}
                     >
                         <Download size={16} /> Download
                     </button>
@@ -246,7 +246,8 @@ export const ApplicationReviewModal = ({ doc, onClose, onApprove, onReject }: { 
     const [showCategoryModal, setShowCategoryModal] = useState(false);
     const [selectedCategory, setSelectedCategory] = useState('');
     const [showDocPreview, setShowDocPreview] = useState<string | null>(null);
-    const [currentStatus] = useState(doc.status);
+    const [mainStatus, setMainStatus] = useState(doc.status);
+    const [openMainStatus, setOpenMainStatus] = useState(false);
 
     const uploadedDocs = [
         { name: 'National ID Card (CIN)', desc: 'Government-issued identification.', status: 'Under Review', date: '2025-01-10' },
@@ -269,14 +270,14 @@ export const ApplicationReviewModal = ({ doc, onClose, onApprove, onReject }: { 
 
     return (
         <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.4)', backdropFilter: 'blur(4px)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }}>
-            <div style={{ backgroundColor: 'white', borderRadius: '24px', width: '100%', maxWidth: '680px', maxHeight: '90vh', overflowY: 'auto', padding: '32px', position: 'relative' }}>
+            <div style={{ backgroundColor: 'white', borderRadius: '24px', width: '100%', maxWidth: '900px', maxHeight: '90vh', overflowY: 'auto', padding: '32px', position: 'relative' }}>
                 {/* Header */}
                 <button onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer', marginBottom: '16px', display: 'flex', alignItems: 'center' }}>
                     <ArrowLeft size={24} />
                 </button>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '8px' }}>
                     <h2 style={{ fontSize: '22px', fontWeight: 'bold', margin: 0 }}>Driver Application Review</h2>
-                    <StatusBadge status={currentStatus} />
+                    <StatusBadge status={mainStatus} />
                 </div>
                 <p style={{ color: '#6b7280', fontSize: '14px', margin: '0 0 28px 0' }}>Review all uploaded documents and approve or reject the application</p>
 
@@ -288,33 +289,52 @@ export const ApplicationReviewModal = ({ doc, onClose, onApprove, onReject }: { 
                             <img src={doc.avatar} style={{ width: '64px', height: '64px', borderRadius: '50%', objectFit: 'cover' }} alt="" />
                             <div style={{ position: 'absolute', bottom: '-6px', left: '50%', transform: 'translateX(-50%)', backgroundColor: '#fbbf24', borderRadius: '6px', padding: '0 4px', fontSize: '10px', fontWeight: 'bold' }}>4.8</div>
                         </div>
-                        <div style={{ flex: 1, display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '12px', fontSize: '13px' }}>
+                        <div style={{ flex: 1, display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.5rem', fontSize: '13px' }}>
                             <div><div style={{ color: '#9ca3af', fontSize: '11px', marginBottom: '2px' }}>Full Name</div><div style={{ fontWeight: '600' }}>{doc.driverName}</div></div>
                             <div><div style={{ color: '#9ca3af', fontSize: '11px', marginBottom: '2px' }}>Vehicle Type</div><div style={{ fontWeight: '600', display: 'flex', alignItems: 'center', gap: '4px' }}>🚕 Taxi</div></div>
                             <div><div style={{ color: '#9ca3af', fontSize: '11px', marginBottom: '2px' }}>Phone</div><div style={{ fontWeight: '600' }}>+212 6 12 34 56</div></div>
                             <div><div style={{ color: '#9ca3af', fontSize: '11px', marginBottom: '2px' }}>Application ID</div><div style={{ fontWeight: '600' }}>REG-001</div></div>
-                            <div><div style={{ color: '#9ca3af', fontSize: '11px', marginBottom: '2px' }}>Email</div><div style={{ fontWeight: '600', wordBreak: 'break-all' }}>Ahmedhassan@gmail.com</div></div>
+                            <div><div style={{ color: '#9ca3af', fontSize: '11px', marginBottom: '2px' }}>Email</div><div style={{ fontWeight: '600' }}>Ahmedhassan@gmail.com</div></div>
                             <div><div style={{ color: '#9ca3af', fontSize: '11px', marginBottom: '2px' }}>Driver ID</div><div style={{ fontWeight: '600' }}>{doc.driverId}</div></div>
                             <div><div style={{ color: '#9ca3af', fontSize: '11px', marginBottom: '2px' }}>City</div><div style={{ fontWeight: '600' }}>Casablanca</div></div>
                             <div><div style={{ color: '#9ca3af', fontSize: '11px', marginBottom: '2px' }}>Gender</div><div style={{ fontWeight: '600' }}>♂ Male</div></div>
                             <div><div style={{ color: '#9ca3af', fontSize: '11px', marginBottom: '2px' }}>Application Date</div><div style={{ fontWeight: '600' }}>10-01-2026</div></div>
-                            <div>
+                            <div style={{ position: 'relative' }}>
                                 <div style={{ color: '#9ca3af', fontSize: '11px', marginBottom: '2px' }}>Current Status</div>
-                                <StatusBadge status={currentStatus} />
+                                <button onClick={() => setOpenMainStatus(!openMainStatus)} style={{
+                                    display: 'flex', alignItems: 'center', gap: '4px', padding: '4px 10px', borderRadius: '6px',
+                                    border: `1px solid ${(statusColors[mainStatus] || statusColors['Pending']).border}`,
+                                    backgroundColor: (statusColors[mainStatus] || statusColors['Pending']).bg,
+                                    color: (statusColors[mainStatus] || statusColors['Pending']).color,
+                                    fontSize: '11px', fontWeight: '600', cursor: 'pointer'
+                                }}>
+                                    {mainStatus} <ChevronDown size={12} />
+                                </button>
+                                {openMainStatus && (
+                                    <div style={{ position: 'absolute', top: '110%', left: 0, backgroundColor: 'white', border: '1px solid #e5e7eb', borderRadius: '8px', boxShadow: '0 8px 20px rgba(0,0,0,0.12)', zIndex: 100, minWidth: '130px', padding: '4px' }}>
+                                        {statusOptions.map(s => (
+                                            <div key={s} onClick={() => { setMainStatus(s); setOpenMainStatus(false); }}
+                                                style={{ padding: '6px 10px', fontSize: '12px', cursor: 'pointer', borderRadius: '4px', fontWeight: mainStatus === s ? 'bold' : 'normal', backgroundColor: mainStatus === s ? '#eef7f0' : 'transparent' }}
+                                                onMouseEnter={e => e.currentTarget.style.backgroundColor = '#f3f4f6'}
+                                                onMouseLeave={e => e.currentTarget.style.backgroundColor = mainStatus === s ? '#eef7f0' : 'transparent'}
+                                            >{s}</div>
+                                        ))}
+                                    </div>
+                                )}
                             </div>
                         </div>
                     </div>
                 </div>
 
                 {/* Category Selection */}
-                <div style={{ backgroundColor: '#f0fdf4', borderRadius: '16px', padding: '20px', textAlign: 'center', marginBottom: '24px' }}>
+                <div style={{ backgroundColor: '#eef7f0', borderRadius: '16px', padding: '20px', textAlign: 'center', marginBottom: '24px' }}>
                     <p style={{ fontWeight: '600', fontSize: '14px', marginBottom: '12px', margin: '0 0 12px 0' }}>Category Determines Pricing And Service Level For This Driver</p>
-                    {selectedCategory && <p style={{ fontSize: '13px', color: '#16a34a', margin: '0 0 12px 0' }}>Selected: <strong>{selectedCategory}</strong></p>}
+                    {selectedCategory && <p style={{ fontSize: '13px', color: '#2d8a46', margin: '0 0 12px 0' }}>Selected: <strong>{selectedCategory}</strong></p>}
                     <button onClick={() => setShowCategoryModal(true)} style={{
                         padding: '10px 24px', borderRadius: '24px', border: '1px solid #e5e7eb',
                         backgroundColor: 'white', fontWeight: '600', cursor: 'pointer', fontSize: '13px', transition: 'all 0.2s'
                     }}
-                    onMouseEnter={e => { e.currentTarget.style.borderColor = '#22c55e'; e.currentTarget.style.backgroundColor = '#f0fdf4'; }}
+                    onMouseEnter={e => { e.currentTarget.style.borderColor = '#38AC57'; e.currentTarget.style.backgroundColor = '#eef7f0'; }}
                     onMouseLeave={e => { e.currentTarget.style.borderColor = '#e5e7eb'; e.currentTarget.style.backgroundColor = 'white'; }}
                     >Select Category</button>
                 </div>
@@ -322,11 +342,11 @@ export const ApplicationReviewModal = ({ doc, onClose, onApprove, onReject }: { 
                 {/* Vehicle Information */}
                 <h3 style={{ fontSize: '16px', fontWeight: 'bold', margin: '0 0 16px 0' }}>Vehicle Information</h3>
                 <div style={{ border: '1px solid #f3f4f6', borderRadius: '16px', padding: '20px', marginBottom: '28px' }}>
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px', fontSize: '13px' }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.5rem', fontSize: '13px' }}>
                         <div><div style={{ color: '#9ca3af', fontSize: '11px', marginBottom: '2px' }}>Driver ID</div><div style={{ fontWeight: 'bold', fontSize: '16px' }}>D-00045</div></div>
                         <div><div style={{ color: '#9ca3af', fontSize: '11px', marginBottom: '2px' }}>Vehicle Colour</div><div style={{ fontWeight: '600', display: 'flex', alignItems: 'center', gap: '4px' }}>⚪ White</div></div>
                         <div><div style={{ color: '#9ca3af', fontSize: '11px', marginBottom: '2px' }}>Licence Plate Num</div><div style={{ fontWeight: 'bold', fontSize: '16px' }}>8 | i | 26363</div></div>
-                        <div><div style={{ color: '#9ca3af', fontSize: '11px', marginBottom: '2px' }}>Make & Mode</div><div style={{ fontWeight: 'bold', fontSize: '16px' }}>Dacia Logan</div></div>
+                        <div><div style={{ color: '#9ca3af', fontSize: '11px', marginBottom: '2px' }}>Make & Model</div><div style={{ fontWeight: 'bold', fontSize: '16px' }}>Dacia Logan</div></div>
                         <div><div style={{ color: '#9ca3af', fontSize: '11px', marginBottom: '2px' }}>Year</div><div style={{ fontWeight: 'bold', fontSize: '16px' }}>2020</div></div>
                         <div><div style={{ color: '#9ca3af', fontSize: '11px', marginBottom: '2px' }}>Join Date</div><div style={{ fontWeight: '600' }}>2023-01-15</div></div>
                     </div>
@@ -355,9 +375,9 @@ export const ApplicationReviewModal = ({ doc, onClose, onApprove, onReject }: { 
                                         <div style={{ position: 'absolute', top: '110%', left: 0, backgroundColor: 'white', border: '1px solid #e5e7eb', borderRadius: '8px', boxShadow: '0 8px 20px rgba(0,0,0,0.12)', zIndex: 10, minWidth: '130px', padding: '4px' }}>
                                             {statusOptions.map(s => (
                                                 <div key={s} onClick={() => { setDocStatuses(prev => ({ ...prev, [d.name]: s })); setOpenDropdown(null); }}
-                                                    style={{ padding: '6px 10px', fontSize: '12px', cursor: 'pointer', borderRadius: '4px', fontWeight: docStatuses[d.name] === s ? 'bold' : 'normal', backgroundColor: docStatuses[d.name] === s ? '#f0fdf4' : 'transparent' }}
+                                                    style={{ padding: '6px 10px', fontSize: '12px', cursor: 'pointer', borderRadius: '4px', fontWeight: docStatuses[d.name] === s ? 'bold' : 'normal', backgroundColor: docStatuses[d.name] === s ? '#eef7f0' : 'transparent' }}
                                                     onMouseEnter={e => e.currentTarget.style.backgroundColor = '#f3f4f6'}
-                                                    onMouseLeave={e => e.currentTarget.style.backgroundColor = docStatuses[d.name] === s ? '#f0fdf4' : 'transparent'}
+                                                    onMouseLeave={e => e.currentTarget.style.backgroundColor = docStatuses[d.name] === s ? '#eef7f0' : 'transparent'}
                                                 >{s}</div>
                                             ))}
                                         </div>
@@ -367,7 +387,7 @@ export const ApplicationReviewModal = ({ doc, onClose, onApprove, onReject }: { 
                                     display: 'flex', alignItems: 'center', gap: '4px', padding: '4px 10px', borderRadius: '6px',
                                     border: '1px solid #e5e7eb', backgroundColor: 'white', fontSize: '11px', fontWeight: '600', cursor: 'pointer'
                                 }}
-                                onMouseEnter={e => { e.currentTarget.style.borderColor = '#22c55e'; }}
+                                onMouseEnter={e => { e.currentTarget.style.borderColor = '#38AC57'; }}
                                 onMouseLeave={e => { e.currentTarget.style.borderColor = '#e5e7eb'; }}
                                 >
                                     <Eye size={12} /> Preview
@@ -395,10 +415,10 @@ export const ApplicationReviewModal = ({ doc, onClose, onApprove, onReject }: { 
                 <div style={{ display: 'flex', gap: '12px' }}>
                     <button onClick={() => { onApprove(); onClose(); }} style={{
                         flex: 1, padding: '14px', borderRadius: '32px', border: 'none',
-                        backgroundColor: '#22c55e', color: 'white', fontWeight: 'bold', fontSize: '15px', cursor: 'pointer', transition: 'background-color 0.2s'
+                        backgroundColor: '#38AC57', color: 'white', fontWeight: 'bold', fontSize: '15px', cursor: 'pointer', transition: 'background-color 0.2s'
                     }}
-                    onMouseEnter={e => e.currentTarget.style.backgroundColor = '#16a34a'}
-                    onMouseLeave={e => e.currentTarget.style.backgroundColor = '#22c55e'}
+                    onMouseEnter={e => e.currentTarget.style.backgroundColor = '#2d8a46'}
+                    onMouseLeave={e => e.currentTarget.style.backgroundColor = '#38AC57'}
                     >Approve Application</button>
                     <button onClick={() => { onReject(); onClose(); }} style={{
                         flex: 1, padding: '14px', borderRadius: '32px', border: '2px solid #dc2626',

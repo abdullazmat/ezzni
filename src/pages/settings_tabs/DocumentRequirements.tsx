@@ -22,7 +22,7 @@ export const DocumentRequirements = () => {
                 <div style={{ overflowX: 'auto' }}>
                     <table style={{ width: '100%', borderCollapse: 'separate', borderSpacing: '0 0.75rem' }}>
                         <thead>
-                            <tr style={{ backgroundColor: '#22c55e', color: 'white' }}>
+                            <tr style={{ backgroundColor: '#38AC57', color: 'white' }}>
                                 <th style={{ padding: '1rem', borderTopLeftRadius: '0.75rem', borderBottomLeftRadius: '0.75rem', textAlign: 'left', fontWeight: '600' }}>Document Type</th>
                                 <th style={{ padding: '1rem', textAlign: 'left', fontWeight: '600' }}>User Types</th>
                                 <th style={{ padding: '1rem', textAlign: 'left', fontWeight: '600' }}>File Limits</th>
@@ -52,7 +52,7 @@ export const DocumentRequirements = () => {
                                             <button style={{ background: 'white', border: '1px solid #e5e7eb', padding: '0.4rem 1rem', borderRadius: '2rem', display: 'flex', alignItems: 'center', gap: '0.4rem', color: '#4b5563', cursor: 'pointer', fontSize: '0.75rem', fontWeight: '600', transition: 'all 0.2s' }} onMouseEnter={e => e.currentTarget.style.backgroundColor = '#f9fafb'} onMouseLeave={e => e.currentTarget.style.backgroundColor = 'white'}>
                                                 <Eye size={14} /> View
                                             </button>
-                                            <button style={{ background: 'white', border: '1px solid #e5e7eb', padding: '0.4rem', borderRadius: '0.5rem', color: '#4b5563', cursor: 'pointer', transition: 'all 0.2s' }} onMouseEnter={e => e.currentTarget.style.backgroundColor = '#f0fdf4'} onMouseLeave={e => e.currentTarget.style.backgroundColor = 'white'}>
+                                            <button style={{ background: 'white', border: '1px solid #e5e7eb', padding: '0.4rem', borderRadius: '0.5rem', color: '#4b5563', cursor: 'pointer', transition: 'all 0.2s' }} onMouseEnter={e => e.currentTarget.style.backgroundColor = '#eef7f0'} onMouseLeave={e => e.currentTarget.style.backgroundColor = 'white'}>
                                                 <Edit2 size={14} />
                                             </button>
                                             <button style={{ background: 'white', border: '1px solid #fee2e2', padding: '0.4rem', borderRadius: '0.5rem', color: '#ef4444', cursor: 'pointer', transition: 'all 0.2s' }} onMouseEnter={e => e.currentTarget.style.backgroundColor = '#fef2f2'} onMouseLeave={e => e.currentTarget.style.backgroundColor = 'white'}>
