@@ -117,7 +117,7 @@ const Dropdown = ({ label, value, options, onChange }: { label: string, value: s
                 onClick={() => setIsOpen(!isOpen)}
                 style={{ 
                     padding: '0.7rem 1.5rem', borderRadius: '2rem', border: '1px solid #e5e7eb', backgroundColor: 'white', 
-                    cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.9rem', minWidth: '120px', justifyContent: 'space-between' 
+                    cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.9rem', width: '100%', minWidth: '120px', justifyContent: 'space-between' 
                 }}
             >
                 <span style={{ color: value === 'All' ? '#6b7280' : 'black' }}>{value === 'All' ? label : value}</span>
@@ -212,8 +212,8 @@ export const VerificationBadges = () => {
         const matchesSearch = u.name.toLowerCase().includes(searchTerm.toLowerCase()) || u.displayId.toLowerCase().includes(searchTerm.toLowerCase());
         const matchesCity = cityFilter === 'All' || u.city === cityFilter;
         
-        let matchesStatus = statusFilter === 'All' ? true : (statusFilter === 'Verified' ? u.isVerified : !u.isVerified);
-        let matchesType = userTypeFilter === 'All' || u.userType === userTypeFilter;
+        const matchesStatus = statusFilter === 'All' ? true : (statusFilter === 'Verified' ? u.isVerified : !u.isVerified);
+        const matchesType = userTypeFilter === 'All' || u.userType === userTypeFilter;
 
         // Apply Stats Cards Filters
         if (activeStat === 'TotalVerified') {
@@ -257,6 +257,155 @@ export const VerificationBadges = () => {
 
     return (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+            <style>{`
+                .vb-stats-grid {
+                    display: grid;
+                    grid-template-columns: repeat(4, 1fr);
+                    gap: 1.5rem;
+                }
+                .vb-controls-container {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    gap: 1.5rem;
+                }
+                .vb-filters-group {
+                    display: flex;
+                    gap: 1rem;
+                    flex-wrap: wrap;
+                    flex: 1;
+                }
+                .vb-table-container {
+                    width: 100%;
+                    overflow-x: auto;
+                    border-radius: 1rem;
+                    background: white;
+                }
+                .vb-modal-overlay {
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    backgroundColor: rgba(0,0,0,0.5);
+                    zIndex: 1000;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    padding: 1rem;
+                }
+                .vb-settings-modal {
+                    width: 600px;
+                    max-width: 100%;
+                    background-color: white;
+                    border-radius: 1.5rem;
+                    padding: 2rem;
+                    max-height: 90vh;
+                    overflow-y: auto;
+                }
+                .vb-preview-modal {
+                    width: 950px;
+                    max-width: 100%;
+                    background-color: #fdfdfd;
+                    border-radius: 1.5rem;
+                    padding: 2.5rem;
+                    max-height: 95vh;
+                    overflow-y: auto;
+                    position: relative;
+                }
+                .vb-info-grid {
+                    display: grid;
+                    grid-template-columns: repeat(4, 1fr);
+                    gap: 2rem;
+                }
+                .vb-metrics-grid {
+                    display: grid;
+                    grid-template-columns: repeat(5, 1fr);
+                    gap: 1.5rem;
+                }
+                .vb-flex-responsive {
+                    display: flex;
+                    gap: 2.5rem;
+                }
+                .vb-settings-grid {
+                    display: grid;
+                    grid-template-columns: repeat(3, 1fr);
+                    gap: 1rem;
+                }
+                .vb-settings-grid-2 {
+                    display: grid;
+                    grid-template-columns: repeat(2, 1fr);
+                    gap: 1rem;
+                }
+                
+                @media (max-width: 1200px) {
+                    .vb-stats-grid {
+                        grid-template-columns: repeat(2, 1fr);
+                    }
+                    .vb-metrics-grid {
+                        grid-template-columns: repeat(3, 1fr);
+                    }
+                }
+
+                @media (max-width: 992px) {
+                    .vb-preview-modal {
+                        padding: 1.5rem;
+                    }
+                    .vb-info-grid {
+                        grid-template-columns: repeat(2, 1fr);
+                        gap: 1.5rem;
+                    }
+                }
+
+                @media (max-width: 768px) {
+                    .vb-stats-grid {
+                        grid-template-columns: 1fr;
+                    }
+                    .vb-controls-container {
+                        flex-direction: column;
+                        align-items: stretch;
+                    }
+                    .vb-filters-group {
+                        flex-direction: column;
+                    }
+                    .vb-filters-group > div, 
+                    .vb-filters-group > button,
+                    .vb-filters-group input {
+                        width: 100% !important;
+                    }
+                    .vb-flex-responsive {
+                        flex-direction: column;
+                        align-items: center;
+                        text-align: center;
+                        gap: 1.5rem;
+                    }
+                    .vb-info-grid {
+                        grid-template-columns: 1fr;
+                        text-align: left;
+                    }
+                    .vb-metrics-grid {
+                        grid-template-columns: 1fr;
+                        text-align: left;
+                    }
+                    .vb-settings-grid, .vb-settings-grid-2 {
+                        grid-template-columns: 1fr;
+                    }
+                    .vb-modal-footer {
+                        flex-direction: column;
+                    }
+                    .vb-modal-footer button {
+                        width: 100%;
+                    }
+                    .vb-status-banner {
+                        flex-direction: column;
+                        gap: 1rem;
+                        text-align: center;
+                    }
+                    .vb-status-banner > div {
+                        flex-direction: column;
+                    }
+                }
+            `}</style>
             {/* Header */}
             <div>
                 <h1 style={{ fontSize: '1.75rem', fontWeight: 'bold', margin: '0 0 0.5rem 0' }}>Verification badges</h1>
@@ -264,93 +413,93 @@ export const VerificationBadges = () => {
             </div>
 
             {/* Stats Cards */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.5rem' }}>
+            <div className="vb-stats-grid">
                 <div 
                     onClick={() => setActiveStat(null)} // Reset
                     style={{ 
-                        padding: '1.5rem', borderRadius: '1.5rem', backgroundColor: !activeStat ? '#eef7f0' : 'white', 
+                        padding: '1.25rem', borderRadius: '1.5rem', backgroundColor: !activeStat ? '#eef7f0' : 'white', 
                         position: 'relative', boxShadow: !activeStat ? 'inset 0 0 0 2px #38AC57' : '0 1px 3px rgba(0,0,0,0.05)', 
-                        display: 'flex', flexDirection: 'column', justifyContent: 'space-between', height: '140px',
+                        display: 'flex', flexDirection: 'column', justifyContent: 'space-between', minHeight: '140px',
                         cursor: 'pointer', transition: 'all 0.2s'
                     }}
                 >
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                        <img src={totalRidersDriversIcon} alt="" style={{ width: '40px', height: '40px', objectFit: 'contain' }} />
-                        <span style={{ fontWeight: '600', fontSize: '0.9rem' }}>Total Riders / Drivers</span>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                        <img src={totalRidersDriversIcon} alt="" style={{ width: '32px', height: '32px', objectFit: 'contain' }} />
+                        <span style={{ fontWeight: '600', fontSize: '0.85rem' }}>Total Riders / Drivers</span>
                     </div>
-                    <div style={{ fontSize: '2.5rem', fontWeight: 'bold' }}>{users.length.toString().padStart(3, '0')}</div>
+                    <div style={{ fontSize: '2.25rem', fontWeight: 'bold', marginTop: '0.5rem' }}>{users.length.toString().padStart(3, '0')}</div>
                     <div style={{ position: 'absolute', bottom: '1rem', right: '1rem', backgroundColor: '#38AC57', borderRadius: '50%', padding: '0.4rem', color: 'white', display: 'flex' }}>
-                        <ArrowUpRight size={16} /> 
+                        <ArrowUpRight size={14} /> 
                     </div>
                 </div>
 
                 <div 
                     onClick={() => handleStatClick('TotalVerified')}
                     style={{ 
-                        padding: '1.5rem', borderRadius: '1.5rem', 
+                        padding: '1.25rem', borderRadius: '1.5rem', 
                         backgroundColor: activeStat === 'TotalVerified' ? '#38AC57' : 'white', 
                         color: activeStat === 'TotalVerified' ? 'white' : 'black',
                         position: 'relative', boxShadow: activeStat === 'TotalVerified' ? '0 10px 15px -3px rgba(56, 172, 87, 0.4)' : '0 1px 3px rgba(0,0,0,0.05)', 
-                        display: 'flex', flexDirection: 'column', justifyContent: 'space-between', height: '140px',
+                        display: 'flex', flexDirection: 'column', justifyContent: 'space-between', minHeight: '140px',
                         cursor: 'pointer', transition: 'all 0.2s', transform: activeStat === 'TotalVerified' ? 'translateY(-2px)' : 'none'
                     }}
                 >
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                        <img src={totalVerifiedIcon} alt="" style={{ width: '40px', height: '40px', objectFit: 'contain' }} />
-                        <span style={{ fontWeight: '600', fontSize: '0.9rem' }}>Total Verified</span>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                        <img src={totalVerifiedIcon} alt="" style={{ width: '32px', height: '32px', objectFit: 'contain' }} />
+                        <span style={{ fontWeight: '600', fontSize: '0.85rem' }}>Total Verified</span>
                     </div>
-                    <div style={{ fontSize: '2.5rem', fontWeight: 'bold' }}>{users.filter(u => u.isVerified).length.toString().padStart(3, '0')}</div>
+                    <div style={{ fontSize: '2.25rem', fontWeight: 'bold', marginTop: '0.5rem' }}>{users.filter(u => u.isVerified).length.toString().padStart(3, '0')}</div>
                     <div style={{ position: 'absolute', bottom: '1rem', right: '1rem', backgroundColor: activeStat === 'TotalVerified' ? 'white' : '#38AC57', borderRadius: '50%', padding: '0.4rem', color: activeStat === 'TotalVerified' ? '#38AC57' : 'white', display: 'flex' }}>
-                         <ArrowUpRight size={16} />
+                          <ArrowUpRight size={14} />
                     </div>
                 </div>
 
                 <div 
                     onClick={() => handleStatClick('VerifiedDrivers')}
                     style={{ 
-                        padding: '1.5rem', borderRadius: '1.5rem', 
+                        padding: '1.25rem', borderRadius: '1.5rem', 
                         backgroundColor: activeStat === 'VerifiedDrivers' ? '#38AC57' : 'white', 
                         color: activeStat === 'VerifiedDrivers' ? 'white' : 'black',
                         position: 'relative', boxShadow: activeStat === 'VerifiedDrivers' ? '0 10px 15px -3px rgba(56, 172, 87, 0.4)' : '0 1px 3px rgba(0,0,0,0.05)', 
-                        display: 'flex', flexDirection: 'column', justifyContent: 'space-between', height: '140px',
+                        display: 'flex', flexDirection: 'column', justifyContent: 'space-between', minHeight: '140px',
                         cursor: 'pointer', transition: 'all 0.2s', transform: activeStat === 'VerifiedDrivers' ? 'translateY(-2px)' : 'none'
                     }}
                 >
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                        <img src={verifiedBadgeIcon} alt="" style={{ width: '40px', height: '40px', objectFit: 'contain' }} />
-                        <span style={{ fontWeight: '600', fontSize: '0.9rem' }}>Verified Drivers</span>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                        <img src={verifiedBadgeIcon} alt="" style={{ width: '32px', height: '32px', objectFit: 'contain' }} />
+                        <span style={{ fontWeight: '600', fontSize: '0.85rem' }}>Verified Drivers</span>
                     </div>
-                    <div style={{ fontSize: '2.5rem', fontWeight: 'bold' }}>{users.filter(u => u.isVerified && u.userType === 'Driver').length.toString().padStart(3, '0')}</div>
+                    <div style={{ fontSize: '2.25rem', fontWeight: 'bold', marginTop: '0.5rem' }}>{users.filter(u => u.isVerified && u.userType === 'Driver').length.toString().padStart(3, '0')}</div>
                     <div style={{ position: 'absolute', bottom: '1rem', right: '1rem', backgroundColor: activeStat === 'VerifiedDrivers' ? 'white' : '#38AC57', borderRadius: '50%', padding: '0.4rem', color: activeStat === 'VerifiedDrivers' ? '#38AC57' : 'white', display: 'flex' }}>
-                        <ArrowUpRight size={16} />
+                        <ArrowUpRight size={14} />
                     </div>
                 </div>
 
                 <div 
                      onClick={() => handleStatClick('VerifiedPassengers')}
                      style={{ 
-                        padding: '1.5rem', borderRadius: '1.5rem', 
+                        padding: '1.25rem', borderRadius: '1.5rem', 
                         backgroundColor: activeStat === 'VerifiedPassengers' ? '#38AC57' : 'white', 
                         color: activeStat === 'VerifiedPassengers' ? 'white' : 'black',
                         position: 'relative', boxShadow: activeStat === 'VerifiedPassengers' ? '0 10px 15px -3px rgba(56, 172, 87, 0.4)' : '0 1px 3px rgba(0,0,0,0.05)', 
-                        display: 'flex', flexDirection: 'column', justifyContent: 'space-between', height: '140px',
+                        display: 'flex', flexDirection: 'column', justifyContent: 'space-between', minHeight: '140px',
                         cursor: 'pointer', transition: 'all 0.2s', transform: activeStat === 'VerifiedPassengers' ? 'translateY(-2px)' : 'none'
                     }}
                 >
-                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                        <img src={verifiedBadgeIcon} alt="" style={{ width: '40px', height: '40px', objectFit: 'contain' }} />
-                        <span style={{ fontWeight: '600', fontSize: '0.9rem' }}>Verified Passengers</span>
+                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                        <img src={verifiedBadgeIcon} alt="" style={{ width: '32px', height: '32px', objectFit: 'contain' }} />
+                        <span style={{ fontWeight: '600', fontSize: '0.85rem' }}>Verified Passengers</span>
                     </div>
-                    <div style={{ fontSize: '2.5rem', fontWeight: 'bold' }}>{users.filter(u => u.isVerified && u.userType === 'Passenger').length.toString().padStart(3, '0')}</div>
+                    <div style={{ fontSize: '2.25rem', fontWeight: 'bold', marginTop: '0.5rem' }}>{users.filter(u => u.isVerified && u.userType === 'Passenger').length.toString().padStart(3, '0')}</div>
                     <div style={{ position: 'absolute', bottom: '1rem', right: '1rem', backgroundColor: activeStat === 'VerifiedPassengers' ? 'white' : '#38AC57', borderRadius: '50%', padding: '0.4rem', color: activeStat === 'VerifiedPassengers' ? '#38AC57' : 'white', display: 'flex' }}>
-                        <ArrowUpRight size={16} />
+                        <ArrowUpRight size={14} />
                     </div>
                 </div>
             </div>
 
             {/* Controls */}
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', flex: 1 }}>
+            <div className="vb-controls-container">
+                <div className="vb-filters-group">
                     <div style={{ position: 'relative', width: '300px' }}>
                         <Search size={18} color="#9ca3af" style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)' }} />
                         <input 
@@ -378,7 +527,7 @@ export const VerificationBadges = () => {
             </div>
 
             {/* Table */}
-            <div className="card" style={{ padding: 0, overflow: 'hidden' }}>
+            <div className="card vb-table-container" style={{ padding: 0 }}>
                 <table style={{ width: '100%', borderCollapse: 'collapse' }}>
                     <thead>
                         <tr style={{ backgroundColor: '#38AC57', color: 'white', textAlign: 'left' }}>
@@ -448,8 +597,8 @@ export const VerificationBadges = () => {
 
             {/* Badge Requirements Settings Modal */}
             {showSettingsModal && (
-                <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.5)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <div className="card" style={{ width: '600px', backgroundColor: 'white', borderRadius: '1.5rem', padding: '2rem', maxHeight: '90vh', overflowY: 'auto' }}>
+                <div className="vb-modal-overlay">
+                    <div className="vb-settings-modal card">
                         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '2rem' }}>
                             <button onClick={() => setShowSettingsModal(false)} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}><ArrowLeft size={24} /></button>
                             <div>
@@ -460,7 +609,7 @@ export const VerificationBadges = () => {
 
                         <div style={{ marginBottom: '2rem' }}>
                             <h3 style={{ fontSize: '1.1rem', fontWeight: 'bold', marginBottom: '1rem' }}>Driver Requirements</h3>
-                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '1rem' }}>
+                            <div className="vb-settings-grid">
                                 <div>
                                     <label style={{ display: 'block', fontSize: '0.8rem', color: '#6b7280', marginBottom: '0.3rem' }}>Minimum trips completed:</label>
                                     <div style={{ padding: '0.8rem', backgroundColor: '#f9fafb', border: '1px solid #e5e7eb', borderRadius: '0.5rem', fontWeight: '600' }}>{badgeSettings.driver.minTrips}</div>
@@ -478,7 +627,7 @@ export const VerificationBadges = () => {
 
                         <div style={{ marginBottom: '2.5rem' }}>
                             <h3 style={{ fontSize: '1.1rem', fontWeight: 'bold', marginBottom: '1rem' }}>Passenger Requirements</h3>
-                             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                             <div className="vb-settings-grid-2">
                                 <div>
                                     <label style={{ display: 'block', fontSize: '0.8rem', color: '#6b7280', marginBottom: '0.3rem' }}>Minimum trips completed:</label>
                                     <div style={{ padding: '0.8rem', backgroundColor: '#f9fafb', border: '1px solid #e5e7eb', borderRadius: '0.5rem', fontWeight: '600' }}>{badgeSettings.passenger.minTrips}</div>
@@ -490,7 +639,7 @@ export const VerificationBadges = () => {
                             </div>
                         </div>
 
-                        <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
+                        <div className="vb-modal-footer" style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
                             <button 
                                 onClick={() => setShowSettingsModal(false)}
                                 style={{ padding: '0.8rem 2.5rem', borderRadius: '2rem', border: '1px solid #e5e7eb', backgroundColor: 'white', fontWeight: '600', cursor: 'pointer' }}
@@ -510,8 +659,8 @@ export const VerificationBadges = () => {
 
             {/* Badge Management Modal (Preview) */}
             {selectedUser && (
-                <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.5)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <div className="card" style={{ width: '950px', backgroundColor: '#fdfdfd', borderRadius: '1.5rem', padding: '2.5rem', maxHeight: '95vh', overflowY: 'auto', position: 'relative', boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1)' }}>
+                <div className="vb-modal-overlay">
+                    <div className="vb-preview-modal card">
                         <button 
                             onClick={() => setSelectedUser(null)} 
                             style={{ position: 'absolute', top: '2rem', right: '2rem', background: 'none', border: 'none', cursor: 'pointer', color: 'black' }}
@@ -526,7 +675,7 @@ export const VerificationBadges = () => {
                         
                         <h3 style={{ fontSize: '1.2rem', fontWeight: 'bold', marginBottom: '1rem' }}>{selectedUser.userType} Information</h3>
                         <div style={{ backgroundColor: 'white', padding: '2rem', borderRadius: '1rem', border: '1px solid #f3f4f6', boxShadow: '0 1px 3px rgba(0,0,0,0.05)', marginBottom: '2rem' }}>
-                            <div style={{ display: 'flex', gap: '2.5rem' }}>
+                            <div className="vb-flex-responsive">
                                 <div style={{ position: 'relative', height: 'fit-content' }}>
                                     <img src={selectedUser.avatar} alt="" style={{ width: '80px', height: '80px', borderRadius: '50%', objectFit: 'cover' }} />
                                     {selectedUser.isVerified && (
@@ -549,13 +698,13 @@ export const VerificationBadges = () => {
                                     <div style={{ position: 'absolute', bottom: -5, left: '50%', transform: 'translateX(-50%)', backgroundColor: '#fbbf24', padding: '0.1rem 0.6rem', borderRadius: '1rem', fontSize: '0.75rem', color: 'white', display: 'flex', alignItems: 'center', gap: '2px', whiteSpace: 'nowrap' }}>★ {selectedUser.rating}</div>
                                 </div>
                                 <div style={{ flex: 1 }}>
-                                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '2rem', marginBottom: '1.5rem' }}>
+                                    <div className="vb-info-grid" style={{ marginBottom: '1.5rem' }}>
                                         <div><div style={{ fontSize: '0.8rem', color: '#9ca3af', marginBottom: '0.3rem' }}>User ID</div><div style={{ fontWeight: 'bold', fontSize: '1rem' }}>{selectedUser.id}</div></div>
                                         <div><div style={{ fontSize: '0.8rem', color: '#9ca3af', marginBottom: '0.3rem' }}>Full Name</div><div style={{ fontWeight: 'bold', fontSize: '1rem' }}>{selectedUser.name}</div></div>
                                         <div><div style={{ fontSize: '0.8rem', color: '#9ca3af', marginBottom: '0.3rem' }}>User Type</div><div style={{ fontWeight: 'bold', fontSize: '1rem' }}>{selectedUser.userType}</div></div>
                                         <div><div style={{ fontSize: '0.8rem', color: '#9ca3af', marginBottom: '0.3rem' }}>Phone</div><div style={{ fontWeight: 'bold', fontSize: '1rem' }}>{selectedUser.phone}</div></div>
                                     </div>
-                                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '2rem' }}>
+                                    <div className="vb-info-grid">
                                         <div><div style={{ fontSize: '0.8rem', color: '#9ca3af', marginBottom: '0.3rem' }}>City</div><div style={{ fontWeight: 'bold', fontSize: '1rem', display: 'flex', alignItems: 'center', gap: '0.3rem' }}>{selectedUser.city} <ChevronDown size={14} /></div></div>
                                         <div><div style={{ fontSize: '0.8rem', color: '#9ca3af', marginBottom: '0.3rem' }}>Join Date</div><div style={{ fontWeight: 'bold', fontSize: '1rem' }}>{selectedUser.joinDate}</div></div>
                                         <div style={{ gridColumn: 'span 2' }}><div style={{ fontSize: '0.8rem', color: '#9ca3af', marginBottom: '0.3rem' }}>Email</div><div style={{ fontWeight: 'bold', fontSize: '1rem' }}>{selectedUser.email}</div></div>
@@ -569,13 +718,13 @@ export const VerificationBadges = () => {
                         <>
                             <h3 style={{ fontSize: '1.2rem', fontWeight: 'bold', marginBottom: '1rem' }}>Vehicle Information</h3>
                             <div style={{ backgroundColor: 'white', padding: '2rem', borderRadius: '1rem', border: '1px solid #f3f4f6', boxShadow: '0 1px 3px rgba(0,0,0,0.05)', marginBottom: '2rem' }}>
-                                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.5rem', marginBottom: '1.5rem' }}>
+                                <div className="vb-info-grid" style={{ marginBottom: '1.5rem' }}>
                                     <div><div style={{ fontSize: '0.8rem', color: '#9ca3af', marginBottom: '0.3rem' }}>License Plate</div><div style={{ fontWeight: 'bold', fontSize: '1rem' }}>{selectedUser.licensePlate}</div></div>
                                     <div><div style={{ fontSize: '0.8rem', color: '#9ca3af', marginBottom: '0.3rem' }}>Make & Model</div><div style={{ fontWeight: 'bold', fontSize: '1rem' }}>{selectedUser.makeModel}</div></div>
                                     <div><div style={{ fontSize: '0.8rem', color: '#9ca3af', marginBottom: '0.3rem' }}>Transmission</div><div style={{ fontWeight: 'bold', fontSize: '1rem' }}>{selectedUser.transmission}</div></div>
                                     <div><div style={{ fontSize: '0.8rem', color: '#9ca3af', marginBottom: '0.3rem' }}>Year</div><div style={{ fontWeight: 'bold', fontSize: '1rem' }}>{selectedUser.year}</div></div>
                                 </div>
-                                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.5rem' }}>
+                                <div className="vb-info-grid">
                                     <div><div style={{ fontSize: '0.8rem', color: '#9ca3af', marginBottom: '0.3rem' }}>On boarding date</div><div style={{ fontWeight: 'bold', fontSize: '1rem' }}>{selectedUser.onBoardingDate}</div></div>
                                     <div>
                                         <div style={{ fontSize: '0.8rem', color: '#9ca3af', marginBottom: '0.3rem' }}>Colour</div>
@@ -589,7 +738,7 @@ export const VerificationBadges = () => {
 
                             <h3 style={{ fontSize: '1.2rem', fontWeight: 'bold', marginBottom: '1rem' }}>Performance Metrics</h3>
                             <div style={{ backgroundColor: 'white', padding: '2rem', borderRadius: '1rem', border: '1px solid #f3f4f6', boxShadow: '0 1px 3px rgba(0,0,0,0.05)', marginBottom: '2rem' }}>
-                                <div style={{ display: 'flex', gap: '2.5rem', alignItems: 'center' }}>
+                                <div className="vb-flex-responsive" style={{ alignItems: 'center' }}>
                                      <div style={{ position: 'relative' }}>
                                         <img src={selectedUser.avatar} alt="" style={{ width: '64px', height: '64px', borderRadius: '50%', objectFit: 'cover' }} />
                                         {selectedUser.isVerified && (
@@ -611,7 +760,7 @@ export const VerificationBadges = () => {
                                         )}
                                         <div style={{ position: 'absolute', bottom: -5, left: '50%', transform: 'translateX(-50%)', backgroundColor: '#fbbf24', padding: '0.1rem 0.4rem', borderRadius: '0.3rem', fontSize: '0.7rem', color: 'white', display: 'flex', alignItems: 'center', gap: '2px', whiteSpace: 'nowrap' }}>★ {selectedUser.rating}</div>
                                      </div>
-                                     <div style={{ flex: 1, display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '1.5rem', textAlign: 'left' }}>
+                                     <div className="vb-metrics-grid" style={{ flex: 1, textAlign: 'left' }}>
                                          <div><div style={{ fontSize: '0.8rem', color: '#9ca3af', marginBottom: '0.3rem' }}>Trip count</div><div style={{ fontWeight: 'bold', fontSize: '1.1rem' }}>{selectedUser.totalTrips}+</div></div>
                                          <div><div style={{ fontSize: '0.8rem', color: '#9ca3af', marginBottom: '0.3rem' }}>Vehicle Type</div><div style={{ fontWeight: 'bold', fontSize: '1.1rem' }}>{selectedUser.vehicleType}</div></div>
                                          <div><div style={{ fontSize: '0.8rem', color: '#9ca3af', marginBottom: '0.3rem' }}>Vehicle ID</div><div style={{ fontWeight: 'bold', fontSize: '1.1rem' }}>{selectedUser.vehicleId}</div></div>
@@ -623,7 +772,7 @@ export const VerificationBadges = () => {
                         </>
                         )}
 
-                        <div style={{ backgroundColor: '#eef7f0', padding: '1.5rem 2rem', borderRadius: '1rem', border: '1px solid #eef7f0', marginBottom: '2.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <div className="vb-status-banner" style={{ backgroundColor: '#eef7f0', padding: '1.5rem 2rem', borderRadius: '1rem', border: '1px solid #eef7f0', marginBottom: '2.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
                                 <h3 style={{ fontSize: '1.2rem', fontWeight: 'bold', margin:0, color: '#2d8a46' }}>Current Badge Status</h3>
                                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginTop: '0.2rem' }}>
@@ -647,7 +796,7 @@ export const VerificationBadges = () => {
                             )}
                         </div>
 
-                        <div style={{ display: 'flex', gap: '1.5rem', justifyContent: 'center' }}>
+                        <div className="vb-modal-footer" style={{ display: 'flex', gap: '1.5rem', justifyContent: 'center' }}>
                             <button 
                                 onClick={() => setSelectedUser(null)}
                                 style={{ padding: '1rem 4rem', borderRadius: '2rem', border: '1px solid #e5e7eb', backgroundColor: 'white', fontWeight: 'bold', cursor: 'pointer', fontSize: '1rem', color: '#374151' }}

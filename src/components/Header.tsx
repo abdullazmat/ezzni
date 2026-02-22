@@ -4,7 +4,6 @@ import { useState } from 'react';
 // Import custom icons
 import bellIcon from '../assets/icons/notification-bell.png';
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const Header = ({ onLogout, onToggleSidebar, onNavigate }: { onLogout: () => void, onToggleSidebar: () => void, onNavigate: (page: string) => void }) => {
   const [user] = useState(() => {
     const savedUser = localStorage.getItem('user');
@@ -12,7 +11,7 @@ export const Header = ({ onLogout, onToggleSidebar, onNavigate }: { onLogout: ()
   });
 
   const [searchQuery, setSearchQuery] = useState('');
-  const [searchResults, setSearchResults] = useState<any[]>([]);
+  const [searchResults, setSearchResults] = useState<{ id: number; name: string; type: string; phone: string; code: string; img: string; rating: string }[]>([]);
   const [showNotifications, setShowNotifications] = useState(false);
 
   const dummyData = [
@@ -52,16 +51,55 @@ export const Header = ({ onLogout, onToggleSidebar, onNavigate }: { onLogout: ()
           .header-container {
             flex-direction: column-reverse;
             align-items: stretch !important;
+            gap: 1.25rem !important;
           }
           .header-actions {
             justify-content: space-between;
-            margin-bottom: 1rem;
+            width: 100%;
+            gap: 0.5rem !important;
           }
           .search-wrapper {
-            padding-right: 0 !important;
+            margin-right: 0 !important;
+            max-width: 100% !important;
           }
           .menu-toggle {
             display: flex !important;
+            padding: 8px !important;
+          }
+          .notification-dropdown {
+            position: fixed !important;
+            top: 70px !important;
+            left: 5% !important;
+            right: 5% !important;
+            width: 90% !important;
+            max-width: 400px !important;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1) !important;
+          }
+          .notification-item-content {
+             flex: 1;
+             min-width: 0;
+          }
+        }
+        @media (max-width: 640px) {
+          .user-info {
+            display: none !important;
+          }
+          .profile-img-header {
+            width: 44px !important;
+            height: 44px !important;
+          }
+          .search-wrapper input {
+            padding-right: 6rem !important;
+            font-size: 0.9rem !important;
+            padding-top: 1rem !important;
+            padding-bottom: 1rem !important;
+          }
+          .search-wrapper button {
+            padding: 0 1.25rem !important;
+            font-size: 0.85rem !important;
+          }
+          .header-actions {
+            gap: 0.35rem !important;
           }
         }
       `}} />
@@ -239,7 +277,7 @@ export const Header = ({ onLogout, onToggleSidebar, onNavigate }: { onLogout: ()
 
                 {/* Notification Dropdown */}
                 {showNotifications && (
-                    <div style={{
+                    <div className="notification-dropdown" style={{
                         position: 'absolute',
                         top: '120%',
                         right: 0,
@@ -265,8 +303,8 @@ export const Header = ({ onLogout, onToggleSidebar, onNavigate }: { onLogout: ()
                                     <div style={{ width: '40px', height: '40px', borderRadius: '50%', backgroundColor: notif.unread ? '#38AC57' : '#f1f5f9', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                                         {notif.unread ? <Bell size={18} color="white" /> : <Check size={18} color="#94a3b8" />}
                                     </div>
-                                    <div>
-                                        <div style={{ fontSize: '0.875rem', fontWeight: '700', color: '#111827' }}>{notif.title}</div>
+                                    <div className="notification-item-content">
+                                        <div style={{ fontSize: '0.875rem', fontWeight: '700', color: '#111827', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{notif.title}</div>
                                         <div style={{ fontSize: '0.75rem', color: '#64748b', marginTop: '0.25rem' }}>{notif.time}</div>
                                     </div>
                                 </div>
@@ -288,6 +326,7 @@ export const Header = ({ onLogout, onToggleSidebar, onNavigate }: { onLogout: ()
                 <img 
                     src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" 
                     alt="Profile" 
+                    className="profile-img-header"
                     style={{ width: '56px', height: '56px', borderRadius: '50%', objectFit: 'cover', border: '2px solid white', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.1)' }}
                 />
                 <div className="user-info" style={{ display: 'block' }}>

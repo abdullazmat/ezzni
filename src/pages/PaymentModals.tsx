@@ -33,22 +33,105 @@ interface ModalProps {
     onBack?: () => void;
 }
 
+// --- Responsive Styles ---
+const ModalStyles = () => (
+    <style>{`
+        .pmo-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0,0,0,0.4);
+            backdrop-filter: blur(4px);
+            z-index: 1100;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            padding: 20px;
+            overflow-y: auto;
+        }
+        .pmo-modal-content {
+            background-color: white;
+            border-radius: 1.5rem;
+            width: 100%;
+            position: relative;
+            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);
+            margin-top: 2rem;
+            margin-bottom: 2rem;
+        }
+        .pmo-info-grid-4 {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr 0.8fr 1fr;
+            gap: 1rem;
+        }
+        .pmo-info-grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+        }
+        .pmo-footer-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+        .pmo-history-user-info {
+            display: flex;
+            gap: 1.5rem;
+            background-color: #f9fafb;
+            padding: 1.5rem;
+            border-radius: 1rem;
+        }
+        .pmo-user-details-grid {
+            flex: 1;
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .pmo-modal-content {
+                padding: 1.5rem !important;
+                margin-top: 1rem;
+                margin-bottom: 1rem;
+            }
+            .pmo-info-grid-4, .pmo-info-grid-3, .pmo-user-details-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 1rem;
+            }
+            .pmo-footer-actions, .pmo-history-user-info {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .pmo-info-item {
+                margin-bottom: 0.5rem;
+            }
+            .pmo-history-user-info {
+                align-items: center;
+                text-align: center;
+            }
+            .pmo-refund-grid-special {
+                grid-template-columns: 1fr !important;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .pmo-info-grid-4, .pmo-info-grid-3, .pmo-user-details-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    `}</style>
+);
+
 const ModalOverlay = ({ children, onClose }: { children: React.ReactNode, onClose: () => void }) => (
-    <div 
-        style={{ 
-            position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, 
-            backgroundColor: 'rgba(0,0,0,0.4)', backdropFilter: 'blur(4px)',
-            zIndex: 1100, display: 'flex', alignItems: 'center', justifyContent: 'center',
-            padding: '2rem'
-        }}
-        onClick={(e) => e.target === e.currentTarget && onClose()}
-    >
+    <div className="pmo-modal-overlay" onClick={(e) => e.target === e.currentTarget && onClose()}>
+        <ModalStyles />
         {children}
     </div>
 );
 
 const InfoItem = ({ label, value, isStatus }: { label: string, value: string | React.ReactNode, isStatus?: boolean }) => (
-    <div style={{ marginBottom: '1rem' }}>
+    <div className="pmo-info-item" style={{ marginBottom: '1rem' }}>
         <div style={{ fontSize: '0.75rem', color: '#6b7280', marginBottom: '0.25rem' }}>{label}</div>
         {isStatus ? (
             <div style={{ 
@@ -68,15 +151,15 @@ const InfoItem = ({ label, value, isStatus }: { label: string, value: string | R
 export const TransactionDetailsModal = ({ onClose, transaction, onProcessRefund, onViewHistory }: ModalProps) => {
     return (
         <ModalOverlay onClose={onClose}>
-            <div className="card" style={{ width: '640px', backgroundColor: 'white', borderRadius: '1.5rem', padding: '2rem', position: 'relative', boxShadow: '0 20px 25px -5px rgba(0,0,0,0.1)' }}>
-                <button onClick={onClose} style={{ position: 'absolute', right: '1.5rem', top: '1.5rem', background: 'none', border: 'none', cursor: 'pointer' }}>
+            <div className="pmo-modal-content" style={{ maxWidth: '640px', padding: '2rem' }}>
+                <button onClick={onClose} style={{ position: 'absolute', right: '1.5rem', top: '1.5rem', background: 'none', border: 'none', cursor: 'pointer', zIndex: 10 }}>
                     <X size={24} color="#111827" strokeWidth={3} />
                 </button>
 
-                <h2 style={{ fontSize: '1.4rem', fontWeight: '800', margin: '0 0 0.25rem 0' }}>Transaction Details - {transaction.id}</h2>
+                <h2 style={{ fontSize: '1.4rem', fontWeight: '800', margin: '0 0 0.25rem 0', paddingRight: '40px' }}>Transaction Details - {transaction.id}</h2>
                 <p style={{ color: '#6b7280', margin: '0 0 1.5rem 0', fontSize: '0.9rem' }}>Review payment transaction details and manage refunds.</p>
 
-                <div style={{ backgroundColor: '#f9fafb', padding: '1.5rem', borderRadius: '1rem', display: 'grid', gridTemplateColumns: '1.2fr 1fr 0.8fr 1fr', gap: '0.5rem', marginBottom: '2rem' }}>
+                <div className="pmo-info-grid-4" style={{ backgroundColor: '#f9fafb', padding: '1.5rem', borderRadius: '1rem', marginBottom: '2rem' }}>
                     <InfoItem label="Transaction ID" value={transaction.id} />
                     <InfoItem label="Rider" value={transaction.rider} />
                     <InfoItem label="Trip ID" value={transaction.tripId} />
@@ -88,7 +171,7 @@ export const TransactionDetailsModal = ({ onClose, transaction, onProcessRefund,
                     <InfoItem label="Phone" value="+212 6 12 34 56" />
                 </div>
 
-                <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
+                <div className="pmo-footer-actions">
                     <button 
                         onClick={onViewHistory}
                         style={{ flex: 1, padding: '0.85rem', borderRadius: '2rem', border: '1px solid #e5e7eb', backgroundColor: 'white', fontWeight: '700', cursor: 'pointer', fontSize: '0.9rem' }}
@@ -123,25 +206,25 @@ export const TransactionHistoryModal = ({ onClose, transaction, onProcessRefund 
 
     return (
         <ModalOverlay onClose={onClose}>
-            <div className="card" style={{ width: '640px', backgroundColor: 'white', borderRadius: '1.5rem', padding: '1rem', position: 'relative', display: 'flex', flexDirection: 'column', maxHeight: '90vh', gap: '0' }}>
+            <div className="pmo-modal-content" style={{ maxWidth: '640px', padding: '0', maxHeight: '90vh', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
                 <button onClick={onClose} style={{ position: 'absolute', right: '1.5rem', top: '1.5rem', background: 'none', border: 'none', cursor: 'pointer', zIndex: 10 }}>
                     <X size={24} color="#111827" strokeWidth={3} />
                 </button>
 
                 {/* Scrollable Body */}
-                <div style={{ padding: '1.5rem 1.5rem 0 1.5rem', overflowY: 'auto', flex: 1 }}>
-                    <h2 style={{ fontSize: '1.4rem', fontWeight: '800', margin: '0 0 1.5rem 0' }}>Transaction History</h2>
+                <div style={{ padding: '2rem', overflowY: 'auto', flex: 1 }}>
+                    <h2 style={{ fontSize: '1.4rem', fontWeight: '800', margin: '0 0 1.5rem 0', paddingRight: '40px' }}>Transaction History</h2>
 
                     <h3 style={{ fontSize: '1rem', fontWeight: '700', margin: '0 0 1rem 0' }}>User Information</h3>
                     
-                    <div style={{ display: 'flex', gap: '1.5rem', marginBottom: '1.5rem', backgroundColor: '#f9fafb', padding: '1.5rem', borderRadius: '1rem' }}>
-                         <div style={{ position: 'relative' }}>
+                    <div className="pmo-history-user-info" style={{ marginBottom: '1.5rem' }}>
+                         <div style={{ position: 'relative', flexShrink: 0 }}>
                              <img src={transaction.riderAvatar} alt={transaction.rider} style={{ width: 64, height: 64, borderRadius: '50%' }} />
                              <div style={{ position: 'absolute', bottom: -5, left: '50%', transform: 'translateX(-50%)', backgroundColor: 'white', padding: '0.1rem 0.4rem', borderRadius: '0.5rem', fontSize: '0.65rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '2px', border: '1px solid #e5e7eb' }}>
                                  <span style={{color:'#fbbf24'}}>★</span> 4.8
                              </div>
                          </div>
-                         <div style={{ flex: 1, display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '1rem' }}>
+                         <div className="pmo-user-details-grid">
                             <div>
                                 <div style={{ fontSize: '0.7rem', color: '#6b7280' }}>Full Name</div>
                                 <div style={{ fontWeight: '700', fontSize: '0.85rem' }}>{transaction.rider}</div>
@@ -164,7 +247,7 @@ export const TransactionHistoryModal = ({ onClose, transaction, onProcessRefund 
                             </div>
                             <div>
                                 <div style={{ fontSize: '0.7rem', color: '#6b7280' }}>Email</div>
-                                <div style={{ fontWeight: '700', fontSize: '0.85rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '120px' }}>Mohamedalaoui@email.com</div>
+                                <div style={{ fontWeight: '700', fontSize: '0.85rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '200px' }}>Mohamedalaoui@email.com</div>
                             </div>
                          </div>
                     </div>
@@ -210,7 +293,7 @@ export const TransactionHistoryModal = ({ onClose, transaction, onProcessRefund 
                 </div>
 
                 {/* Fixed Footer */}
-                <div style={{ padding: '1.5rem', borderTop: '1px solid #f3f4f6', display: 'flex', gap: '1rem', backgroundColor: 'white', borderRadius: '0 0 1.5rem 1.5rem' }}>
+                <div className="pmo-footer-actions" style={{ padding: '1.5rem', borderTop: '1px solid #f3f4f6', backgroundColor: 'white' }}>
                     <button style={{ flex: 1, padding: '0.85rem', borderRadius: '2rem', border: '1px solid #e5e7eb', backgroundColor: 'white', fontWeight: '700', cursor: 'pointer', fontSize: '0.9rem' }}>Transaction History</button>
                     <button onClick={onProcessRefund} style={{ flex: 1, padding: '0.85rem', borderRadius: '2rem', border: '1px solid #e5e7eb', backgroundColor: 'white', fontWeight: '700', cursor: 'pointer', fontSize: '0.9rem' }}>Process Refund</button>
                     <button style={{ flex: 1, padding: '0.85rem', borderRadius: '2rem', border: 'none', backgroundColor: '#38AC57', color: 'white', fontWeight: '700', cursor: 'pointer', fontSize: '0.9rem' }}>Download Receipt</button>
@@ -224,15 +307,15 @@ export const TransactionHistoryModal = ({ onClose, transaction, onProcessRefund 
 export const ProcessRefundModal = ({ onClose, transaction }: ModalProps) => {
     return (
         <ModalOverlay onClose={onClose}>
-            <div className="card" style={{ width: '720px', backgroundColor: 'white', borderRadius: '1.5rem', padding: '2rem', position: 'relative', maxHeight: '95vh', overflowY: 'auto' }}>
-                <button onClick={onClose} style={{ position: 'absolute', right: '1.5rem', top: '1.5rem', background: 'none', border: 'none', cursor: 'pointer' }}>
+            <div className="pmo-modal-content" style={{ maxWidth: '720px', padding: '2rem' }}>
+                <button onClick={onClose} style={{ position: 'absolute', right: '1.5rem', top: '1.5rem', background: 'none', border: 'none', cursor: 'pointer', zIndex: 10 }}>
                     <X size={24} color="#111827" strokeWidth={3} />
                 </button>
 
-                <h2 style={{ fontSize: '1.4rem', fontWeight: '800', margin: '0 0 0.25rem 0' }}>Process Refund</h2>
+                <h2 style={{ fontSize: '1.4rem', fontWeight: '800', margin: '0 0 0.25rem 0', paddingRight: '40px' }}>Process Refund</h2>
                 <p style={{ color: '#6b7280', margin: '0 0 1.5rem 0', fontSize: '0.9rem' }}>Process refund for payment {transaction.id}</p>
 
-                <div style={{ backgroundColor: '#f9fafb', padding: '1.5rem', borderRadius: '1rem', display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1.5rem', marginBottom: '1.5rem' }}>
+                <div className="pmo-info-grid-3" style={{ backgroundColor: '#f9fafb', padding: '1.5rem', borderRadius: '1rem', marginBottom: '1.5rem' }}>
                     <div>
                         <div style={{ fontSize: '0.75rem', color: '#6b7280', marginBottom: '0.25rem' }}>Payment ID:</div>
                         <div style={{ fontWeight: '700', fontSize: '0.9rem' }}>PAY001</div>
@@ -288,10 +371,10 @@ export const ProcessRefundModal = ({ onClose, transaction }: ModalProps) => {
                     <div style={{ fontSize: '0.8rem', color: '#92400e', opacity: 0.8 }}>Cash refunds require driver confirmation and manual processing before approval.</div>
                 </div>
 
-                <div style={{ display: 'grid', gridTemplateColumns: '1.5fr 1fr 1fr', gap: '1rem', marginBottom: '1.5rem' }}>
+                <div className="pmo-info-grid-3 pmo-refund-grid-special" style={{ gridTemplateColumns: '1.5fr 1fr 1fr', marginBottom: '1.5rem' }}>
                     <div>
                         <label style={{ display: 'block', fontSize: '0.9rem', fontWeight: '700', marginBottom: '0.5rem' }}>Refund Amount</label>
-                        <input type="text" placeholder="Type Here" style={{ width: '100%', padding: '0.85rem', borderRadius: '0.75rem', border: '1px solid #e5e7eb', backgroundColor: '#f9fafb', fontSize: '0.9rem' }} />
+                        <input type="text" placeholder="Type Here" style={{ width: '100%', padding: '0.85rem', borderRadius: '0.75rem', border: '1px solid #e5e7eb', backgroundColor: '#f9fafb', fontSize: '0.9rem', boxSizing: 'border-box' }} />
                     </div>
                     <div>
                         <label style={{ display: 'block', fontSize: '0.9rem', fontWeight: '700', marginBottom: '0.5rem' }}>Refund Reason</label>
@@ -312,7 +395,7 @@ export const ProcessRefundModal = ({ onClose, transaction }: ModalProps) => {
                     <textarea placeholder="Type Here" style={{ width: '100%', padding: '1rem', borderRadius: '1rem', border: '1px solid #e5e7eb', backgroundColor: '#f9fafb', fontSize: '0.9rem', minHeight: '100px', resize: 'none', fontFamily: 'inherit' }} />
                 </div>
 
-                <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
+                <div className="pmo-footer-actions">
                     <button style={{ flex: 1, padding: '1rem', borderRadius: '2rem', border: '1px solid #e5e7eb', backgroundColor: 'white', fontWeight: '700', cursor: 'pointer', fontSize: '1rem' }}>Update Status</button>
                     <button onClick={onClose} style={{ flex: 1, padding: '1rem', borderRadius: '2rem', border: 'none', backgroundColor: 'black', color: 'white', fontWeight: '700', cursor: 'pointer', fontSize: '1rem' }}>Process Refund</button>
                     <button style={{ flex: 1, padding: '1rem', borderRadius: '2rem', border: 'none', backgroundColor: '#38AC57', color: 'white', fontWeight: '700', cursor: 'pointer', fontSize: '1rem' }}>Download Receipt</button>

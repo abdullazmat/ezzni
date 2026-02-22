@@ -50,6 +50,91 @@ export interface VehicleListing {
     description: string;
 }
 
+// --- Responsive Styles ---
+const ModalStyles = () => (
+    <style>{`
+        .rcm-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0,0,0,0.4);
+            backdrop-filter: blur(4px);
+            z-index: 1000;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            padding: 20px;
+            overflow-y: auto;
+        }
+        .rcm-modal-content {
+            background-color: white;
+            border-radius: 24px;
+            width: 100%;
+            max-width: 680px;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            position: relative;
+            padding: 32px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+        .rcm-info-grid-5 {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 16px;
+        }
+        .rcm-info-grid-4 {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+        }
+        .rcm-info-grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+        }
+        .rcm-info-grid-2 {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+        }
+        .rcm-flex-responsive {
+            display: flex;
+            gap: 12px;
+        }
+        .rcm-footer-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        @media (max-width: 768px) {
+            .rcm-modal-content {
+                padding: 20px;
+                margin-top: 10px;
+                margin-bottom: 10px;
+            }
+            .rcm-info-grid-5, .rcm-info-grid-4, .rcm-info-grid-3, .rcm-info-grid-2 {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
+            }
+            .rcm-flex-responsive, .rcm-footer-actions {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .rcm-info-item {
+                text-align: inherit;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .rcm-info-grid-5, .rcm-info-grid-4, .rcm-info-grid-3, .rcm-info-grid-2 {
+                grid-template-columns: 1fr;
+            }
+        }
+    `}</style>
+);
+
 export const VehicleDetailModal = ({ vehicle, onClose, onApprove, onReject }: {
     vehicle: VehicleListing; onClose: () => void; onApprove: () => void; onReject: () => void;
 }) => {
@@ -69,11 +154,9 @@ export const VehicleDetailModal = ({ vehicle, onClose, onApprove, onReject }: {
     const total = images.length;
 
     return (
-        <div 
-            onClick={onClose}
-            style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.4)', backdropFilter: 'blur(4px)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }}
-        >
-            <div onClick={e => e.stopPropagation()} style={{ backgroundColor: 'white', borderRadius: '24px', width: '100%', maxWidth: '680px', maxHeight: '90vh', overflowY: 'auto', padding: '32px', position: 'relative' }}>
+        <div className="rcm-modal-overlay" onClick={onClose}>
+            <ModalStyles />
+            <div className="rcm-modal-content" onClick={e => e.stopPropagation()}>
                 {/* Close Button */}
                 <button 
                     onClick={onClose}
@@ -88,25 +171,25 @@ export const VehicleDetailModal = ({ vehicle, onClose, onApprove, onReject }: {
                 >✕</button>
 
                 {/* Header */}
-                <div style={{ marginBottom: '20px', paddingRight: '40px' }}>
-                    <h2 style={{ fontSize: '24px', fontWeight: 'bold', margin: '0 0 4px 0' }}>
+                <div style={{ marginBottom: '20px', paddingRight: '40px', textAlign: 'inherit' }}>
+                    <h2 style={{ fontSize: '24px', fontWeight: 'bold', margin: '0 0 4px 0', textAlign: 'inherit' }}>
                         {isEditing ? (
                             <input value={editData.name} onChange={e => setEditData({...editData, name: e.target.value})}
                                 style={{ fontSize: '24px', fontWeight: 'bold', border: '1px solid #38AC57', borderRadius: '8px', padding: '4px 8px', width: '100%', outline: 'none', boxSizing: 'border-box' }} />
                         ) : vehicle.name}
                     </h2>
-                    <p style={{ color: '#6b7280', fontSize: '14px', margin: 0 }}>Review rental listing details and approve or reject</p>
+                    <p style={{ color: '#6b7280', fontSize: '14px', margin: 0, textAlign: 'inherit' }}>Review rental listing details and approve or reject</p>
                 </div>
 
                 {/* Image Carousel */}
                 <div style={{ position: 'relative', marginBottom: '24px', borderRadius: '16px', overflow: 'hidden', backgroundColor: '#f3f4f6' }}>
-                    <img src={images[imgIndex]} alt={vehicle.name} style={{ width: '100%', height: '320px', objectFit: 'cover', display: 'block' }} />
+                    <img src={images[imgIndex]} alt={vehicle.name} style={{ width: '100%', height: 'auto', minHeight: '200px', maxHeight: '320px', objectFit: 'cover', display: 'block' }} />
                     <button onClick={() => setImgIndex(Math.max(0, imgIndex - 1))} disabled={imgIndex === 0}
-                        style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', width: '44px', height: '44px', borderRadius: '50%', backgroundColor: 'white', border: 'none', cursor: imgIndex === 0 ? 'default' : 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 2px 12px rgba(0,0,0,0.2)', opacity: imgIndex === 0 ? 0.4 : 1, transition: 'opacity 0.2s' }}>
+                        style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', width: '40px', height: '40px', borderRadius: '50%', backgroundColor: 'white', border: 'none', cursor: imgIndex === 0 ? 'default' : 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 2px 12px rgba(0,0,0,0.2)', opacity: imgIndex === 0 ? 0.4 : 1, transition: 'opacity 0.2s' }}>
                         <ChevronLeft size={24} />
                     </button>
                     <button onClick={() => setImgIndex(Math.min(total - 1, imgIndex + 1))} disabled={imgIndex === total - 1}
-                        style={{ position: 'absolute', right: '12px', top: '50%', transform: 'translateY(-50%)', width: '44px', height: '44px', borderRadius: '50%', backgroundColor: 'white', border: 'none', cursor: imgIndex === total - 1 ? 'default' : 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 2px 12px rgba(0,0,0,0.2)', opacity: imgIndex === total - 1 ? 0.4 : 1, transition: 'opacity 0.2s' }}>
+                        style={{ position: 'absolute', right: '12px', top: '50%', transform: 'translateY(-50%)', width: '40px', height: '40px', borderRadius: '50%', backgroundColor: 'white', border: 'none', cursor: imgIndex === total - 1 ? 'default' : 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 2px 12px rgba(0,0,0,0.2)', opacity: imgIndex === total - 1 ? 0.4 : 1, transition: 'opacity 0.2s' }}>
                         <ChevronRight size={24} />
                     </button>
                     <div style={{ position: 'absolute', bottom: '12px', left: '12px', backgroundColor: 'rgba(0,0,0,0.6)', color: 'white', padding: '4px 12px', borderRadius: '8px', fontSize: '13px', fontWeight: '600' }}>
@@ -115,27 +198,27 @@ export const VehicleDetailModal = ({ vehicle, onClose, onApprove, onReject }: {
                 </div>
 
                 {/* Vehicle Information */}
-                <h3 style={{ fontSize: '18px', fontWeight: 'bold', margin: '0 0 16px 0' }}>Vehicle Information</h3>
-                <div style={{ border: `1px solid ${isEditing ? '#38AC57' : '#f3f4f6'}`, borderRadius: '16px', padding: '20px', marginBottom: '24px', transition: 'border-color 0.2s' }}>
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '16px', marginBottom: '16px' }}>
-                        <div>
+                <h3 style={{ fontSize: '18px', fontWeight: 'bold', margin: '0 0 16px 0', textAlign: 'inherit' }}>Vehicle Information</h3>
+                <div style={{ border: `1px solid ${isEditing ? '#38AC57' : '#f3f4f6'}`, borderRadius: '16px', padding: '20px', marginBottom: '24px', transition: 'border-color 0.2s', textAlign: 'inherit' }}>
+                    <div className="rcm-info-grid-5" style={{ marginBottom: '16px' }}>
+                        <div className="rcm-info-item">
                             <div style={{ color: '#9ca3af', fontSize: '11px', marginBottom: '4px' }}>License Plate:</div>
                             <div style={{ fontWeight: 'bold', fontSize: '15px' }}>{vehicle.licensePlate}</div>
                         </div>
-                        <div>
+                        <div className="rcm-info-item">
                             <div style={{ color: '#9ca3af', fontSize: '11px', marginBottom: '4px' }}>Make & Model:</div>
                             <div style={{ fontWeight: 'bold', fontSize: '15px' }}>{isEditing ? editData.name : vehicle.name}</div>
                         </div>
-                        <div>
+                        <div className="rcm-info-item">
                             <div style={{ color: '#9ca3af', fontSize: '11px', marginBottom: '4px' }}>Colour:</div>
                             {isEditing ? (
                                 <input value={editData.color} onChange={e => setEditData({...editData, color: e.target.value})}
                                     style={{ fontWeight: '600', fontSize: '14px', border: '1px solid #d1d5db', borderRadius: '6px', padding: '4px 6px', width: '100%', outline: 'none', boxSizing: 'border-box' }} />
                             ) : (
-                                <div style={{ fontWeight: '600', display: 'flex', alignItems: 'center', gap: '4px' }}>⚪ {vehicle.color}</div>
+                                <div style={{ fontWeight: '600', display: 'flex', alignItems: 'center', gap: '4px', justifyContent: 'inherit' }}>⚪ {vehicle.color}</div>
                             )}
                         </div>
-                        <div>
+                        <div className="rcm-info-item">
                             <div style={{ color: '#9ca3af', fontSize: '11px', marginBottom: '4px' }}>Year:</div>
                             {isEditing ? (
                                 <input value={editData.year} onChange={e => setEditData({...editData, year: e.target.value})}
@@ -144,7 +227,7 @@ export const VehicleDetailModal = ({ vehicle, onClose, onApprove, onReject }: {
                                 <div style={{ fontWeight: 'bold', fontSize: '15px' }}>{vehicle.year}</div>
                             )}
                         </div>
-                        <div>
+                        <div className="rcm-info-item">
                             <div style={{ color: '#9ca3af', fontSize: '11px', marginBottom: '4px' }}>Transmission:</div>
                             {isEditing ? (
                                 <select value={editData.transmission} onChange={e => setEditData({...editData, transmission: e.target.value})}
@@ -156,8 +239,8 @@ export const VehicleDetailModal = ({ vehicle, onClose, onApprove, onReject }: {
                             )}
                         </div>
                     </div>
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px' }}>
-                        <div>
+                    <div className="rcm-info-grid-4">
+                        <div className="rcm-info-item">
                             <div style={{ color: '#9ca3af', fontSize: '11px', marginBottom: '4px' }}>Fuel Type:</div>
                             {isEditing ? (
                                 <select value={editData.fuel} onChange={e => setEditData({...editData, fuel: e.target.value})}
@@ -168,7 +251,7 @@ export const VehicleDetailModal = ({ vehicle, onClose, onApprove, onReject }: {
                                 <div style={{ fontWeight: 'bold', fontSize: '15px' }}>{vehicle.fuel}</div>
                             )}
                         </div>
-                        <div>
+                        <div className="rcm-info-item">
                             <div style={{ color: '#9ca3af', fontSize: '11px', marginBottom: '4px' }}>Number of Seats:</div>
                             {isEditing ? (
                                 <input type="number" value={editData.seats} onChange={e => setEditData({...editData, seats: parseInt(e.target.value) || 0})}
@@ -177,11 +260,11 @@ export const VehicleDetailModal = ({ vehicle, onClose, onApprove, onReject }: {
                                 <div style={{ fontWeight: 'bold', fontSize: '15px' }}>{vehicle.seats}</div>
                             )}
                         </div>
-                        <div>
+                        <div className="rcm-info-item">
                             <div style={{ color: '#9ca3af', fontSize: '11px', marginBottom: '4px' }}>Pricing:</div>
                             <div style={{ fontWeight: 'bold', fontSize: '15px' }}>Daily Rate: <span style={{ color: '#38AC57' }}>{vehicle.price}</span></div>
                         </div>
-                        <div>
+                        <div className="rcm-info-item">
                             <div style={{ color: '#9ca3af', fontSize: '11px', marginBottom: '4px' }}>Submitted Date:</div>
                             <div style={{ fontWeight: '600', fontSize: '14px' }}>{vehicle.submittedDate}</div>
                         </div>
@@ -189,8 +272,8 @@ export const VehicleDetailModal = ({ vehicle, onClose, onApprove, onReject }: {
                 </div>
 
                 {/* Description */}
-                <h4 style={{ fontSize: '14px', fontWeight: '600', margin: '0 0 8px 0', color: '#374151' }}>Description</h4>
-                <div style={{ backgroundColor: '#eef7f0', borderRadius: '12px', padding: '16px', marginBottom: '28px', border: '1px solid #eef7f0' }}>
+                <h4 style={{ fontSize: '14px', fontWeight: '600', margin: '0 0 8px 0', color: '#374151', textAlign: 'inherit' }}>Description</h4>
+                <div style={{ backgroundColor: '#eef7f0', borderRadius: '12px', padding: '16px', marginBottom: '28px', border: '1px solid #eef7f0', textAlign: 'inherit' }}>
                     {isEditing ? (
                         <textarea value={editData.description} onChange={e => setEditData({...editData, description: e.target.value})}
                             style={{ width: '100%', height: '80px', fontSize: '13px', border: '1px solid #d1d5db', borderRadius: '8px', padding: '10px', fontFamily: 'inherit', resize: 'none', outline: 'none', boxSizing: 'border-box' }} />
@@ -201,7 +284,7 @@ export const VehicleDetailModal = ({ vehicle, onClose, onApprove, onReject }: {
 
                 {/* Actions */}
                 {isEditing ? (
-                    <div style={{ display: 'flex', gap: '12px' }}>
+                    <div className="rcm-footer-actions">
                         <button onClick={() => setIsEditing(false)}
                             style={{ flex: 1, padding: '14px', borderRadius: '32px', border: '2px solid #e5e7eb', backgroundColor: 'white', fontWeight: 'bold', fontSize: '15px', cursor: 'pointer', transition: 'all 0.2s' }}
                             onMouseEnter={e => e.currentTarget.style.backgroundColor = '#f9fafb'}
@@ -214,7 +297,7 @@ export const VehicleDetailModal = ({ vehicle, onClose, onApprove, onReject }: {
                         >Save Changes</button>
                     </div>
                 ) : (
-                    <div style={{ display: 'flex', gap: '12px' }}>
+                    <div className="rcm-footer-actions">
                         <button onClick={() => setIsEditing(true)}
                             style={{ flex: 1, padding: '14px', borderRadius: '32px', border: '2px solid #1f2937', backgroundColor: 'white', fontWeight: 'bold', fontSize: '15px', cursor: 'pointer', transition: 'all 0.2s' }}
                             onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#f9fafb'; e.currentTarget.style.transform = 'translateY(-1px)'; }}
@@ -262,11 +345,9 @@ export const AddVehicleModal = ({ onClose, onAdd }: { onClose: () => void; onAdd
     };
 
     return (
-        <div 
-            onClick={onClose}
-            style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.4)', backdropFilter: 'blur(4px)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }}
-        >
-            <div onClick={e => e.stopPropagation()} style={{ backgroundColor: 'white', borderRadius: '24px', width: '100%', maxWidth: '600px', maxHeight: '90vh', overflowY: 'auto', padding: '32px', position: 'relative' }}>
+        <div className="rcm-modal-overlay" onClick={onClose}>
+            <ModalStyles />
+            <div className="rcm-modal-content" style={{ maxWidth: '600px' }} onClick={e => e.stopPropagation()}>
                 <button 
                     onClick={onClose}
                     style={{ position: 'absolute', top: '20px', right: '20px', width: '36px', height: '36px', borderRadius: '50%', border: 'none', backgroundColor: '#f3f4f6', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '18px', color: '#374151', transition: 'all 0.2s', zIndex: 10 }}
@@ -290,8 +371,8 @@ export const AddVehicleModal = ({ onClose, onAdd }: { onClose: () => void; onAdd
                         </select>
                     </div>
 
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
-                        <div>
+                    <div className="rcm-info-grid-2">
+                        <div className="rcm-info-item">
                             <label style={{ display: 'block', marginBottom: '8px', fontSize: '14px', fontWeight: 'bold' }}>License Plate</label>
                             <input 
                                 type="text" 
@@ -301,7 +382,7 @@ export const AddVehicleModal = ({ onClose, onAdd }: { onClose: () => void; onAdd
                                 style={{ width: '100%', padding: '12px', borderRadius: '12px', border: '1px solid #d1d5db', outline: 'none', boxSizing: 'border-box' }} 
                             />
                         </div>
-                        <div>
+                        <div className="rcm-info-item">
                             <label style={{ display: 'block', marginBottom: '8px', fontSize: '14px', fontWeight: 'bold' }}>Company Name</label>
                             <input 
                                 type="text" 
@@ -312,8 +393,8 @@ export const AddVehicleModal = ({ onClose, onAdd }: { onClose: () => void; onAdd
                         </div>
                     </div>
 
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px' }}>
-                        <div>
+                    <div className="rcm-info-grid-3">
+                        <div className="rcm-info-item">
                             <label style={{ display: 'block', marginBottom: '8px', fontSize: '14px', fontWeight: 'bold' }}>Price</label>
                             <input 
                                 type="text" 
@@ -323,7 +404,7 @@ export const AddVehicleModal = ({ onClose, onAdd }: { onClose: () => void; onAdd
                                 style={{ width: '100%', padding: '12px', borderRadius: '12px', border: '1px solid #d1d5db', outline: 'none', boxSizing: 'border-box' }} 
                             />
                         </div>
-                        <div>
+                        <div className="rcm-info-item">
                             <label style={{ display: 'block', marginBottom: '8px', fontSize: '14px', fontWeight: 'bold' }}>Year</label>
                             <input 
                                 type="text" 
@@ -332,7 +413,7 @@ export const AddVehicleModal = ({ onClose, onAdd }: { onClose: () => void; onAdd
                                 style={{ width: '100%', padding: '12px', borderRadius: '12px', border: '1px solid #d1d5db', outline: 'none', boxSizing: 'border-box' }} 
                             />
                         </div>
-                        <div>
+                        <div className="rcm-info-item">
                             <label style={{ display: 'block', marginBottom: '8px', fontSize: '14px', fontWeight: 'bold' }}>Color</label>
                             <input 
                                 type="text" 
@@ -343,8 +424,8 @@ export const AddVehicleModal = ({ onClose, onAdd }: { onClose: () => void; onAdd
                         </div>
                     </div>
                 
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px' }}>
-                         <div>
+                    <div className="rcm-info-grid-3">
+                         <div className="rcm-info-item">
                             <label style={{ display: 'block', marginBottom: '8px', fontSize: '14px', fontWeight: 'bold' }}>Transmission</label>
                             <select 
                                 value={formData.transmission} 
@@ -355,7 +436,7 @@ export const AddVehicleModal = ({ onClose, onAdd }: { onClose: () => void; onAdd
                                 <option>Manual</option>
                             </select>
                         </div>
-                        <div>
+                        <div className="rcm-info-item">
                             <label style={{ display: 'block', marginBottom: '8px', fontSize: '14px', fontWeight: 'bold' }}>Fuel</label>
                             <select 
                                 value={formData.fuel} 
@@ -369,7 +450,7 @@ export const AddVehicleModal = ({ onClose, onAdd }: { onClose: () => void; onAdd
                                 <option>Hybrid</option>
                             </select>
                         </div>
-                        <div>
+                        <div className="rcm-info-item">
                             <label style={{ display: 'block', marginBottom: '8px', fontSize: '14px', fontWeight: 'bold' }}>Seats</label>
                             <input 
                                 type="number" 

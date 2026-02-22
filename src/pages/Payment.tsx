@@ -215,25 +215,147 @@ export const Payment = () => {
 
     return (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem', paddingBottom: '4rem' }}>
-            
+            <style>{`
+                .pay-header-container {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                }
+                .pay-export-buttons {
+                    display: flex;
+                    gap: 1rem;
+                }
+                .pay-tabs-container {
+                    display: flex;
+                    backgroundColor: #f3f4f6;
+                    padding: 0.3rem;
+                    borderRadius: 2rem;
+                    width: fit-content;
+                }
+                .pay-stats-grid {
+                    display: grid;
+                    grid-template-columns: repeat(4, 1fr);
+                    gap: 1.5rem;
+                }
+                .pay-controls-container {
+                    display: flex;
+                    align-items: center;
+                    gap: 1rem;
+                    flex-wrap: wrap;
+                }
+                .pay-table-container {
+                    width: 100%;
+                    overflow-x: auto;
+                    border-radius: 12px;
+                }
+                .pay-table-header, .pay-table-row {
+                    display: grid;
+                    grid-template-columns: 1fr 1fr 2fr 1.2fr 1.6fr 1.3fr 1.6fr 1.2fr 100px;
+                    min-width: 1150px;
+                    align-items: center;
+                }
+                .pay-table-header {
+                    background-color: #38AC57;
+                    color: white;
+                    padding: 1rem;
+                    border-radius: 1rem;
+                    font-weight: bold;
+                    font-size: 0.85rem;
+                    margin-bottom: 1rem;
+                }
+                .pay-table-row {
+                    background-color: white;
+                    padding: 1.2rem 1rem;
+                    border-radius: 1.2rem;
+                    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+                    font-size: 0.9rem;
+                    margin-bottom: 0.5rem;
+                }
+                .pay-search-wrapper {
+                    position: relative;
+                    width: 250px;
+                    flex-shrink: 0;
+                }
+
+                @media (max-width: 1024px) {
+                    .pay-stats-grid {
+                        grid-template-columns: repeat(2, 1fr);
+                    }
+                }
+
+                @media (max-width: 768px) {
+                    .pay-header-container {
+                        flex-direction: column;
+                        align-items: stretch;
+                        gap: 1.5rem;
+                        text-align: center;
+                    }
+                    .pay-export-buttons {
+                        justify-content: center;
+                    }
+                    .pay-tabs-container {
+                        width: 100%;
+                        flex-wrap: wrap;
+                        justify-content: center;
+                    }
+                    .pay-tabs-container button {
+                        flex: 1;
+                        min-width: 120px;
+                        padding: 0.6rem 1rem !important;
+                    }
+                    .pay-controls-container {
+                        flex-direction: column;
+                        align-items: stretch;
+                    }
+                    .pay-search-wrapper {
+                        width: 100%;
+                    }
+                    .pay-controls-container > button {
+                        width: 100%;
+                        justify-content: space-between;
+                    }
+                    .pay-dropdown-group {
+                        display: flex;
+                        flex-direction: column;
+                        gap: 0.75rem;
+                    }
+                    .pay-dropdown-group > div {
+                        width: 100% !important;
+                    }
+                    .pay-dropdown-group button {
+                        width: 100% !important;
+                        justify-content: space-between;
+                    }
+                }
+
+                @media (max-width: 480px) {
+                    .pay-stats-grid {
+                        grid-template-columns: 1fr;
+                    }
+                    .pay-export-buttons {
+                        flex-direction: column;
+                    }
+                }
+            `}</style>
+
             {/* Header */}
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <div className="pay-header-container">
                 <div>
                      <h1 style={{ fontSize: '1.8rem', fontWeight: 'bold', margin: '0 0 0.5rem 0' }}>Payments & Refunds</h1>
                      <p style={{ color: '#6b7280', margin: 0 }}>Monitor payment transactions, wallet recharges, and manage refunds</p>
                 </div>
-                <div style={{ display: 'flex', gap: '1rem' }}>
-                    <button style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.6rem 1.2rem', borderRadius: '2rem', backgroundColor: '#38AC57', color: 'white', border: 'none', fontWeight: '600', cursor: 'pointer' }}>
+                <div className="pay-export-buttons">
+                    <button style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.6rem 1.2rem', borderRadius: '2rem', backgroundColor: '#38AC57', color: 'white', border: 'none', fontWeight: '600', cursor: 'pointer', justifyContent: 'center' }}>
                         <Download size={18} /> Export CSV
                     </button>
-                    <button style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.6rem 1.2rem', borderRadius: '2rem', backgroundColor: 'white', color: '#374151', border: '1px solid #e5e7eb', fontWeight: '600', cursor: 'pointer' }}>
+                    <button style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.6rem 1.2rem', borderRadius: '2rem', backgroundColor: 'white', color: '#374151', border: '1px solid #e5e7eb', fontWeight: '600', cursor: 'pointer', justifyContent: 'center' }}>
                         Export Excel
                     </button>
                 </div>
             </div>
 
             {/* Sub-Nav / Tabs */}
-            <div style={{ display: 'flex', backgroundColor: '#f3f4f6', padding: '0.3rem', borderRadius: '2rem', width: 'fit-content' }}>
+            <div className="pay-tabs-container">
                 {(['Trip Payments', 'Wallet Recharges', 'Refund Management'] as const).map((view) => (
                     <button 
                         key={view}
@@ -246,7 +368,8 @@ export const Payment = () => {
                             color: activeView === view ? 'white' : '#6b7280', 
                             fontWeight: '600', 
                             cursor: 'pointer',
-                            transition: 'all 0.2s'
+                            transition: 'all 0.2s',
+                            whiteSpace: 'nowrap'
                         }}
                     >
                         {view}
@@ -255,7 +378,7 @@ export const Payment = () => {
             </div>
 
             {/* Stats Cards */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.5rem' }}>
+            <div className="pay-stats-grid">
                 {[
                     { id: 'All', label: 'Total Transactions', count: '0100', icon: totalTransactionsIcon },
                     { id: 'Successful', label: 'Successful', count: '005', icon: successfulPaymentsIcon },
@@ -276,7 +399,8 @@ export const Payment = () => {
                                 cursor: 'pointer',
                                 transition: 'all 0.2s',
                                 transform: isActive ? 'translateY(-4px)' : 'none',
-                                boxShadow: isActive ? '0 10px 15px -3px rgba(56, 172, 87, 0.3)' : 'var(--shadow-sm)'
+                                boxShadow: isActive ? '0 10px 15px -3px rgba(56, 172, 87, 0.3)' : 'var(--shadow-sm)',
+                                width: 'auto'
                             }}
                         >
                             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: isActive ? 'white' : '#6b7280', fontWeight: '600' }}>
@@ -295,8 +419,8 @@ export const Payment = () => {
 
             {/* Filters */}
              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', flexWrap: 'wrap' }}>
-                     <div style={{ position: 'relative', width: '250px', flexShrink: 0 }}>
+                <div className="pay-controls-container">
+                     <div className="pay-search-wrapper">
                         <Search size={18} color="#2d8a46" style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', zIndex: 1 }} />
                         <input 
                             type="text" 
@@ -315,7 +439,7 @@ export const Payment = () => {
                             display: 'flex', alignItems: 'center', gap: '0.5rem', 
                             fontSize: '0.85rem', color: activeFilterCount > 0 ? '#2d8a46' : '#374151', 
                             cursor: 'pointer', whiteSpace: 'nowrap', flexShrink: 0,
-                            transition: 'all 0.2s'
+                            transition: 'all 0.2s', justifyContent: 'center'
                         }}
                     >
                         <Filter size={14} /> Filters
@@ -326,16 +450,16 @@ export const Payment = () => {
                         )}
                     </button>
                     {showFilters && (
-                        <>
+                        <div className="pay-dropdown-group" style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
                             <Dropdown label="Payment Method" options={['VISA', 'Mastercard', 'Hezzni Wallet', 'Cash']} activeValue={paymentMethodFilter} onSelect={setPaymentMethodFilter} />
                             <Dropdown label="Status" options={['Completed', 'Failed', 'Cancelled']} activeValue={statusFilter} onSelect={setStatusFilter} />
                             <Dropdown label="Refund Status" options={['No Refund', 'Refunded', 'Refund Pending', 'Refund Failed', 'Under Review']} activeValue={refundStatusFilter} onSelect={setRefundStatusFilter} />
-                        </>
+                        </div>
                     )}
                     {activeFilterCount > 0 && (
                         <button 
                             onClick={clearAllFilters}
-                            style={{ padding: '0.5rem 1rem', borderRadius: '2rem', border: 'none', backgroundColor: '#fee2e2', color: '#b91c1c', fontSize: '0.8rem', fontWeight: '600', cursor: 'pointer', whiteSpace: 'nowrap' }}
+                            style={{ padding: '0.5rem 1rem', borderRadius: '2rem', border: 'none', backgroundColor: '#fee2e2', color: '#b91c1c', fontSize: '0.8rem', fontWeight: '600', cursor: 'pointer', whiteSpace: 'nowrap', justifyContent: 'center' }}
                         >
                             Clear All
                         </button>
@@ -344,16 +468,8 @@ export const Payment = () => {
             </div>
 
             {/* Table */}
-            <div className="card" style={{ padding: 0, overflow: 'hidden', border: 'none', boxShadow: 'none', backgroundColor: 'transparent' }}>
-                <div style={{ 
-                    display: 'grid', 
-                    gridTemplateColumns: activeView === 'Trip Payments' 
-                        ? '0.8fr 0.8fr 1.5fr 1.2fr 1.3fr 1fr 1.2fr 1fr 0.5fr'
-                        : activeView === 'Wallet Recharges'
-                        ? '0.8fr 1.5fr 1fr 1.2fr 1.2fr 1fr 1.2fr 1fr 0.5fr'
-                        : '0.8fr 1fr 0.8fr 1fr 1fr 0.8fr 1fr 1fr 0.5fr',
-                    backgroundColor: '#38AC57', color: 'white', padding: '1rem', borderRadius: '1rem', fontWeight: 'bold', fontSize: '0.85rem', alignItems: 'center', marginBottom: '1rem' 
-                }}>
+            <div className="pay-table-container">
+                <div className="pay-table-header">
                     {activeView === 'Trip Payments' ? (
                         <>
                             <div>Transaction ID</div>
@@ -369,41 +485,35 @@ export const Payment = () => {
                     ) : (
                         <>
                             <div>ID</div>
+                            <div>Account ID</div>
                             <div>User</div>
                             <div>Amount</div>
-                            <div>Method</div>
-                            <div>Code</div>
+                            <div>Method & Code</div>
                             <div style={{textAlign:'center'}}>Status</div>
-                            <div style={{textAlign:'center'}}>Refund</div>
+                            <div style={{textAlign:'center'}}>Refund Status</div>
                             <div style={{textAlign:'center'}}>Date</div>
                             <div style={{textAlign:'right'}}>Actions</div>
                         </>
                     )}
                 </div>
 
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', minWidth: '1150px' }}>
                     {filteredTransactions.map((tx) => (
-                        <div key={tx.id} style={{ 
-                            display: 'grid', 
-                            gridTemplateColumns: activeView === 'Trip Payments' 
-                                ? '0.8fr 0.8fr 1.5fr 1.2fr 1.3fr 1fr 1.2fr 1fr 0.5fr'
-                                : activeView === 'Wallet Recharges'
-                                ? '0.8fr 1.5fr 1fr 1.2fr 1.2fr 1fr 1.2fr 1fr 0.5fr'
-                                : '0.8fr 1fr 0.8fr 1fr 1fr 0.8fr 1fr 1fr 0.5fr',
-                            backgroundColor: 'white', padding: '1.2rem 1rem', borderRadius: '1.2rem', alignItems: 'center', boxShadow: '0 2px 4px rgba(0,0,0,0.02)', fontSize: '0.9rem' 
-                        }}>
+                        <div key={tx.id} className="pay-table-row">
                             <div style={{ fontWeight: '800' }}>{tx.id}</div>
-                            {activeView === 'Trip Payments' && <div style={{ fontWeight: '600', color: '#6b7280' }}>{tx.tripId}</div>}
+                            <div style={{ fontWeight: '600', color: '#6b7280' }}>{activeView === 'Trip Payments' ? tx.tripId : 'R-00045'}</div>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
                                 <img src={tx.riderAvatar} alt={tx.rider} style={{ width: 32, height: 32, borderRadius: '50%' }} />
-                                <div style={{ fontWeight: '700' }}>{tx.rider}</div>
+                                <div style={{ fontWeight: '700', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{tx.rider}</div>
                             </div>
                             <div style={{ fontWeight: '800' }}>{tx.amount}</div>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                                <PaymentIcon method={tx.paymentMethod} />
-                                <span style={{ fontSize: '0.8rem', color: '#4b5563', fontWeight: '600' }}>{tx.paymentMethod}</span>
+                            <div>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                    <PaymentIcon method={tx.paymentMethod} />
+                                    <span style={{ fontSize: '0.8rem', color: '#4b5563', fontWeight: '600' }}>{tx.paymentMethod}</span>
+                                </div>
+                                {activeView !== 'Trip Payments' && <div style={{ fontSize: '0.7rem', color: '#9ca3af', marginTop: '2px' }}>CP123456789</div>}
                             </div>
-                            {activeView !== 'Trip Payments' && <div style={{ color: '#6b7280', fontSize: '0.8rem' }}>CP123456789</div>}
                             <div style={{ textAlign: 'center' }}>
                                 <StatusBadge status={tx.status} type="payment" />
                             </div>

@@ -25,7 +25,32 @@ const StatusBadge = ({ status }: { status: string }) => {
 // ============================================================
 // Rider Details Modal Content (sub-view inside main modal)
 // ============================================================
-export const RiderDetailsContent = ({ rider, onViewSpending, onViewHistory, onSuspend, onActivate, onEdit }: any) => {
+interface Rider {
+    id: string;
+    name: string;
+    avatar?: string;
+    rating?: number | string;
+    totalTrips?: number | string;
+    email: string;
+    phone?: string;
+    totalSpent?: string;
+    joinDate?: string;
+    status: string;
+    region?: string;
+    location?: string;
+    type?: string;
+}
+
+interface RiderDetailsContentProps {
+    rider: Rider;
+    onViewSpending: () => void;
+    onViewHistory: () => void;
+    onSuspend: () => void;
+    onActivate: () => void;
+    onEdit: () => void;
+}
+
+export const RiderDetailsContent = ({ rider, onViewSpending, onViewHistory, onSuspend, onActivate, onEdit }: RiderDetailsContentProps) => {
     if (!rider) return null;
 
     const isSuspended = rider.status === 'Suspended';
@@ -34,13 +59,13 @@ export const RiderDetailsContent = ({ rider, onViewSpending, onViewHistory, onSu
         <>
             {/* Header */}
             <div style={{ marginBottom: '24px' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '8px' }}>
+                <div className="rm-flex-responsive" style={{ alignItems: 'center', gap: '12px', marginBottom: '8px', justifyContent: 'flex-start' }}>
                     <h2 style={{ fontSize: '24px', fontWeight: 'bold', margin: 0 }}>
-                        Rider  - {rider.id || 'T-00234'}
+                        Rider - {rider.id || 'T-00234'}
                     </h2>
                     <StatusBadge status={rider.status || 'Active'} />
                 </div>
-                <p style={{ color: '#6b7280', margin: 0, fontSize: '14px' }}>
+                <p style={{ color: '#6b7280', margin: 0, fontSize: '14px', textAlign: 'inherit' }}>
                     Complete rider profile and activity information
                 </p>
             </div>
@@ -49,7 +74,7 @@ export const RiderDetailsContent = ({ rider, onViewSpending, onViewHistory, onSu
             <div style={{ marginBottom: '24px' }}>
                 <h3 style={{ fontSize: '18px', fontWeight: 'bold', marginBottom: '16px' }}>Customer Information</h3>
                 <div style={{ border: '1px solid #f3f4f6', borderRadius: '16px', padding: '20px' }}>
-                    <div style={{ display: 'flex', gap: '24px', alignItems: 'flex-start' }}>
+                    <div className="rm-flex-responsive">
                         <div style={{ position: 'relative', flexShrink: 0 }}>
                             <img 
                                 src={rider.avatar || 'https://i.pravatar.cc/150?u=rider1'} 
@@ -64,7 +89,7 @@ export const RiderDetailsContent = ({ rider, onViewSpending, onViewHistory, onSu
                                 <Star size={12} fill="#fbbf24" stroke="none" /> {rider.rating || '4.8'}
                             </div>
                         </div>
-                        <div style={{ flex: 1, display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px' }}>
+                        <div className="rm-info-grid" style={{ flex: 1, textAlign: 'inherit' }}>
                             <div>
                                 <div style={{ fontSize: '12px', color: '#9ca3af', marginBottom: '4px' }}>Name</div>
                                 <div style={{ fontWeight: '600', fontSize: '14px' }}>{rider.name}</div>
@@ -95,12 +120,12 @@ export const RiderDetailsContent = ({ rider, onViewSpending, onViewHistory, onSu
             </div>
 
             {/* Stats: Total Trips | Earnings | Commission */}
-            <div style={{ display: 'flex', justifyContent: 'space-around', textAlign: 'center', marginBottom: '24px' }}>
+            <div className="rm-flex-responsive" style={{ justifyContent: 'space-around', textAlign: 'center', marginBottom: '24px' }}>
                 <div>
                     <div style={{ fontSize: '36px', fontWeight: 'bold' }}>{rider.totalTrips || '1247'}</div>
                     <div style={{ fontSize: '14px', color: '#6b7280' }}>Total Trips</div>
                 </div>
-                <div style={{ width: '1px', backgroundColor: '#e5e7eb' }}></div>
+                <div className="rm-divider-v"></div>
                 <div>
                     <div style={{ fontSize: '36px', fontWeight: 'bold' }}>{rider.totalSpent ? rider.totalSpent.replace(',', '') : '45321'}</div>
                     <div style={{ fontSize: '14px', color: '#6b7280' }}>Spending (MAD)</div>
@@ -110,21 +135,21 @@ export const RiderDetailsContent = ({ rider, onViewSpending, onViewHistory, onSu
             {/* Account Information */}
             <div style={{ marginBottom: '24px' }}>
                 <div style={{ border: '1px solid #f3f4f6', borderRadius: '16px', padding: '20px' }}>
-                    <h4 style={{ fontSize: '16px', fontWeight: 'bold', marginBottom: '16px', margin: '0 0 16px 0' }}>Account Information</h4>
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px' }}>
-                        <div>
+                    <h4 style={{ fontSize: '16px', fontWeight: 'bold', marginBottom: '16px', margin: '0 0 16px 0', textAlign: 'inherit' }}>Account Information</h4>
+                    <div className="rm-account-grid">
+                        <div style={{ textAlign: 'inherit' }}>
                             <div style={{ fontSize: '12px', color: '#9ca3af', marginBottom: '4px' }}>Join Date</div>
                             <div style={{ fontWeight: '600', fontSize: '14px' }}>{rider.joinDate || '2023-01-15'}</div>
                         </div>
-                        <div>
+                        <div style={{ textAlign: 'inherit' }}>
                             <div style={{ fontSize: '12px', color: '#9ca3af', marginBottom: '4px' }}>Last Trips</div>
                             <div style={{ fontWeight: '600', fontSize: '14px' }}>2 hrs ago</div>
                         </div>
-                        <div>
+                        <div style={{ textAlign: 'inherit' }}>
                             <div style={{ fontSize: '12px', color: '#9ca3af', marginBottom: '4px' }}>Account Status</div>
                             <StatusBadge status={rider.status} />
                         </div>
-                        <div>
+                        <div style={{ textAlign: 'inherit' }}>
                             <div style={{ fontSize: '12px', color: '#9ca3af', marginBottom: '4px' }}>Verification</div>
                             <div style={{ fontWeight: '600', fontSize: '14px' }}>{isSuspended ? 'Not Verified' : 'Verified'}</div>
                         </div>
@@ -140,7 +165,7 @@ export const RiderDetailsContent = ({ rider, onViewSpending, onViewHistory, onSu
                         borderRadius: '16px', padding: '20px' 
                     }}>
                         <h4 style={{ fontSize: '16px', fontWeight: 'bold', marginBottom: '12px', margin: '0 0 12px 0', color: '#991b1b' }}>Suspension Details</h4>
-                        <div style={{ display: 'flex', gap: '32px' }}>
+                        <div className="rm-flex-responsive" style={{ gap: '32px', justifyContent: 'center' }}>
                             <div>
                                 <span style={{ fontSize: '13px', color: '#6b7280' }}>Reason: </span>
                                 <span style={{ fontSize: '13px', fontWeight: '600' }}>Multiple payment disputes</span>
@@ -155,7 +180,7 @@ export const RiderDetailsContent = ({ rider, onViewSpending, onViewHistory, onSu
             )}
 
             {/* Action Buttons */}
-            <div style={{ display: 'flex', gap: '12px' }}>
+            <div className="rm-footer-actions">
                 <button 
                     onClick={onEdit}
                     style={{ 
@@ -250,7 +275,7 @@ export const SpendingContent = () => {
             <h2 style={{ fontSize: '24px', fontWeight: 'bold', margin: '0 0 24px 0' }}>Spending</h2>
             
             {/* Period Tabs */}
-            <div style={{ display: 'flex', backgroundColor: '#f3f4f6', borderRadius: '12px', padding: '4px', marginBottom: '24px' }}>
+            <div style={{ display: 'flex', flexWrap: 'wrap', backgroundColor: '#f3f4f6', borderRadius: '12px', padding: '4px', marginBottom: '24px', gap: '4px' }}>
                 {['Today', 'Weekly', 'Monthly'].map(period => (
                     <button 
                         key={period} 
@@ -260,7 +285,8 @@ export const SpendingContent = () => {
                             backgroundColor: activePeriod === period ? 'white' : 'transparent',
                             fontWeight: '600', cursor: 'pointer', fontSize: '14px',
                             boxShadow: activePeriod === period ? '0 1px 3px rgba(0,0,0,0.1)' : 'none',
-                            transition: 'all 0.2s'
+                            transition: 'all 0.2s',
+                            minWidth: '80px'
                         }}
                     >
                         {period}
@@ -273,53 +299,57 @@ export const SpendingContent = () => {
                 <div style={{ fontSize: '13px', color: '#6b7280', marginBottom: '4px' }}>Total Spending</div>
                 <div style={{ fontSize: '28px', fontWeight: 'bold', marginBottom: '32px' }}>{data.total}</div>
                 
-                {/* Y-axis labels + bars */}
-                <div style={{ display: 'flex', height: '200px' }}>
-                    {/* Y-axis */}
-                    <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', paddingRight: '12px', fontSize: '11px', color: '#9ca3af' }}>
-                        <span>300</span>
-                        <span>200</span>
-                        <span>100</span>
-                        <span>0</span>
-                    </div>
-                    {/* Bars */}
-                    <div style={{ flex: 1, display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: '8px', borderLeft: '1px solid #f3f4f6', borderBottom: '1px solid #f3f4f6', paddingLeft: '8px' }}>
-                        {data.bars.map((h, i) => (
-                            <div key={i} style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px' }}>
-                                <div style={{ 
-                                    width: '16px', 
-                                    height: `${Math.max(h, 3)}%`, 
-                                    backgroundColor: i === data.highlight ? '#38AC57' : '#eef7f0', 
-                                    borderRadius: '4px 4px 0 0', 
-                                    position: 'relative', 
-                                    transition: 'height 0.4s ease',
-                                    cursor: 'pointer'
-                                }}>
-                                    {i === data.highlight && (
-                                        <div style={{ 
-                                            position: 'absolute', top: '-32px', left: '50%', transform: 'translateX(-50%)',
-                                            backgroundColor: '#1f2937', color: 'white', padding: '4px 8px', 
-                                            borderRadius: '6px', fontSize: '11px', whiteSpace: 'nowrap',
-                                            fontWeight: '600'
-                                        }}>
-                                            {data.highlightVal}
-                                        </div>
-                                    )}
-                                </div>
+                <div className="rm-chart-container">
+                    <div className="rm-chart-inner">
+                        {/* Y-axis labels + bars */}
+                        <div style={{ display: 'flex', height: '200px' }}>
+                            {/* Y-axis */}
+                            <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', paddingRight: '12px', fontSize: '11px', color: '#9ca3af' }}>
+                                <span>300</span>
+                                <span>200</span>
+                                <span>100</span>
+                                <span>0</span>
                             </div>
-                        ))}
+                            {/* Bars */}
+                            <div style={{ flex: 1, display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: '8px', borderLeft: '1px solid #f3f4f6', borderBottom: '1px solid #f3f4f6', paddingLeft: '8px' }}>
+                                {data.bars.map((h, i) => (
+                                    <div key={i} style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px' }}>
+                                        <div style={{ 
+                                            width: '16px', 
+                                            height: `${Math.max(h, 3)}%`, 
+                                            backgroundColor: i === data.highlight ? '#38AC57' : '#eef7f0', 
+                                            borderRadius: '4px 4px 0 0', 
+                                            position: 'relative', 
+                                            transition: 'height 0.4s ease',
+                                            cursor: 'pointer'
+                                        }}>
+                                            {i === data.highlight && (
+                                                <div style={{ 
+                                                    position: 'absolute', top: '-32px', left: '50%', transform: 'translateX(-50%)',
+                                                    backgroundColor: '#1f2937', color: 'white', padding: '4px 8px', 
+                                                    borderRadius: '6px', fontSize: '11px', whiteSpace: 'nowrap',
+                                                    fontWeight: '600'
+                                                }}>
+                                                    {data.highlightVal}
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                        {/* Month labels */}
+                        <div style={{ display: 'flex', paddingLeft: '40px', marginTop: '8px' }}>
+                            {months.map((m) => (
+                                <div key={m} style={{ flex: 1, textAlign: 'center', fontSize: '10px', color: '#9ca3af' }}>{m}</div>
+                            ))}
+                        </div>
                     </div>
-                </div>
-                {/* Month labels */}
-                <div style={{ display: 'flex', paddingLeft: '40px', marginTop: '8px' }}>
-                    {months.map((m) => (
-                        <div key={m} style={{ flex: 1, textAlign: 'center', fontSize: '10px', color: '#9ca3af' }}>{m}</div>
-                    ))}
                 </div>
             </div>
 
             {/* Bottom Stats */}
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+            <div className="rm-info-grid">
                 <div style={{ border: '1px solid #e5e7eb', borderRadius: '16px', padding: '16px' }}>
                     <div style={{ fontSize: '13px', color: '#6b7280', marginBottom: '4px' }}>Online Time</div>
                     <div style={{ fontWeight: 'bold', fontSize: '20px' }}>{data.onlineTime}</div>
@@ -356,7 +386,7 @@ export const TripsHistoryContent = ({ onViewSummary }: { onViewSummary: (tripId:
             </div>
 
             {/* Time Range */}
-            <div style={{ backgroundColor: '#f9fafb', borderRadius: '12px', padding: '16px', display: 'flex', justifyContent: 'space-between', marginBottom: '24px' }}>
+            <div className="rm-flex-responsive" style={{ backgroundColor: '#f9fafb', borderRadius: '12px', padding: '16px', justifyContent: 'space-between', marginBottom: '24px' }}>
                 <div>
                     <div style={{ fontSize: '12px', color: '#9ca3af' }}>Start Time</div>
                     <div style={{ fontWeight: '600' }}>14:30</div>
@@ -368,7 +398,7 @@ export const TripsHistoryContent = ({ onViewSummary }: { onViewSummary: (tripId:
             </div>
 
             {/* Tabs */}
-            <div style={{ display: 'flex', backgroundColor: '#f3f4f6', borderRadius: '12px', padding: '4px', marginBottom: '24px' }}>
+            <div style={{ display: 'flex', flexWrap: 'wrap', backgroundColor: '#f3f4f6', borderRadius: '12px', padding: '4px', marginBottom: '24px', gap: '4px' }}>
                 {['All', 'Completed', 'Cancelled'].map(tab => (
                     <button 
                         key={tab}
@@ -377,7 +407,8 @@ export const TripsHistoryContent = ({ onViewSummary }: { onViewSummary: (tripId:
                             flex: 1, padding: '10px', border: 'none', borderRadius: '8px',
                             backgroundColor: activeTab === tab ? 'white' : 'transparent',
                             fontWeight: '600', cursor: 'pointer', transition: '0.2s',
-                            boxShadow: activeTab === tab ? '0 1px 3px rgba(0,0,0,0.1)' : 'none'
+                            boxShadow: activeTab === tab ? '0 1px 3px rgba(0,0,0,0.1)' : 'none',
+                            minWidth: '80px'
                         }}
                     >
                         {tab}
@@ -419,9 +450,9 @@ export const TripsHistoryContent = ({ onViewSummary }: { onViewSummary: (tripId:
                             </span>
                         </div>
 
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
+                        <div className="rm-flex-responsive" style={{ alignItems: 'center', marginBottom: '16px' }}>
                             <img src={`https://i.pravatar.cc/150?u=d${trip.id}`} style={{ width: '40px', height: '40px', borderRadius: '50%' }} alt="Driver" />
-                            <div style={{ flex: 1 }}>
+                            <div style={{ flex: 1, textAlign: 'inherit' }}>
                                 <div style={{ fontWeight: 'bold', fontSize: '14px' }}>{trip.driver}</div>
                                 <div style={{ fontSize: '12px', color: '#9ca3af' }}>{trip.date}</div>
                             </div>
@@ -466,20 +497,20 @@ export const TripSummaryContent = () => {
             </div>
 
             {/* Driver Info */}
-            <div style={{ border: '1px solid #f3f4f6', borderRadius: '16px', padding: '16px', display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '16px' }}>
-                <div style={{ position: 'relative' }}>
+            <div className="rm-flex-responsive" style={{ border: '1px solid #f3f4f6', borderRadius: '16px', padding: '16px', alignItems: 'center', marginBottom: '16px' }}>
+                <div style={{ position: 'relative', flexShrink: 0 }}>
                     <img src="https://i.pravatar.cc/150?u=ahmed" style={{ width: '50px', height: '50px', borderRadius: '50%' }} alt="Driver" />
                     <div style={{ position: 'absolute', bottom: '-5px', left: '50%', transform: 'translateX(-50%)', backgroundColor: '#fbbf24', borderRadius: '6px', padding: '0 4px', fontSize: '10px', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '2px' }}>
                         ★ 4.8
                     </div>
                 </div>
-                <div style={{ flex: 1 }}>
-                    <div style={{ fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                <div style={{ flex: 1, textAlign: 'inherit' }}>
+                    <div style={{ fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '4px', justifyContent: 'inherit' }}>
                         Ahmed Hassan <CheckCircle2 size={14} color="#3b82f6" fill="#3b82f6" stroke="#fff" />
                     </div>
                     <div style={{ fontSize: '12px', color: '#9ca3af' }}>(2847 trips)</div>
                 </div>
-                <div style={{ textAlign: 'right', display: 'flex', gap: '16px' }}>
+                <div className="rm-flex-responsive" style={{ textAlign: 'inherit', gap: '16px' }}>
                     <div>
                         <div style={{ fontSize: '10px', color: '#9ca3af' }}>Distance</div>
                         <div style={{ fontWeight: 'bold' }}>1.3 km</div>
@@ -586,7 +617,7 @@ export const TripSummaryContent = () => {
 // ============================================================
 // Edit Rider Content (sub-view inside main modal)
 // ============================================================
-export const EditRiderContent = ({ rider, onSave }: { rider: any, onSave: () => void }) => {
+export const EditRiderContent = ({ rider, onSave }: { rider: Rider, onSave: () => void }) => {
     const [formData, setFormData] = useState({
         name: rider.name || '',
         phone: rider.phone || '',
@@ -626,7 +657,7 @@ export const EditRiderContent = ({ rider, onSave }: { rider: any, onSave: () => 
             <p style={{ color: '#6b7280', marginBottom: '24px', fontSize: '14px', margin: '0 0 24px 0' }}>Update rider profile information</p>
 
             <h3 style={{ fontSize: '16px', fontWeight: 'bold', marginBottom: '16px', margin: '0 0 16px 0' }}>Personal Information</h3>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '24px' }}>
+            <div className="rm-info-grid" style={{ marginBottom: '24px' }}>
                 <div>
                     <label style={labelStyle}>Full Name</label>
                     <input style={inputStyle} value={formData.name} onChange={(e) => handleChange('name', e.target.value)} />
@@ -692,7 +723,7 @@ export const EditRiderContent = ({ rider, onSave }: { rider: any, onSave: () => 
 // ============================================================
 // Suspend Rider Modal (separate overlay on top of main modal)
 // ============================================================
-export const SuspendRiderModal = ({ onClose, onConfirm }: { onClose: () => void, onConfirm: (reason: string, hours: string) => void }) => {
+export const SuspendRiderModal = ({ onClose, onConfirm }: { onClose: () => void, onConfirm: () => void }) => {
     const [reason, setReason] = useState('');
     const [hours, setHours] = useState('24 Hours');
 
@@ -767,7 +798,7 @@ export const SuspendRiderModal = ({ onClose, onConfirm }: { onClose: () => void,
                 </p>
 
                 <button 
-                    onClick={() => onConfirm(reason, hours)}
+                    onClick={() => onConfirm()}
                     style={{ 
                         width: '100%', padding: '14px', borderRadius: '32px', border: 'none', 
                         backgroundColor: '#b91c1c', color: 'white', fontWeight: 'bold', fontSize: '16px',

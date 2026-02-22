@@ -22,6 +22,95 @@ const StatusBadge = ({ status }: { status: string }) => {
     );
 };
 
+// --- Responsive Styles ---
+const ModalStyles = () => (
+    <style>{`
+        .adm-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0,0,0,0.4);
+            backdrop-filter: blur(4px);
+            z-index: 1000;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            padding: 20px;
+            overflow-y: auto;
+        }
+        .adm-modal-content {
+            background-color: white;
+            border-radius: 24px;
+            width: 100%;
+            max-width: 900px;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            position: relative;
+            padding: 32px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+        .adm-info-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+        }
+        .adm-docs-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+        .adm-flex-responsive {
+            display: flex;
+            gap: 20px;
+        }
+        .adm-footer-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        @media (max-width: 1024px) {
+            .adm-info-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .adm-modal-content {
+                padding: 20px;
+                margin-top: 10px;
+                margin-bottom: 10px;
+            }
+            .adm-info-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1rem;
+            }
+            .adm-docs-grid {
+                grid-template-columns: 1fr;
+            }
+            .adm-flex-responsive {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+            .adm-footer-actions {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .adm-info-item {
+                text-align: inherit;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .adm-info-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    `}</style>
+);
+
 // ============ SELECT CATEGORY MODAL ============
 export const SelectCategoryModal = ({ onClose, onConfirm }: { onClose: () => void; onConfirm: (cat: string) => void }) => {
     const [selected, setSelected] = useState('Hezzni Standard');
@@ -35,13 +124,14 @@ export const SelectCategoryModal = ({ onClose, onConfirm }: { onClose: () => voi
     ];
 
     return (
-        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.5)', zIndex: 1200, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }}>
-            <div style={{ backgroundColor: 'white', borderRadius: '24px', width: '100%', maxWidth: '500px', padding: '32px', maxHeight: '90vh', overflowY: 'auto' }}>
+        <div className="adm-modal-overlay">
+            <ModalStyles />
+            <div className="adm-modal-content" style={{ maxWidth: '500px' }}>
                 <button onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer', marginBottom: '16px', display: 'flex', alignItems: 'center' }}>
                     <ArrowLeft size={24} />
                 </button>
-                <h2 style={{ fontSize: '22px', fontWeight: 'bold', margin: '0 0 4px 0' }}>Rider  - T-00234</h2>
-                <p style={{ color: '#6b7280', fontSize: '14px', margin: '0 0 24px 0' }}>Complete rider profile and activity information</p>
+                <h2 style={{ fontSize: '22px', fontWeight: 'bold', margin: '0 0 4px 0', textAlign: 'inherit' }}>Rider - T-00234</h2>
+                <p style={{ color: '#6b7280', fontSize: '14px', margin: '0 0 24px 0', textAlign: 'inherit' }}>Complete rider profile and activity information</p>
 
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '24px' }}>
                     {categories.map(cat => {
@@ -143,12 +233,13 @@ export const DocumentPreviewModal = ({ docName, onClose }: { docName: string; on
     const totalImages = images.length;
 
     return (
-        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.5)', zIndex: 1200, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }}>
-            <div style={{ backgroundColor: 'white', borderRadius: '24px', width: '100%', maxWidth: '520px', padding: '32px' }}>
+        <div className="adm-modal-overlay">
+            <ModalStyles />
+            <div className="adm-modal-content" style={{ maxWidth: '520px' }}>
                 <button onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer', marginBottom: '16px', display: 'flex', alignItems: 'center' }}>
                     <ArrowLeft size={24} />
                 </button>
-                <h3 style={{ fontSize: '18px', fontWeight: 'bold', margin: '0 0 20px 0' }}>{docName}</h3>
+                <h3 style={{ fontSize: '18px', fontWeight: 'bold', margin: '0 0 20px 0', textAlign: 'inherit' }}>{docName}</h3>
 
                 <div style={{ position: 'relative', marginBottom: '16px' }}>
                     <img 
@@ -214,7 +305,7 @@ export const DocumentPreviewModal = ({ docName, onClose }: { docName: string; on
                     Page {imgIndex + 1} of {totalImages}
                 </div>
 
-                <div style={{ display: 'flex', gap: '12px' }}>
+                <div className="adm-footer-actions">
                     <button onClick={onClose} style={{
                         flex: 1, padding: '12px', borderRadius: '24px', border: '1px solid #e5e7eb',
                         backgroundColor: 'white', fontWeight: '600', cursor: 'pointer', fontSize: '14px',
@@ -269,8 +360,9 @@ export const ApplicationReviewModal = ({ doc, onClose, onApprove, onReject }: { 
     const statusOptions = ['Pending', 'Under Review', 'Verified', 'Updated', 'Rejected'];
 
     return (
-        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.4)', backdropFilter: 'blur(4px)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }}>
-            <div style={{ backgroundColor: 'white', borderRadius: '24px', width: '100%', maxWidth: '900px', maxHeight: '90vh', overflowY: 'auto', padding: '32px', position: 'relative' }}>
+        <div className="adm-modal-overlay">
+            <ModalStyles />
+            <div className="adm-modal-content">
                 {/* Header */}
                 <button onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer', marginBottom: '16px', display: 'flex', alignItems: 'center' }}>
                     <ArrowLeft size={24} />
@@ -282,24 +374,24 @@ export const ApplicationReviewModal = ({ doc, onClose, onApprove, onReject }: { 
                 <p style={{ color: '#6b7280', fontSize: '14px', margin: '0 0 28px 0' }}>Review all uploaded documents and approve or reject the application</p>
 
                 {/* Driver Information */}
-                <h3 style={{ fontSize: '16px', fontWeight: 'bold', margin: '0 0 16px 0' }}>Driver Information</h3>
+                <h3 style={{ fontSize: '16px', fontWeight: 'bold', margin: '0 0 16px 0', textAlign: 'inherit' }}>Driver Information</h3>
                 <div style={{ border: '1px solid #f3f4f6', borderRadius: '16px', padding: '20px', marginBottom: '24px' }}>
-                    <div style={{ display: 'flex', gap: '20px', alignItems: 'flex-start' }}>
+                    <div className="adm-flex-responsive" style={{ alignItems: 'flex-start' }}>
                         <div style={{ position: 'relative', flexShrink: 0 }}>
                             <img src={doc.avatar} style={{ width: '64px', height: '64px', borderRadius: '50%', objectFit: 'cover' }} alt="" />
                             <div style={{ position: 'absolute', bottom: '-6px', left: '50%', transform: 'translateX(-50%)', backgroundColor: '#fbbf24', borderRadius: '6px', padding: '0 4px', fontSize: '10px', fontWeight: 'bold' }}>4.8</div>
                         </div>
-                        <div style={{ flex: 1, display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.5rem', fontSize: '13px' }}>
-                            <div><div style={{ color: '#9ca3af', fontSize: '11px', marginBottom: '2px' }}>Full Name</div><div style={{ fontWeight: '600' }}>{doc.driverName}</div></div>
-                            <div><div style={{ color: '#9ca3af', fontSize: '11px', marginBottom: '2px' }}>Vehicle Type</div><div style={{ fontWeight: '600', display: 'flex', alignItems: 'center', gap: '4px' }}>🚕 Taxi</div></div>
-                            <div><div style={{ color: '#9ca3af', fontSize: '11px', marginBottom: '2px' }}>Phone</div><div style={{ fontWeight: '600' }}>+212 6 12 34 56</div></div>
-                            <div><div style={{ color: '#9ca3af', fontSize: '11px', marginBottom: '2px' }}>Application ID</div><div style={{ fontWeight: '600' }}>REG-001</div></div>
-                            <div><div style={{ color: '#9ca3af', fontSize: '11px', marginBottom: '2px' }}>Email</div><div style={{ fontWeight: '600' }}>Ahmedhassan@gmail.com</div></div>
-                            <div><div style={{ color: '#9ca3af', fontSize: '11px', marginBottom: '2px' }}>Driver ID</div><div style={{ fontWeight: '600' }}>{doc.driverId}</div></div>
-                            <div><div style={{ color: '#9ca3af', fontSize: '11px', marginBottom: '2px' }}>City</div><div style={{ fontWeight: '600' }}>Casablanca</div></div>
-                            <div><div style={{ color: '#9ca3af', fontSize: '11px', marginBottom: '2px' }}>Gender</div><div style={{ fontWeight: '600' }}>♂ Male</div></div>
-                            <div><div style={{ color: '#9ca3af', fontSize: '11px', marginBottom: '2px' }}>Application Date</div><div style={{ fontWeight: '600' }}>10-01-2026</div></div>
-                            <div style={{ position: 'relative' }}>
+                        <div className="adm-info-grid" style={{ flex: 1, textAlign: 'inherit' }}>
+                            <div className="adm-info-item"><div style={{ color: '#9ca3af', fontSize: '11px', marginBottom: '2px' }}>Full Name</div><div style={{ fontWeight: '600' }}>{doc.driverName}</div></div>
+                            <div className="adm-info-item"><div style={{ color: '#9ca3af', fontSize: '11px', marginBottom: '2px' }}>Vehicle Type</div><div style={{ fontWeight: '600', display: 'flex', alignItems: 'center', gap: '4px', justifyContent: 'inherit' }}>🚕 Taxi</div></div>
+                            <div className="adm-info-item"><div style={{ color: '#9ca3af', fontSize: '11px', marginBottom: '2px' }}>Phone</div><div style={{ fontWeight: '600' }}>+212 6 12 34 56</div></div>
+                            <div className="adm-info-item"><div style={{ color: '#9ca3af', fontSize: '11px', marginBottom: '2px' }}>Application ID</div><div style={{ fontWeight: '600' }}>REG-001</div></div>
+                            <div className="adm-info-item"><div style={{ color: '#9ca3af', fontSize: '11px', marginBottom: '2px' }}>Email</div><div style={{ fontWeight: '600', wordBreak: 'break-all' }}>Ahmedhassan@gmail.com</div></div>
+                            <div className="adm-info-item"><div style={{ color: '#9ca3af', fontSize: '11px', marginBottom: '2px' }}>Driver ID</div><div style={{ fontWeight: '600' }}>{doc.driverId}</div></div>
+                            <div className="adm-info-item"><div style={{ color: '#9ca3af', fontSize: '11px', marginBottom: '2px' }}>City</div><div style={{ fontWeight: '600' }}>Casablanca</div></div>
+                            <div className="adm-info-item"><div style={{ color: '#9ca3af', fontSize: '11px', marginBottom: '2px' }}>Gender</div><div style={{ fontWeight: '600' }}>♂ Male</div></div>
+                            <div className="adm-info-item"><div style={{ color: '#9ca3af', fontSize: '11px', marginBottom: '2px' }}>Application Date</div><div style={{ fontWeight: '600' }}>10-01-2026</div></div>
+                            <div style={{ position: 'relative' }} className="adm-info-item">
                                 <div style={{ color: '#9ca3af', fontSize: '11px', marginBottom: '2px' }}>Current Status</div>
                                 <button onClick={() => setOpenMainStatus(!openMainStatus)} style={{
                                     display: 'flex', alignItems: 'center', gap: '4px', padding: '4px 10px', borderRadius: '6px',
@@ -340,21 +432,21 @@ export const ApplicationReviewModal = ({ doc, onClose, onApprove, onReject }: { 
                 </div>
 
                 {/* Vehicle Information */}
-                <h3 style={{ fontSize: '16px', fontWeight: 'bold', margin: '0 0 16px 0' }}>Vehicle Information</h3>
+                <h3 style={{ fontSize: '16px', fontWeight: 'bold', margin: '0 0 16px 0', textAlign: 'inherit' }}>Vehicle Information</h3>
                 <div style={{ border: '1px solid #f3f4f6', borderRadius: '16px', padding: '20px', marginBottom: '28px' }}>
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.5rem', fontSize: '13px' }}>
-                        <div><div style={{ color: '#9ca3af', fontSize: '11px', marginBottom: '2px' }}>Driver ID</div><div style={{ fontWeight: 'bold', fontSize: '16px' }}>D-00045</div></div>
-                        <div><div style={{ color: '#9ca3af', fontSize: '11px', marginBottom: '2px' }}>Vehicle Colour</div><div style={{ fontWeight: '600', display: 'flex', alignItems: 'center', gap: '4px' }}>⚪ White</div></div>
-                        <div><div style={{ color: '#9ca3af', fontSize: '11px', marginBottom: '2px' }}>Licence Plate Num</div><div style={{ fontWeight: 'bold', fontSize: '16px' }}>8 | i | 26363</div></div>
-                        <div><div style={{ color: '#9ca3af', fontSize: '11px', marginBottom: '2px' }}>Make & Model</div><div style={{ fontWeight: 'bold', fontSize: '16px' }}>Dacia Logan</div></div>
-                        <div><div style={{ color: '#9ca3af', fontSize: '11px', marginBottom: '2px' }}>Year</div><div style={{ fontWeight: 'bold', fontSize: '16px' }}>2020</div></div>
-                        <div><div style={{ color: '#9ca3af', fontSize: '11px', marginBottom: '2px' }}>Join Date</div><div style={{ fontWeight: '600' }}>2023-01-15</div></div>
+                    <div className="adm-info-grid" style={{ flex: 1, textAlign: 'inherit' }}>
+                        <div className="adm-info-item"><div style={{ color: '#9ca3af', fontSize: '11px', marginBottom: '2px' }}>Driver ID</div><div style={{ fontWeight: 'bold', fontSize: '16px' }}>D-00045</div></div>
+                        <div className="adm-info-item"><div style={{ color: '#9ca3af', fontSize: '11px', marginBottom: '2px' }}>Vehicle Colour</div><div style={{ fontWeight: '600', display: 'flex', alignItems: 'center', gap: '4px', justifyContent: 'inherit' }}>⚪ White</div></div>
+                        <div className="adm-info-item"><div style={{ color: '#9ca3af', fontSize: '11px', marginBottom: '2px' }}>Licence Plate Num</div><div style={{ fontWeight: 'bold', fontSize: '16px' }}>8 | i | 26363</div></div>
+                        <div className="adm-info-item"><div style={{ color: '#9ca3af', fontSize: '11px', marginBottom: '2px' }}>Make & Model</div><div style={{ fontWeight: 'bold', fontSize: '16px' }}>Dacia Logan</div></div>
+                        <div className="adm-info-item"><div style={{ color: '#9ca3af', fontSize: '11px', marginBottom: '2px' }}>Year</div><div style={{ fontWeight: 'bold', fontSize: '16px' }}>2020</div></div>
+                        <div className="adm-info-item"><div style={{ color: '#9ca3af', fontSize: '11px', marginBottom: '2px' }}>Join Date</div><div style={{ fontWeight: '600' }}>2023-01-15</div></div>
                     </div>
                 </div>
 
                 {/* Uploaded Documents */}
-                <h3 style={{ fontSize: '16px', fontWeight: 'bold', margin: '0 0 16px 0' }}>Uploaded Documents</h3>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '28px' }}>
+                <h3 style={{ fontSize: '16px', fontWeight: 'bold', margin: '0 0 16px 0', textAlign: 'inherit' }}>Uploaded Documents</h3>
+                <div className="adm-docs-grid" style={{ marginBottom: '28px' }}>
                     {uploadedDocs.map(d => (
                         <div key={d.name} style={{ border: '1px solid #f3f4f6', borderRadius: '16px', padding: '16px' }}>
                             <div style={{ fontWeight: 'bold', fontSize: '14px', marginBottom: '4px' }}>{d.name}</div>
@@ -412,7 +504,7 @@ export const ApplicationReviewModal = ({ doc, onClose, onApprove, onReject }: { 
                 >Save Notes</button>
 
                 {/* Approve / Reject */}
-                <div style={{ display: 'flex', gap: '12px' }}>
+                <div className="adm-footer-actions">
                     <button onClick={() => { onApprove(); onClose(); }} style={{
                         flex: 1, padding: '14px', borderRadius: '32px', border: 'none',
                         backgroundColor: '#38AC57', color: 'white', fontWeight: 'bold', fontSize: '15px', cursor: 'pointer', transition: 'background-color 0.2s'

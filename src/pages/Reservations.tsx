@@ -115,7 +115,7 @@ const Dropdown = ({ label, value, options, onChange }: { label: string, value: s
                 onClick={() => setIsOpen(!isOpen)}
                 style={{ 
                     padding: '0.7rem 1.5rem', borderRadius: '2rem', border: '1px solid #e5e7eb', backgroundColor: 'white', 
-                    cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.9rem', minWidth: '120px', justifyContent: 'space-between' 
+                    cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.9rem', width: '100%', minWidth: '120px', justifyContent: 'space-between' 
                 }}
             >
                 <span style={{ color: value === 'All' ? '#6b7280' : 'black' }}>{value === 'All' ? label : value}</span>
@@ -290,6 +290,154 @@ export const Reservations = () => {
 
     return (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+            <style>{`
+                .res-stats-grid {
+                    display: grid;
+                    grid-template-columns: repeat(4, 1fr);
+                    gap: 1.5rem;
+                }
+                .res-controls-container {
+                    display: flex;
+                    gap: 1rem;
+                    flex-wrap: wrap;
+                    align-items: center;
+                }
+                .res-table-container {
+                    width: 100%;
+                    overflow-x: auto;
+                    border-radius: 1rem;
+                    background: white;
+                }
+                .res-modal-overlay {
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    backgroundColor: rgba(0,0,0,0.5);
+                    zIndex: 1000;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    padding: 1rem;
+                    backdrop-filter: blur(4px);
+                }
+                .res-modal-content {
+                    width: 900px;
+                    max-width: 100%;
+                    background-color: white;
+                    border-radius: 2rem;
+                    padding: 2.5rem;
+                    max-height: 95vh;
+                    overflow-y: auto;
+                    position: relative;
+                    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+                }
+                .res-info-bar {
+                    display: grid;
+                    grid-template-columns: repeat(5, 1fr) auto;
+                    gap: 1rem;
+                    padding: 1.25rem;
+                    background-color: #f9fafb;
+                    border: 1px solid #f3f4f6;
+                    borderRadius: 1.25rem;
+                    alignItems: center;
+                }
+                .res-info-grid {
+                    display: grid;
+                    grid-template-columns: repeat(4, 1fr);
+                    gap: 1.5rem 0.5rem;
+                }
+                .res-vehicle-grid {
+                    display: grid;
+                    grid-template-columns: repeat(4, 1fr);
+                    gap: 2rem 1rem;
+                }
+                .res-payment-grid {
+                    display: grid;
+                    grid-template-columns: repeat(5, 1fr);
+                    gap: 1rem;
+                    text-align: center;
+                }
+                .res-archive-grid {
+                    display: grid;
+                    grid-template-columns: 1fr 2fr;
+                    gap: 2rem;
+                }
+                .res-flex-responsive {
+                    display: flex;
+                    gap: 2rem;
+                    align-items: center;
+                }
+                .res-footer {
+                    display: flex;
+                    justify-content: flex-end;
+                }
+
+                @media (max-width: 1024px) {
+                    .res-stats-grid {
+                        grid-template-columns: repeat(2, 1fr);
+                    }
+                    .res-info-bar {
+                        grid-template-columns: repeat(3, 1fr);
+                    }
+                    .res-info-bar > div:last-child {
+                        grid-column: span 3;
+                        justify-content: center !important;
+                        margin-top: 1rem;
+                    }
+                }
+
+                @media (max-width: 768px) {
+                    .res-modal-content {
+                        padding: 1.5rem;
+                    }
+                    .res-controls-container {
+                        flex-direction: column;
+                        align-items: stretch;
+                    }
+                    .res-controls-container > div {
+                        width: 100% !important;
+                    }
+                    .res-flex-responsive {
+                        flex-direction: column;
+                        text-align: center;
+                    }
+                    .res-info-grid, .res-vehicle-grid, .res-payment-grid, .res-archive-grid {
+                        grid-template-columns: 1fr;
+                        text-align: left;
+                        gap: 1rem;
+                    }
+                    .res-info-bar {
+                        grid-template-columns: 1fr;
+                    }
+                    .res-info-bar > div:last-child {
+                        grid-column: span 1;
+                    }
+                    .res-payment-grid {
+                        text-align: left;
+                    }
+                    .res-payment-grid > div {
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        padding-bottom: 0.5rem;
+                        border-bottom: 1px solid #f3f4f6;
+                    }
+                    .res-footer button {
+                        width: 100%;
+                    }
+                    .res-route-exchange {
+                        display: none !important;
+                    }
+                }
+
+                @media (max-width: 480px) {
+                    .res-stats-grid {
+                        grid-template-columns: 1fr;
+                    }
+                }
+            `}</style>
             {/* Header */}
             <div>
                 <h1 style={{ fontSize: '1.75rem', fontWeight: 'bold', margin: '0 0 0.5rem 0' }}>Reservations</h1>
@@ -297,7 +445,7 @@ export const Reservations = () => {
             </div>
 
             {/* Stats Cards */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.5rem' }}>
+            <div className="res-stats-grid">
                 <div 
                     onClick={() => setActiveStat(null)}
                     style={{ 
@@ -386,7 +534,7 @@ export const Reservations = () => {
             </div>
 
             {/* Controls */}
-            <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', alignItems: 'center' }}>
+            <div className="res-controls-container">
                 <div style={{ position: 'relative', width: '300px' }}>
                     <Search size={18} color="#9ca3af" style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)' }} />
                     <input 
@@ -404,7 +552,7 @@ export const Reservations = () => {
             </div>
 
             {/* Table */}
-            <div className="card" style={{ padding: 0, overflow: 'hidden' }}>
+            <div className="card res-table-container" style={{ padding: 0 }}>
                 <table style={{ width: '100%', borderCollapse: 'collapse' }}>
                     <thead>
                          <tr style={{ backgroundColor: '#38AC57', color: 'white', textAlign: 'left' }}>
@@ -473,24 +621,8 @@ export const Reservations = () => {
 
             {/* Modal */}
             {selectedReservation && (
-                <div 
-                    style={{ 
-                        position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, 
-                        backgroundColor: 'rgba(0,0,0,0.5)', zIndex: 1000, 
-                        display: 'flex', alignItems: 'center', justifyContent: 'center',
-                        backdropFilter: 'blur(4px)'
-                    }}
-                    onClick={() => setSelectedReservation(null)}
-                >
-                     <div 
-                        className="modal-content"
-                         style={{ 
-                            width: '900px', backgroundColor: 'white', borderRadius: '2rem', 
-                            padding: '2.5rem', maxHeight: '95vh', overflowY: 'auto', 
-                            position: 'relative', boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)' 
-                        }}
-                        onClick={e => e.stopPropagation()}
-                     >
+                <div className="res-modal-overlay" onClick={() => setSelectedReservation(null)}>
+                     <div className="res-modal-content" onClick={e => e.stopPropagation()}>
                         {/* Modal Header */}
                         <div style={{ marginBottom: '2rem', display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
                             <button 
@@ -510,12 +642,7 @@ export const Reservations = () => {
                         </div>
 
                         {/* Top Info Bar */}
-                        <div style={{ 
-                            display: 'grid', gridTemplateColumns: 'repeat(5, 1fr) auto', 
-                            gap: '1rem', padding: '1.25rem', backgroundColor: '#f9fafb', 
-                            border: '1px solid #f3f4f6', borderRadius: '1.25rem', marginBottom: '2.5rem',
-                            alignItems: 'center'
-                        }}>
+                        <div className="res-info-bar" style={{ marginBottom: '2.5rem' }}>
                             <div>
                                 <div style={{ fontSize: '0.75rem', color: '#94a3b8', fontWeight: '600', marginBottom: '0.25rem' }}>Start Time</div>
                                 <div style={{ fontWeight: '700', fontSize: '1rem', color: '#1e293b' }}>{selectedReservation.startTime}</div>
@@ -536,7 +663,7 @@ export const Reservations = () => {
                                 <div style={{ fontSize: '0.75rem', color: '#94a3b8', fontWeight: '600', marginBottom: '0.25rem' }}>Schedule Time</div>
                                 <div style={{ fontWeight: '700', fontSize: '1rem', color: '#1e293b' }}>{selectedReservation.scheduleTime}</div>
                             </div>
-                            <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                            <div className="res-footer">
                                 <div style={{ backgroundColor: '#eef7f0', color: '#2d8a46', padding: '0.4rem 1rem', borderRadius: '0.75rem', fontSize: '0.85rem', fontWeight: '600' }}>
                                     Completed
                                 </div>
@@ -546,7 +673,7 @@ export const Reservations = () => {
                         {/* Passenger Info */}
                          <h3 style={{ fontSize: '1.3rem', fontWeight: '800', marginBottom: '1.25rem', color: '#1e293b' }}>Passenger Information</h3>
                         <div style={{ border: '1px solid #f3f4f6', borderRadius: '1.5rem', padding: '1.5rem', marginBottom: '2rem', backgroundColor: 'white' }}>
-                            <div style={{ display: 'flex', gap: '2rem', alignItems: 'center' }}>
+                            <div className="res-flex-responsive">
                                 <div style={{ position: 'relative', flexShrink: 0 }}>
                                     <img src={selectedReservation.customer.avatar} alt="" style={{ width: '72px', height: '72px', borderRadius: '50%', objectFit: 'cover' }} />
                                     <div style={{ 
@@ -556,7 +683,7 @@ export const Reservations = () => {
                                         boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
                                     }}>★ {selectedReservation.customer.rating}</div>
                                 </div>
-                                <div style={{ flex: 1, display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.5rem 0.5rem' }}>
+                                <div className="res-info-grid">
                                     <div>
                                         <div style={{ fontSize: '0.75rem', color: '#94a3b8', fontWeight: '500', marginBottom: '0.4rem' }}>Full Name</div>
                                         <div style={{ fontWeight: '700', fontSize: '1rem' }}>{selectedReservation.customer.name}</div>
@@ -595,7 +722,7 @@ export const Reservations = () => {
                         {/* Driver Info */}
                         <h3 style={{ fontSize: '1.3rem', fontWeight: '800', marginBottom: '1.25rem', color: '#1e293b' }}>Driver Information</h3>
                         <div style={{ border: '1px solid #f3f4f6', borderRadius: '1.5rem', padding: '1.5rem', marginBottom: '2rem', backgroundColor: 'white' }}>
-                            <div style={{ display: 'flex', gap: '2rem', alignItems: 'center' }}>
+                            <div className="res-flex-responsive">
                                  <div style={{ position: 'relative', flexShrink: 0 }}>
                                     <img src={selectedReservation.driver.avatar} alt="" style={{ width: '72px', height: '72px', borderRadius: '50%', objectFit: 'cover' }} />
                                     <div style={{ 
@@ -605,7 +732,7 @@ export const Reservations = () => {
                                         boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
                                     }}>★ {selectedReservation.driver.rating}</div>
                                 </div>
-                                <div style={{ flex: 1, display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.5rem 0.5rem' }}>
+                                <div className="res-info-grid">
                                     <div style={{ gridColumn: 'span 1' }}>
                                         <div style={{ fontSize: '0.75rem', color: '#94a3b8', fontWeight: '500', marginBottom: '0.4rem' }}>Full Name</div>
                                         <div style={{ fontWeight: '700', fontSize: '1rem' }}>{selectedReservation.driver.name}</div>
@@ -646,7 +773,7 @@ export const Reservations = () => {
                          {/* Vehicle Info */}
                          <h3 style={{ fontSize: '1.3rem', fontWeight: '800', marginBottom: '1.25rem', color: '#1e293b' }}>Vehicle Information</h3>
                          <div style={{ border: '1px solid #f3f4f6', borderRadius: '1.5rem', padding: '2rem', marginBottom: '2.5rem', backgroundColor: 'white' }}>
-                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '2rem 1rem' }}>
+                            <div className="res-vehicle-grid">
                                 <div>
                                     <div style={{ fontSize: '0.8rem', color: '#94a3b8', fontWeight: '500', marginBottom: '0.5rem' }}>Driver ID</div>
                                     <div style={{ fontWeight: '700', fontSize: '1.05rem' }}>{selectedReservation.driver.id}</div>
@@ -694,7 +821,7 @@ export const Reservations = () => {
                                 </div>
                             </div>
 
-                            <div style={{ 
+                                 <div className="res-route-exchange" style={{ 
                                 position: 'absolute', right: '40px', top: '50%', transform: 'translateY(-50%)', 
                                 zIndex: 1, backgroundColor: 'white', border: '1px solid #f3f4f6', 
                                 borderRadius: '50%', width: '40px', height: '40px', 
@@ -738,7 +865,7 @@ export const Reservations = () => {
                                 </div>
                              </div>
 
-                             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '1rem', textAlign: 'center' }}>
+                             <div className="res-payment-grid">
                                 <div>
                                     <div style={{ fontSize: '0.8rem', color: '#94a3b8', fontWeight: '600', marginBottom: '0.5rem' }}>TVA</div>
                                     <div style={{ fontWeight: '700', fontSize: '1.1rem' }}>{selectedReservation.tva}</div>
@@ -770,7 +897,7 @@ export const Reservations = () => {
                           {/* Archive Information */}
                           <h3 style={{ fontSize: '1.3rem', fontWeight: '800', marginBottom: '1.25rem', color: '#1e293b' }}>Archive Information</h3>
                           <div style={{ border: '1px solid #f3f4f6', borderRadius: '1.5rem', padding: '2rem', marginBottom: '3rem', backgroundColor: 'white' }}>
-                              <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '2rem' }}>
+                              <div className="res-archive-grid">
                                   <div>
                                       <div style={{ fontSize: '0.85rem', color: '#94a3b8', fontWeight: '600', marginBottom: '0.5rem' }}>Archived Date:</div>
                                       <div style={{ fontWeight: '700', fontSize: '1.1rem' }}>2025-01-15 00:00</div>
@@ -782,7 +909,7 @@ export const Reservations = () => {
                               </div>
                           </div>
                         
-                         <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                         <div className="res-footer">
                             <button 
                                 style={{ 
                                     padding: '1rem 3.5rem', borderRadius: '1.25rem', backgroundColor: '#38AC57', color: 'white', 

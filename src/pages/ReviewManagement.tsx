@@ -178,7 +178,191 @@ export const ReviewManagement = () => {
 
   return (
     <div className="main-content" style={{ padding: '2rem', backgroundColor: '#f8fafc', minHeight: '100vh', overflowY: 'auto' }}>
-      <div className="page-header" style={{ marginBottom: '2rem', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+      <style>{`
+        .rev-header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 2rem;
+            gap: 1.5rem;
+        }
+        .rev-stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 2.5rem;
+        }
+        .rev-stat-card {
+            background-color: white;
+            padding: 1.5rem;
+            border-radius: 24px;
+            cursor: pointer;
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+            transition: all 0.2s ease;
+        }
+        .rev-stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+        }
+        .rev-stat-card.active {
+            border: 2px solid #38AC57;
+            background-color: #eef7f0;
+        }
+        .rev-stat-card.active-green {
+            background-color: #38AC57;
+            border: none;
+        }
+        .rev-controls-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+        .rev-search-filter-group {
+            display: flex;
+            gap: 1rem;
+            flex: 1;
+            flex-wrap: wrap;
+        }
+        .rev-search-wrapper {
+            position: relative;
+            flex: 1;
+            min-width: 280px;
+        }
+        .rev-search-wrapper input {
+            width: 100%;
+            padding: 12px 16px 12px 48px;
+            border-radius: 20px;
+            border: 1px solid #e5e7eb;
+            outline: none;
+            font-size: 14px;
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+        .rev-search-wrapper svg {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        .rev-filter-select-group {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+        .rev-select-custom {
+            appearance: none;
+            background-color: white;
+            border: 1px solid #e5e7eb;
+            color: #374151;
+            padding: 10px 35px 10px 15px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+        .rev-tabs-container {
+            display: flex;
+            background-color: #f3f4f6;
+            padding: 4px;
+            border-radius: 14px;
+            border: 1px solid #e5e7eb;
+            width: fit-content;
+        }
+        .rev-tab-btn {
+            padding: 8px 18px;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .rev-table-container {
+            background-color: white;
+            border-radius: 24px;
+            overflow-x: auto;
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+        }
+        .rev-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 1000px;
+        }
+        .rev-table th {
+            background-color: #38AC57;
+            color: white;
+            padding: 1.25rem 1.5rem;
+            text-align: left;
+            font-weight: 700;
+            font-size: 14px;
+        }
+        .rev-table td {
+            padding: 1.25rem 1.5rem;
+            border-bottom: 1px solid #f3f4f6;
+        }
+
+        @media (max-width: 1024px) {
+            .rev-stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .rev-header-container {
+                flex-direction: column;
+                align-items: stretch;
+                text-align: center;
+            }
+            .rev-header-container h1 {
+                font-size: 1.5rem !important;
+            }
+            .rev-header-container button {
+                width: 100%;
+                justify-content: center;
+            }
+            .rev-controls-container {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .rev-search-wrapper {
+                min-width: 100%;
+            }
+            .rev-filter-select-group {
+                width: 100%;
+            }
+            .rev-select-custom {
+                flex: 1;
+                min-width: 120px;
+            }
+            .rev-tabs-container {
+                width: 100%;
+            }
+            .rev-tab-btn {
+                flex: 1;
+                padding: 10px 5px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .rev-stats-grid {
+                grid-template-columns: 1fr;
+            }
+            .rev-select-custom {
+                width: 100%;
+            }
+            .rev-search-filter-group button {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+      `}</style>
+      <div className="rev-header-container">
         <div>
           <h1 style={{ fontSize: '1.875rem', fontWeight: '800', margin: '0 0 0.5rem 0', color: '#111827' }}>Review Management</h1>
           <p style={{ margin: 0, color: '#6B7280', fontSize: '0.925rem' }}>Manage driver and rider reviews for quality control</p>
@@ -190,12 +374,13 @@ export const ReviewManagement = () => {
             color: 'white', 
             border: 'none', 
             padding: '12px 24px', 
-            borderRadius: '12px', 
-            fontWeight: '600',
+            borderRadius: '16px', 
+            fontWeight: '700',
             cursor: 'pointer',
             display: 'flex',
             alignItems: 'center',
-            gap: '8px'
+            gap: '8px',
+            boxShadow: '0 8px 16px -4px rgba(56, 172, 87, 0.4)'
           }}
         >
           Review Analytics
@@ -228,111 +413,110 @@ export const ReviewManagement = () => {
         </div>
       )}
 
-      <div className="stats-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.5rem', marginBottom: '2rem' }}>
+      <div className="rev-stats-grid">
         <div 
+          className={`rev-stat-card ${filterStats === 'total' ? 'active' : ''}`}
           onClick={() => setFilterStats('total')}
-          style={{ 
-            backgroundColor: 'white', padding: '1.5rem', borderRadius: '24px', cursor: 'pointer', border: filterStats === 'total' ? '2px solid #38AC57' : '1px solid #e5e7eb', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.05)'
-          }}
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '1.5rem' }}>
              <div style={{ width: '32px', height: '32px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <img src={totalReviewsIcon} alt="" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
              </div>
-             <span style={{ fontSize: '0.875rem', fontWeight: '600', color: '#374151' }}>Total Reviews</span>
+             <span style={{ fontSize: '14px', fontWeight: '700', color: '#374151' }}>Total Reviews</span>
           </div>
           <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between' }}>
-             <span style={{ fontSize: '2.5rem', fontWeight: '800', color: '#111827' }}>{stats.total}</span>
-             <ArrowUpRight size={24} color="#38AC57" />
+             <span style={{ fontSize: '2.5rem', fontWeight: '900', color: '#111827' }}>{stats.total}</span>
+             <div style={{ backgroundColor: '#f3f4f6', padding: '6px', borderRadius: '50%' }}>
+                <ArrowUpRight size={20} color="#38AC57" />
+             </div>
           </div>
         </div>
 
         <div 
+          className={`rev-stat-card ${filterStats === 'visible' ? 'active-green' : ''}`}
           onClick={() => setFilterStats('visible')}
-          style={{ 
-            backgroundColor: filterStats === 'visible' ? '#38AC57' : 'white', padding: '1.5rem', borderRadius: '24px', cursor: 'pointer', border: filterStats === 'visible' ? 'none' : '1px solid #e5e7eb', boxShadow: '0 4px 6px -1px rgba(16, 185, 129, 0.1)'
-          }}
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '1.5rem' }}>
              <div style={{ width: '32px', height: '32px', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: filterStats === 'visible' ? 'rgba(255,255,255,0.2)' : 'transparent', borderRadius: '8px', padding: '4px' }}>
                 <img src={visibleIcon} alt="" style={{ width: '100%', height: '100%', objectFit: 'contain', filter: filterStats === 'visible' ? 'brightness(0) invert(1)' : 'none' }} />
              </div>
-             <span style={{ fontSize: '0.875rem', fontWeight: '600', color: filterStats === 'visible' ? 'white' : '#374151' }}>Visible</span>
+             <span style={{ fontSize: '14px', fontWeight: '700', color: filterStats === 'visible' ? 'white' : '#374151' }}>Visible</span>
           </div>
           <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between' }}>
-             <span style={{ fontSize: '2.5rem', fontWeight: '800', color: filterStats === 'visible' ? 'white' : '#111827' }}>{stats.visible}</span>
-             <ArrowUpRight size={24} color={filterStats === 'visible' ? 'white' : '#38AC57'} />
+             <span style={{ fontSize: '2.5rem', fontWeight: '900', color: filterStats === 'visible' ? 'white' : '#111827' }}>{stats.visible}</span>
+             <div style={{ backgroundColor: filterStats === 'visible' ? 'rgba(0,0,0,0.1)' : '#f3f4f6', padding: '6px', borderRadius: '50%' }}>
+                <ArrowUpRight size={20} color={filterStats === 'visible' ? 'white' : '#38AC57'} />
+             </div>
           </div>
         </div>
 
         <div 
+          className={`rev-stat-card ${filterStats === 'high' ? 'active' : ''}`}
           onClick={() => setFilterStats('high')}
-          style={{ 
-            backgroundColor: 'white', padding: '1.5rem', borderRadius: '24px', cursor: 'pointer', border: filterStats === 'high' ? '2px solid #38AC57' : '1px solid #e5e7eb', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.05)'
-          }}
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '1.5rem' }}>
              <div style={{ width: '32px', height: '32px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <img src={highRatedIcon} alt="" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
              </div>
-             <span style={{ fontSize: '0.875rem', fontWeight: '600', color: '#374151' }}>High Rated</span>
+             <span style={{ fontSize: '14px', fontWeight: '700', color: '#374151' }}>High Rated</span>
           </div>
           <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between' }}>
-             <span style={{ fontSize: '2.5rem', fontWeight: '800', color: '#111827' }}>{stats.highRated}</span>
-             <ArrowUpRight size={24} color="#38AC57" />
+             <span style={{ fontSize: '2.5rem', fontWeight: '900', color: '#111827' }}>{stats.highRated}</span>
+             <div style={{ backgroundColor: '#f3f4f6', padding: '6px', borderRadius: '50%' }}>
+                <ArrowUpRight size={20} color="#38AC57" />
+             </div>
           </div>
         </div>
 
         <div 
+          className={`rev-stat-card ${filterStats === 'low' ? 'active' : ''}`}
           onClick={() => setFilterStats('low')}
-          style={{ 
-            backgroundColor: 'white', padding: '1.5rem', borderRadius: '24px', cursor: 'pointer', border: filterStats === 'low' ? '2px solid #38AC57' : '1px solid #e5e7eb', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.05)'
-          }}
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '1.5rem' }}>
              <div style={{ width: '32px', height: '32px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <img src={lowRatedIcon} alt="" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
              </div>
-             <span style={{ fontSize: '0.875rem', fontWeight: '600', color: '#374151' }}>Low Rated</span>
+             <span style={{ fontSize: '14px', fontWeight: '700', color: '#374151' }}>Low Rated</span>
           </div>
           <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between' }}>
-             <span style={{ fontSize: '2.5rem', fontWeight: '800', color: '#111827' }}>{stats.lowRated}</span>
-             <ArrowUpRight size={24} color="#38AC57" />
+             <span style={{ fontSize: '2.5rem', fontWeight: '900', color: '#111827' }}>{stats.lowRated}</span>
+             <div style={{ backgroundColor: '#f3f4f6', padding: '6px', borderRadius: '50%' }}>
+                <ArrowUpRight size={20} color="#38AC57" />
+             </div>
           </div>
         </div>
       </div>
 
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
-        <div style={{ display: 'flex', gap: '1rem', flex: 1 }}>
-          <div style={{ position: 'relative', flex: '0 0 300px', backgroundColor: 'white', borderRadius: '12px', border: '1px solid #e5e7eb', display: 'flex', alignItems: 'center', padding: '0 1rem' }}>
+      <div className="rev-controls-container">
+        <div className="rev-search-filter-group">
+          <div className="rev-search-wrapper">
             <Search size={18} color="#9CA3AF" />
             <input 
               type="text" 
-              placeholder="Search..." 
+              placeholder="Search by name or ID..." 
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              style={{ border: 'none', background: 'none', outline: 'none', padding: '10px', fontSize: '14px', width: '100%', color: '#111827' }}
             />
           </div>
 
-          <div style={{ display: 'flex', gap: '0.75rem' }}>
+          <div className="rev-filter-select-group">
              <div style={{ position: 'relative' }}>
                 <select 
-                  style={{ appearance: 'none', backgroundColor: 'white', border: '1px solid #e5e7eb', color: '#374151', padding: '10px 35px 10px 15px', borderRadius: '12px', fontSize: '14px', cursor: 'pointer' }}
+                  className="rev-select-custom"
                   value={ratingFilter}
                   onChange={(e) => setRatingFilter(e.target.value)}
                 >
                   <option>Rating</option>
                   <option>High (4.5+)</option>
                   <option>Medium (3.0-4.4)</option>
-                  <option>&lt; 3.0</option>
+                  <option value="Low (< 3.0)">&lt; 3.0</option>
                 </select>
                 <ChevronDown size={14} style={{ position: 'absolute', right: '12px', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none' }} color="#9CA3AF" />
              </div>
 
              <div style={{ position: 'relative' }}>
                 <select 
-                  style={{ appearance: 'none', backgroundColor: 'white', border: '1px solid #e5e7eb', color: '#374151', padding: '10px 35px 10px 15px', borderRadius: '12px', fontSize: '14px', cursor: 'pointer' }}
+                  className="rev-select-custom"
                   value={typesFilter}
                   onChange={(e) => setTypesFilter(e.target.value)}
                 >
@@ -343,7 +527,7 @@ export const ReviewManagement = () => {
                 <ChevronDown size={14} style={{ position: 'absolute', right: '12px', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none' }} color="#9CA3AF" />
              </div>
 
-             <button style={{ backgroundColor: 'white', border: '1px solid #e5e7eb', color: '#374151', padding: '10px 20px', borderRadius: '12px', fontSize: '14px', display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }} onClick={() => {
+             <button style={{ backgroundColor: 'white', border: '1px solid #e5e7eb', color: '#374151', padding: '10px 20px', borderRadius: '12px', fontSize: '14px', display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', fontWeight: '700' }} onClick={() => {
                  setSearchQuery('');
                  setRatingFilter('Rating');
                  setTypesFilter('Types');
@@ -356,17 +540,16 @@ export const ReviewManagement = () => {
           </div>
         </div>
 
-        <div style={{ display: 'flex', backgroundColor: '#f3f4f6', padding: '4px', borderRadius: '12px', border: '1px solid #e5e7eb' }}>
+        <div className="rev-tabs-container">
           {['Driver Reviews', 'All Reviews', 'Passenger Reviews'].map(tab => (
               <button 
                 key={tab}
                 onClick={() => setActiveTypeTab(tab === 'All Reviews' ? 'All' : tab.split(' ')[0] as any)}
+                className="rev-tab-btn"
                 style={{ 
-                    padding: '8px 20px', borderRadius: '10px', fontSize: '14px', fontWeight: '600', border: 'none',
                     backgroundColor: (activeTypeTab === 'All' && tab === 'All Reviews') || (activeTypeTab + ' Reviews' === tab) ? 'white' : 'transparent',
-                    color: (activeTypeTab === 'All' && tab === 'All Reviews') || (activeTypeTab + ' Reviews' === tab) ? '#111827' : '#6B7280',
-                    boxShadow: (activeTypeTab === 'All' && tab === 'All Reviews') || (activeTypeTab + ' Reviews' === tab) ? '0 1px 3px rgba(0,0,0,0.1)' : 'none',
-                    cursor: 'pointer'
+                    color: (activeTypeTab === 'All' && tab === 'All Reviews') || (activeTypeTab + ' Reviews' === tab) ? '#38AC57' : '#6B7280',
+                    boxShadow: (activeTypeTab === 'All' && tab === 'All Reviews') || (activeTypeTab + ' Reviews' === tab) ? '0 4px 6px -1px rgba(0,0,0,0.1)' : 'none',
                 }}
               >
                 {tab}
@@ -375,54 +558,58 @@ export const ReviewManagement = () => {
         </div>
       </div>
 
-      <div style={{ backgroundColor: 'white', borderRadius: '24px', overflow: 'hidden', border: '1px solid #e5e7eb', boxShadow: '0 1px 3px rgba(0,0,0,0.05)' }}>
-        <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+      <div className="rev-table-container">
+        <table className="rev-table">
           <thead>
-            <tr style={{ backgroundColor: '#38AC57', color: 'white' }}>
-              <th style={{ padding: '1.25rem 1.5rem', textAlign: 'left', fontWeight: '600' }}>User Type</th>
-              <th style={{ padding: '1.25rem 1.5rem', textAlign: 'left', fontWeight: '600' }}>Name ID</th>
-              <th style={{ padding: '1.25rem 1.5rem', textAlign: 'left', fontWeight: '600' }}>Review Date</th>
-              <th style={{ padding: '1.25rem 1.5rem', textAlign: 'left', fontWeight: '600' }}>Visible</th>
-              <th style={{ padding: '1.25rem 1.5rem', textAlign: 'center', fontWeight: '600' }}>Action</th>
+            <tr>
+              <th>User Type</th>
+              <th>Name ID</th>
+              <th>Review Date</th>
+              <th>Visible</th>
+              <th style={{ textAlign: 'center' }}>Action</th>
             </tr>
           </thead>
           <tbody>
-            {filteredReviews.map((review) => (
-              <tr key={review.id} style={{ borderBottom: '1px solid #f3f4f6' }}>
-                <td style={{ padding: '1rem 1.5rem' }}>
-                  <span style={{ padding: '6px 16px', borderRadius: '8px', fontSize: '12px', fontWeight: '700', backgroundColor: '#eef7f0', color: '#38AC57', border: '1px solid #eef7f0' }}>{review.userType}</span>
+            {filteredReviews.length > 0 ? filteredReviews.map((review) => (
+              <tr key={review.id}>
+                <td>
+                  <span style={{ padding: '6px 16px', borderRadius: '8px', fontSize: '12px', fontWeight: '800', backgroundColor: '#eef7f0', color: '#38AC57', textTransform: 'uppercase' }}>{review.userType}</span>
                 </td>
-                <td style={{ padding: '1rem 1.5rem' }}>
+                <td>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                    <div style={{ position: 'relative' }}>
-                      <img src={review.userInfo.avatar} alt="" style={{ width: '40px', height: '40px', borderRadius: '50%', objectFit: 'cover' }} />
-                      <div style={{ position: 'absolute', bottom: '-4px', right: '-4px', backgroundColor: 'white', borderRadius: '50%', padding: '2px', display: 'flex', alignItems: 'center', gap: '2px', border: '1px solid #f3f4f6', boxShadow: '0 1px 2px rgba(0,0,0,0.05)' }}>
+                    <div style={{ position: 'relative', flexShrink: 0 }}>
+                      <img src={review.userInfo.avatar} alt="" style={{ width: '44px', height: '44px', borderRadius: '50%', objectFit: 'cover', border: '2px solid white', boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }} />
+                      <div style={{ position: 'absolute', bottom: '-4px', right: '-4px', backgroundColor: 'white', borderRadius: '12px', padding: '2px 6px', display: 'flex', alignItems: 'center', gap: '2px', border: '1px solid #f3f4f6', boxShadow: '0 1px 2px rgba(0,0,0,0.1)' }}>
                          <Star size={10} fill="#FBBF24" color="#FBBF24" />
-                         <span style={{ fontSize: '10px', fontWeight: '800' }}>{review.rating}</span>
+                         <span style={{ fontSize: '10px', fontWeight: '900' }}>{review.rating}</span>
                       </div>
                     </div>
                     <div>
-                      <div style={{ fontWeight: '700', fontSize: '14px', color: '#111827', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                      <div style={{ fontWeight: '800', fontSize: '14px', color: '#111827', display: 'flex', alignItems: 'center', gap: '4px' }}>
                         {review.userInfo.name}
-                        <CheckCircle2 size={12} fill="black" color="white" />
+                        <CheckCircle2 size={12} fill="#38AC57" color="white" />
                       </div>
-                      <div style={{ fontSize: '12px', color: '#6B7280' }}>{review.userInfo.id}</div>
+                      <div style={{ fontSize: '12px', color: '#6B7280', fontWeight: '600' }}>{review.userInfo.id}</div>
                     </div>
                   </div>
                 </td>
-                <td style={{ padding: '1rem 1.5rem', fontSize: '14px', color: '#374151', fontWeight: '600' }}>{review.reviewDate}</td>
-                <td style={{ padding: '1rem 1.5rem' }}>
-                  <span style={{ padding: '6px 12px', borderRadius: '8px', fontSize: '12px', fontWeight: '700', backgroundColor: review.visible ? '#f3f4f6' : '#FEF2F2', color: review.visible ? '#374151' : '#EF4444' }}>
+                <td style={{ fontSize: '14px', color: '#374151', fontWeight: '700' }}>{review.reviewDate}</td>
+                <td>
+                  <span style={{ padding: '6px 14px', borderRadius: '8px', fontSize: '11px', fontWeight: '800', backgroundColor: review.visible ? '#f3f4f6' : '#FEF2F2', color: review.visible ? '#374151' : '#EF4444', textTransform: 'uppercase' }}>
                     {review.visible ? 'Visible' : 'Flagged'}
                   </span>
                 </td>
-                <td style={{ padding: '1rem 1.5rem', textAlign: 'center' }}>
-                  <button onClick={() => { setSelectedReview(review); setIsModalOpen(true); }} style={{ backgroundColor: 'white', border: '1px solid #e5e7eb', padding: '8px 20px', borderRadius: '10px', fontSize: '14px', color: '#374151', fontWeight: '600', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '8px', transition: 'all 0.2s' }}>
-                    <Eye size={16} /> View
+                <td style={{ textAlign: 'center' }}>
+                  <button onClick={() => { setSelectedReview(review); setIsModalOpen(true); }} style={{ backgroundColor: 'white', border: '1px solid #e5e7eb', padding: '8px 16px', borderRadius: '10px', fontSize: '13px', color: '#374151', fontWeight: '700', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '6px', transition: 'all 0.2s' }}>
+                    <Eye size={14} /> View
                   </button>
                 </td>
               </tr>
-            ))}
+            )) : (
+              <tr>
+                <td colSpan={5} style={{ textAlign: 'center', padding: '3rem', color: '#9CA3AF', fontWeight: '600' }}>No reviews found matching filters</td>
+              </tr>
+            )}
           </tbody>
         </table>
       </div>

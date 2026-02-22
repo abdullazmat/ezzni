@@ -26,198 +26,292 @@ export const CreateNotificationModal = ({ isOpen, onClose }: ModalProps) => {
   if (!isOpen) return null;
 
   return (
-    <div className="modal-overlay">
-      <div className="modal-content" style={{ width: '600px', backgroundColor: 'white', position: 'relative', maxHeight: '90vh', overflowY: 'auto' }}>
-        <button onClick={onClose} style={{ position: 'absolute', top: '24px', left: '24px', border: 'none', background: 'none', cursor: 'pointer' }}>
-          <ArrowLeft size={24} />
+    <div className="modal-overlay" style={{
+        position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
+        backgroundColor: 'rgba(0, 0, 0, 0.4)', display: 'flex',
+        alignItems: 'flex-start', justifyContent: 'center', zIndex: 1000,
+        backdropFilter: 'blur(4px)', padding: '20px', overflowY: 'auto'
+    }}>
+      <style>{`
+        .nom-container {
+            background-color: white;
+            border-radius: 32px;
+            width: 100%;
+            max-width: 650px;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            position: relative;
+            padding: 3rem;
+            color: #111827;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            display: flex;
+            flex-direction: column;
+        }
+        .nom-back-btn {
+            border: none;
+            background: #f3f4f6;
+            cursor: pointer;
+            padding: 10px;
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+            width: fit-content;
+            transition: all 0.2s;
+        }
+        .nom-back-btn:hover {
+            background: #e5e7eb;
+            transform: translateX(-2px);
+        }
+        .nom-step-nav {
+            display: flex;
+            background-color: #F3F4F6;
+            border-radius: 16px;
+            padding: 5px;
+            margin-bottom: 2.5rem;
+        }
+        .nom-step-btn {
+            flex: 1;
+            padding: 12px;
+            border-radius: 12px;
+            border: none;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.95rem;
+        }
+        .nom-step-btn.active {
+            background-color: #38AC57;
+            color: white;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        .nom-preview-card {
+            background-color: #F9FAFB;
+            border-radius: 20px;
+            padding: 1.5rem;
+            border: 1px solid #E5E7EB;
+            margin-top: 2rem;
+        }
+        .nom-reach-card {
+            background-color: #F9FAFB;
+            border-radius: 20px;
+            padding: 1.5rem;
+            border: 1px solid #E5E7EB;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1rem;
+        }
+        .nom-grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.75rem;
+        }
+        .nom-footer {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2.5rem;
+        }
+        .nom-btn {
+            flex: 1;
+            padding: 16px;
+            border-radius: 100px;
+            font-weight: 800;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.2s;
+        }
+        .nom-btn-outline {
+            background: white;
+            border: 1.5px solid #E5E7EB;
+            color: #374151;
+        }
+        .nom-btn-primary {
+            background: #38AC57;
+            border: none;
+            color: white;
+            box-shadow: 0 8px 16px -4px rgba(56, 172, 87, 0.3);
+        }
+        .nom-detail-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .nom-container {
+                padding: 1.5rem;
+                border-radius: 24px;
+            }
+            .nom-grid-3 {
+                grid-template-columns: 1fr 1fr;
+            }
+            .nom-footer {
+                flex-direction: column;
+            }
+            .nom-btn {
+                width: 100%;
+            }
+            .nom-reach-card {
+                flex-direction: column;
+                gap: 1.25rem;
+                align-items: flex-start;
+            }
+            .nom-detail-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+      `}</style>
+      <div className="nom-container" onClick={e => e.stopPropagation()}>
+        <button className="nom-back-btn" onClick={onClose}>
+          <ArrowLeft size={22} />
         </button>
         
-        <div style={{ padding: '3rem 3rem 2rem 3rem' }}>
-          <h2 style={{ fontSize: '1.75rem', fontWeight: '800', margin: '0 0 0.5rem 0', textAlign: 'left' }}>Create New Notification</h2>
-          <p style={{ margin: '0 0 2rem 0', color: '#6B7280', fontWeight: '600' }}>Send targeted notifications to drivers and passengers across both mobile apps</p>
-          
-          {/* Step Indicator */}
-          <div style={{ display: 'flex', backgroundColor: '#F3F4F6', borderRadius: '12px', padding: '4px', marginBottom: '2rem' }}>
-            <button 
-              onClick={() => setStep(1)}
-              style={{ 
-                flex: 1, 
-                padding: '10px', 
-                borderRadius: '8px', 
-                border: 'none', 
-                backgroundColor: step === 1 ? '#38AC57' : 'transparent',
-                color: step === 1 ? 'white' : '#6B7280',
-                fontWeight: '700',
-                cursor: 'pointer'
-              }}
-            >
-              Content
-            </button>
-            <button 
-              onClick={() => setStep(2)}
-              style={{ 
-                flex: 1, 
-                padding: '10px', 
-                borderRadius: '8px', 
-                border: 'none', 
-                backgroundColor: step === 2 ? '#38AC57' : 'transparent',
-                color: step === 2 ? 'white' : '#6B7280',
-                fontWeight: '700',
-                cursor: 'pointer'
-              }}
-            >
-              Audience
-            </button>
-          </div>
+        <h2 style={{ fontSize: '1.75rem', fontWeight: '900', margin: '0 0 0.25rem 0' }}>Create New Notification</h2>
+        <p style={{ margin: '0 0 2rem 0', color: '#6B7280', fontSize: '1rem', fontWeight: '600' }}>Send targeted notifications to drivers and passengers</p>
+        
+        <div className="nom-step-nav">
+          <button onClick={() => setStep(1)} className={`nom-step-btn ${step === 1 ? 'active' : ''}`}>Content</button>
+          <button onClick={() => setStep(2)} className={`nom-step-btn ${step === 2 ? 'active' : ''}`}>Audience</button>
+        </div>
 
-          {step === 1 ? (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                <label style={{ fontWeight: '800', color: '#111827' }}>Notification Title</label>
-                <input 
-                  type="text" 
-                  placeholder="Enter notification title" 
-                  value={formData.title}
-                  onChange={(e) => setFormData({...formData, title: e.target.value})}
-                  style={{ padding: '12px 16px', borderRadius: '12px', border: '1px solid #E5E7EB', outline: 'none' }}
-                />
-              </div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                <label style={{ fontWeight: '800', color: '#111827' }}>Message</label>
-                <textarea 
-                  placeholder="Enter your message" 
-                  rows={4}
-                  value={formData.message}
-                  onChange={(e) => setFormData({...formData, message: e.target.value})}
-                  style={{ padding: '12px 16px', borderRadius: '12px', border: '1px solid #E5E7EB', outline: 'none', resize: 'none' }}
-                />
-              </div>
-              
-              <div style={{ backgroundColor: '#F9FAFB', borderRadius: '16px', padding: '1.5rem', border: '1px solid #E5E7EB' }}>
-                <p style={{ margin: '0 0 1rem 0', fontWeight: '700', color: '#374151' }}>Mobile App Preview</p>
-                <div style={{ backgroundColor: 'white', borderRadius: '12px', padding: '1rem', display: 'flex', gap: '1rem', border: '1px solid #E5E7EB' }}>
-                  <div style={{ width: '40px', height: '40px', borderRadius: '8px', backgroundColor: '#38AC57', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                    <Bell color="white" size={20} />
-                  </div>
-                  <div style={{ flex: 1 }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <span style={{ fontWeight: '800', fontSize: '0.9rem' }}>{formData.title || 'Notification Title'}</span>
-                      <span style={{ fontSize: '0.75rem', color: '#9CA3AF' }}>Just Now</span>
-                    </div>
-                    <p style={{ margin: '0.25rem 0 0 0', fontSize: '0.85rem', color: '#6B7280' }}>{formData.message || 'Your notification message will appear here...'}</p>
-                  </div>
+        {step === 1 ? (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+              <label style={{ fontWeight: '800', color: '#111827', fontSize: '0.95rem' }}>Notification Title</label>
+              <input 
+                type="text" 
+                placeholder="Enter notification title" 
+                value={formData.title}
+                onChange={(e) => setFormData({...formData, title: e.target.value})}
+                style={{ padding: '14px 18px', borderRadius: '14px', border: '1.5px solid #E5E7EB', outline: 'none', fontSize: '1rem', fontWeight: '600' }}
+              />
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+              <label style={{ fontWeight: '800', color: '#111827', fontSize: '0.95rem' }}>Message</label>
+              <textarea 
+                placeholder="Enter your message" 
+                rows={4}
+                value={formData.message}
+                onChange={(e) => setFormData({...formData, message: e.target.value})}
+                style={{ padding: '14px 18px', borderRadius: '14px', border: '1.5px solid #E5E7EB', outline: 'none', resize: 'none', fontSize: '1rem', fontWeight: '600' }}
+              />
+            </div>
+            
+            <div className="nom-preview-card">
+              <p style={{ margin: '0 0 1.25rem 0', fontWeight: '800', color: '#374151', fontSize: '0.9rem' }}>Mobile App Preview</p>
+              <div style={{ backgroundColor: 'white', borderRadius: '16px', padding: '1.25rem', display: 'flex', gap: '1.25rem', border: '1.5px solid #E5E7EB', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.05)' }}>
+                <div style={{ width: '44px', height: '44px', borderRadius: '12px', backgroundColor: '#38AC57', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                  <Bell color="white" size={22} />
                 </div>
-                <p style={{ margin: '1rem 0 0 0', fontSize: '0.75rem', color: '#6B7280', textAlign: 'center' }}>This notification will appear in the admin dashboard</p>
+                <div style={{ flex: 1 }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <span style={{ fontWeight: '900', fontSize: '1rem' }}>{formData.title || 'Notification Title'}</span>
+                    <span style={{ fontSize: '0.8rem', color: '#9CA3AF', fontWeight: '700' }}>Just Now</span>
+                  </div>
+                  <p style={{ margin: '0.4rem 0 0 0', fontSize: '0.9rem', color: '#6B7280', fontWeight: '600', lineHeight: '1.4' }}>{formData.message || 'Your notification message will appear here...'}</p>
+                </div>
               </div>
             </div>
-          ) : (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                <label style={{ fontWeight: '800', fontSize: '1rem' }}>Private Target</label>
-                <div style={{ position: 'relative' }}>
-                  <select 
-                    style={{ width: '100%', padding: '12px 16px', borderRadius: '12px', border: '1px solid #E5E7EB', appearance: 'none', outline: 'none', fontWeight: '600' }}
-                    value={formData.target}
-                    onChange={(e) => setFormData({...formData, target: e.target.value})}
-                  >
-                    <option>Drivers</option>
-                    <option>Passengers</option>
-                  </select>
-                  <ChevronDown size={20} style={{ position: 'absolute', right: '16px', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none' }} />
-                </div>
+          </div>
+        ) : (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+              <label style={{ fontWeight: '800', fontSize: '1rem' }}>User Type</label>
+              <div style={{ position: 'relative' }}>
+                <select 
+                  style={{ width: '100%', padding: '14px 18px', borderRadius: '14px', border: '1.5px solid #E5E7EB', appearance: 'none', outline: 'none', fontWeight: '700', fontSize: '1rem', backgroundColor: 'white' }}
+                  value={formData.target}
+                  onChange={(e) => setFormData({...formData, target: e.target.value})}
+                >
+                  <option>Drivers</option>
+                  <option>Passengers</option>
+                </select>
+                <ChevronDown size={20} style={{ position: 'absolute', right: '18px', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none', color: '#6B7280' }} />
               </div>
+            </div>
 
-              <p style={{ margin: '0.5rem 0 0 0', fontWeight: '800' }}>Driver Filters</p>
-              
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                <label style={{ fontWeight: '600', color: '#374151', fontSize: '0.9rem' }}>Driver Status</label>
+            <p style={{ margin: '0.5rem 0 0 0', fontWeight: '900', color: '#111827', fontSize: '1.1rem' }}>Targeting Filters</p>
+            
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1.25rem' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem' }}>
+                <label style={{ fontWeight: '700', color: '#374151', fontSize: '0.9rem' }}>Status</label>
                 <div style={{ position: 'relative' }}>
                   <select 
-                    style={{ width: '100%', padding: '12px 16px', borderRadius: '12px', border: '1px solid #E5E7EB', appearance: 'none', outline: 'none', fontWeight: '600' }}
+                    style={{ width: '100%', padding: '12px 16px', borderRadius: '12px', border: '1.5px solid #E5E7EB', appearance: 'none', outline: 'none', fontWeight: '700', backgroundColor: 'white' }}
                     value={formData.status}
                     onChange={(e) => setFormData({...formData, status: e.target.value})}
                   >
-                    <option>All Drivers</option>
+                    <option>All Status</option>
                     <option>Active</option>
                     <option>Offline</option>
                   </select>
-                  <ChevronDown size={20} style={{ position: 'absolute', right: '16px', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none' }} />
+                  <ChevronDown size={18} style={{ position: 'absolute', right: '16px', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none', color: '#6B7280' }} />
                 </div>
               </div>
 
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                <label style={{ fontWeight: '600', color: '#374151', fontSize: '0.9rem' }}>Vehicle Type</label>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem' }}>
+                <label style={{ fontWeight: '700', color: '#374151', fontSize: '0.9rem' }}>Vehicle Category</label>
                 <div style={{ position: 'relative' }}>
                   <select 
-                    style={{ width: '100%', padding: '12px 16px', borderRadius: '12px', border: '1px solid #E5E7EB', appearance: 'none', outline: 'none', fontWeight: '600' }}
+                    style={{ width: '100%', padding: '12px 16px', borderRadius: '12px', border: '1.5px solid #E5E7EB', appearance: 'none', outline: 'none', fontWeight: '700', backgroundColor: 'white' }}
                     value={formData.vehicle}
                     onChange={(e) => setFormData({...formData, vehicle: e.target.value})}
                   >
-                    <option>All Vehicle</option>
+                    <option>All Vehicles</option>
                     <option>Car</option>
                     <option>Motorcycle</option>
                   </select>
-                  <ChevronDown size={20} style={{ position: 'absolute', right: '16px', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none' }} />
+                  <ChevronDown size={18} style={{ position: 'absolute', right: '16px', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none', color: '#6B7280' }} />
                 </div>
               </div>
 
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                <label style={{ fontWeight: '600', color: '#374151', fontSize: '0.9rem' }}>City</label>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem' }}>
+                <label style={{ fontWeight: '700', color: '#374151', fontSize: '0.9rem' }}>Operating City</label>
                 <div style={{ position: 'relative' }}>
                   <select 
-                    style={{ width: '100%', padding: '12px 16px', borderRadius: '12px', border: '1px solid #E5E7EB', appearance: 'none', outline: 'none', fontWeight: '600' }}
+                    style={{ width: '100%', padding: '12px 16px', borderRadius: '12px', border: '1.5px solid #E5E7EB', appearance: 'none', outline: 'none', fontWeight: '700', backgroundColor: 'white' }}
                     value={formData.city}
                     onChange={(e) => setFormData({...formData, city: e.target.value})}
                   >
-                    <option>All City</option>
+                    <option>All Cities</option>
                     <option>Casablanca</option>
                     <option>Rabat</option>
                   </select>
-                  <ChevronDown size={20} style={{ position: 'absolute', right: '16px', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none' }} />
-                </div>
-              </div>
-
-              <div style={{ backgroundColor: '#F9FAFB', borderRadius: '16px', padding: '1.25rem', border: '1px solid #E5E7EB', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-                  <div style={{ width: '48px', height: '48px', borderRadius: '12px', backgroundColor: '#38AC57', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <Users color="white" size={24} />
-                  </div>
-                  <div>
-                    <p style={{ margin: 0, fontWeight: '800', fontSize: '1.1rem' }}>Estimated Reach</p>
-                    <p style={{ margin: 0, fontSize: '0.85rem', color: '#6B7280' }}>Approximate delivery count</p>
-                  </div>
-                </div>
-                <div style={{ textAlign: 'right' }}>
-                  <p style={{ margin: 0, fontSize: '2rem', fontWeight: '800' }}>450</p>
-                  <p style={{ margin: 0, fontSize: '0.85rem', color: '#6B7280', fontWeight: '700' }}>Users</p>
+                  <ChevronDown size={18} style={{ position: 'absolute', right: '16px', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none', color: '#6B7280' }} />
                 </div>
               </div>
             </div>
-          )}
 
-          <div style={{ display: 'flex', gap: '1rem', marginTop: '2.5rem' }}>
-            {step === 1 ? (
-              <button 
-                onClick={onClose}
-                style={{ flex: 1, padding: '14px', borderRadius: '30px', border: '1.5px solid #E5E7EB', backgroundColor: 'transparent', fontWeight: '800', cursor: 'pointer' }}
-              >
-                Cancel
-              </button>
-            ) : (
-              <button 
-                onClick={() => setStep(1)}
-                style={{ flex: 1, padding: '14px', borderRadius: '30px', border: '1.5px solid #E5E7EB', backgroundColor: 'transparent', fontWeight: '800', cursor: 'pointer' }}
-              >
-                Previous
-              </button>
-            )}
-            <button 
-              onClick={() => step === 1 ? setStep(2) : onClose()}
-              style={{ flex: 1, padding: '14px', borderRadius: '30px', border: 'none', backgroundColor: '#38AC57', color: 'white', fontWeight: '800', cursor: 'pointer' }}
-            >
-              {step === 1 ? 'Next' : 'Create'}
-            </button>
+            <div className="nom-reach-card">
+              <div style={{ display: 'flex', gap: '1.25rem', alignItems: 'center' }}>
+                <div style={{ width: '56px', height: '56px', borderRadius: '16px', backgroundColor: '#38AC57', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 8px 16px rgba(56, 172, 87, 0.2)' }}>
+                  <Users color="white" size={28} />
+                </div>
+                <div>
+                  <p style={{ margin: 0, fontWeight: '900', fontSize: '1.25rem' }}>Estimated Reach</p>
+                  <p style={{ margin: 0, fontSize: '0.9rem', color: '#6B7280', fontWeight: '600' }}>Potential delivery count</p>
+                </div>
+              </div>
+              <div style={{ textAlign: 'right' }}>
+                <p style={{ margin: 0, fontSize: '2.5rem', fontWeight: '900', color: '#38AC57', lineHeight: 1 }}>{formData.target === 'Drivers' ? '450' : '1,200'}</p>
+                <p style={{ margin: '0.2rem 0 0 0', fontSize: '0.95rem', color: '#6B7280', fontWeight: '800' }}>Total Users</p>
+              </div>
+            </div>
           </div>
+        )}
+
+        <div className="nom-footer">
+          {step === 1 ? (
+            <button className="nom-btn nom-btn-outline" onClick={onClose}>Cancel</button>
+          ) : (
+            <button className="nom-btn nom-btn-outline" onClick={() => setStep(1)}>Back to Content</button>
+          )}
+          <button 
+            className="nom-btn nom-btn-primary"
+            onClick={() => step === 1 ? setStep(2) : onClose()}
+          >
+            {step === 1 ? 'Configure Audience' : 'Send Notification Now'}
+          </button>
         </div>
       </div>
     </div>
@@ -236,56 +330,61 @@ export const TeamNotificationModal = ({ isOpen, onClose }: ModalProps) => {
   if (!isOpen) return null;
 
   return (
-    <div className="modal-overlay">
-      <div className="modal-content" style={{ width: '600px', backgroundColor: 'white', position: 'relative', maxHeight: '90vh', overflowY: 'auto' }}>
-         <button onClick={onClose} style={{ position: 'absolute', top: '24px', left: '24px', border: 'none', background: 'none', cursor: 'pointer' }}>
-          <ArrowLeft size={24} />
+    <div className="modal-overlay" style={{
+        position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
+        backgroundColor: 'rgba(0, 0, 0, 0.4)', display: 'flex',
+        alignItems: 'flex-start', justifyContent: 'center', zIndex: 1000,
+        backdropFilter: 'blur(4px)', padding: '20px', overflowY: 'auto'
+    }}>
+      <div className="nom-container" onClick={e => e.stopPropagation()}>
+        <button className="nom-back-btn" onClick={onClose}>
+          <ArrowLeft size={22} />
         </button>
         
-        <div style={{ padding: '3rem 3rem 2rem 3rem' }}>
-          <h2 style={{ fontSize: '1.75rem', fontWeight: '800', margin: '0 0 0.5rem 0' }}>Send Team Notification</h2>
-          <p style={{ margin: '0 0 2rem 0', color: '#6B7280', fontWeight: '600' }}>Create internal notifications for admin panel team members</p>
+        <h2 style={{ fontSize: '1.75rem', fontWeight: '900', margin: '0 0 0.25rem 0' }}>Send Team Notification</h2>
+        <p style={{ margin: '0 0 2rem 0', color: '#6B7280', fontSize: '1rem', fontWeight: '600' }}>Internal notifications for admin panel team members</p>
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-              <label style={{ fontWeight: '800' }}>Notification Title</label>
-              <input 
-                type="text" 
-                placeholder="Enter notification title" 
-                value={formData.title}
-                onChange={(e) => setFormData({...formData, title: e.target.value})}
-                style={{ padding: '12px 16px', borderRadius: '12px', border: '1px solid #E5E7EB', outline: 'none' }}
-              />
-            </div>
-            
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-              <label style={{ fontWeight: '800' }}>Message</label>
-              <textarea 
-                placeholder="Enter your message" 
-                rows={4}
-                value={formData.message}
-                onChange={(e) => setFormData({...formData, message: e.target.value})}
-                style={{ padding: '12px 16px', borderRadius: '12px', border: '1px solid #E5E7EB', outline: 'none', resize: 'none' }}
-              />
-            </div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+            <label style={{ fontWeight: '800', fontSize: '0.95rem' }}>Notification Title</label>
+            <input 
+              type="text" 
+              placeholder="Enter notification title" 
+              value={formData.title}
+              onChange={(e) => setFormData({...formData, title: e.target.value})}
+              style={{ padding: '14px 18px', borderRadius: '14px', border: '1.5px solid #E5E7EB', outline: 'none', fontSize: '1rem', fontWeight: '600' }}
+            />
+          </div>
+          
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+            <label style={{ fontWeight: '800', fontSize: '0.95rem' }}>Message Content</label>
+            <textarea 
+              placeholder="Enter your message" 
+              rows={4}
+              value={formData.message}
+              onChange={(e) => setFormData({...formData, message: e.target.value})}
+              style={{ padding: '14px 18px', borderRadius: '14px', border: '1.5px solid #E5E7EB', outline: 'none', resize: 'none', fontSize: '1rem', fontWeight: '600' }}
+            />
+          </div>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-              <label style={{ fontWeight: '800' }}>Target Departments</label>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '0.75rem' }}>
-                {departments.map(dept => (
-                  <label key={dept} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', backgroundColor: '#F9FAFB', padding: '10px 12px', borderRadius: '10px', fontSize: '0.9rem', fontWeight: '600' }}>
-                    <input type="checkbox" style={{ accentColor: '#38AC57' }} />
-                    {dept}
-                  </label>
-                ))}
-              </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+            <label style={{ fontWeight: '800', fontSize: '0.95rem' }}>Target Departments</label>
+            <div className="nom-grid-3">
+              {departments.map(dept => (
+                <label key={dept} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', cursor: 'pointer', backgroundColor: '#F9FAFB', padding: '12px', borderRadius: '12px', fontSize: '0.85rem', fontWeight: '700', border: '1px solid #E5E7EB' }}>
+                  <input type="checkbox" style={{ accentColor: '#38AC57', width: '18px', height: '18px' }} />
+                  {dept}
+                </label>
+              ))}
             </div>
+          </div>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-              <label style={{ fontWeight: '800' }}>Category</label>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1.25rem' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem' }}>
+              <label style={{ fontWeight: '800', fontSize: '0.95rem' }}>Category</label>
               <div style={{ position: 'relative' }}>
                 <select 
-                  style={{ width: '100%', padding: '12px 16px', borderRadius: '12px', border: '1px solid #E5E7EB', appearance: 'none', outline: 'none', fontWeight: '600' }}
+                  style={{ width: '100%', padding: '14px 18px', borderRadius: '14px', border: '1.5px solid #E5E7EB', appearance: 'none', outline: 'none', fontWeight: '700', backgroundColor: 'white' }}
                   value={formData.category}
                   onChange={(e) => setFormData({...formData, category: e.target.value})}
                 >
@@ -293,78 +392,69 @@ export const TeamNotificationModal = ({ isOpen, onClose }: ModalProps) => {
                   <option>Urgent</option>
                   <option>Update</option>
                 </select>
-                <ChevronDown size={20} style={{ position: 'absolute', right: '16px', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none' }} />
+                <ChevronDown size={20} style={{ position: 'absolute', right: '18px', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none' }} />
               </div>
             </div>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-              <label style={{ fontWeight: '800' }}>Send Option</label>
-              <div style={{ display: 'flex', gap: '1rem' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem' }}>
+              <label style={{ fontWeight: '800', fontSize: '0.95rem' }}>Send Timing</label>
+              <div style={{ display: 'flex', gap: '0.75rem', backgroundColor: '#F3F4F6', padding: '4px', borderRadius: '30px' }}>
                 <button 
                   onClick={() => setSendOption('Now')}
                   style={{ 
                     flex: 1, 
-                    padding: '12px', 
-                    borderRadius: '30px', 
+                    padding: '10px', 
+                    borderRadius: '26px', 
                     backgroundColor: sendOption === 'Now' ? 'black' : 'transparent',
                     color: sendOption === 'Now' ? 'white' : '#6B7280',
-                    border: sendOption === 'Now' ? 'none' : '1.5px solid #E5E7EB',
+                    border: 'none',
                     fontWeight: '800',
-                    cursor: 'pointer'
+                    cursor: 'pointer',
+                    fontSize: '0.9rem'
                   }}
                 >
-                  Send Now
+                  Now
                 </button>
                 <button 
                   onClick={() => setSendOption('Schedule')}
                   style={{ 
                     flex: 1, 
-                    padding: '12px', 
-                    borderRadius: '30px', 
+                    padding: '10px', 
+                    borderRadius: '26px', 
                     backgroundColor: sendOption === 'Schedule' ? 'black' : 'transparent',
                     color: sendOption === 'Schedule' ? 'white' : '#6B7280',
-                    border: sendOption === 'Schedule' ? 'none' : '1.5px solid #E5E7EB',
+                    border: 'none',
                     fontWeight: '800',
-                    cursor: 'pointer'
+                    cursor: 'pointer',
+                    fontSize: '0.9rem'
                   }}
                 >
                   Schedule
                 </button>
               </div>
             </div>
+          </div>
 
-            <div style={{ backgroundColor: '#F9FAFB', borderRadius: '16px', padding: '1.25rem', border: '1px solid #E5E7EB' }}>
-                <p style={{ margin: '0 0 1rem 0', fontWeight: '700', color: '#374151' }}>Dashboard Preview</p>
-                <div style={{ backgroundColor: 'white', borderRadius: '12px', padding: '1rem', display: 'flex', gap: '1rem', border: '1px solid #E5E7EB' }}>
-                  <div style={{ width: '40px', height: '40px', borderRadius: '8px', backgroundColor: '#38AC57', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                    <Bell color="white" size={20} />
-                  </div>
-                  <div style={{ flex: 1 }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <span style={{ fontWeight: '800', fontSize: '0.9rem' }}>{formData.title || 'Notification Title'}</span>
-                      <span style={{ fontSize: '0.75rem', color: '#9CA3AF' }}>Just Now</span>
-                    </div>
-                    <p style={{ margin: '0.25rem 0 0 0', fontSize: '0.85rem', color: '#6B7280' }}>{formData.message || 'Your notification message will appear here...'}</p>
-                  </div>
+          <div className="nom-preview-card">
+              <p style={{ margin: '0 0 1.25rem 0', fontWeight: '800', color: '#374151', fontSize: '0.9rem' }}>Dashboard Preview</p>
+              <div style={{ backgroundColor: 'white', borderRadius: '16px', padding: '1.25rem', display: 'flex', gap: '1.25rem', border: '1.5px solid #E5E7EB' }}>
+                <div style={{ width: '44px', height: '44px', borderRadius: '12px', backgroundColor: '#38AC57', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                  <Bell color="white" size={22} />
                 </div>
-                <p style={{ margin: '1rem 0 0 0', fontSize: '0.75rem', color: '#6B7280', textAlign: 'center' }}>This notification will appear in the admin dashboard</p>
-            </div>
+                <div style={{ flex: 1 }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <span style={{ fontWeight: '900', fontSize: '1rem' }}>{formData.title || 'Notification Title'}</span>
+                    <span style={{ fontSize: '0.8rem', color: '#9CA3AF', fontWeight: '700' }}>Just Now</span>
+                  </div>
+                  <p style={{ margin: '0.4rem 0 0 0', fontSize: '0.9rem', color: '#6B7280', fontWeight: '600' }}>{formData.message || 'The team will see this message...'}</p>
+                </div>
+              </div>
           </div>
+        </div>
 
-          <div style={{ display: 'flex', gap: '1rem', marginTop: '2.5rem' }}>
-            <button 
-              onClick={onClose}
-              style={{ flex: 1, padding: '14px', borderRadius: '30px', border: '1.5px solid #E5E7EB', backgroundColor: 'transparent', fontWeight: '800', cursor: 'pointer' }}
-            >
-              Cancel
-            </button>
-            <button 
-              onClick={onClose}
-              style={{ flex: 1.5, padding: '14px', borderRadius: '30px', border: 'none', backgroundColor: '#38AC57', color: 'white', fontWeight: '800', cursor: 'pointer' }}
-            >
-              Send
-            </button>
-          </div>
+        <div className="nom-footer">
+          <button className="nom-btn nom-btn-outline" onClick={onClose}>Cancel</button>
+          <button className="nom-btn nom-btn-primary" onClick={onClose}>Deploy Notification</button>
         </div>
       </div>
     </div>
@@ -375,52 +465,57 @@ export const NotificationDetailsModal = ({ isOpen, onClose, notification }: Moda
   if (!isOpen || !notification) return null;
 
   return (
-    <div className="modal-overlay">
-      <div className="modal-content" style={{ width: '500px', backgroundColor: 'white', position: 'relative' }}>
-         <button onClick={onClose} style={{ position: 'absolute', top: '24px', left: '24px', border: 'none', background: 'none', cursor: 'pointer' }}>
-          <ArrowLeft size={24} />
+    <div className="modal-overlay" style={{
+        position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
+        backgroundColor: 'rgba(0, 0, 0, 0.4)', display: 'flex',
+        alignItems: 'flex-start', justifyContent: 'center', zIndex: 1000,
+        backdropFilter: 'blur(4px)', padding: '20px', overflowY: 'auto'
+    }}>
+      <div className="nom-container" onClick={e => e.stopPropagation()} style={{ maxWidth: '550px' }}>
+        <button className="nom-back-btn" onClick={onClose}>
+          <ArrowLeft size={22} />
         </button>
         
-        <div style={{ padding: '3rem 2.5rem 2.5rem 2.5rem' }}>
-          <h2 style={{ fontSize: '1.75rem', fontWeight: '800', margin: '0 0 1.5rem 0' }}>Notification Details</h2>
-          
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-            <div>
-              <h3 style={{ fontSize: '1.25rem', fontWeight: '800', margin: '0 0 0.75rem 0' }}>{notification.title}</h3>
-              <div style={{ display: 'flex', gap: '0.5rem' }}>
-                <span style={{ padding: '4px 12px', borderRadius: '6px', backgroundColor: '#EFF6FF', color: '#3B82F6', fontSize: '0.8rem', fontWeight: '700' }}>Announcement</span>
-                <span style={{ padding: '4px 12px', borderRadius: '6px', backgroundColor: '#eef7f0', color: '#38AC57', fontSize: '0.8rem', fontWeight: '700' }}>Sent</span>
-              </div>
+        <h2 style={{ fontSize: '1.75rem', fontWeight: '900', margin: '0 0 1.5rem 0' }}>Notification Insight</h2>
+        
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.75rem' }}>
+          <div>
+            <h3 style={{ fontSize: '1.35rem', fontWeight: '900', margin: '0 0 0.75rem 0', color: '#111827' }}>{notification.title}</h3>
+            <div style={{ display: 'flex', gap: '0.75rem' }}>
+              <span style={{ padding: '6px 16px', borderRadius: '8px', backgroundColor: '#EFF6FF', color: '#3B82F6', fontSize: '0.85rem', fontWeight: '800' }}>{notification.category}</span>
+              <span style={{ padding: '6px 16px', borderRadius: '8px', backgroundColor: '#eef7f0', color: '#38AC57', fontSize: '0.85rem', fontWeight: '800' }}>{notification.status}</span>
             </div>
+          </div>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-              <label style={{ fontWeight: '800', color: '#111827' }}>Message</label>
-              <div style={{ padding: '1.25rem', borderRadius: '16px', border: '1px solid #E5E7EB', backgroundColor: '#F9FAFB', color: '#374151', fontSize: '0.95rem', lineHeight: '1.5', fontWeight: '600' }}>
-                {notification.message}
-              </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
+            <label style={{ fontWeight: '900', color: '#111827', fontSize: '0.95rem' }}>Full Message Content</label>
+            <div style={{ padding: '1.5rem', borderRadius: '20px', border: '1.5px solid #E5E7EB', backgroundColor: '#F9FAFB', color: '#374151', fontSize: '1.1rem', lineHeight: '1.6', fontWeight: '600' }}>
+              {notification.message}
             </div>
+          </div>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-               <label style={{ fontWeight: '800', color: '#111827' }}>Target Departments</label>
-               <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
-                 {['Operations', 'Support'].map(dept => (
-                   <span key={dept} style={{ padding: '6px 16px', borderRadius: '8px', backgroundColor: '#F0F9FF', color: '#0EA5E9', fontSize: '0.85rem', fontWeight: '700' }}>{dept}</span>
-                 ))}
-               </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
+             <label style={{ fontWeight: '900', color: '#111827', fontSize: '0.95rem' }}>Recipient Segment</label>
+             <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
+               {(notification.departments || [notification.target || 'All Users']).map(dept => (
+                 <span key={dept} style={{ padding: '8px 18px', borderRadius: '10px', backgroundColor: '#F0F9FF', color: '#0EA5E9', fontSize: '0.9rem', fontWeight: '800', border: '1px solid #BAE6FD' }}>{dept}</span>
+               ))}
+             </div>
+          </div>
+
+          <div className="nom-detail-grid">
+            <div style={{ textAlign: 'center', padding: '1.5rem', borderRadius: '20px', backgroundColor: '#fcfdfc', border: '1.5px solid #eef7f0' }}>
+              <p style={{ fontSize: '2.5rem', fontWeight: '900', margin: 0, color: '#111827' }}>{notification.deliveryCount}</p>
+              <p style={{ fontSize: '0.9rem', color: '#6B7280', margin: '0.2rem 0 0 0', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Delivered</p>
             </div>
-
-            <div style={{ display: 'flex', gap: '2rem', marginTop: '1rem' }}>
-              <div style={{ textAlign: 'center', flex: 1 }}>
-                <p style={{ fontSize: '2.5rem', fontWeight: '800', margin: 0 }}>12</p>
-                <p style={{ fontSize: '0.9rem', color: '#6B7280', margin: 0, fontWeight: '700' }}>Delivered</p>
-              </div>
-              <div style={{ textAlign: 'center', flex: 1 }}>
-                <p style={{ fontSize: '2.5rem', fontWeight: '800', margin: 0 }}>9</p>
-                <p style={{ fontSize: '0.9rem', color: '#6B7280', margin: 0, fontWeight: '700' }}>Read</p>
-              </div>
+            <div style={{ textAlign: 'center', padding: '1.5rem', borderRadius: '20px', backgroundColor: '#fcfdfc', border: '1.5px solid #eef7f0' }}>
+              <p style={{ fontSize: '2.5rem', fontWeight: '900', margin: 0, color: '#111827' }}>{notification.readCount}</p>
+              <p style={{ fontSize: '0.9rem', color: '#6B7280', margin: '0.2rem 0 0 0', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Estimated Views</p>
             </div>
           </div>
         </div>
+
+        <button className="nom-btn nom-btn-primary" style={{ marginTop: '2rem' }} onClick={onClose}>Dismiss Insights</button>
       </div>
     </div>
   );
@@ -438,46 +533,50 @@ export const SystemStatusModal = ({ isOpen, onClose }: ModalProps) => {
   ];
 
   return (
-    <div className="modal-overlay">
-      <div className="modal-content" style={{ width: '550px', backgroundColor: 'white', position: 'relative' }}>
-         <button onClick={onClose} style={{ position: 'absolute', top: '24px', left: '24px', border: 'none', background: 'none', cursor: 'pointer' }}>
-          <ArrowLeft size={24} />
+    <div className="modal-overlay" style={{
+        position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
+        backgroundColor: 'rgba(0, 0, 0, 0.4)', display: 'flex',
+        alignItems: 'flex-start', justifyContent: 'center', zIndex: 1000,
+        backdropFilter: 'blur(4px)', padding: '20px', overflowY: 'auto'
+    }}>
+      <div className="nom-container" onClick={e => e.stopPropagation()} style={{ maxWidth: '600px' }}>
+        <button className="nom-back-btn" onClick={onClose}>
+          <ArrowLeft size={22} />
         </button>
         
-        <div style={{ padding: '3rem 2.5rem 2.5rem 2.5rem' }}>
-          <h2 style={{ fontSize: '1.75rem', fontWeight: '800', margin: '0 0 0.5rem 0' }}>System Status</h2>
-          <p style={{ margin: '0 0 2rem 0', color: '#6B7280', fontWeight: '600' }}>Real-time health monitoring of notification services</p>
-          
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-            <div style={{ backgroundColor: '#eef7f0', border: '1px solid #BBF7D0', borderRadius: '16px', padding: '1.5rem', display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1rem' }}>
-              <div style={{ width: '12px', height: '12px', borderRadius: '50%', backgroundColor: '#38AC57', boxShadow: '0 0 0 4px rgba(16, 185, 129, 0.2)' }}></div>
-              <div>
-                <p style={{ margin: 0, fontWeight: '800', color: '#065F46', fontSize: '1.1rem' }}>All Systems Operational</p>
-                <p style={{ margin: 0, fontSize: '0.85rem', color: '#059669', fontWeight: '700' }}>Last checked: Just now</p>
-              </div>
+        <h2 style={{ fontSize: '1.75rem', fontWeight: '900', margin: '0 0 0.5rem 0' }}>System Health Center</h2>
+        <p style={{ margin: '0 0 2rem 0', color: '#6B7280', fontSize: '1rem', fontWeight: '600' }}>Real-time health monitoring of notification services</p>
+        
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+          <div style={{ backgroundColor: '#eef7f0', border: '1.5px solid #BBF7D0', borderRadius: '20px', padding: '1.75rem', display: 'flex', alignItems: 'center', gap: '1.25rem', marginBottom: '0.5rem' }}>
+            <div style={{ width: '14px', height: '14px', borderRadius: '50%', backgroundColor: '#38AC57', boxShadow: '0 0 0 5px rgba(16, 185, 129, 0.2)' }}></div>
+            <div>
+              <p style={{ margin: 0, fontWeight: '900', color: '#065F46', fontSize: '1.25rem' }}>All Services Optimal</p>
+              <p style={{ margin: '0.2rem 0 0 0', fontSize: '0.9rem', color: '#059669', fontWeight: '800' }}>Active monitoring enabled • Refreshed just now</p>
             </div>
-
-            {services.map((service, index) => (
-              <div key={index} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1.25rem', borderRadius: '16px', border: '1px solid #E5E7EB', backgroundColor: 'white' }}>
-                <div style={{ display: 'flex', flexDirection: 'column' }}>
-                  <span style={{ fontWeight: '800', color: '#111827' }}>{service.name}</span>
-                  <span style={{ fontSize: '0.8rem', color: '#6B7280', fontWeight: '700' }}>Latency: {service.latency}</span>
-                </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <div style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#38AC57' }}></div>
-                  <span style={{ fontSize: '0.85rem', fontWeight: '700', color: '#059669' }}>{service.status}</span>
-                </div>
-              </div>
-            ))}
           </div>
 
-          <button 
-            onClick={onClose}
-            style={{ width: '100%', marginTop: '2.5rem', padding: '14px', borderRadius: '30px', border: 'none', backgroundColor: '#38AC57', color: 'white', fontWeight: '800', cursor: 'pointer' }}
-          >
-            Close Status Report
-          </button>
+          {services.map((service, index) => (
+            <div key={index} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1.25rem 1.5rem', borderRadius: '18px', border: '1.5px solid #E5E7EB', backgroundColor: 'white', transition: 'all 0.2s ease' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.2rem' }}>
+                <span style={{ fontWeight: '900', color: '#111827', fontSize: '1.05rem' }}>{service.name}</span>
+                <span style={{ fontSize: '0.85rem', color: '#9CA3AF', fontWeight: '800' }}>Ping Latency: <span style={{ color: '#6B7280' }}>{service.latency}</span></span>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', backgroundColor: '#fcfdfc', padding: '6px 14px', borderRadius: '10px', border: '1px solid #eef7f0' }}>
+                <div style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#38AC57' }}></div>
+                <span style={{ fontSize: '0.85rem', fontWeight: '900', color: '#38AC57', textTransform: 'uppercase' }}>{service.status}</span>
+              </div>
+            </div>
+          ))}
         </div>
+
+        <button 
+          className="nom-btn nom-btn-primary"
+          onClick={onClose}
+          style={{ marginTop: '2.5rem' }}
+        >
+          Exit Health Monitor
+        </button>
       </div>
     </div>
   );

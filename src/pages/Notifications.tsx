@@ -247,36 +247,207 @@ export const Notifications = () => {
   };
 
   return (
-    <div style={{ padding: '2rem', backgroundColor: '#f8fafc', minHeight: '100vh' }}>
+    <div className="main-content" style={{ padding: '2rem', backgroundColor: '#f8fafc', minHeight: '100vh', overflowY: 'auto' }}>
+      <style>{`
+        .not-header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 2.5rem;
+            gap: 1.5rem;
+        }
+        .not-title-section h1 {
+            font-size: 2rem;
+            font-weight: 800;
+            margin: 0 0 0.5rem 0;
+            color: #111827;
+        }
+        .not-title-section p {
+            margin: 0;
+            color: #6B7280;
+            font-size: 1.1rem;
+        }
+        .not-create-btn {
+            background-color: #38AC57;
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 18px;
+            font-weight: 800;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1rem;
+            box-shadow: 0 8px 16px -4px rgba(56, 172, 87, 0.4);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            white-space: nowrap;
+        }
+        .not-create-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 20px -4px rgba(56, 172, 87, 0.5);
+            background-color: #2e8f47;
+        }
+        .not-stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 2.5rem;
+        }
+        .not-stat-card {
+            padding: 1.75rem;
+            border-radius: 28px;
+            border: 1px solid #E5E7EB;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .not-stat-card.active {
+            background-color: #38AC57 !important;
+            border-color: #38AC57 !important;
+            transform: translateY(-4px);
+            box-shadow: 0 20px 25px -5px rgba(56, 172, 87, 0.3);
+        }
+        .not-search-container {
+            position: relative;
+            margin-bottom: 2rem;
+            max-width: 500px;
+        }
+        .not-search-input {
+            width: 100%;
+            padding: 14px 16px 14px 52px;
+            border-radius: 20px;
+            border: 1.5px solid #e5e7eb;
+            font-size: 1rem;
+            font-weight: 600;
+            outline: none;
+            background-color: white;
+            transition: all 0.2s;
+        }
+        .not-search-input:focus {
+            border-color: #38AC57;
+            box-shadow: 0 0 0 4px rgba(56, 172, 87, 0.1);
+        }
+        .not-tabs-container {
+            display: inline-flex;
+            background-color: #F3F4F6;
+            padding: 6px;
+            border-radius: 20px;
+            margin-bottom: 2.5rem;
+        }
+        .not-tab-btn {
+            padding: 12px 36px;
+            border-radius: 14px;
+            border: none;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.95rem;
+        }
+        .not-tab-active {
+            background-color: #38AC57;
+            color: white;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        .not-list-group {
+            margin-bottom: 2rem;
+        }
+        .not-group-title {
+            font-size: 1.1rem;
+            color: #111827;
+            font-weight: 900;
+            margin-bottom: 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .not-card {
+            background-color: white;
+            padding: 1.5rem;
+            border-radius: 24px;
+            border: 1.5px solid #E5E7EB;
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-bottom: 1rem;
+        }
+        .not-card:hover {
+            border-color: #38AC57;
+            background-color: #fcfdfc;
+            transform: translateX(4px);
+        }
+        .not-table-wrapper {
+            background-color: white;
+            border-radius: 24px;
+            overflow: hidden;
+            border: 1px solid #E5E7EB;
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05);
+            overflow-x: auto;
+        }
+        .not-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 800px;
+        }
+
+        @media (max-width: 1024px) {
+            .not-stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        @media (max-width: 768px) {
+            .not-header-container {
+                flex-direction: column;
+                align-items: stretch;
+                text-align: center;
+            }
+            .not-create-btn {
+                width: 100%;
+                justify-content: center;
+            }
+            .not-stats-grid {
+                grid-template-columns: 1fr;
+            }
+            .not-search-container {
+                max-width: 100%;
+            }
+            .not-tabs-container {
+                width: 100%;
+            }
+            .not-tab-btn {
+                flex: 1;
+                padding: 12px 10px;
+            }
+            .not-card {
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 1.25rem;
+            }
+            .not-card-status {
+                align-self: flex-end;
+            }
+        }
+      `}</style>
       {/* Header */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
-        <div>
-          <h1 style={{ fontSize: '2rem', fontWeight: '800', margin: 0, color: '#111827' }}>Notification Management Center</h1>
-          <p style={{ margin: '0.25rem 0 0 0', color: '#6B7280', fontSize: '1.1rem' }}>External app notifications & internal admin team communications</p>
+      <div className="not-header-container">
+        <div className="not-title-section">
+          <h1>Notification Management Center</h1>
+          <p>External app notifications & internal admin team communications</p>
         </div>
         <button 
+          className="not-create-btn"
           onClick={() => activeTab === 'External' ? setIsCreateModalOpen(true) : setIsTeamModalOpen(true)}
-          style={{ 
-            backgroundColor: '#38AC57', 
-            color: 'white', 
-            border: 'none', 
-            padding: '12px 24px', 
-            borderRadius: '16px', 
-            fontWeight: '700',
-            cursor: 'pointer',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '10px',
-            fontSize: '1rem',
-            boxShadow: '0 4px 12px rgba(16, 185, 129, 0.2)'
-          }}
         >
-          <Plus size={20} strokeWidth={3} /> {activeTab === 'External' ? 'Create Notification' : 'Send Team Notification'}
+          <Plus size={22} strokeWidth={3} /> {activeTab === 'External' ? 'Create Notification' : 'Send Team Notification'}
         </button>
       </div>
 
       {/* Stats Grid */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.5rem', marginBottom: '2.5rem' }}>
+      <div className="not-stats-grid">
         {stats.map((stat, index) => {
           const isActive = (stat.label === 'Total Sent Today' && targetFilter === 'Today') ||
                            (stat.label === 'To Drivers' && targetFilter === 'Drivers') ||
@@ -287,47 +458,42 @@ export const Notifications = () => {
             <div 
               key={index} 
               onClick={stat.onClick}
+              className={`not-stat-card ${isActive ? 'active' : ''}`}
               style={{ 
                 backgroundColor: isActive ? '#38AC57' : '#eef7f0', 
-                padding: '1.5rem', 
-                borderRadius: '24px', 
-                border: isActive ? 'none' : '1px solid #E5E7EB',
-                position: 'relative',
-                cursor: 'pointer',
-                transition: 'all 0.2s ease',
-                transform: isActive ? 'scale(1.02)' : 'none',
-                boxShadow: isActive ? '0 10px 15px -3px rgba(56, 172, 87, 0.2)' : 'none'
               }}
             >
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.5rem' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.75rem' }}>
                 <div style={{ 
-                  width: '40px', 
-                  height: '40px', 
-                  borderRadius: '12px', 
+                  width: '44px', 
+                  height: '44px', 
+                  borderRadius: '14px', 
                   backgroundColor: isActive ? 'rgba(255,255,255,0.2)' : 'white',
                   display: 'flex',
                   alignItems: 'center',
-                  justifyContent: 'center'
+                  justifyContent: 'center',
+                  boxShadow: isActive ? 'none' : '0 4px 6px rgba(0,0,0,0.05)'
                 }}>
-                  <img src={stat.icon} alt={stat.label} style={{ width: '32px', height: '32px', objectFit: 'contain' }} />
+                  <img src={stat.icon} alt={stat.label} style={{ width: '30px', height: '30px', objectFit: 'contain' }} />
                 </div>
-                <span style={{ color: isActive ? 'white' : '#6B7280', fontWeight: '700', fontSize: '0.9rem' }}>{stat.label}</span>
+                <span style={{ color: isActive ? 'white' : '#6B7280', fontWeight: '800', fontSize: '0.95rem' }}>{stat.label}</span>
               </div>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
                 <div>
-                  <div style={{ fontSize: '2.5rem', fontWeight: '800', color: isActive ? 'white' : '#111827', lineHeight: '1' }}>{stat.value}</div>
-                  <div style={{ fontSize: '0.85rem', color: isActive ? 'rgba(255,255,255,0.8)' : '#6B7280', marginTop: '0.5rem', fontWeight: '600' }}>{stat.desc}</div>
+                  <div style={{ fontSize: '2.5rem', fontWeight: '900', color: isActive ? 'white' : '#111827', lineHeight: '1' }}>{stat.value}</div>
+                  <div style={{ fontSize: '0.85rem', color: isActive ? 'rgba(255,255,255,0.85)' : '#6B7280', marginTop: '0.6rem', fontWeight: '700' }}>{stat.desc}</div>
                 </div>
                 <div style={{ 
-                  width: '32px', 
-                  height: '32px', 
+                  width: '36px', 
+                  height: '36px', 
                   borderRadius: '50%', 
-                  backgroundColor: isActive ? 'black' : '#38AC57',
+                  backgroundColor: isActive ? 'rgba(0,0,0,0.3)' : '#38AC57',
                   display: 'flex',
                   alignItems: 'center',
-                  justifyContent: 'center'
+                  justifyContent: 'center',
+                  transition: 'all 0.2s'
                 }}>
-                  <ArrowUpRight size={18} color="white" />
+                  <ArrowUpRight size={20} color="white" />
                 </div>
               </div>
             </div>
@@ -335,54 +501,30 @@ export const Notifications = () => {
         })}
       </div>
 
-      <div style={{ position: 'relative', marginBottom: '2rem' }}>
+      <div className="not-search-container">
         <input 
           type="text" 
-          placeholder="Search notifications..." 
+          className="not-search-input"
+          placeholder="Search by title or message..." 
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          style={{ 
-            width: '400px', 
-            padding: '12px 16px 12px 48px', 
-            borderRadius: '24px', 
-            border: '1px solid #e5e7eb', 
-            fontSize: '1rem',
-            outline: 'none',
-            backgroundColor: 'white'
-          }}
         />
-        <Search size={20} color="#9CA3AF" style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)' }} />
+        <Search size={22} color="#9CA3AF" style={{ position: 'absolute', left: '18px', top: '50%', transform: 'translateY(-50%)' }} />
       </div>
 
       {/* Navigation Tabs */}
-      <div style={{ display: 'inline-flex', backgroundColor: '#F3F4F6', padding: '6px', borderRadius: '16px', marginBottom: '2rem' }}>
+      <div className="not-tabs-container">
         <button 
           onClick={() => setActiveTab('External')}
-          style={{ 
-            padding: '10px 32px', 
-            borderRadius: '12px', 
-            border: 'none',
-            backgroundColor: activeTab === 'External' ? '#38AC57' : 'transparent',
-            color: activeTab === 'External' ? 'white' : '#6B7280',
-            fontWeight: '700',
-            cursor: 'pointer',
-            transition: 'all 0.2s'
-          }}
+          className={`not-tab-btn ${activeTab === 'External' ? 'not-tab-active' : ''}`}
+          style={{ color: activeTab === 'External' ? 'white' : '#6B7280' }}
         >
           External App
         </button>
         <button 
           onClick={() => setActiveTab('Internal')}
-          style={{ 
-            padding: '10px 32px', 
-            borderRadius: '12px', 
-            border: 'none',
-            backgroundColor: activeTab === 'Internal' ? '#38AC57' : 'transparent',
-            color: activeTab === 'Internal' ? 'white' : '#6B7280',
-            fontWeight: '700',
-            cursor: 'pointer',
-            transition: 'all 0.2s'
-          }}
+          className={`not-tab-btn ${activeTab === 'Internal' ? 'not-tab-active' : ''}`}
+          style={{ color: activeTab === 'Internal' ? 'white' : '#6B7280' }}
         >
           Admin Team
         </button>
@@ -391,41 +533,41 @@ export const Notifications = () => {
       {/* Notifications List */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
         {activeTab === 'Internal' ? (
-          <div style={{ backgroundColor: 'white', borderRadius: '16px', overflow: 'hidden', border: '1px solid #E5E7EB', boxShadow: '0 1px 3px rgba(0,0,0,0.05)' }}>
-            <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+          <div className="not-table-wrapper">
+            <table className="not-table">
               <thead>
                 <tr style={{ backgroundColor: '#38AC57', color: 'white', textAlign: 'left' }}>
-                  <th style={{ padding: '1rem 1.5rem', fontWeight: '800', fontSize: '15px' }}>Title</th>
+                  <th style={{ padding: '1.25rem 1.5rem', fontWeight: '800', fontSize: '15px' }}>Title</th>
                   <th style={{ padding: '1.25rem 1.5rem', fontWeight: '800', fontSize: '15px', textAlign: 'center' }}>Target</th>
                   <th style={{ padding: '1.25rem 1.5rem', fontWeight: '800', fontSize: '15px', textAlign: 'center' }}>Category</th>
                   <th style={{ padding: '1.25rem 1.5rem', fontWeight: '800', fontSize: '15px', textAlign: 'center' }}>Status</th>
                 </tr>
               </thead>
               <tbody>
-                {filteredNotifications.map((notif) => (
+                {filteredNotifications.length > 0 ? filteredNotifications.map((notif) => (
                   <tr key={notif.id} style={{ borderBottom: '1px solid #F3F4F6' }}>
-                    <td style={{ padding: '1rem 1.5rem' }}>
-                      <div style={{ fontWeight: '800', fontSize: '16px', color: '#111827' }}>{notif.title}</div>
-                      <div style={{ fontSize: '12px', color: '#6B7280', fontWeight: '700' }}>{notif.id}</div>
+                    <td style={{ padding: '1.25rem 1.5rem' }}>
+                      <div style={{ fontWeight: '900', fontSize: '16px', color: '#111827' }}>{notif.title}</div>
+                      <div style={{ fontSize: '11px', color: '#9CA3AF', fontWeight: '800', letterSpacing: '0.05em', marginTop: '2px' }}>{notif.id}</div>
                     </td>
-                    <td style={{ padding: '1rem 1.5rem', textAlign: 'center' }}>
+                    <td style={{ padding: '1.25rem 1.5rem', textAlign: 'center' }}>
                       <span style={{ 
                         padding: '6px 20px', 
-                        borderRadius: '8px', 
+                        borderRadius: '10px', 
                         fontSize: '13px', 
-                        fontWeight: '700', 
-                        backgroundColor: (notif.category === 'Urgent' || notif.category === 'Alert') ? '#FEE2E2' : '#DBEAFE', 
-                        color: (notif.category === 'Urgent' || notif.category === 'Alert') ? '#EF4444' : '#3B82F6'
+                        fontWeight: '800', 
+                        backgroundColor: '#DBEAFE', 
+                        color: '#3B82F6'
                       }}>
                         {notif.departments?.[0] || 'Support'}
                       </span>
                     </td>
-                    <td style={{ padding: '1rem 1.5rem', textAlign: 'center' }}>
+                    <td style={{ padding: '1.25rem 1.5rem', textAlign: 'center' }}>
                       <span style={{ 
                         padding: '6px 20px', 
-                        borderRadius: '8px', 
+                        borderRadius: '10px', 
                         fontSize: '13px', 
-                        fontWeight: '700', 
+                        fontWeight: '800', 
                         backgroundColor: notif.category === 'Update' ? '#FEF9C3' : 
                                        (notif.category === 'Urgent' || notif.category === 'Alert') ? '#FEE2E2' : '#DBEAFE',
                         color: notif.category === 'Update' ? '#854D0E' : 
@@ -434,12 +576,12 @@ export const Notifications = () => {
                         {notif.category}
                       </span>
                     </td>
-                    <td style={{ padding: '1rem 1.5rem', textAlign: 'center' }}>
+                    <td style={{ padding: '1.25rem 1.5rem', textAlign: 'center' }}>
                       <span style={{ 
                         padding: '6px 20px', 
-                        borderRadius: '8px', 
+                        borderRadius: '10px', 
                         fontSize: '13px', 
-                        fontWeight: '700', 
+                        fontWeight: '800', 
                         backgroundColor: notif.status === 'Sent' ? '#eef7f0' : '#F3F4F6', 
                         color: notif.status === 'Sent' ? '#38AC57' : '#374151' 
                       }}>
@@ -447,94 +589,81 @@ export const Notifications = () => {
                       </span>
                     </td>
                   </tr>
-                ))}
+                )) : (
+                   <tr>
+                     <td colSpan={4} style={{ padding: '4rem', textAlign: 'center', color: '#9CA3AF', fontWeight: '700' }}>No admin notifications found</td>
+                   </tr>
+                )}
               </tbody>
             </table>
           </div>
         ) : (
           <>
-            <div>
-              <h2 style={{ fontSize: '1rem', color: '#6B7280', fontWeight: '700', marginBottom: '1rem' }}>Today</h2>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+            <div className="not-list-group">
+              <h2 className="not-group-title">Today</h2>
+              <div style={{ display: 'flex', flexDirection: 'column' }}>
                 {filteredNotifications.filter(n => n.timestamp.includes('Now') || n.timestamp.includes('hour')).map((notif) => (
                   <div 
                     key={notif.id}
                     onClick={() => { setSelectedNotification(notif); setIsDetailsModalOpen(true); }}
-                    style={{ 
-                      backgroundColor: 'white', 
-                      padding: '1.25rem', 
-                      borderRadius: '16px', 
-                      border: '1px solid #E5E7EB',
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '1.25rem',
-                      cursor: 'pointer',
-                      transition: 'transform 0.1s ease',
-                    }}
+                    className="not-card"
                   >
                     <div style={{ 
-                      width: '48px', 
-                      height: '48px', 
-                      borderRadius: '12px', 
+                      width: '52px', 
+                      height: '52px', 
+                      borderRadius: '16px', 
                       backgroundColor: getIconBg(),
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
-                      flexShrink: 0
+                      flexShrink: 0,
+                      boxShadow: '0 4px 10px rgba(56, 172, 87, 0.1)'
                     }}>
                       {getIcon(notif.category)}
                     </div>
                     <div style={{ flex: 1 }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                        <span style={{ fontWeight: '800', fontSize: '1.1rem', color: '#111827' }}>{notif.title}</span>
-                        <span style={{ color: '#38AC57', fontSize: '0.8rem', fontWeight: '700' }}>{notif.timestamp}</span>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
+                        <span style={{ fontWeight: '900', fontSize: '1.15rem', color: '#111827' }}>{notif.title}</span>
+                        <span style={{ color: '#38AC57', fontSize: '0.85rem', fontWeight: '800' }}>{notif.timestamp}</span>
                       </div>
-                      <p style={{ margin: '0.25rem 0 0 0', color: '#6B7280', fontSize: '0.95rem', fontWeight: '600' }}>{notif.message}</p>
+                      <p style={{ margin: '0.4rem 0 0 0', color: '#6B7280', fontSize: '1rem', fontWeight: '600', lineHeight: '1.5' }}>{notif.message}</p>
                     </div>
-                    <div style={{ width: '10px', height: '10px', borderRadius: '50%', backgroundColor: '#38AC57' }}></div>
+                    <div className="not-card-status" style={{ width: '12px', height: '12px', borderRadius: '50%', backgroundColor: '#38AC57', flexShrink: 0 }}></div>
                   </div>
                 ))}
               </div>
             </div>
 
-            <div>
-              <h2 style={{ fontSize: '1rem', color: '#6B7280', fontWeight: '700', marginBottom: '1rem' }}>Yesterday</h2>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+            <div className="not-list-group">
+              <h2 className="not-group-title">Yesterday</h2>
+              <div style={{ display: 'flex', flexDirection: 'column' }}>
                 {filteredNotifications.filter(n => n.timestamp.includes('day')).map((notif) => (
                   <div 
                     key={notif.id}
                     onClick={() => { setSelectedNotification(notif); setIsDetailsModalOpen(true); }}
-                    style={{ 
-                      backgroundColor: 'white', 
-                      padding: '1.25rem', 
-                      borderRadius: '16px', 
-                      border: '1px solid #E5E7EB',
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '1.25rem',
-                      cursor: 'pointer'
-                    }}
+                    className="not-card"
                   >
                     <div style={{ 
-                      width: '48px', 
-                      height: '48px', 
-                      borderRadius: '12px', 
+                      width: '52px', 
+                      height: '52px', 
+                      borderRadius: '16px', 
                       backgroundColor: getIconBg(),
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
-                      flexShrink: 0
+                      flexShrink: 0,
+                      boxShadow: '0 4px 10px rgba(9, 10, 10, 0.05)'
                     }}>
                       {getIcon(notif.category)}
                     </div>
                     <div style={{ flex: 1 }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                        <span style={{ fontWeight: '800', fontSize: '1.1rem', color: '#111827' }}>{notif.title}</span>
-                        <span style={{ color: '#6B7280', fontSize: '0.8rem', fontWeight: '700' }}>{notif.timestamp}</span>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
+                        <span style={{ fontWeight: '900', fontSize: '1.15rem', color: '#111827' }}>{notif.title}</span>
+                        <span style={{ color: '#6B7280', fontSize: '0.85rem', fontWeight: '800' }}>{notif.timestamp}</span>
                       </div>
-                      <p style={{ margin: '0.25rem 0 0 0', color: '#6B7280', fontSize: '0.95rem', fontWeight: '600' }}>{notif.message}</p>
+                      <p style={{ margin: '0.4rem 0 0 0', color: '#6B7280', fontSize: '1rem', fontWeight: '600', lineHeight: '1.5' }}>{notif.message}</p>
                     </div>
-                    <div style={{ width: '10px', height: '10px', borderRadius: '50%', backgroundColor: '#38AC57' }}></div>
+                    <div className="not-card-status" style={{ width: '12px', height: '12px', borderRadius: '50%', backgroundColor: '#38AC57', flexShrink: 0 }}></div>
                   </div>
                 ))}
               </div>

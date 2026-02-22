@@ -136,7 +136,6 @@ const MOCK_COMPLAINTS: ComplaintDetail[] = [
     messages: []
   }
 ];
-
 export const Support = () => {
   const [activeTab, setActiveTab] = useState<'Live Chat' | 'Support Tickets'>('Support Tickets');
   const [filterStats, setFilterStats] = useState<string>('all');
@@ -243,7 +242,7 @@ export const Support = () => {
 
   const renderTicketsTab = () => (
     <>
-      <div className="stats-grid">
+      <div className="cs-stats-grid">
         <div 
           className={`stat-card ${filterStats === 'all' ? 'active' : ''}`}
           onClick={() => setFilterStats('all')}
@@ -337,8 +336,8 @@ export const Support = () => {
         </div>
       </div>
 
-      <div className="filters-section">
-        <div className="search-box">
+      <div className="cs-filters-container">
+        <div className="cs-search-wrapper">
           <Search size={20} color="#9CA3AF" />
           <input 
             type="text" 
@@ -347,9 +346,9 @@ export const Support = () => {
             onChange={(e) => setTicketSearchQuery(e.target.value)}
           />
         </div>
-        <div className="filter-group">
+        <div className="cs-filter-group">
           <select 
-            className="filter-select" 
+            className="cs-filter-select" 
             value={dropdownStatus} 
             onChange={(e) => setDropdownStatus(e.target.value)}
           >
@@ -363,7 +362,7 @@ export const Support = () => {
             <option value="Closed">Closed</option>
           </select>
           <select 
-            className="filter-select" 
+            className="cs-filter-select" 
             value={dropdownUser} 
             onChange={(e) => setDropdownUser(e.target.value)}
           >
@@ -372,7 +371,7 @@ export const Support = () => {
             <option value="Driver">Driver</option>
           </select>
           <select 
-            className="filter-select" 
+            className="cs-filter-select" 
             value={dropdownCategory} 
             onChange={(e) => setDropdownCategory(e.target.value)}
           >
@@ -385,15 +384,15 @@ export const Support = () => {
             <option value="App Issue">App Issue</option>
             <option value="Other">Other</option>
           </select>
-          <button className="filter-btn" onClick={clearFilters}>
+          <button className="filter-btn" style={{ padding: '10px 16px', borderRadius: '12px', display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', backgroundColor: 'white', border: '1px solid #e5e7eb', fontSize: '13px', fontWeight: '600' }} onClick={clearFilters}>
             <Filter size={18} />
             Clear
           </button>
         </div>
       </div>
 
-      <div className="mt-6 rounded-xl overflow-hidden shadow-sm border bg-white">
-        <table className="support-table">
+      <div className="cs-table-container">
+        <table className="cs-table">
           <thead>
             <tr>
               <th style={{ width: '120px' }}>Ticket ID</th>
@@ -430,18 +429,21 @@ export const Support = () => {
                   </div>
                 </td>
                 <td style={{ textAlign: 'center' }}>
-                  <span 
-                    style={{ 
-                      ...getStatusStyle(item.status),
-                      padding: '4px 10px',
-                      borderRadius: '8px',
-                      fontSize: '11px',
-                      fontWeight: 'bold',
-                      display: 'inline-block'
-                    }}
-                  >
-                    {item.status}
-                  </span>
+                  <div style={{ display: 'flex', justifyContent: 'center' }}>
+                    <span 
+                      style={{ 
+                        ...getStatusStyle(item.status),
+                        padding: '6px 12px',
+                        borderRadius: '8px',
+                        fontSize: '11px',
+                        fontWeight: '800',
+                        display: 'inline-block',
+                        whiteSpace: 'nowrap'
+                      }}
+                    >
+                      {item.status}
+                    </span>
+                  </div>
                 </td>
                 <td style={{ fontSize: '13px', color: '#4B5563' }}>{item.dateTime}</td>
                 <td style={{ fontSize: '13px', color: '#4B5563' }}>{item.assignedTo}</td>
@@ -480,11 +482,11 @@ export const Support = () => {
   );
 
   const renderLiveChatTab = () => (
-    <div className="flex gap-4" style={{ height: 'calc(100vh - 250px)', marginTop: '1rem' }}>
+    <div className="cs-chat-container flex gap-4" style={{ height: 'calc(100vh - 250px)', marginTop: '1rem' }}>
       {/* Sidebar List */}
-      <div style={{ width: '380px', backgroundColor: 'white', borderRadius: '24px', border: '1px solid #e5e7eb', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+      <div className="cs-sidebar">
         <div style={{ padding: '1.5rem', borderBottom: '1px solid #f3f4f6' }}>
-          <div className="search-box" style={{ maxWidth: '100%', margin: 0 }}>
+          <div className="cs-search-wrapper" style={{ minWidth: '100%', margin: 0 }}>
             <Search size={20} color="#9CA3AF" />
             <input 
               type="text" 
@@ -535,7 +537,7 @@ export const Support = () => {
       </div>
 
       {/* Main Chat View */}
-      <div style={{ flex: 1, backgroundColor: 'white', borderRadius: '24px', border: '1px solid #e5e7eb', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+      <div className="cs-chat-view">
         {activeChat ? (
              <div className="flex h-full" style={{ flexDirection: 'column' }}>
                  {/* Chat Header */}
@@ -614,13 +616,162 @@ export const Support = () => {
 
   return (
     <div className="main-content" style={{ padding: '2rem', backgroundColor: '#f8fafc', height: '100%', overflowY: 'auto' }}>
-      <div className="page-header" style={{ marginBottom: '2rem', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+      <style>{`
+        .cs-header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 2rem;
+            gap: 1.5rem;
+        }
+        .cs-header-info {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+        .cs-header-badges {
+            display: flex;
+            gap: 0.75rem;
+        }
+        .cs-stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        .cs-filters-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-bottom: 24px;
+        }
+        .cs-search-wrapper {
+            position: relative;
+            flex: 1;
+            min-width: 300px;
+        }
+        .cs-search-wrapper input {
+            width: 100%;
+            padding: 12px 16px 12px 48px;
+            border-radius: 14px;
+            border: 1px solid #e5e7eb;
+            outline: none;
+            font-size: 14px;
+        }
+        .cs-sidebar {
+            width: 380px;
+            background-color: white;
+            border-radius: 24px;
+            border: 1px solid #e5e7eb;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        .cs-tabs-container {
+            display: flex;
+            gap: 0.5rem;
+            background-color: #f3f4f6;
+            padding: 6px;
+            border-radius: 14px;
+            width: fit-content;
+            margin-bottom: 2rem;
+        }
+        .cs-table-container {
+            width: 100%;
+            overflow-x: auto;
+            border-radius: 12px;
+        }
+        .cs-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 1000px;
+        }
+        .cs-table th {
+            background-color: #38AC57;
+            color: white;
+            padding: 16px;
+            text-align: left;
+        }
+        .cs-filter-group {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+        .cs-filter-select {
+            padding: 10px 16px;
+            border-radius: 12px;
+            border: 1px solid #e5e7eb;
+            background-color: white;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        @media (max-width: 1024px) {
+            .cs-stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .cs-sidebar {
+                width: 300px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .cs-header-container {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .cs-header-info {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 1rem;
+            }
+            .cs-header-badges {
+                flex-direction: column;
+            }
+            .cs-header-badges > div {
+                width: 100%;
+                justify-content: center;
+            }
+            .cs-header-info button {
+                width: 100%;
+                justify-content: center;
+            }
+            .cs-tabs-container {
+                width: 100%;
+                flex-wrap: wrap;
+            }
+            .cs-tabs-container button {
+                flex: 1;
+                justify-content: center;
+            }
+            .cs-chat-container {
+                flex-direction: column !important;
+                height: auto !important;
+            }
+            .cs-sidebar {
+                width: 100% !important;
+                height: 400px;
+            }
+            .cs-chat-view {
+                height: 600px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .cs-stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+      `}</style>
+      <div className="cs-header-container">
         <div>
           <h1 style={{ fontSize: '1.875rem', fontWeight: '800', margin: '0 0 0.5rem 0', color: '#111827' }}>Complaints & Support</h1>
           <p style={{ margin: 0, color: '#6B7280', fontSize: '0.925rem' }}>Manage customer complaints and support tickets from drivers and passengers</p>
         </div>
-        <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-            <div style={{ display: 'flex', gap: '0.75rem' }}>
+        <div className="cs-header-info">
+            <div className="cs-header-badges">
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '10px 18px', backgroundColor: '#eef7f0', borderRadius: '14px', fontSize: '13px', color: '#38AC57', border: '1px solid #eef7f0', fontWeight: '700' }}>
                    <span>{stats.total >= 3 ? 3 : stats.total} Unread Messages</span>
                 </div>
@@ -635,7 +786,7 @@ export const Support = () => {
         </div>
       </div>
 
-      <div style={{ display: 'flex', gap: '0.5rem', backgroundColor: '#f3f4f6', padding: '6px', borderRadius: '14px', width: 'fit-content', marginBottom: '2rem' }}>
+      <div className="cs-tabs-container">
         <button 
           onClick={() => setActiveTab('Live Chat')}
           className={`tab-btn ${activeTab === 'Live Chat' ? 'active' : 'inactive'}`}

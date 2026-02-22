@@ -131,6 +131,16 @@ export const Dashboard = () => {
   return (
     <div className="dashboard-container" style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
       <style dangerouslySetInnerHTML={{ __html: `
+        @media (max-width: 1024px) {
+           .pie-legend-grid {
+             grid-template-columns: repeat(3, 1fr) !important;
+           }
+        }
+        @media (max-width: 768px) {
+           .pie-legend-grid {
+             grid-template-columns: repeat(2, 1fr) !important;
+           }
+        }
         @media (max-width: 640px) {
           .dashboard-header {
             flex-direction: column;
@@ -139,6 +149,15 @@ export const Dashboard = () => {
           }
           .dashboard-header select {
             width: 100%;
+          }
+          .pie-legend-grid {
+            grid-template-columns: 1fr !important;
+          }
+          .stat-value {
+            font-size: 2rem !important;
+          }
+          .stat-label-text {
+            font-size: 0.85rem !important;
           }
         }
       `}} />
@@ -200,7 +219,7 @@ export const Dashboard = () => {
         >
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.5rem' }}>
                 <img src={totalTripsIcon} alt="Trips" style={{ width: '40px', height: 'auto' }} />
-                <span style={{ fontSize: '1rem', fontWeight: '700' }}>Total Trips Today</span>
+                <span className="stat-label-text" style={{ fontSize: '1rem', fontWeight: '700' }}>Total Trips Today</span>
                 <span style={{ 
                     fontSize: '0.875rem', 
                     color: '#38AC57',
@@ -208,7 +227,7 @@ export const Dashboard = () => {
                     marginLeft: 'auto'
                 }}>{stats.trips.trend}</span>
             </div>
-            <div style={{ fontSize: '3rem', fontWeight: '800', margin: '0.5rem 0' }}>{stats.trips.value}</div>
+            <div className="stat-value" style={{ fontSize: '3rem', fontWeight: '800', margin: '0.5rem 0' }}>{stats.trips.value}</div>
             <div style={{ fontSize: '0.875rem', textDecoration: 'underline', color: activeMetric === 'trips' ? 'white' : 'var(--text-secondary)', opacity: 0.8 }}>Vs Yesterday</div>
             <div style={{ position: 'absolute', bottom: '1rem', right: '1rem', backgroundColor: activeMetric === 'trips' ? 'black' : 'var(--primary-color)', borderRadius: '50%', width: '44px', height: '44px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white' }}>
                 <ArrowUpRight size={24} />
@@ -233,7 +252,7 @@ export const Dashboard = () => {
         >
              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.5rem' }}>
                 <img src={activeDriversIcon} alt="Drivers" style={{ width: '40px', height: 'auto' }} />
-                <span style={{ fontSize: '1rem', fontWeight: '700' }}>Active Drivers</span>
+                <span className="stat-label-text" style={{ fontSize: '1rem', fontWeight: '700' }}>Active Drivers</span>
                 <span style={{ 
                     fontSize: '0.875rem', 
                     color: activeMetric === 'drivers' ? 'white' : '#38AC57',
@@ -241,7 +260,7 @@ export const Dashboard = () => {
                     marginLeft: 'auto'
                 }}>{stats.drivers.trend}</span>
             </div>
-            <div style={{ fontSize: '3rem', fontWeight: '800', margin: '0.5rem 0' }}>{stats.drivers.value}</div>
+            <div className="stat-value" style={{ fontSize: '3rem', fontWeight: '800', margin: '0.5rem 0' }}>{stats.drivers.value}</div>
             <div style={{ fontSize: '0.875rem', textDecoration: 'underline', color: activeMetric === 'drivers' ? 'white' : 'var(--text-secondary)', opacity: 0.8 }}>Vs Yesterday</div>
             <div style={{ position: 'absolute', bottom: '1rem', right: '1rem', backgroundColor: activeMetric === 'drivers' ? 'black' : 'var(--primary-color)', borderRadius: '50%', width: '44px', height: '44px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white' }}>
                 <ArrowUpRight size={24} />
@@ -265,7 +284,7 @@ export const Dashboard = () => {
         >
              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.5rem' }}>
                 <img src={totalEarningsIcon} alt="Earnings" style={{ width: '40px', height: 'auto' }} />
-                <span style={{ fontSize: '1rem', fontWeight: '700' }}>Total Earnings</span>
+                <span className="stat-label-text" style={{ fontSize: '1rem', fontWeight: '700' }}>Total Earnings</span>
                 <span style={{ 
                     fontSize: '0.875rem', 
                     color: '#38AC57',
@@ -273,7 +292,7 @@ export const Dashboard = () => {
                     marginLeft: 'auto'
                  }}>{stats.earnings.trend}</span>
             </div>
-            <div style={{ fontSize: '3rem', fontWeight: '800', margin: '0.5rem 0', display: 'flex', alignItems: 'baseline' }}>
+            <div className="stat-value" style={{ fontSize: '3rem', fontWeight: '800', margin: '0.5rem 0', display: 'flex', alignItems: 'baseline' }}>
                 {stats.earnings.value} <span style={{ fontSize: '1.25rem', fontWeight: '600', color: activeMetric === 'earnings' ? 'rgba(255,255,255,0.8)' : 'var(--text-secondary)', marginLeft: '8px' }}>MAD</span>
             </div>
             <div style={{ fontSize: '0.875rem', textDecoration: 'underline', color: activeMetric === 'earnings' ? 'white' : 'var(--text-secondary)', opacity: 0.8 }}>Vs Yesterday</div>
@@ -299,7 +318,7 @@ export const Dashboard = () => {
         >
              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.5rem' }}>
                 <img src={dailyBonusIcon} alt="Bonus" style={{ width: '40px', height: 'auto' }} />
-                <span style={{ fontSize: '1rem', fontWeight: '700' }}>Daily Bonus Earned</span>
+                <span className="stat-label-text" style={{ fontSize: '1rem', fontWeight: '700' }}>Daily Bonus Earned</span>
                 <span style={{ 
                     fontSize: '0.875rem', 
                     color: '#38AC57',
@@ -307,7 +326,7 @@ export const Dashboard = () => {
                     marginLeft: 'auto'
                 }}>{stats.bonus.trend}</span>
             </div>
-            <div style={{ fontSize: '3rem', fontWeight: '800', margin: '0.5rem 0', display: 'flex', alignItems: 'baseline' }}>
+            <div className="stat-value" style={{ fontSize: '3rem', fontWeight: '800', margin: '0.5rem 0', display: 'flex', alignItems: 'baseline' }}>
                 {stats.bonus.value} <span style={{ fontSize: '1.25rem', fontWeight: '600', color: activeMetric === 'bonus' ? 'rgba(255,255,255,0.8)' : 'var(--text-secondary)', marginLeft: '8px' }}>MAD</span>
             </div>
             <div style={{ fontSize: '0.875rem', textDecoration: 'underline', color: activeMetric === 'bonus' ? 'white' : 'var(--text-secondary)', opacity: 0.8 }}>Vs Yesterday</div>
@@ -435,7 +454,7 @@ export const Dashboard = () => {
                     </ResponsiveContainer>
                 </div>
                 {/* Custom Legend Grid */}
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1rem', marginTop: '1.5rem' }}>
+                <div className="pie-legend-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1rem', marginTop: '1.5rem' }}>
                     {currentPieData.map((entry, index) => (
                         <div key={index} style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>

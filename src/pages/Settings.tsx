@@ -55,130 +55,289 @@ export const Settings = ({ onNavigate }: SettingsProps) => {
   };
 
   return (
-    <div className="settings-container" style={{ padding: '1.5rem', backgroundColor: '#f9fafb', minHeight: '100vh' }}>
-      <div style={{ marginBottom: '2rem' }}>
-        {/* Header */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '1rem' }}>
-          <div>
-            <h1 style={{ fontSize: '1.75rem', fontWeight: '800', color: '#111827', margin: 0, fontFamily: 'Outfit, sans-serif' }}>Settings</h1>
-            <p style={{ color: '#6b7280', margin: '0.25rem 0 0 0', fontSize: '0.95rem' }}>Configure platform settings and preferences</p>
+    <div className="vp-settings-wrapper">
+      <style>{`
+        .vp-settings-wrapper {
+            padding: 2.5rem;
+            max-width: 1600px;
+            margin: 0 auto;
+            width: 100%;
+            background-color: #f8fafc;
+            min-height: 100vh;
+            box-sizing: border-box;
+        }
+
+        .vp-settings-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .vp-settings-title h1 {
+            font-size: 2.5rem !important;
+            font-weight: 900 !important;
+            color: #1e293b;
+            margin: 0;
+            letter-spacing: -0.025em;
+        }
+
+        .vp-settings-title p {
+            color: #64748b;
+            margin: 0.5rem 0 0 0;
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+
+        .vp-settings-actions {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .vp-header-search {
+            position: relative;
+            width: 400px;
+            max-width: 100%;
+        }
+
+        .vp-header-search input {
+            width: 100%;
+            padding: 0.875rem 5rem 0.875rem 1.75rem;
+            border-radius: 100px;
+            border: 1px solid #e2e8f0;
+            font-size: 1rem;
+            font-weight: 500;
+            outline: none;
+            transition: all 0.2s;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+
+        .vp-header-search input:focus {
+            border-color: #38AC57;
+            box-shadow: 0 0 0 4px rgba(56, 172, 87, 0.1);
+        }
+
+        .vp-header-search button {
+            position: absolute;
+            right: 6px;
+            top: 6px;
+            background-color: #38AC57;
+            color: white;
+            border: none;
+            padding: 0.65rem 1.75rem;
+            border-radius: 100px;
+            font-weight: 800;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .vp-header-profile {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            background: white;
+            padding: 0.5rem 1.5rem 0.5rem 0.5rem;
+            border-radius: 100px;
+            border: 1px solid #e2e8f0;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+        }
+
+        .vp-header-profile:hover {
+            border-color: #38AC57;
+            transform: translateY(-1px);
+        }
+
+        .vp-profile-text .name {
+            font-size: 1rem;
+            font-weight: 800;
+            color: #1e293b;
+        }
+
+        .vp-profile-text .role {
+            font-size: 0.8rem;
+            color: #38AC57;
+            font-weight: 700;
+        }
+
+        .vp-analytics-bar {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 2.5rem;
+        }
+
+        .vp-analytics-btn {
+            background-color: #111827;
+            color: white;
+            border: none;
+            padding: 1rem 2.25rem;
+            border-radius: 100px;
+            font-weight: 800;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 10px 15px -3px rgba(17, 24, 39, 0.2);
+        }
+
+        .vp-analytics-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 20px 25px -5px rgba(17, 24, 39, 0.3);
+        }
+
+        .vp-settings-tabs {
+            display: flex;
+            gap: 0.625rem;
+            background: #f1f5f9;
+            padding: 8px;
+            border-radius: 100px;
+            width: fit-content;
+            margin-bottom: 3rem;
+            overflow-x: auto;
+            max-width: 100%;
+            scrollbar-width: none;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .vp-settings-tabs::-webkit-scrollbar {
+            display: none;
+        }
+
+        .vp-tab-trigger {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem 2.25rem;
+            border-radius: 100px;
+            border: none;
+            background: transparent;
+            color: #64748b;
+            font-weight: 800;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            white-space: nowrap;
+        }
+
+        .vp-tab-trigger.active {
+            background: #38AC57;
+            color: white;
+            box-shadow: 0 10px 15px -3px rgba(56, 172, 87, 0.3);
+        }
+
+        @media (max-width: 1024px) {
+            .vp-header-search {
+                width: 100%;
+                order: 2;
+            }
+            .vp-settings-actions {
+                width: 100%;
+                justify-content: space-between;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .vp-settings-wrapper {
+                padding: 1.5rem;
+            }
+            .vp-settings-header {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+                gap: 1.5rem;
+            }
+            .vp-settings-title h1 {
+                font-size: 2rem !important;
+            }
+            .vp-settings-actions {
+                flex-direction: column;
+                gap: 1.25rem;
+            }
+            .vp-header-profile {
+                width: 100%;
+                justify-content: center;
+                order: 1;
+            }
+            .vp-analytics-bar {
+                justify-content: center;
+            }
+            .vp-analytics-btn {
+                width: 100%;
+            }
+            .vp-settings-tabs {
+                border-radius: 20px;
+                padding: 6px;
+            }
+            .vp-tab-trigger {
+                padding: 0.875rem 1.5rem;
+                font-size: 0.9rem;
+            }
+        }
+      `}</style>
+
+      {/* Header */}
+      <div className="vp-settings-header">
+        <div className="vp-settings-title">
+          <h1>Settings</h1>
+          <p>Configure platform settings and preferences</p>
+        </div>
+        
+        <div className="vp-settings-actions">
+          <div className="vp-header-search">
+            <input type="text" placeholder="Search settings..." />
+            <button onClick={() => alert('Searching settings...')}>Search</button>
           </div>
           
           <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
-            <div style={{ position: 'relative' }}>
-              <input 
-                type="text" 
-                placeholder="Type here..." 
-                style={{ 
-                  padding: '0.75rem 3rem 0.75rem 1.25rem', 
-                  borderRadius: '2rem', 
-                  border: '1px solid #e5e7eb', 
-                  width: '320px',
-                  fontSize: '0.9rem',
-                  outline: 'none',
-                  boxShadow: '0 1px 2px rgba(0,0,0,0.05)'
-                }} 
-              />
-              <button 
-                onClick={() => alert('Performing global platform search...')}
-                style={{ 
-                    position: 'absolute', 
-                    right: '4px', 
-                    top: '4px', 
-                    backgroundColor: '#38AC57', 
-                    color: 'white', 
-                    border: 'none', 
-                    padding: '0.5rem 1.5rem', 
-                    borderRadius: '1.5rem',
-                    fontSize: '0.875rem',
-                    fontWeight: '600',
-                    cursor: 'pointer'
-                }}
-              >
-                Search
-              </button>
-            </div>
-            
             <div 
-                onClick={() => alert('No new notifications')}
-                style={{ position: 'relative', cursor: 'pointer' }}
+              className="vp-notification-badge"
+              onClick={() => alert('No new notifications')}
+              style={{ position: 'relative', cursor: 'pointer' }}
             >
-               <Bell size={24} color="#6b7280" />
-               <span style={{ position: 'absolute', top: '-2px', right: '-2px', width: '10px', height: '10px', backgroundColor: '#38AC57', borderRadius: '50%', border: '2px solid white' }}></span>
+              <Bell size={26} color="#64748b" />
+              <span style={{ position: 'absolute', top: '-1px', right: '-1px', width: '12px', height: '12px', backgroundColor: '#38AC57', borderRadius: '50%', border: '2.5px solid white' }}></span>
             </div>
 
-            <div 
-                onClick={() => alert('Opening Profile Settings...')}
-                style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', backgroundColor: 'white', padding: '0.4rem 1rem 0.4rem 0.4rem', borderRadius: '2rem', border: '1px solid #e5e7eb', cursor: 'pointer' }}
-            >
-               <img src="https://i.pravatar.cc/150?u=paityn" alt="User" style={{ width: '36px', height: '36px', borderRadius: '50%' }} />
-               <div>
-                  <div style={{ fontSize: '0.85rem', fontWeight: '700', color: '#111827' }}>Paityn Calzo</div>
-                  <div style={{ fontSize: '0.7rem', color: '#38AC57', fontWeight: '600' }}>Admin</div>
-               </div>
+            <div className="vp-header-profile" onClick={() => alert('Opening Profile...')}>
+              <img src="https://i.pravatar.cc/150?u=paityn" alt="User" style={{ width: '44px', height: '44px', borderRadius: '50%' }} />
+              <div className="vp-profile-text">
+                <div className="name">Paityn Calzo</div>
+                <div className="role">Platform Admin</div>
+              </div>
             </div>
           </div>
         </div>
-
-        <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '1.5rem' }}>
-            <button 
-                onClick={() => onNavigate ? onNavigate('report') : alert('Loading Platform Analytics...')}
-                style={{ 
-                    backgroundColor: '#38AC57', 
-                    color: 'white', 
-                    border: 'none', 
-                    padding: '0.75rem 1.75rem', 
-                    borderRadius: '2rem', 
-                    fontWeight: '600',
-                    fontSize: '0.9rem',
-                    cursor: 'pointer',
-                    boxShadow: '0 4px 6px -1px rgba(56, 172, 87, 0.2)',
-                    transition: 'all 0.2s'
-                }}
-            >
-                Review Analytics
-            </button>
-        </div>
-
-        {/* Tab Navigation */}
-        <div style={{ 
-          display: 'flex', 
-          backgroundColor: '#f1f5f9', 
-          padding: '6px', 
-          borderRadius: '2.5rem', 
-          width: 'fit-content',
-          marginBottom: '2rem',
-          boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.05)',
-          overflowX: 'auto',
-          maxWidth: '100%'
-        }}>
-          {tabs.map((tab) => (
-            <button
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '0.5rem',
-                padding: '0.75rem 1.75rem',
-                borderRadius: '2rem',
-                border: 'none',
-                backgroundColor: activeTab === tab.id ? '#38AC57' : 'transparent',
-                color: activeTab === tab.id ? 'white' : '#64748b',
-                fontWeight: '600',
-                fontSize: '0.9rem',
-                cursor: 'pointer',
-                transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                whiteSpace: 'nowrap'
-              }}
-            >
-              {tab.label}
-            </button>
-          ))}
-        </div>
       </div>
 
-      <div className="settings-content">
+      <div className="vp-analytics-bar">
+        <button 
+          className="vp-analytics-btn"
+          onClick={() => onNavigate ? onNavigate('report') : alert('Loading Analytics...')}
+        >
+          Review Analytics
+        </button>
+      </div>
+
+      {/* Tab Navigation */}
+      <div className="vp-settings-tabs">
+        {tabs.map((tab) => (
+          <button
+            key={tab.id}
+            onClick={() => setActiveTab(tab.id)}
+            className={`vp-tab-trigger ${activeTab === tab.id ? 'active' : ''}`}
+          >
+            {tab.icon}
+            {tab.label}
+          </button>
+        ))}
+      </div>
+
+      <div className="vp-settings-main-content">
         {renderContent()}
       </div>
     </div>

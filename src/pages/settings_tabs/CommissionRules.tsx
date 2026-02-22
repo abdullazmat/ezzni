@@ -19,90 +19,198 @@ export const CommissionRules = () => {
         setCommissionRates(prev => prev.map(item => item.id === id ? { ...item, enabled: !item.enabled } : item));
     };
 
-    return (
-        <div>
-            <div style={{ marginBottom: '2rem' }}>
-                <h2 style={{ fontSize: '1.5rem', fontWeight: '800', margin: 0 }}>Commission Rules</h2>
-                <p style={{ color: '#6b7280', margin: '0.25rem 0 0 0' }}>Configure commission rates for different services and regions</p>
-            </div>
+  return (
+    <div className="vp-commission-container">
+      <style>{`
+        .vp-commission-container {
+            animation: fadeIn 0.4s ease-out;
+        }
 
-            <div style={{ backgroundColor: 'white', padding: '2rem', borderRadius: '1.5rem', border: '1px solid #e5e7eb', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.05)' }}>
-                <h3 style={{ fontSize: '1.25rem', fontWeight: '700', marginBottom: '2rem', color: '#111827' }}>Global Commission Rates</h3>
-                
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '2rem 3rem' }}>
-                    {commissionRates.map((item) => (
-                        <div key={item.id}>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
-                                <label style={{ fontSize: '0.95rem', fontWeight: '600', color: '#374151' }}>{item.label}</label>
-                                <div 
-                                    onClick={() => toggleService(item.id)}
-                                    style={{ 
-                                        width: '40px', 
-                                        height: '22px', 
-                                        backgroundColor: item.enabled ? '#38AC57' : '#e5e7eb', 
-                                        borderRadius: '11px', 
-                                        position: 'relative', 
-                                        cursor: 'pointer',
-                                        transition: 'background-color 0.3s'
-                                    }}
-                                >
-                                    <div style={{ 
-                                        width: '16px', 
-                                        height: '16px', 
-                                        backgroundColor: 'white', 
-                                        borderRadius: '50%', 
-                                        position: 'absolute', 
-                                        top: '3px', 
-                                        left: item.enabled ? '21px' : '3px',
-                                        transition: 'left 0.3s'
-                                    }}></div>
-                                </div>
-                            </div>
-                            <input 
-                                type="text" 
-                                defaultValue={item.value || ''}
-                                placeholder={item.placeholder || ''}
-                                style={{ 
-                                    width: '100%', 
-                                    padding: '0.75rem 1rem', 
-                                    borderRadius: '0.75rem', 
-                                    border: '1px solid #e5e7eb', 
-                                    backgroundColor: '#f9fafb',
-                                    fontSize: '0.9rem',
-                                    outline: 'none',
-                                    color: item.enabled ? '#111827' : '#9ca3af'
-                                }}
-                                disabled={!item.enabled}
-                            />
-                        </div>
-                    ))}
-                </div>
+        .vp-commission-header {
+            margin-bottom: 2.5rem;
+        }
 
-                <div style={{ marginTop: '3rem', display: 'flex', justifyContent: 'flex-end' }}>
-                    <button 
-                        onClick={() => {
-                            console.log('Saving Commission Rates:', commissionRates);
-                            alert('Commission configuration saved successfully!');
-                        }}
-                        style={{ 
-                            backgroundColor: '#38AC57', 
-                            color: 'white', 
-                            border: 'none', 
-                            padding: '0.8rem 2.5rem', 
-                            borderRadius: '2rem', 
-                            fontWeight: '700',
-                            fontSize: '0.95rem',
-                            cursor: 'pointer',
-                            boxShadow: '0 4px 6px -1px rgba(56, 172, 87, 0.4)',
-                            transition: 'all 0.2s'
-                        }}
-                        onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-2px)'}
-                        onMouseLeave={e => e.currentTarget.style.transform = 'translateY(0)'}
-                    >
-                        Save Configuration
-                    </button>
+        .vp-commission-header h2 {
+            font-size: 1.75rem;
+            font-weight: 900;
+            color: #1e293b;
+            margin: 0;
+            letter-spacing: -0.025em;
+        }
+
+        .vp-commission-header p {
+            color: #64748b;
+            margin: 0.5rem 0 0 0;
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+
+        .vp-commission-card {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 32px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+
+        .vp-commission-card h3 {
+            font-size: 1.5rem;
+            font-weight: 800;
+            margin-bottom: 2.5rem;
+            color: #1e293b;
+        }
+
+        .vp-commission-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2.5rem;
+        }
+
+        .vp-commission-item {
+            background: #f8fafc;
+            padding: 1.5rem;
+            border-radius: 20px;
+            border: 1px solid #e2e8f0;
+            transition: all 0.2s;
+        }
+
+        .vp-commission-item:focus-within {
+            border-color: #38AC57;
+            background: white;
+            box-shadow: 0 4px 12px rgba(56, 172, 87, 0.08);
+        }
+
+        .vp-commission-item .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.25rem;
+        }
+
+        .vp-commission-item label {
+            font-size: 1.05rem;
+            font-weight: 800;
+            color: #1e293b;
+        }
+
+        .vp-commission-item input {
+            width: 100%;
+            padding: 1rem 1.25rem;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            background-color: white;
+            font-size: 1.1rem;
+            font-weight: 800;
+            outline: none;
+            transition: all 0.2s;
+            color: #1e293b;
+        }
+
+        .vp-commission-item input:disabled {
+            background: #f1f5f9;
+            color: #94a3b8;
+            cursor: not-allowed;
+        }
+
+        .vp-switch {
+            width: 44px;
+            height: 24px;
+            border-radius: 100px;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .vp-switch .knob {
+            width: 18px;
+            height: 18px;
+            background: white;
+            border-radius: 50%;
+            position: absolute;
+            top: 3px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .vp-save-btn {
+            background: #38AC57;
+            color: white;
+            border: none;
+            padding: 1.125rem 3.5rem;
+            border-radius: 100px;
+            font-weight: 900;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 10px 15px -3px rgba(56, 172, 87, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .vp-save-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 20px 25px -5px rgba(56, 172, 87, 0.4);
+            background: #2e8d46;
+        }
+
+        @media (max-width: 768px) {
+            .vp-commission-card {
+                padding: 1.5rem;
+            }
+            .vp-commission-grid {
+                grid-template-columns: 1fr;
+            }
+            .vp-save-btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+      `}</style>
+
+      <div className="vp-commission-header">
+        <h2>Commission Rules</h2>
+        <p>Configure commission rates for different services and regions</p>
+      </div>
+
+      <div className="vp-commission-card">
+        <h3>Global Commission Rates</h3>
+        
+        <div className="vp-commission-grid">
+          {commissionRates.map((item) => (
+            <div key={item.id} className="vp-commission-item" style={{ opacity: item.enabled ? 1 : 0.6 }}>
+              <div className="header">
+                <label>{item.label}</label>
+                <div 
+                  className="vp-switch"
+                  onClick={() => toggleService(item.id)}
+                  style={{ backgroundColor: item.enabled ? '#38AC57' : '#e2e8f0' }}
+                >
+                  <div className="knob" style={{ left: item.enabled ? '23px' : '3px' }}></div>
                 </div>
+              </div>
+              <div style={{ position: 'relative' }}>
+                <input 
+                  type="text" 
+                  defaultValue={item.value || ''}
+                  placeholder={item.placeholder || '00'}
+                  disabled={!item.enabled}
+                />
+                <span style={{ position: 'absolute', right: '1.25rem', top: '50%', transform: 'translateY(-50%)', fontWeight: '800', color: item.enabled ? '#64748b' : '#cbd5e1', fontSize: '1rem' }}>%</span>
+              </div>
             </div>
+          ))}
         </div>
-    );
+
+        <div style={{ marginTop: '4rem', display: 'flex', justifyContent: 'flex-end' }}>
+          <button 
+            className="vp-save-btn"
+            onClick={() => alert('Commission configuration saved successfully!')}
+          >
+            Save Configuration
+          </button>
+        </div>
+      </div>
+    </div>
+  );
 };

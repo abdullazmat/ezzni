@@ -69,10 +69,11 @@ const Dropdown = ({ label, options, activeValue, onSelect }: { label: string; op
         return () => document.removeEventListener('mousedown', h);
     }, [isOpen]);
     return (
-        <div ref={ref} style={{ position: 'relative', display: 'inline-block' }}>
+        <div ref={ref} className="rc-dropdown-wrapper" style={{ position: 'relative', display: 'inline-block' }}>
             <button onClick={() => setIsOpen(!isOpen)} style={{
                 display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '24px',
-                border: '1px solid #e5e7eb', backgroundColor: 'white', fontSize: '14px', color: '#374151', cursor: 'pointer', whiteSpace: 'nowrap'
+                border: '1px solid #e5e7eb', backgroundColor: 'white', fontSize: '14px', color: '#374151', cursor: 'pointer', whiteSpace: 'nowrap',
+                width: '100%', justifyContent: 'space-between'
             }}>
                 {activeValue === 'All' ? label : `✓ ${activeValue}`}
                 <ChevronDown size={14} style={{ transform: isOpen ? 'rotate(180deg)' : 'none', transition: '0.2s' }} />
@@ -200,6 +201,125 @@ export const RentalCompanies = () => {
 
     return (
         <div style={{ padding: '24px', backgroundColor: '#f9fafb', minHeight: '100vh' }}>
+            <style>{`
+                .rc-stats-grid {
+                    display: grid;
+                    grid-template-columns: repeat(4, 1fr);
+                    gap: 20px;
+                    margin-bottom: 32px;
+                }
+                .rc-flex-responsive {
+                    display: flex;
+                    gap: 24px;
+                }
+                .rc-controls-container {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    margin-bottom: 24px;
+                    flex-wrap: wrap;
+                    gap: 12px;
+                }
+                .rc-tabs-container {
+                    display: flex;
+                    background-color: #f3f4f6;
+                    border-radius: 24px;
+                    padding: 3px;
+                }
+                .rc-table-container {
+                    width: 100%;
+                    overflow-x: auto;
+                    border-radius: 12px;
+                }
+                .rc-table-header {
+                    display: grid;
+                    grid-template-columns: 2fr 120px 1.2fr 100px 100px 1.2fr 100px;
+                    padding: 16px 24px;
+                    background-color: #38AC57;
+                    color: white;
+                    border-radius: 12px;
+                    font-weight: bold;
+                    font-size: 13px;
+                    margin-bottom: 16px;
+                    min-width: 1000px;
+                }
+                .rc-table-row {
+                    display: grid;
+                    grid-template-columns: 2fr 120px 1.2fr 100px 100px 1.2fr 100px;
+                    padding: 16px 24px;
+                    background-color: white;
+                    border-radius: 16px;
+                    align-items: center;
+                    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+                    margin-bottom: 12px;
+                    min-width: 1000px;
+                    transition: all 0.2s;
+                }
+                .rc-grid-view {
+                    display: grid;
+                    grid-template-columns: repeat(4, 1fr);
+                    gap: 20px;
+                }
+                .rc-dropdown-wrapper {
+                    width: 100%;
+                    max-width: max-content;
+                }
+
+                @media (max-width: 1200px) {
+                    .rc-grid-view {
+                        grid-template-columns: repeat(3, 1fr);
+                    }
+                }
+
+                @media (max-width: 1024px) {
+                    .rc-stats-grid {
+                        grid-template-columns: repeat(2, 1fr);
+                    }
+                    .rc-grid-view {
+                        grid-template-columns: repeat(2, 1fr);
+                    }
+                }
+
+                @media (max-width: 768px) {
+                    .rc-flex-responsive {
+                        flex-direction: column;
+                        align-items: stretch !important;
+                        text-align: center;
+                    }
+                    .rc-controls-container {
+                        flex-direction: column;
+                        align-items: stretch;
+                    }
+                    .rc-controls-container > div {
+                        flex-direction: column;
+                        align-items: stretch !important;
+                    }
+                    .rc-controls-container .rc-dropdown-wrapper {
+                        max-width: none;
+                    }
+                    .rc-controls-container button {
+                        width: 100%;
+                        justify-content: space-between;
+                    }
+                    .rc-tabs-container {
+                        width: 100%;
+                        flex-wrap: wrap;
+                    }
+                    .rc-tabs-container button {
+                        flex: 1;
+                        min-width: 100px;
+                    }
+                }
+
+                @media (max-width: 480px) {
+                    .rc-stats-grid {
+                        grid-template-columns: 1fr;
+                    }
+                    .rc-grid-view {
+                        grid-template-columns: 1fr;
+                    }
+                }
+            `}</style>
             {/* Banner */}
             {banner && (
                 <div style={{
@@ -218,7 +338,7 @@ export const RentalCompanies = () => {
             )}
 
             {/* Header */}
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
+            <div className="rc-flex-responsive" style={{ justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
                 <div>
                     <h1 style={{ fontSize: '28px', fontWeight: 'bold', margin: 0 }}>
                         {viewMode === 'table' ? 'Rental Companies' : selectedCompany ? `${selectedCompany.name} Fleet` : 'All Vehicles'}
@@ -227,12 +347,12 @@ export const RentalCompanies = () => {
                         {viewMode === 'table' ? 'Manage rental company partnerships and fleet integrations' : `Viewing vehicle fleet ${selectedCompany ? `for ${selectedCompany.name}` : 'across all companies'}`}
                     </p>
                 </div>
-                <div style={{ display: 'flex', gap: '12px' }}>
+                <div style={{ display: 'flex', gap: '12px', justifyContent: 'center' }}>
                     <button onClick={() => { 
                         if (viewMode === 'grid') setSelectedCompany(null);
                         setViewMode(viewMode === 'table' ? 'grid' : 'table');
                     }} style={{
-                        display: 'flex', alignItems: 'center', gap: '8px', padding: '10px 20px', borderRadius: '24px', border: '1px solid #e5e7eb', backgroundColor: 'white', fontWeight: '600', fontSize: '14px', cursor: 'pointer', transition: 'all 0.2s'
+                        display: 'flex', alignItems: 'center', gap: '8px', padding: '10px 20px', borderRadius: '24px', border: '1px solid #e5e7eb', backgroundColor: 'white', fontWeight: '600', fontSize: '14px', cursor: 'pointer', transition: 'all 0.2s', justifyContent: 'center'
                     }}
                     onMouseEnter={e => e.currentTarget.style.borderColor = '#38AC57'}
                     onMouseLeave={e => e.currentTarget.style.borderColor = '#e5e7eb'}
@@ -242,7 +362,7 @@ export const RentalCompanies = () => {
                     </button>
                     <button onClick={() => setIsAddModalOpen(true)} style={{
                         display: 'flex', alignItems: 'center', gap: '8px', padding: '10px 20px', borderRadius: '24px', border: 'none',
-                        backgroundColor: '#38AC57', color: 'white', fontWeight: '600', fontSize: '14px', cursor: 'pointer', transition: 'background-color 0.2s'
+                        backgroundColor: '#38AC57', color: 'white', fontWeight: '600', fontSize: '14px', cursor: 'pointer', transition: 'background-color 0.2s', justifyContent: 'center'
                     }}
                     onMouseEnter={e => e.currentTarget.style.backgroundColor = '#2d8a46'}
                     onMouseLeave={e => e.currentTarget.style.backgroundColor = '#38AC57'}
@@ -251,7 +371,7 @@ export const RentalCompanies = () => {
             </div>
 
             {/* Stat Cards */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '20px', marginBottom: '32px' }}>
+            <div className="rc-stats-grid">
                 {statCards.map(stat => {
                     const isActive = activeStat === stat.key;
                     return (
@@ -273,19 +393,19 @@ export const RentalCompanies = () => {
             </div>
 
             {/* Filters */}
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px', flexWrap: 'wrap', gap: '12px' }}>
+            <div className="rc-controls-container">
                 <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
-                    <div style={{ position: 'relative', maxWidth: '260px' }}>
+                    <div style={{ position: 'relative', flex: 1, minWidth: '200px' }}>
                         <Search size={18} color="#9ca3af" style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)' }} />
                         <input type="text" placeholder="Search" value={searchTerm} onChange={e => setSearchTerm(e.target.value)}
                             style={{ width: '100%', padding: '10px 16px 10px 48px', borderRadius: '24px', border: '1px solid #e5e7eb', outline: 'none', fontSize: '14px', boxSizing: 'border-box' }} />
                     </div>
                     <Dropdown label="Status" options={['Available', 'Approved', 'Pending', 'Pending Review', 'Rejected']} activeValue={statusFilter} onSelect={setStatusFilter} />
-                    <button style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '8px 16px', borderRadius: '24px', border: '1px solid #e5e7eb', backgroundColor: 'white', fontSize: '14px', cursor: 'pointer' }}>
+                    <button style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '8px 16px', borderRadius: '24px', border: '1px solid #e5e7eb', backgroundColor: 'white', fontSize: '14px', cursor: 'pointer', justifyContent: 'center' }}>
                         <Filter size={14} /> Filters
                     </button>
                 </div>
-                <div style={{ display: 'flex', backgroundColor: '#f3f4f6', borderRadius: '24px', padding: '3px' }}>
+                <div className="rc-tabs-container">
                     {tabs.map(tab => (
                         <button key={tab} onClick={() => setActiveTab(tab)} style={{
                             padding: '8px 18px', borderRadius: '20px', border: 'none',
@@ -299,11 +419,11 @@ export const RentalCompanies = () => {
 
             {/* ====== TABLE VIEW ====== */}
             {viewMode === 'table' && (
-                <>
-                    <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1.2fr 0.8fr 0.8fr 1.2fr 0.8fr', padding: '16px 24px', backgroundColor: '#38AC57', color: 'white', borderRadius: '12px', fontWeight: 'bold', fontSize: '13px', marginBottom: '16px' }}>
+                <div className="rc-table-container">
+                    <div className="rc-table-header">
                         <div>Company Details</div><div>Location</div><div>Fleet Info</div><div style={{ textAlign: 'center' }}>Documents</div><div style={{ textAlign: 'center' }}>Status</div><div style={{ textAlign: 'center' }}>Submitted</div><div style={{ textAlign: 'center' }}>Action</div>
                     </div>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', minWidth: '1000px' }}>
                         {filteredCompanies.length === 0 ? (
                             <div style={{ backgroundColor: 'white', padding: '48px', borderRadius: '16px', textAlign: 'center' }}>
                                 <div style={{ fontSize: '40px', marginBottom: '16px' }}>🏢</div>
@@ -312,10 +432,7 @@ export const RentalCompanies = () => {
                             </div>
                         ) : filteredCompanies.map((c, i) => {
                             return (
-                                <div key={i} style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1.2fr 0.8fr 0.8fr 1.2fr 0.8fr', padding: '16px 24px', backgroundColor: 'white', borderRadius: '16px', alignItems: 'center', boxShadow: '0 1px 2px rgba(0,0,0,0.05)', transition: 'all 0.2s' }}
-                                    onMouseEnter={e => { e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.08)'; e.currentTarget.style.transform = 'translateY(-1px)'; }}
-                                    onMouseLeave={e => { e.currentTarget.style.boxShadow = '0 1px 2px rgba(0,0,0,0.05)'; e.currentTarget.style.transform = 'none'; }}
-                                >
+                                <div key={i} className="rc-table-row">
                                     <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                                         <div style={{ width: '40px', height: '40px', borderRadius: '50%', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                                             <img src={companyLogoAsset} alt="Company Logo" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
@@ -323,7 +440,7 @@ export const RentalCompanies = () => {
                                         <div>
                                             <div style={{ fontWeight: '600', fontSize: '14px' }}>{c.name}</div>
                                             <div style={{ fontSize: '11px', color: '#9ca3af' }}>{c.email}</div>
-                                            <div style={{ fontSize: '11px', color: '#9ca3af' }}>{c.phone}</div>
+                                            <div style={{ fontSize: '11px', color: '#9ca3af', whiteSpace: 'nowrap' }}>{c.phone}</div>
                                         </div>
                                     </div>
                                     <div><div style={{ fontWeight: '600', fontSize: '13px' }}>{c.location}</div><div style={{ fontSize: '11px', color: '#9ca3af' }}>{c.region}</div></div>
@@ -341,12 +458,12 @@ export const RentalCompanies = () => {
                             );
                         })}
                     </div>
-                </>
+                </div>
             )}
 
             {/* ====== GRID VIEW ====== */}
             {viewMode === 'grid' && (
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '20px' }}>
+                <div className="rc-grid-view">
                     {filteredVehicles.length === 0 ? (
                         <div style={{ gridColumn: '1/-1', backgroundColor: 'white', padding: '48px', borderRadius: '16px', textAlign: 'center' }}>
                             <div style={{ fontSize: '40px', marginBottom: '16px' }}>🚗</div>
@@ -368,7 +485,6 @@ export const RentalCompanies = () => {
                                     <img src={carImages[v.name] || defaultCarImg} alt={v.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                                     <div style={{ position: 'absolute', top: '10px', right: '10px', backgroundColor: sc.bg, color: sc.color, border: `1px solid ${sc.border}`, padding: '3px 10px', borderRadius: '6px', fontSize: '11px', fontWeight: '700' }}>{v.status}</div>
                                 </div>
-                                {/* Info */}
                                 <div style={{ padding: '16px' }}>
                                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
                                         <h3 style={{ fontSize: '16px', fontWeight: 'bold', margin: 0 }}>{v.name}</h3>

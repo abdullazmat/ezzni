@@ -165,7 +165,7 @@ const Dropdown = ({ label, options, activeValue, onSelect }: { label: string, op
         <div style={{ position: 'relative', display: 'inline-block' }}>
             <button 
                 onClick={() => setIsOpen(!isOpen)}
-                style={{ padding: '0.6rem 1rem', borderRadius: '2rem', border: '1px solid #e5e7eb', backgroundColor: activeValue !== 'All' && activeValue !== label ? '#eef7f0' : 'white', display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.85rem', color: activeValue !== 'All' && activeValue !== label ? '#2d8a46' : '#374151', cursor: 'pointer' }}
+                style={{ padding: '0.6rem 1rem', borderRadius: '2rem', border: '1px solid #e5e7eb', backgroundColor: activeValue !== 'All' && activeValue !== label ? '#eef7f0' : 'white', display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.85rem', color: activeValue !== 'All' && activeValue !== label ? '#2d8a46' : '#374151', cursor: 'pointer', width: '100%', justifyContent: 'space-between' }}
             >
                 {activeValue === 'All' ? label : activeValue}
                 <ChevronDown size={14} />
@@ -235,6 +235,157 @@ export const DeliveryServices = () => {
 
     return (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem', paddingBottom: '4rem' }}>
+            <style>{`
+                .ds-stats-grid {
+                    display: grid;
+                    grid-template-columns: repeat(4, 1fr);
+                    gap: 1.5rem;
+                }
+                .ds-controls-container {
+                    display: flex;
+                    gap: 1rem;
+                    flex-wrap: wrap;
+                    align-items: center;
+                }
+                .ds-table-container {
+                    width: 100%;
+                    overflow-x: auto;
+                    border-radius: 1rem;
+                    background: transparent;
+                }
+                .ds-table-header {
+                    display: grid;
+                    grid-template-columns: 0.8fr 1fr 2fr 2fr 1fr 1fr 1fr 1fr;
+                    background-color: #38AC57;
+                    color: white;
+                    padding: 1rem;
+                    border-radius: 1rem;
+                    align-items: center;
+                    font-weight: bold;
+                    font-size: 0.9rem;
+                    margin-bottom: 1rem;
+                    min-width: 1000px;
+                }
+                .ds-table-row {
+                    display: grid;
+                    grid-template-columns: 0.8fr 1fr 2fr 2fr 1fr 1fr 1fr 1fr;
+                    background-color: white;
+                    padding: 1rem;
+                    border-radius: 1rem;
+                    align-items: center;
+                    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+                    min-width: 1000px;
+                }
+                .ds-people-grid {
+                    display: grid;
+                    grid-template-columns: repeat(3, 1fr);
+                    gap: 1rem;
+                }
+                .ds-modal-overlay {
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    background-color: rgba(0,0,0,0.5);
+                    z-index: 1000;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    padding: 1rem;
+                    backdrop-filter: blur(4px);
+                }
+                .ds-modal-content {
+                    width: 900px;
+                    max-width: 100%;
+                    background-color: white;
+                    border-radius: 2rem;
+                    padding: 2.5rem;
+                    max-height: 95vh;
+                    overflow-y: auto;
+                    position: relative;
+                    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+                }
+                .ds-info-grid {
+                    display: grid;
+                    grid-template-columns: repeat(4, 1fr);
+                    gap: 1.5rem 1rem;
+                }
+                .ds-vehicle-grid {
+                    display: grid;
+                    grid-template-columns: repeat(4, 1fr);
+                    gap: 1.5rem 1rem;
+                }
+                .ds-payment-grid {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: flex-end;
+                    text-align: center;
+                }
+                .ds-summary-grid {
+                    display: grid;
+                    grid-template-columns: repeat(5, 1fr);
+                    gap: 1rem;
+                }
+                .ds-flex-responsive {
+                    display: flex;
+                    gap: 2rem;
+                    align-items: center;
+                }
+
+                @media (max-width: 1024px) {
+                    .ds-stats-grid {
+                        grid-template-columns: repeat(2, 1fr);
+                    }
+                    .ds-people-grid {
+                        grid-template-columns: repeat(2, 1fr);
+                    }
+                }
+
+                @media (max-width: 768px) {
+                    .ds-modal-content {
+                        padding: 1.5rem;
+                    }
+                    .ds-controls-container {
+                        flex-direction: column;
+                        align-items: stretch;
+                    }
+                    .ds-controls-container > div {
+                        width: 100% !important;
+                    }
+                    .ds-people-grid {
+                        grid-template-columns: 1fr;
+                    }
+                    .ds-flex-responsive {
+                        flex-direction: column;
+                        text-align: center;
+                    }
+                    .ds-info-grid, .ds-vehicle-grid, .ds-summary-grid {
+                        grid-template-columns: 1fr;
+                        text-align: left;
+                        gap: 1rem;
+                    }
+                    .ds-payment-grid {
+                        flex-direction: column;
+                        align-items: stretch;
+                        text-align: left;
+                        gap: 1rem;
+                    }
+                    .ds-payment-grid > div {
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        padding-bottom: 0.5rem;
+                        border-bottom: 1px solid #f3f4f6;
+                    }
+                }
+
+                @media (max-width: 480px) {
+                    .ds-stats-grid {
+                        grid-template-columns: 1fr;
+                    }
+                }
+            `}</style>
             {/* Header */}
             <div>
                 <h1 style={{ fontSize: '1.8rem', fontWeight: 'bold', margin: '0 0 0.5rem 0' }}>Delivery Service</h1>
@@ -242,7 +393,7 @@ export const DeliveryServices = () => {
             </div>
 
             {/* Stats Cards */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.5rem' }}>
+            <div className="ds-stats-grid">
                 {[
                     { label: 'Total Deliveries', count: '068', icon: totalDeliveriesIcon, activeName: 'Total Deliveries' },
                     { label: 'Pending', count: '045', icon: pendingIcon, activeName: 'Pending' },
@@ -284,7 +435,7 @@ export const DeliveryServices = () => {
             </div>
 
             {/* Toolbar */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', flexWrap: 'wrap' }}>
+            <div className="ds-controls-container">
                 <div style={{ position: 'relative', width: '300px' }}>
                     <Search size={18} color="#9ca3af" style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)' }} />
                     <input 
@@ -312,9 +463,9 @@ export const DeliveryServices = () => {
             </div>
 
             {/* Table */}
-            <div className="card" style={{ padding: 0, overflow: 'hidden', border: 'none', boxShadow: 'none', backgroundColor: 'transparent' }}>
+            <div className="ds-table-container">
                 {/* Header Row */}
-                <div style={{ display: 'grid', gridTemplateColumns: '0.8fr 1fr 2fr 2fr 1fr 1fr 1fr 1fr', backgroundColor: '#38AC57', color: 'white', padding: '1rem', borderRadius: '1rem', alignItems: 'center', fontWeight: 'bold', fontSize: '0.9rem', marginBottom: '1rem' }}>
+                <div className="ds-table-header">
                     <div>Trip ID</div>
                     <div>Service</div>
                     <div>Rider</div>
@@ -328,7 +479,7 @@ export const DeliveryServices = () => {
                 {/* Rows */}
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.8rem' }}>
                     {filteredDeliveries.map((item, idx) => (
-                        <div key={idx} style={{ display: 'grid', gridTemplateColumns: '0.8fr 1fr 2fr 2fr 1fr 1fr 1fr 1fr', backgroundColor: 'white', padding: '1rem', borderRadius: '1rem', alignItems: 'center', boxShadow: '0 1px 2px rgba(0,0,0,0.05)' }}>
+                        <div key={idx} className="ds-table-row">
                             <div style={{ fontWeight: '600' }}>{item.id}</div>
                             <div>
                                 <span style={{ backgroundColor: '#eef7f0', color: '#2d8a46', padding: '0.2rem 0.6rem', borderRadius: '1rem', fontSize: '0.7rem', fontWeight: '600' }}>
@@ -408,7 +559,7 @@ export const DeliveryServices = () => {
             </div>
 
             {/* Driver/Rider Cards Grid */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1rem' }}>
+            <div className="ds-people-grid">
                 {filteredDriverRiders.map((person, idx) => (
                    <div key={idx} className="card" style={{ padding: '1rem', display: 'flex', alignItems: 'center', gap: '1rem' }}>
                        <div style={{ position: 'relative' }}>
@@ -433,8 +584,8 @@ export const DeliveryServices = () => {
 
             {/* Modal */}
             {selectedDelivery && (
-                <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.5)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                     <div className="card" style={{ width: '900px', backgroundColor: 'white', borderRadius: '1.5rem', padding: '2rem', maxHeight: '95vh', overflowY: 'auto', position: 'relative' }}>
+                <div className="ds-modal-overlay" onClick={() => setSelectedDelivery(null)}>
+                     <div className="ds-modal-content" onClick={e => e.stopPropagation()}>
                         
                         {/* Header */}
                         <div style={{ marginBottom: '1.5rem' }}>
@@ -446,7 +597,7 @@ export const DeliveryServices = () => {
                         {/* Customer Info */}
                         <h3 style={{ fontSize: '1.25rem', fontWeight: '800', marginBottom: '1.25rem', color: '#1e293b' }}>Customer Information</h3>
                         <div style={{ border: '1px solid #f3f4f6', borderRadius: '1.5rem', padding: '1.5rem', marginBottom: '2rem', backgroundColor: 'white' }}>
-                            <div style={{ display: 'flex', gap: '2rem', alignItems: 'center' }}>
+                            <div className="ds-flex-responsive">
                                 <div style={{ position: 'relative', flexShrink: 0 }}>
                                     <img src={selectedDelivery.rider.avatar} alt="" style={{ width: '72px', height: '72px', borderRadius: '50%', objectFit: 'cover' }} />
                                     <div style={{ 
@@ -456,7 +607,7 @@ export const DeliveryServices = () => {
                                         boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
                                     }}>★ {selectedDelivery.rider.rating}</div>
                                 </div>
-                                <div style={{ flex: 1, display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', columnGap: '1.5rem', rowGap: '1.25rem' }}>
+                                <div className="ds-info-grid">
                                     <div>
                                         <div style={{ fontSize: '0.75rem', color: '#94a3b8', fontWeight: '500', marginBottom: '0.4rem' }}>Full Name</div>
                                         <div style={{ fontWeight: '700', fontSize: '1rem' }}>{selectedDelivery.rider.name}</div>
@@ -499,7 +650,7 @@ export const DeliveryServices = () => {
                         {/* Driver Info */}
                         <h3 style={{ fontSize: '1.25rem', fontWeight: '800', marginBottom: '1.25rem', color: '#1e293b' }}>Driver Information</h3>
                         <div style={{ border: '1px solid #f3f4f6', borderRadius: '1.5rem', padding: '1.5rem', marginBottom: '2rem', backgroundColor: 'white' }}>
-                            <div style={{ display: 'flex', gap: '2rem', alignItems: 'center' }}>
+                            <div className="ds-flex-responsive">
                                 <div style={{ position: 'relative', flexShrink: 0 }}>
                                     <img src={selectedDelivery.driver.avatar} alt="" style={{ width: '72px', height: '72px', borderRadius: '50%', objectFit: 'cover' }} />
                                     <div style={{ 
@@ -509,7 +660,7 @@ export const DeliveryServices = () => {
                                         boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
                                     }}>★ {selectedDelivery.driver.rating}</div>
                                 </div>
-                                <div style={{ flex: 1, display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', columnGap: '1.5rem', rowGap: '1.25rem' }}>
+                                <div className="ds-info-grid">
                                     <div>
                                         <div style={{ fontSize: '0.75rem', color: '#94a3b8', fontWeight: '500', marginBottom: '0.4rem' }}>Name</div>
                                         <div style={{ fontWeight: '700', fontSize: '1rem' }}>{selectedDelivery.driver.name}</div>
@@ -562,7 +713,7 @@ export const DeliveryServices = () => {
                         {/* Vehicle Info */}
                         <h3 style={{ fontSize: '1.25rem', fontWeight: '800', marginBottom: '1.25rem', color: '#1e293b' }}>Vehicle Information</h3>
                         <div style={{ border: '1px solid #f3f4f6', borderRadius: '1.5rem', padding: '1.5rem', marginBottom: '2rem', backgroundColor: 'white' }}>
-                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', columnGap: '1.5rem', rowGap: '1.25rem' }}>
+                            <div className="ds-vehicle-grid">
                                 <div>
                                     <div style={{ fontSize: '0.75rem', color: '#94a3b8', fontWeight: '500', marginBottom: '0.4rem' }}>Vehicle</div>
                                     <div style={{ fontWeight: '700', fontSize: '1rem', display: 'flex', alignItems: 'center', gap: '12px' }}>
@@ -631,7 +782,7 @@ export const DeliveryServices = () => {
                                 </div>
                              </div>
 
-                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', textAlign: 'center' }}>
+                             <div className="ds-payment-grid">
                                 <div><div style={{ fontSize: '0.75rem', color: '#9ca3af' }}>TVA</div><div style={{ fontWeight: '600' }}>{selectedDelivery.tva}</div></div>
                                 <div><div style={{ fontSize: '0.75rem', color: '#9ca3af' }}>Service fee</div><div style={{ fontWeight: '600' }}>{selectedDelivery.serviceFee.toFixed(2)} MAD</div></div>
                                  <div>
@@ -649,7 +800,7 @@ export const DeliveryServices = () => {
                         
                         {/* Trip Summary */}
                         <h3 style={{ fontSize: '1.1rem', fontWeight: 'bold', marginBottom: '1rem' }}>Trip Summary</h3>
-                        <div style={{ border: '1px solid #f3f4f6', borderRadius: '1rem', padding: '1rem', display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)' }}>
+                        <div className="ds-summary-grid" style={{ border: '1px solid #f3f4f6', borderRadius: '1rem', padding: '1rem' }}>
                              <div><div style={{ fontSize: '0.7rem', color: '#9ca3af' }}>Start Time</div><div style={{ fontWeight: '600', fontSize: '0.85rem' }}>{selectedDelivery.startTime}</div></div>
                              <div><div style={{ fontSize: '0.7rem', color: '#9ca3af' }}>End Time</div><div style={{ fontWeight: '600', fontSize: '0.85rem' }}>{selectedDelivery.endTime}</div></div>
                              <div><div style={{ fontSize: '0.7rem', color: '#9ca3af' }}>Distance</div><div style={{ fontWeight: '600', fontSize: '0.85rem' }}>{selectedDelivery.distance}</div></div>

@@ -245,125 +245,481 @@ export const AllServices = () => {
   const enabledServices = services.filter(s => s.status === 'Enabled');
   const disabledServices = services.filter(s => s.status === 'Disabled');
 
-  const renderServiceCard = (service: ServiceMember) => (
-    <div key={service.id} style={{ 
-      backgroundColor: 'white', 
-      borderRadius: '1.25rem', 
-      padding: '1.25rem', 
-      border: '1px solid #e5e7eb',
-      boxShadow: '0 4px 6px -1px rgba(0,0,0,0.05)',
-      opacity: service.status === 'Disabled' ? 0.7 : 1,
-      transition: 'all 0.2s'
-    }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1.25rem' }}>
-        <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
-          <div style={{ padding: '0px', borderRadius: '0.75rem' }}>
-            <img src={service.icon} alt="" style={{ width: '48px', height: '48px', objectFit: 'contain' }} />
-          </div>
-          <div>
-            <h4 style={{ margin: 0, fontSize: '1rem', fontWeight: '800', color: '#111827' }}>{service.name}</h4>
-            <span style={{ 
-              fontSize: '0.65rem', 
-              fontWeight: '700', 
-              padding: '0.1rem 0.5rem', 
-              borderRadius: '0.25rem',
-              backgroundColor: service.priority === 'High' ? '#fee2e2' : service.priority === 'Medium' ? '#fef3c7' : '#f3f4f6',
-              color: service.priority === 'High' ? '#ef4444' : service.priority === 'Medium' ? '#d97706' : '#6b7280',
-              textTransform: 'uppercase'
-            }}>
-              {service.priority} Priority
-            </span>
-          </div>
-        </div>
-        <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
-          <div 
-            style={{ 
-              width: '44px', 
-              height: '24px', 
-              backgroundColor: service.status === 'Enabled' ? '#38AC57' : '#e5e7eb', 
-              borderRadius: '12px', 
-              position: 'relative', 
-              cursor: 'pointer' 
-            }}
-          >
-            <div style={{ 
-              width: '18px', 
-              height: '18px', 
-              backgroundColor: 'white', 
-              borderRadius: '50%', 
-              position: 'absolute', 
-              top: '3px', 
-              left: service.status === 'Enabled' ? '23px' : '3px',
-              transition: 'all 0.2s'
-            }} />
-          </div>
-          <button 
-            onClick={() => setSelectedService(service)}
-            style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '0.25rem', color: '#6b7280' }}
-          >
-            <Eye size={20} />
-          </button>
-        </div>
-      </div>
-
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem', marginBottom: '1.25rem' }}>
-        <div style={{ backgroundColor: '#f9fafb', padding: '1rem', borderRadius: '1rem', textAlign: 'center' }}>
-          <div style={{ fontSize: '1.75rem', fontWeight: '800', color: '#111827' }}>{service.activeNow}</div>
-          <div style={{ fontSize: '0.75rem', color: '#6b7280', fontWeight: '600' }}>Active Now</div>
-        </div>
-        <div style={{ backgroundColor: '#f9fafb', padding: '1rem', borderRadius: '1rem', textAlign: 'center' }}>
-          <div style={{ fontSize: '1.75rem', fontWeight: '800', color: '#111827' }}>{service.totalToday}</div>
-          <div style={{ fontSize: '0.75rem', color: '#6b7280', fontWeight: '600' }}>Total Today</div>
-        </div>
-      </div>
-
-      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', color: '#6b7280', fontWeight: '600', marginBottom: '0.5rem' }}>
-        <span onClick={(e) => { e.stopPropagation(); setActiveChart('revenue'); }} style={{ cursor: 'pointer' }}>Revenue: <strong style={{ color: '#111827' }}>{service.revenue}</strong></span>
-        <span onClick={(e) => { e.stopPropagation(); setActiveChart('growth'); }} style={{ cursor: 'pointer' }}>Growth: <strong style={{ color: '#38AC57' }}>{service.growth}</strong></span>
-        <span>Resp. Time: <strong style={{ color: '#111827' }}>{service.responseTime}</strong></span>
-      </div>
-
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: '1px solid #f3f4f6', paddingTop: '0.75rem', marginTop: '0.75rem' }}>
-        <div style={{ fontSize: '0.65rem', color: '#9ca3af' }}>Last updated: <span style={{ fontWeight: '700' }}>{service.lastUpdated}</span></div>
-        <div 
-          className={service.status === 'Enabled' ? 'pulsate' : ''}
-          style={{ 
-            backgroundColor: service.status === 'Enabled' ? '#eef7f0' : '#fef2f2', 
-            color: service.status === 'Enabled' ? '#38AC57' : '#ef4444', 
-            fontSize: '0.65rem', 
-            fontWeight: '700', 
-            padding: '0.2rem 0.5rem', 
-            borderRadius: '0.25rem',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '0.3rem'
-          }}
-        >
-          {service.status === 'Enabled' && <div style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: '#38AC57' }} />}
-          {service.status === 'Enabled' ? 'Live' : 'Paused'}
-        </div>
-      </div>
-    </div>
-  );
 
   return (
-    <div style={{ padding: '2rem', backgroundColor: '#f9fafb', minHeight: '100vh', position: 'relative' }}>
+    <div className="vp-allservices-wrapper">
+      <style>{`
+        .vp-allservices-wrapper {
+            padding: 2.5rem;
+            max-width: 1600px;
+            margin: 0 auto;
+            width: 100%;
+            background-color: #f8fafc;
+            min-height: 100vh;
+            box-sizing: border-box;
+            animation: fadeIn 0.4s ease-out;
+            position: relative;
+        }
+
+        .vp-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 2rem;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .vp-title-section h1 {
+            font-size: 2.5rem !important;
+            font-weight: 900 !important;
+            color: #1e293b;
+            margin: 0;
+            letter-spacing: -0.025em;
+        }
+
+        .vp-title-section p {
+            color: #64748b;
+            margin: 0.5rem 0 0 0;
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+
+        .vp-header-actions {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .vp-btn {
+            padding: 0.875rem 2rem;
+            border-radius: 100px;
+            font-weight: 800;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            white-space: nowrap;
+        }
+
+        .vp-btn-white {
+            background-color: white;
+            border: 1px solid #e2e8f0;
+            color: #475569;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+
+        .vp-btn-white:hover {
+            border-color: #38AC57;
+            color: #38AC57;
+            transform: translateY(-2px);
+        }
+
+        .vp-btn-green {
+            background-color: #38AC57;
+            color: white;
+            border: none;
+            box-shadow: 0 10px 15px -3px rgba(56, 172, 87, 0.3);
+        }
+
+        .vp-btn-green:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 20px 25px -5px rgba(56, 172, 87, 0.4);
+            background-color: #2e8d46;
+        }
+
+        .vp-stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 4rem;
+        }
+
+        .vp-stat-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 32px;
+            border: 1px solid #e2e8f0;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .vp-stat-card.active {
+            background: #38AC57;
+            border-color: #38AC57;
+            box-shadow: 0 20px 25px -5px rgba(56, 172, 87, 0.2);
+            color: white;
+        }
+
+        .vp-stat-card:hover:not(.active) {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+            border-color: #38AC57;
+        }
+
+        .vp-stat-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .vp-stat-icon {
+            width: 48px;
+            height: 48px;
+            padding: 8px;
+            border-radius: 12px;
+            background: #f0fdf4;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+
+        .vp-stat-card.active .vp-stat-icon {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .vp-stat-label {
+            font-size: 1rem;
+            font-weight: 800;
+            color: #64748b;
+        }
+
+        .vp-stat-card.active .vp-stat-label {
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .vp-stat-value {
+            font-size: 3rem;
+            font-weight: 950;
+            letter-spacing: -0.025em;
+        }
+
+        .vp-stat-arrow {
+            position: absolute;
+            right: 2rem;
+            bottom: 2rem;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f1f5f9;
+            color: #64748b;
+            transition: all 0.3s;
+        }
+
+        .vp-stat-card.active .vp-stat-arrow {
+            background: rgba(0, 0, 0, 0.15);
+            color: white;
+        }
+
+        .vp-section-title {
+            font-size: 1.75rem;
+            font-weight: 900;
+            color: #1e293b;
+            margin-bottom: 2rem;
+            letter-spacing: -0.025em;
+        }
+
+        .vp-services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .vp-service-card {
+            background: white;
+            border-radius: 32px;
+            padding: 2rem;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+
+        .vp-service-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            border-color: #38AC57;
+        }
+
+        .vp-service-card.disabled {
+            opacity: 0.7;
+        }
+
+        .vp-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 2rem;
+        }
+
+        .vp-service-info {
+            display: flex;
+            gap: 1.25rem;
+            align-items: center;
+        }
+
+        .vp-service-img {
+            width: 64px;
+            height: 64px;
+            object-fit: contain;
+        }
+
+        .vp-service-name h4 {
+            font-size: 1.25rem;
+            font-weight: 900;
+            color: #1e293b;
+            margin: 0;
+        }
+
+        .vp-priority-badge {
+            display: inline-block;
+            font-size: 0.75rem;
+            font-weight: 800;
+            padding: 0.25rem 0.75rem;
+            border-radius: 100px;
+            text-transform: uppercase;
+            margin-top: 0.5rem;
+        }
+
+        .vp-switch-container {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .vp-switch {
+            width: 48px;
+            height: 26px;
+            border-radius: 100px;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .vp-switch .knob {
+            width: 20px;
+            height: 20px;
+            background: white;
+            border-radius: 50%;
+            position: absolute;
+            top: 3px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .vp-card-metrics {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .vp-metric-box {
+            background: #f8fafc;
+            padding: 1.5rem;
+            border-radius: 20px;
+            text-align: center;
+            border: 1px solid #f1f5f9;
+        }
+
+        .vp-metric-label {
+            display: block;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.5rem;
+        }
+
+        .vp-metric-value {
+            font-size: 1.75rem;
+            font-weight: 900;
+            color: #1e293b;
+        }
+
+        .vp-card-footer-metrics {
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+            padding: 1.5rem 0;
+            border-top: 1px solid #f1f5f9;
+            flex-wrap: wrap;
+        }
+
+        .vp-footer-item {
+            font-size: 0.875rem;
+            font-weight: 700;
+            color: #64748b;
+        }
+
+        .vp-footer-item strong {
+            color: #1e293b;
+        }
+
+        .vp-card-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 0.5rem;
+        }
+
+        .vp-last-updated {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #94a3b8;
+        }
+
+        .vp-status-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.4rem 1rem;
+            border-radius: 100px;
+            font-size: 0.75rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .vp-status-tag.live {
+            background: #f0fdf4;
+            color: #38AC57;
+        }
+
+        .vp-status-tag.paused {
+            background: #fef2f2;
+            color: #ef4444;
+        }
+
+        .vp-live-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: #38AC57;
+        }
+
+        .vp-navigation-helper {
+            position: fixed;
+            bottom: 2.5rem;
+            left: 2.5rem;
+            background: #111827;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 100px;
+            display: flex;
+            gap: 1rem;
+            font-size: 0.75rem;
+            font-weight: 800;
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.3);
+            z-index: 50;
+            letter-spacing: 0.05em;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulsate {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .pulsate {
+            animation: pulsate 2s infinite ease-in-out;
+        }
+
+        @media (max-width: 1024px) {
+            .vp-services-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .vp-allservices-wrapper {
+                padding: 1.5rem;
+            }
+            .vp-header {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+            .vp-title-section h1 {
+                font-size: 2rem !important;
+            }
+            .vp-header-actions {
+                width: 100%;
+                justify-content: center;
+            }
+            .vp-btn {
+                width: 100%;
+                justify-content: center;
+            }
+            .vp-services-grid {
+                grid-template-columns: 1fr;
+            }
+            .vp-service-card {
+                padding: 1.5rem;
+            }
+            .vp-card-header {
+                flex-direction: column;
+                gap: 1.5rem;
+                align-items: center;
+                text-align: center;
+            }
+            .vp-service-info {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            .vp-card-footer-metrics {
+                flex-direction: column;
+                gap: 0.75rem;
+                align-items: center;
+                text-align: center;
+            }
+            .vp-card-bottom {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            .vp-navigation-helper {
+                left: 50%;
+                transform: translateX(-50%);
+                width: max-content;
+                bottom: 1.5rem;
+            }
+        }
+      `}</style>
+
       {/* Header Section */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '2.5rem' }}>
-        <div>
-          <h1 style={{ fontSize: '2rem', fontWeight: '800', color: '#111827', margin: 0 }}>All Services Management</h1>
-          <p style={{ color: '#6b7280', marginTop: '0.5rem', fontSize: '1rem' }}>Enable, disable, and manage all 9 Hezzni services from one central hub</p>
+      <div className="vp-header">
+        <div className="vp-title-section">
+          <h1>All Services Management</h1>
+          <p>Enable, disable, and manage all Hezzni services from one central hub</p>
         </div>
-        <div style={{ display: 'flex', gap: '1rem' }}>
+        <div className="vp-header-actions">
           <button 
+            className="vp-btn vp-btn-white"
             onClick={() => alert('Opening Service Status Monitor...')}
-            style={{ backgroundColor: 'white', border: '1px solid #e5e7eb', padding: '0.75rem 1.5rem', borderRadius: '2rem', fontWeight: '700', fontSize: '0.9rem', color: '#4b5563', cursor: 'pointer', boxShadow: '0 1px 2px rgba(0,0,0,0.05)' }}
           >
             Service Status Monitor
           </button>
           <button 
+            className="vp-btn vp-btn-green"
             onClick={() => alert('Opening Global Service Settings...')}
-            style={{ backgroundColor: '#38AC57', color: 'white', border: 'none', padding: '0.75rem 2rem', borderRadius: '2rem', fontWeight: '700', fontSize: '0.9rem', cursor: 'pointer', boxShadow: '0 4px 6px -1px rgba(56, 172, 87, 0.2)' }}
           >
             Global Settings
           </button>
@@ -371,57 +727,24 @@ export const AllServices = () => {
       </div>
 
       {/* Stats Cards */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.5rem', marginBottom: '3rem' }}>
+      <div className="vp-stats-grid">
         {stats.map((stat, idx) => {
           const isActive = activeStat === stat.label;
           return (
             <div 
               key={idx} 
+              className={`vp-stat-card ${isActive ? 'active' : ''}`}
               onClick={() => setActiveStat(stat.label)}
-              style={{ 
-                backgroundColor: isActive ? '#38AC57' : '#ffffff', 
-                color: isActive ? 'white' : '#111827',
-                padding: '1.75rem', 
-                borderRadius: '1.5rem',
-                border: isActive ? 'none' : '1px solid #e5e7eb',
-                boxShadow: isActive ? '0 10px 15px -3px rgba(56, 172, 87, 0.2)' : '0 4px 6px -1px rgba(0,0,0,0.05)',
-                position: 'relative',
-                cursor: 'pointer',
-                transition: 'all 0.2s ease',
-                transform: isActive ? 'scale(1.02)' : 'none'
-              }}
             >
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.25rem' }}>
-                <div style={{ 
-                  padding: '0px', 
-                  borderRadius: '0.75rem',
-                  backgroundColor: isActive ? 'rgba(255, 255, 255, 0.2)' : 'transparent',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  width: '32px',
-                  height: '32px'
-                }}>
+              <div className="vp-stat-header">
+                <div className="vp-stat-icon">
                   <img src={stat.icon} alt="" style={{ width: '24px', height: '24px', objectFit: 'contain' }} />
                 </div>
-                <span style={{ fontSize: '0.95rem', fontWeight: '700' }}>{stat.label}</span>
+                <span className="vp-stat-label">{stat.label}</span>
               </div>
-              <div style={{ fontSize: '3rem', fontWeight: '900' }}>{stat.value}</div>
-              <div style={{ 
-                position: 'absolute', 
-                right: '1.5rem', 
-                bottom: '1.5rem',
-                backgroundColor: isActive ? '#111827' : '#38AC57',
-                color: 'white',
-                width: '36px',
-                height: '36px',
-                borderRadius: '50%',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                transition: 'all 0.2s ease'
-              }}>
-                <ArrowUpRight size={20} />
+              <div className="vp-stat-value">{stat.value}</div>
+              <div className="vp-stat-arrow">
+                <ArrowUpRight size={22} />
               </div>
             </div>
           );
@@ -429,112 +752,187 @@ export const AllServices = () => {
       </div>
 
       {/* Enabled Services Grid */}
-      <div style={{ marginBottom: '3rem' }}>
-        <h2 style={{ fontSize: '1.5rem', fontWeight: '800', color: '#111827', marginBottom: '1.5rem' }}>
+      <div>
+        <h2 className="vp-section-title">
           Enabled Services ({enabledServices.length})
         </h2>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(360px, 1fr))', gap: '1.5rem' }}>
-          {enabledServices.map(renderServiceCard)}
+        <div className="vp-services-grid">
+          {enabledServices.map((service) => (
+            <div 
+              key={service.id} 
+              className="vp-service-card"
+            >
+              <div className="vp-card-header">
+                <div className="vp-service-info">
+                  <img src={service.icon} alt="" className="vp-service-img" />
+                  <div className="vp-service-name">
+                    <h4>{service.name}</h4>
+                    <span className="vp-priority-badge" style={{ 
+                      backgroundColor: service.priority === 'High' ? '#fee2e2' : service.priority === 'Medium' ? '#fef3c7' : '#f1f5f9',
+                      color: service.priority === 'High' ? '#ef4444' : service.priority === 'Medium' ? '#d97706' : '#64748b'
+                    }}>
+                      {service.priority} Priority
+                    </span>
+                  </div>
+                </div>
+                <div className="vp-switch-container">
+                  <div 
+                    className="vp-switch"
+                    style={{ backgroundColor: service.status === 'Enabled' ? '#38AC57' : '#e2e8f0' }}
+                  >
+                    <div className="knob" style={{ left: service.status === 'Enabled' ? '25px' : '3px' }} />
+                  </div>
+                  <button 
+                    className="vp-btn vp-btn-white" 
+                    style={{ padding: '0.5rem', borderRadius: '12px' }}
+                    onClick={() => setSelectedService(service)}
+                  >
+                    <Eye size={20} />
+                  </button>
+                </div>
+              </div>
+
+              <div className="vp-card-metrics">
+                <div className="vp-metric-box">
+                  <span className="vp-metric-label">Active Now</span>
+                  <div className="vp-metric-value">{service.activeNow}</div>
+                </div>
+                <div className="vp-metric-box">
+                  <span className="vp-metric-label">Total Today</span>
+                  <div className="vp-metric-value">{service.totalToday}</div>
+                </div>
+              </div>
+
+              <div className="vp-card-footer-metrics">
+                <span className="vp-footer-item" onClick={(e) => { e.stopPropagation(); setActiveChart('revenue'); }} style={{ cursor: 'pointer' }}>
+                  Revenue: <strong>{service.revenue}</strong>
+                </span>
+                <span className="vp-footer-item" onClick={(e) => { e.stopPropagation(); setActiveChart('growth'); }} style={{ cursor: 'pointer' }}>
+                  Growth: <strong style={{ color: '#38AC57' }}>{service.growth}</strong>
+                </span>
+                <span className="vp-footer-item">
+                  Resp. Time: <strong>{service.responseTime}</strong>
+                </span>
+              </div>
+
+              <div className="vp-card-bottom">
+                <div className="vp-last-updated">Last updated: {service.lastUpdated}</div>
+                <div className={`vp-status-tag ${service.status === 'Enabled' ? 'live' : 'paused'} ${service.status === 'Enabled' ? 'pulsate' : ''}`}>
+                  {service.status === 'Enabled' && <div className="vp-live-dot" />}
+                  {service.status === 'Enabled' ? 'Live' : 'Paused'}
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
 
       {/* Disabled Services Grid */}
       <div>
-        <h2 style={{ fontSize: '1.5rem', fontWeight: '800', color: '#111827', marginBottom: '1.5rem' }}>
+        <h2 className="vp-section-title">
           Disabled Services ({disabledServices.length})
         </h2>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(360px, 1fr))', gap: '1.5rem' }}>
-          {disabledServices.map(renderServiceCard)}
+        <div className="vp-services-grid">
+          {disabledServices.map((service) => (
+            <div 
+              key={service.id} 
+              className="vp-service-card disabled"
+            >
+              <div className="vp-card-header">
+                <div className="vp-service-info">
+                  <img src={service.icon} alt="" className="vp-service-img" />
+                  <div className="vp-service-name">
+                    <h4>{service.name}</h4>
+                    <span className="vp-priority-badge" style={{ 
+                      backgroundColor: service.priority === 'High' ? '#fee2e2' : service.priority === 'Medium' ? '#fef3c7' : '#f1f5f9',
+                      color: service.priority === 'High' ? '#ef4444' : service.priority === 'Medium' ? '#d97706' : '#64748b'
+                    }}>
+                      {service.priority} Priority
+                    </span>
+                  </div>
+                </div>
+                <div className="vp-switch-container">
+                  <div 
+                    className="vp-switch"
+                    style={{ backgroundColor: service.status === 'Enabled' ? '#38AC57' : '#e2e8f0' }}
+                  >
+                    <div className="knob" style={{ left: service.status === 'Enabled' ? '25px' : '3px' }} />
+                  </div>
+                  <button 
+                    className="vp-btn vp-btn-white" 
+                    style={{ padding: '0.5rem', borderRadius: '12px' }}
+                    onClick={() => setSelectedService(service)}
+                  >
+                    <Eye size={20} />
+                  </button>
+                </div>
+              </div>
+
+              <div className="vp-card-metrics">
+                <div className="vp-metric-box">
+                  <span className="vp-metric-label">Active Now</span>
+                  <div className="vp-metric-value">{service.activeNow}</div>
+                </div>
+                <div className="vp-metric-box">
+                  <span className="vp-metric-label">Total Today</span>
+                  <div className="vp-metric-value">{service.totalToday}</div>
+                </div>
+              </div>
+
+              <div className="vp-card-footer-metrics">
+                <span className="vp-footer-item">
+                  Revenue: <strong>{service.revenue}</strong>
+                </span>
+                <span className="vp-footer-item">
+                  Growth: <strong style={{ color: '#64748b' }}>{service.growth}</strong>
+                </span>
+                <span className="vp-footer-item">
+                  Resp. Time: <strong>{service.responseTime}</strong>
+                </span>
+              </div>
+
+              <div className="vp-card-bottom">
+                <div className="vp-last-updated">Last updated: {service.lastUpdated}</div>
+                <div className="vp-status-tag paused">
+                  Paused
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
 
       {/* Revenue Modal */}
       {activeChart === 'revenue' && (
-        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(8px)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1100 }}>
+        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(8px)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1100, padding: '1rem' }}>
           <div onClick={() => setActiveChart(null)} style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }}></div>
-          <div style={{ backgroundColor: 'white', padding: '2rem', borderRadius: '1.5rem', width: '90%', maxWidth: '500px', position: 'relative', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)', margin: 'auto' }}>
-            <h3 style={{ fontSize: '1.5rem', fontWeight: '800', marginBottom: '1.5rem', marginTop: 0 }}>Revenue</h3>
-            <div style={{ height: '300px', display: 'flex', alignItems: 'flex-end', gap: '0.75rem', paddingBottom: '2rem', borderLeft: '2px dashed #e5e7eb', borderBottom: '2px dashed #e5e7eb', paddingLeft: '1rem', position: 'relative' }}>
-              {/* Y-Axis Labels */}
-              <div style={{ position: 'absolute', left: '-45px', bottom: '0', height: '100%', display: 'flex', flexDirection: 'column-reverse', justifyContent: 'space-between', fontSize: '0.75rem', color: '#6b7280', fontWeight: 'bold' }}>
-                <span>0</span>
-                <span>150</span>
-                <span>300</span>
-                <span>450</span>
-                <span>600</span>
-              </div>
-              {/* Bars */}
-              {[450, 320, 280, 500, 320, 250, 500, 350, 300, 450, 250].map((h, i) => (
-                <div key={i} style={{ flex: 1, backgroundColor: '#38AC57', height: `${(h/600)*100}%`, borderRadius: '4px 4px 0 0', position: 'relative', transition: 'height 0.5s ease-out' }}>
-                  {i === 10 && <div style={{ position: 'absolute', top: '-30px', left: '50%', transform: 'translateX(-50%)', backgroundColor: '#38AC57', color: 'white', padding: '2px 8px', borderRadius: '4px', fontSize: '0.65rem', fontWeight: 'bold' }}>300</div>}
+          <div style={{ backgroundColor: 'white', padding: '2rem', borderRadius: '2rem', width: '100%', maxWidth: '500px', position: 'relative', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)', overflow: 'hidden' }}>
+            <h3 style={{ fontSize: '1.5rem', fontWeight: '900', marginBottom: '2rem', marginTop: 0, color: '#1e293b' }}>Weekly Revenue</h3>
+            <div style={{ height: '240px', display: 'flex', alignItems: 'flex-end', gap: '0.75rem', paddingBottom: '2.5rem', borderLeft: '2px solid #f1f5f9', borderBottom: '2px solid #f1f5f9', paddingLeft: '1rem', position: 'relative' }}>
+              {[450, 320, 280, 500, 320, 250, 500].map((h, i) => (
+                <div key={i} style={{ flex: 1, backgroundColor: '#38AC57', height: `${(h/600)*100}%`, borderRadius: '6px 6px 0 0', position: 'relative', transition: 'height 0.5s ease-out' }}>
                 </div>
               ))}
             </div>
-            {/* X-Axis Labels */}
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '1rem', paddingLeft: '1rem', fontSize: '0.8rem', color: '#6b7280', fontWeight: 'bold' }}>
-              <span>Mon</span>
-              <span>Tue</span>
-              <span>Wed</span>
-              <span>Thurs</span>
-              <span>Fri</span>
-              <span>Sat</span>
-              <span>Sun</span>
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '1rem', paddingLeft: '1rem', fontSize: '0.75rem', color: '#64748b', fontWeight: '800' }}>
+              <span>MON</span>
+              <span>TUE</span>
+              <span>WED</span>
+              <span>THU</span>
+              <span>FRI</span>
+              <span>SAT</span>
+              <span>SUN</span>
             </div>
-            {/* Legend */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginTop: '1.5rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginTop: '2rem', background: '#f8fafc', padding: '1.25rem', borderRadius: '16px' }}>
               <div style={{ width: '12px', height: '12px', borderRadius: '50%', backgroundColor: '#38AC57' }}></div>
-              <span style={{ fontSize: '0.85rem', fontWeight: '700' }}>45,230 MAD</span>
+              <span style={{ fontSize: '1rem', fontWeight: '800', color: '#111827' }}>45,230 MAD</span>
+              <span style={{ fontSize: '0.8rem', fontWeight: '700', color: '#38AC57', marginLeft: 'auto' }}>+12% vs last week</span>
             </div>
           </div>
         </div>
       )}
 
-      {/* Growth Modal */}
-      {activeChart === 'growth' && (
-        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(8px)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1100 }}>
-          <div onClick={() => setActiveChart(null)} style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }}></div>
-          <div style={{ backgroundColor: 'white', padding: '2rem', borderRadius: '1.5rem', width: '90%', maxWidth: '500px', position: 'relative', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)', margin: 'auto' }}>
-            <h3 style={{ fontSize: '1.5rem', fontWeight: '800', marginBottom: '1.5rem', marginTop: 0 }}>Growth</h3>
-            <div style={{ height: '300px', position: 'relative', borderLeft: '2px dashed #e5e7eb', borderBottom: '2px dashed #e5e7eb', paddingLeft: '1rem', overflow: 'hidden' }}>
-              {/* Y-Axis Labels */}
-              <div style={{ position: 'absolute', left: '-45px', bottom: '0', height: '100%', display: 'flex', flexDirection: 'column-reverse', justifyContent: 'space-between', fontSize: '0.75rem', color: '#6b7280', fontWeight: 'bold' }}>
-                <span>0</span>
-                <span>150</span>
-                <span>300</span>
-                <span>450</span>
-                <span>600</span>
-              </div>
-              {/* Area Chart Implementation using SVG */}
-              <svg width="100%" height="100%" viewBox="0 0 400 300" preserveAspectRatio="none">
-                <defs>
-                   <linearGradient id="growthGradient" x1="0" y1="0" x2="0" y2="1">
-                     <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.8}/>
-                     <stop offset="95%" stopColor="#3b82f6" stopOpacity={0}/>
-                   </linearGradient>
-                </defs>
-                <path d="M0,250 Q100,200 150,220 T300,100 T400,280 L400,300 L0,300 Z" fill="url(#growthGradient)" />
-                <path d="M0,250 Q100,200 150,220 T300,100 T400,280" stroke="#3b82f6" strokeWidth="3" fill="none" />
-                {/* Additional layers for stylized look */}
-                <path d="M0,260 Q100,210 150,230 T300,110 T400,290 L400,300 L0,300 Z" fill="#38AC57" opacity="0.3" />
-                <path d="M0,270 Q100,220 150,240 T300,120 T400,300 L400,300 L0,300 Z" fill="#f59e0b" opacity="0.3" />
-                <path d="M0,280 Q100,230 150,250 T300,130 T400,300 L400,300 L0,300 Z" fill="#ef4444" opacity="0.3" />
-              </svg>
-            </div>
-            {/* X-Axis Labels */}
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '1rem', paddingLeft: '1rem', fontSize: '0.8rem', color: '#6b7280', fontWeight: 'bold' }}>
-              <span>06:00</span>
-              <span>09:00</span>
-              <span>12:00</span>
-              <span>15:00</span>
-              <span>18:00</span>
-              <span>21:00</span>
-              <span>00:00</span>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Details Modal */}
+      {/* Details Modal - Keeping its structure but improving mobile look */}
       {selectedService && (
         <div style={{ 
           position: 'fixed', 
@@ -543,166 +941,101 @@ export const AllServices = () => {
           right: 0, 
           bottom: 0, 
           backgroundColor: 'rgba(0,0,0,0.5)', 
-          backdropFilter: 'blur(8px)',
+          backdropFilter: 'blur(10px)',
           display: 'flex', 
           alignItems: 'center', 
           justifyContent: 'center', 
           zIndex: 1000,
-          padding: '2rem'
+          padding: '1.5rem'
         }}>
+          <div onClick={() => setSelectedService(null)} style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }}></div>
           <div style={{ 
             backgroundColor: 'white', 
             width: '100%', 
             maxWidth: '680px', 
             maxHeight: '90vh', 
-            borderRadius: '2rem', 
+            borderRadius: '2.5rem', 
             overflow: 'hidden',
             boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)',
             display: 'flex',
-            flexDirection: 'column'
+            flexDirection: 'column',
+            position: 'relative',
+            animation: 'fadeIn 0.3s ease-out'
           }}>
-            {/* Modal Header */}
-            <div style={{ padding: '1.5rem 2rem', borderBottom: '1px solid #f3f4f6', display: 'flex', alignItems: 'center', gap: '1rem' }}>
+            <div style={{ padding: '2rem', borderBottom: '1px solid #f1f5f9', display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
               <button 
                 onClick={() => setSelectedService(null)}
-                style={{ background: '#f3f4f6', border: 'none', padding: '0.5rem', borderRadius: '50%', cursor: 'pointer', color: '#111827' }}
+                style={{ background: '#f8fafc', border: '1px solid #e2e8f0', padding: '0.75rem', borderRadius: '50%', cursor: 'pointer', color: '#1e293b', display: 'flex' }}
               >
                 <ChevronLeft size={24} />
               </button>
               <div>
-                <h3 style={{ margin: 0, fontSize: '1.5rem', fontWeight: '800', color: '#111827' }}>{selectedService.name} - Service Details</h3>
-                <p style={{ margin: 0, fontSize: '0.85rem', color: '#6b7280', fontWeight: '600' }}>Complete information and management options for {selectedService.type}</p>
+                <h3 style={{ margin: 0, fontSize: '1.5rem', fontWeight: '900', color: '#1e293b' }}>{selectedService.name}</h3>
+                <p style={{ margin: 0, fontSize: '0.875rem', color: '#64748b', fontWeight: '600' }}>{selectedService.type}</p>
               </div>
             </div>
 
-            {/* Modal Content */}
-            <div style={{ padding: '2rem', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '2rem' }}>
-              
-              {/* Service Information Box */}
-              <div>
-                <h4 style={{ margin: '0 0 1rem 0', fontSize: '1.1rem', fontWeight: '800' }}>Service Information</h4>
-                <div style={{ backgroundColor: '#f9fafb', padding: '1.5rem', borderRadius: '1.5rem', display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1rem' }}>
-                  <div>
-                    <div style={{ fontSize: '0.75rem', color: '#6b7280', fontWeight: '600', marginBottom: '0.4rem' }}>Status:</div>
-                    <span style={{ backgroundColor: '#eef7f0', color: '#38AC57', padding: '0.2rem 0.6rem', borderRadius: '0.4rem', fontSize: '0.75rem', fontWeight: '700' }}>
-                      {selectedService.status}
-                    </span>
+            <div style={{ padding: '2.5rem', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '2.5rem' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: '1.5rem' }}>
+                <div style={{ background: '#f8fafc', padding: '1.25rem', borderRadius: '20px', border: '1px solid #f1f5f9' }}>
+                  <div style={{ fontSize: '0.75rem', color: '#64748b', fontWeight: '800', textTransform: 'uppercase', marginBottom: '0.5rem' }}>Status</div>
+                  <span style={{ backgroundColor: '#eef7f0', color: '#38AC57', padding: '0.4rem 1rem', borderRadius: '100px', fontSize: '0.75rem', fontWeight: '800' }}>{selectedService.status}</span>
+                </div>
+                <div style={{ background: '#f8fafc', padding: '1.25rem', borderRadius: '20px', border: '1px solid #f1f5f9' }}>
+                  <div style={{ fontSize: '0.75rem', color: '#64748b', fontWeight: '800', textTransform: 'uppercase', marginBottom: '0.5rem' }}>Priority</div>
+                  <span style={{ backgroundColor: '#fee2e2', color: '#ef4444', padding: '0.4rem 1rem', borderRadius: '100px', fontSize: '0.75rem', fontWeight: '800' }}>{selectedService.priority}</span>
+                </div>
+                <div style={{ background: '#f8fafc', padding: '1.25rem', borderRadius: '20px', border: '1px solid #f1f5f9' }}>
+                  <div style={{ fontSize: '0.75rem', color: '#64748b', fontWeight: '800', textTransform: 'uppercase', marginBottom: '0.5rem' }}>Rating</div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '1.1rem', fontWeight: '900', color: '#1e293b' }}>
+                    <Star size={18} fill="#38AC57" color="#38AC57" /> {selectedService.rating}
                   </div>
-                  <div>
-                    <div style={{ fontSize: '0.75rem', color: '#6b7280', fontWeight: '600', marginBottom: '0.4rem' }}>Last Updated:</div>
-                    <div style={{ fontSize: '0.8rem', fontWeight: '700' }}>{selectedService.lastUpdated}</div>
-                  </div>
-                  <div>
-                    <div style={{ fontSize: '0.75rem', color: '#6b7280', fontWeight: '600', marginBottom: '0.4rem' }}>Priority:</div>
-                    <span style={{ backgroundColor: '#fee2e2', color: '#ef4444', padding: '0.2rem 0.6rem', borderRadius: '0.4rem', fontSize: '0.75rem', fontWeight: '700' }}>
-                      {selectedService.priority} Priority
-                    </span>
-                  </div>
-                  <div>
-                    <div style={{ fontSize: '0.75rem', color: '#6b7280', fontWeight: '600', marginBottom: '0.4rem' }}>Rating:</div>
-                    <div style={{ fontSize: '0.8rem', fontWeight: '700', display: 'flex', alignItems: 'center', gap: '0.2rem' }}>
-                      <Star size={14} fill="#fbbf24" color="#fbbf24" /> {selectedService.rating}/5.0
-                    </div>
-                  </div>
+                </div>
+                <div style={{ background: '#f8fafc', padding: '1.25rem', borderRadius: '20px', border: '1px solid #f1f5f9' }}>
+                  <div style={{ fontSize: '0.75rem', color: '#64748b', fontWeight: '800', textTransform: 'uppercase', marginBottom: '0.5rem' }}>Success</div>
+                  <div style={{ fontSize: '1.1rem', fontWeight: '900', color: '#38AC57' }}>{selectedService.completionRate}</div>
                 </div>
               </div>
 
-              {/* Performance Metrics Section */}
               <div>
-                <h4 style={{ margin: '0 0 1rem 0', fontSize: '1.1rem', fontWeight: '800' }}>Performance Metrics</h4>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1rem' }}>
-                  {[
-                    { label: 'Growth:', value: selectedService.growth, color: '#38AC57' },
-                    { label: 'Revenue:', value: selectedService.revenue, color: '#111827' },
-                    { label: 'Response Time:', value: selectedService.responseTime, color: '#111827' },
-                    { label: 'Completion Rate:', value: selectedService.completionRate, color: '#111827' }
-                  ].map((m, i) => (
-                    <div key={i} style={{ textAlign: 'center' }}>
-                      <div style={{ fontSize: '0.75rem', color: '#6b7280', fontWeight: '600', marginBottom: '0.4rem' }}>{m.label}</div>
-                      <div style={{ fontSize: '0.95rem', fontWeight: '800', color: m.color }}>{m.value}</div>
+                <h4 style={{ margin: '0 0 1rem 0', fontSize: '1.1rem', fontWeight: '900', color: '#1e293b' }}>Description</h4>
+                <p style={{ margin: 0, color: '#475569', lineHeight: 1.7, fontSize: '0.95rem' }}>{selectedService.description}</p>
+              </div>
+
+              <div>
+                <h4 style={{ margin: '0 0 1.25rem 0', fontSize: '1.1rem', fontWeight: '900', color: '#1e293b' }}>Features</h4>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem' }}>
+                  {selectedService.features.map((f: string, i: number) => (
+                    <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '1rem', background: '#f0fdf4', borderRadius: '16px', color: '#166534', fontWeight: '700', fontSize: '0.9rem' }}>
+                      <CheckCircle2 size={18} /> {f}
                     </div>
                   ))}
                 </div>
               </div>
 
-              {/* Service Description Section */}
               <div>
-                <h4 style={{ margin: '0 0 1rem 0', fontSize: '1.1rem', fontWeight: '800' }}>Service Description</h4>
-                <div style={{ backgroundColor: '#f9fafb', padding: '1.5rem', borderRadius: '1.5rem', color: '#4b5563', fontSize: '0.9rem', lineHeight: 1.6 }}>
-                  {selectedService.description}
-                </div>
-              </div>
-
-              {/* Service Features Grid */}
-              <div style={{ backgroundColor: '#eef7f0', padding: '1.5rem', borderRadius: '1.5rem' }}>
-                <h4 style={{ margin: '0 0 1rem 0', fontSize: '1.1rem', fontWeight: '800' }}>Service Features</h4>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
-                  {selectedService.features.map((feature: string, i: number) => (
-                    <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', fontSize: '0.85rem', fontWeight: '600', color: '#38AC57' }}>
-                      <CheckCircle2 size={16} /> {feature}
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Coverage Areas Section */}
-              <div>
-                <h4 style={{ margin: '0 0 1rem 0', fontSize: '1.1rem', fontWeight: '800' }}>Coverage Areas</h4>
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.75rem' }}>
-                  {selectedService.coverage.map((city: string, i: number) => (
-                    <span key={i} style={{ 
-                      padding: '0.6rem 1.5rem', 
-                      borderRadius: '2rem', 
-                      border: '1px solid #e5e7eb', 
-                      fontSize: '0.8rem', 
-                      fontWeight: '700', 
-                      color: '#4b5563' 
-                    }}>
-                      {city}
-                    </span>
-                  ))}
-                </div>
-              </div>
-
-              {/* Detailed Statistics Grid */}
-              <div style={{ borderTop: '1px solid #f3f4f6', paddingTop: '2rem' }}>
-                <h4 style={{ margin: '0 0 1.5rem 0', fontSize: '1.1rem', fontWeight: '800' }}>Detailed Statistics</h4>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <h4 style={{ margin: '0 0 1.25rem 0', fontSize: '1.1rem', fontWeight: '900', color: '#1e293b' }}>Statistics</h4>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1.5rem' }}>
                   {[
                     { label: 'Total Requests', value: selectedService.stats.totalRequests },
                     { label: 'Active Now', value: selectedService.stats.activeNow },
                     { label: 'Completed', value: selectedService.stats.completed },
                     { label: 'Cancelled', value: selectedService.stats.cancelled }
                   ].map((s, i) => (
-                    <div key={i} style={{ textAlign: 'center', flex: 1, borderRight: i < 3 ? '1px solid #f3f4f6' : 'none' }}>
-                      <div style={{ fontSize: '1.75rem', fontWeight: '900', color: '#111827', marginBottom: '0.25rem' }}>{s.value}</div>
-                      <div style={{ fontSize: '0.7rem', color: '#6b7280', fontWeight: '700', textTransform: 'uppercase' }}>{s.label}</div>
+                    <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1rem 0', borderBottom: '1px solid #f1f5f9' }}>
+                      <span style={{ color: '#64748b', fontWeight: '700', fontSize: '0.9rem' }}>{s.label}</span>
+                      <span style={{ color: '#1e293b', fontWeight: '900', fontSize: '1.1rem' }}>{s.value}</span>
                     </div>
                   ))}
                 </div>
               </div>
-
             </div>
           </div>
         </div>
       )}
 
       {/* Navigation Helper */}
-      <div style={{ 
-        position: 'fixed', 
-        bottom: '2rem', 
-        left: '2rem', 
-        backgroundColor: '#f1f5f9', 
-        padding: '0.5rem 1rem', 
-        borderRadius: '2rem', 
-        display: 'flex', 
-        gap: '1rem',
-        fontSize: '0.7rem',
-        fontWeight: '700',
-        color: '#64748b',
-        boxShadow: '0 4px 6px -1px rgba(0,0,0,0.1)',
-        zIndex: 50
-      }}>
+      <div className="vp-navigation-helper">
         <span>#ALLSERVICES</span>
         <span>•</span>
         <span>MANAGEMENT HUB v1.0</span>

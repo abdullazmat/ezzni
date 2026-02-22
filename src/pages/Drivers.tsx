@@ -138,7 +138,7 @@ const Dropdown = ({ label, options, activeValue, onSelect }: { label: string, op
     }, [isOpen]);
 
     return (
-        <div ref={dropdownRef} style={{ position: 'relative', display: 'inline-block' }}>
+        <div ref={dropdownRef} style={{ position: 'relative', display: 'inline-block', width: '100%' }}>
             <button 
                 onClick={() => setIsOpen(!isOpen)}
                 style={{ 
@@ -149,7 +149,9 @@ const Dropdown = ({ label, options, activeValue, onSelect }: { label: string, op
                     fontSize: '0.85rem', 
                     color: activeValue !== 'All' ? '#2d8a46' : '#374151', 
                     cursor: 'pointer', whiteSpace: 'nowrap',
-                    transition: 'all 0.2s'
+                    transition: 'all 0.2s',
+                    width: '100%',
+                    justifyContent: 'space-between'
                 }}
             >
                 {activeValue === 'All' ? label : activeValue}
@@ -181,11 +183,11 @@ const EarningsModalContent = () => {
     const data = earningsData[activePeriod];
 
     return (
-        <div style={{ padding: '1rem' }}>
+        <div className="dr-modal-inner" style={{ padding: '1rem' }}>
             <h2 style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>Earnings</h2>
-            <div style={{ display: 'flex', backgroundColor: '#f3f4f6', borderRadius: '0.5rem', padding: '0.3rem', margin: '1.5rem 0' }}>
+            <div style={{ display: 'flex', flexWrap: 'wrap', backgroundColor: '#f3f4f6', borderRadius: '0.8rem', padding: '0.35rem', margin: '1.5rem 0', gap: '0.25rem' }}>
                 {['Today', 'Weekly', 'Monthly'].map(period => (
-                    <button key={period} onClick={() => setActivePeriod(period)} style={{ flex: 1, padding: '0.5rem', borderRadius: '0.3rem', border: 'none', backgroundColor: activePeriod === period ? 'white' : 'transparent', fontWeight: '600', cursor: 'pointer', boxShadow: activePeriod === period ? '0 1px 2px rgba(0,0,0,0.1)' : 'none', transition: 'all 0.2s' }}>
+                    <button key={period} onClick={() => setActivePeriod(period)} style={{ flex: 1, padding: '0.6rem 0.4rem', borderRadius: '0.6rem', border: 'none', backgroundColor: activePeriod === period ? 'white' : 'transparent', fontWeight: '700', fontSize: '0.85rem', color: activePeriod === period ? '#38AC57' : '#6b7280', cursor: 'pointer', boxShadow: activePeriod === period ? '0 2px 4px rgba(0,0,0,0.1)' : 'none', transition: 'all 0.2s', whiteSpace: 'nowrap', minWidth: '80px' }}>
                         {period}
                     </button>
                 ))}
@@ -195,19 +197,30 @@ const EarningsModalContent = () => {
                  <div style={{ fontSize: '1.8rem', fontWeight: 'bold', marginBottom: '2rem' }}>{data.total}</div>
                  
                  {/* Simple Custom Bar Chart Mock */}
-                 <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', height: '200px', gap: '10px' }}>
-                     {data.bars.map((h, i) => (
-                         <div key={i} style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem' }}>
-                              <div style={{ width: '12px', height: `${h}%`, backgroundColor: i === data.highlight ? '#38AC57' : '#bbf7d0', borderRadius: '20px', position: 'relative', transition: 'height 0.4s ease' }}>
-                                 {i === data.highlight && <div style={{ position: 'absolute', top: '-35px', left: '50%', transform: 'translateX(-50%)', backgroundColor: 'black', color: 'white', padding: '0.3rem', borderRadius: '0.3rem', fontSize: '0.7rem', whiteSpace: 'nowrap' }}>{data.highlightVal}</div>}
-                              </div>
-                              <div style={{ fontSize: '0.6rem', color: '#9ca3af' }}>{['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'][i]}</div>
-                         </div>
-                     ))}
+                 <div className="dr-chart-container">
+                     <div className="dr-chart-inner">
+                         {data.bars.map((h, i) => (
+                             <div key={i} style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem', position: 'relative' }}>
+                                  <div style={{ width: '12px', height: `${h}%`, backgroundColor: i === data.highlight ? '#38AC57' : '#bbf7d0', borderRadius: '20px', position: 'relative', transition: 'height 0.4s ease' }}>
+                                     {i === data.highlight && (
+                                         <div style={{ 
+                                             position: 'absolute', top: '-35px', left: '50%', transform: 'translateX(-50%)', 
+                                             backgroundColor: 'black', color: 'white', padding: '0.4rem 0.6rem', borderRadius: '0.5rem', 
+                                             fontSize: '0.75rem', whiteSpace: 'nowrap', fontWeight: 'bold', zIndex: 10,
+                                             boxShadow: '0 4px 6px -1px rgba(0,0,0,0.1)'
+                                         }}>
+                                             {data.highlightVal}
+                                         </div>
+                                     )}
+                                  </div>
+                                  <div style={{ fontSize: '0.65rem', color: '#9ca3af', fontWeight: '500' }}>{['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'][i]}</div>
+                             </div>
+                         ))}
+                     </div>
                  </div>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginTop: '1.5rem' }}>
+            <div className="dr-edit-grid" style={{ marginTop: '1.5rem' }}>
                 <div style={{ border: '1px solid #e5e7eb', borderRadius: '1rem', padding: '1rem' }}>
                     <div style={{ fontSize: '0.8rem', color: '#6b7280' }}>Online Time</div>
                     <div style={{ fontWeight: 'bold', fontSize: '1.2rem' }}>{data.onlineTime}</div>
@@ -240,7 +253,7 @@ const TripsHistoryModalContent = ({ onViewTripSummary }: { onViewTripSummary: (t
             <h2 style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>Trips History</h2>
             <p style={{ color: '#6b7280' }}>Review the trip history</p>
 
-            <div style={{ border: '1px solid #e5e7eb', borderRadius: '1rem', padding: '1rem', display: 'flex', justifyContent: 'space-between', marginBottom: '1.5rem' }}>
+            <div className="dr-flex-responsive" style={{ border: '1px solid #e5e7eb', borderRadius: '1rem', padding: '1rem', justifyContent: 'space-between', marginBottom: '1.5rem' }}>
                 <div><div style={{ fontSize: '0.8rem', color: '#6b7280' }}>Start Time</div><div style={{ fontWeight: '600' }}>14:30</div></div>
                 <div><div style={{ fontSize: '0.8rem', color: '#6b7280' }}>End Time</div><div style={{ fontWeight: '600' }}>14:55</div></div>
             </div>
@@ -350,7 +363,7 @@ const EditDriverModalContent = ({ driver, onSave }: { driver: Driver, onSave: ()
             <p style={{ color: '#6b7280', marginBottom: '1.5rem' }}>Update driver profile information</p>
 
             <h3 style={{ fontSize: '1rem', fontWeight: 'bold', marginBottom: '1rem' }}>Personal Information</h3>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1.5rem' }}>
+            <div className="dr-edit-grid" style={{ marginBottom: '1.5rem' }}>
                 <div>
                     <label style={labelStyle}>Full Name</label>
                     <input style={inputStyle} value={formData.name} onChange={(e) => handleChange('name', e.target.value)} />
@@ -394,7 +407,7 @@ const EditDriverModalContent = ({ driver, onSave }: { driver: Driver, onSave: ()
             </div>
 
             <h3 style={{ fontSize: '1rem', fontWeight: 'bold', marginBottom: '1rem' }}>Vehicle Information</h3>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '2rem' }}>
+            <div className="dr-edit-grid" style={{ marginBottom: '2rem' }}>
                 <div>
                     <label style={labelStyle}>Vehicle Colour</label>
                     <input style={inputStyle} value={formData.vehicleColor} onChange={(e) => handleChange('vehicleColor', e.target.value)} />
@@ -498,9 +511,162 @@ export const Drivers = () => {
 
     return (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem', paddingBottom: '4rem' }}>
+            <style>{`
+                .dr-stats-grid {
+                    display: grid;
+                    grid-template-columns: repeat(4, 1fr);
+                    gap: 1.5rem;
+                }
+                .dr-controls-container {
+                    display: flex;
+                    gap: 1rem;
+                    flex-wrap: wrap;
+                    align-items: center;
+                }
+                .dr-table-container {
+                    width: 100%;
+                    overflow-x: auto;
+                    border-radius: 1rem;
+                    background: transparent;
+                }
+                .dr-table-header {
+                    display: grid;
+                    grid-template-columns: 1fr 2fr 2fr 1.5fr 1fr 1fr 1fr;
+                    background-color: #38AC57;
+                    color: white;
+                    padding: 1rem;
+                    border-radius: 1rem;
+                    align-items: center;
+                    font-weight: bold;
+                    font-size: 0.9rem;
+                    margin-bottom: 1rem;
+                    min-width: 1000px;
+                }
+                .dr-table-row {
+                    display: grid;
+                    grid-template-columns: 1fr 2fr 2fr 1.5fr 1fr 1fr 1fr;
+                    background-color: white;
+                    padding: 1rem;
+                    border-radius: 1rem;
+                    align-items: center;
+                    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+                    min-width: 1000px;
+                }
+
+                .dr-modal-overlay {
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    background-color: rgba(0,0,0,0.5);
+                    z-index: 1000;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    padding: 1rem;
+                    backdrop-filter: blur(4px);
+                }
+                .dr-modal-content {
+                    width: 850px;
+                    max-width: 100%;
+                    background-color: white;
+                    border-radius: 2rem;
+                    padding: 0;
+                    max-height: 95vh;
+                    overflow-y: auto;
+                    position: relative;
+                    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+                }
+                .dr-info-grid {
+                    display: grid;
+                    grid-template-columns: 1.2fr 1.8fr 1.2fr 1fr;
+                    gap: 1.5rem;
+                }
+                .dr-vehicle-grid {
+                    display: grid;
+                    grid-template-columns: 1.5fr 1fr 1.2fr 1.2fr;
+                    gap: 1.5rem;
+                }
+                .dr-footer-actions {
+                    display: flex;
+                    gap: 1rem;
+                    justify-content: space-between;
+                    align-items: center;
+                }
+                .dr-flex-responsive {
+                    display: flex;
+                    gap: 1.5rem;
+                }
+                .dr-edit-grid {
+                    display: grid;
+                    grid-template-columns: 1fr 1fr;
+                    gap: 1rem;
+                }
+
+                @media (max-width: 1024px) {
+                    .dr-stats-grid {
+                        grid-template-columns: repeat(2, 1fr);
+                    }
+                    .dr-info-grid, .dr-vehicle-grid {
+                        grid-template-columns: 1fr 1fr;
+                    }
+                }
+
+                @media (max-width: 768px) {
+                    .dr-modal-content {
+                        padding: 0;
+                    }
+                    .dr-modal-inner {
+                        padding: 1.5rem !important;
+                    }
+                    .dr-controls-container {
+                        flex-direction: column;
+                        align-items: stretch;
+                    }
+                    .dr-controls-container > div {
+                        width: 100% !important;
+                    }
+                    .dr-flex-responsive {
+                        flex-direction: column;
+                        align-items: center;
+                        text-align: center;
+                    }
+                    .dr-info-grid, .dr-vehicle-grid, .dr-edit-grid {
+                        grid-template-columns: 1fr;
+                    }
+                    .dr-footer-actions {
+                        flex-direction: column;
+                        align-items: stretch;
+                    }
+                    .dr-header-actions {
+                        flex-direction: column;
+                        gap: 1rem;
+                    }
+                }
+
+                @media (max-width: 480px) {
+                    .dr-stats-grid {
+                        grid-template-columns: 1fr;
+                    }
+                }
+                .dr-chart-container {
+                    width: 100%;
+                    overflow-x: auto;
+                    padding-bottom: 1rem;
+                }
+                .dr-chart-inner {
+                    min-width: 500px;
+                    display: flex;
+                    align-items: flex-end;
+                    justify-content: space-between;
+                    height: 200px;
+                    gap: 10px;
+                }
+            `}</style>
             
             {/* Header Area */}
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+            <div className="dr-header-actions" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                 <div>
                     <h1 style={{ fontSize: '1.8rem', fontWeight: 'bold', margin: '0 0 0.5rem 0' }}>Driver</h1>
                     <p style={{ color: '#6b7280', margin: 0 }}>Manage driver accounts and generate IDs by vehicle type</p>
@@ -511,7 +677,7 @@ export const Drivers = () => {
             </div>
 
             {/* Stats Cards */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.5rem' }}>
+            <div className="dr-stats-grid">
                 {[
                     { label: 'Taxi Drivers', count: String(mockDrivers.filter(d => d.vehicleType === 'Taxi').length).padStart(4, '0'), icon: taxiIcon, activeName: 'Taxi Drivers' },
                     { label: 'Motorcycle Drivers', count: String(mockDrivers.filter(d => d.vehicleType === 'Motorcycle').length).padStart(4, '0'), icon: bikeIcon, activeName: 'Motorcycle Drivers' },
@@ -553,7 +719,7 @@ export const Drivers = () => {
 
             {/* Filters */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', flexWrap: 'wrap' }}>
+                <div className="dr-controls-container">
                      <div style={{ position: 'relative', width: '250px', flexShrink: 0 }}>
                         <Search size={18} color="#9ca3af" style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', zIndex: 1 }} />
                         <input 
@@ -614,9 +780,9 @@ export const Drivers = () => {
                  </div>
                  <p style={{ color: '#6b7280', fontSize: '0.9rem', marginBottom: '1.5rem' }}>Manage driver accounts and generate IDs by vehicle type</p>
 
-                 <div className="card" style={{ padding: 0, overflow: 'hidden', border: 'none', boxShadow: 'none', backgroundColor: 'transparent' }}>
+                 <div className="dr-table-container">
                     {/* Header */}
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr 2fr 1.5fr 1fr 1fr 1fr', backgroundColor: '#38AC57', color: 'white', padding: '1rem', borderRadius: '1rem', fontWeight: 'bold', fontSize: '0.9rem', alignItems: 'center', marginBottom: '1rem' }}>
+                    <div className="dr-table-header">
                         <div>Driver ID</div>
                         <div>Driver</div>
                         <div>Contact</div>
@@ -638,7 +804,7 @@ export const Drivers = () => {
                                  </button>
                              </div>
                          ) : filteredDrivers.map((driver, idx) => (
-                             <div key={idx} style={{ display: 'grid', gridTemplateColumns: '1fr 2fr 2fr 1.5fr 1fr 1fr 1fr', backgroundColor: 'white', padding: '1rem', borderRadius: '1rem', alignItems: 'center', boxShadow: '0 1px 2px rgba(0,0,0,0.05)' }}>
+                             <div key={idx} className="dr-table-row">
                                  <div style={{ fontWeight: 'bold', fontSize: '0.95rem' }}>{driver.id}</div> 
                                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.8rem' }}>
                                      <div style={{ position: 'relative' }}>
@@ -682,10 +848,10 @@ export const Drivers = () => {
 
             {/* Main Modal */}
             {selectedDriver && (
-                <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.5)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <div className="card" style={{ width: '850px', backgroundColor: 'white', borderRadius: '1.5rem', maxHeight: '95vh', overflowY: 'auto', position: 'relative', padding: 0 }}>
+                <div className="dr-modal-overlay" onClick={() => setSelectedDriver(null)}>
+                    <div className="dr-modal-content" onClick={e => e.stopPropagation()}>
                         {/* Modal Navigation/Header */}
-                        <div style={{ padding: '2rem 2rem 1rem 2rem' }}>
+                        <div className="dr-modal-inner" style={{ padding: '2rem 2rem 1rem 2rem' }}>
                             <button onClick={modalSubView === 'Details' ? () => setSelectedDriver(null) : () => setModalSubView('Details')} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, marginBottom: '1rem' }}>
                                 <ArrowLeft size={24} />
                             </button>
@@ -698,12 +864,12 @@ export const Drivers = () => {
                                     <h3 style={{ fontSize: '1.2rem', fontWeight: 'bold', marginTop: '1.5rem', marginBottom: '1rem' }}>Driver Information</h3>
                                     
                                     <div style={{ border: '1px solid #f3f4f6', borderRadius: '1rem', padding: '1.5rem' }}>
-                                        <div style={{ display: 'flex', gap: '1.5rem' }}>
+                                        <div className="dr-flex-responsive">
                                             <div style={{ flexShrink: 0, position: 'relative' }}>
                                                 <img src={selectedDriver.avatar} style={{ width: 64, height: 64, borderRadius: '50%' }} />
                                                 <div style={{ position: 'absolute', bottom: -5, left: '50%', transform: 'translateX(-50%)', backgroundColor: '#fbbf24', padding: '0 0.4rem', borderRadius: '0.3rem', fontSize: '0.7rem', fontWeight: 'bold' }}>★ {selectedDriver.rating}</div>
                                             </div>
-                                            <div style={{ flex: 1, display: 'grid', gridTemplateColumns: '1.2fr 1.8fr 1.2fr 1fr', rowGap: '1.5rem', columnGap: '1.5rem' }}>
+                                            <div className="dr-info-grid" style={{ flex: 1 }}>
                                                  <div style={{ gridColumn: 'span 1' }}><div style={{ fontSize: '0.75rem', color: '#9ca3af' }}>Full Name</div><div style={{ fontWeight: 'bold', fontSize: '0.9rem' }}>{selectedDriver.name}</div></div>
                                                  <div style={{ gridColumn: 'span 1' }}><div style={{ fontSize: '0.75rem', color: '#9ca3af' }}>Region</div><div style={{ fontWeight: 'bold', fontSize: '0.9rem' }}>{selectedDriver.region}</div></div>
                                                  <div style={{ gridColumn: 'span 1' }}><div style={{ fontSize: '0.75rem', color: '#9ca3af' }}>City</div><div style={{ fontWeight: 'bold', fontSize: '0.9rem' }}>{selectedDriver.city}</div></div>
@@ -721,7 +887,7 @@ export const Drivers = () => {
                                     
                                     <h3 style={{ fontSize: '1.2rem', fontWeight: 'bold', marginTop: '1.5rem', marginBottom: '1rem' }}>Vehicle Information</h3>
                                     <div style={{ border: '1px solid #f3f4f6', borderRadius: '1rem', padding: '1.5rem' }}>
-                                        <div style={{ display: 'grid', gridTemplateColumns: '1.5fr 1fr 1.2fr 1.2fr', rowGap: '1.5rem', columnGap: '1.5rem' }}>
+                                        <div className="dr-vehicle-grid">
                                              <div><div style={{ fontSize: '0.75rem', color: '#9ca3af' }}>Driver ID</div><div style={{ fontWeight: 'bold' }}>{selectedDriver.driverId}</div></div>
                                              <div><div style={{ fontSize: '0.75rem', color: '#9ca3af' }}>Vehicle Colour</div><div style={{ fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '0.3rem' }}><div style={{width:10,height:10,borderRadius:'50%',border:'1px solid #ccc', backgroundColor: selectedDriver.vehicleDetails.color}}></div> {selectedDriver.vehicleDetails.color}</div></div>
                                              <div><div style={{ fontSize: '0.75rem', color: '#9ca3af' }}>Licence Plate Num</div><div style={{ fontWeight: 'bold' }}>{selectedDriver.vehicleDetails.plate}</div></div>
@@ -737,11 +903,11 @@ export const Drivers = () => {
                                         </div>
                                     </div>
 
-                                    <div style={{ backgroundColor: '#eef7f0', borderRadius: '1rem', padding: '1.5rem', marginTop: '1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                          <div>
+                                    <div className="dr-flex-responsive" style={{ backgroundColor: '#eef7f0', borderRadius: '1rem', padding: '1.5rem', marginTop: '1.5rem', justifyContent: 'space-between', alignItems: 'center' }}>
+                                          <div style={{ textAlign: 'inherit' }}>
                                               <h3 style={{ fontSize: '1rem', fontWeight: 'bold', margin: '0 0 0.5rem 0' }}>Hezzni Service Category</h3>
                                               <div style={{ fontSize: '0.8rem', color: '#2d8a46', marginBottom: '0.5rem' }}>Current Category:</div>
-                                              <div style={{ fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                              <div style={{ fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '0.5rem', justifyContent: 'inherit' }}>
                                                   {selectedDriver.vehicleType === 'Car' ? <img src={carIcon} alt="" style={{ height: '20px', width: 'auto' }} /> : 
                                                    selectedDriver.vehicleType === 'Taxi' ? <img src={taxiIcon} alt="" style={{ height: '20px', width: 'auto' }} /> : 
                                                    <img src={bikeIcon} alt="" style={{ height: '20px', width: 'auto' }} />} 
@@ -755,7 +921,7 @@ export const Drivers = () => {
                                     </div>
 
                                     <h3 style={{ fontSize: '1.2rem', fontWeight: 'bold', marginTop: '1.5rem', marginBottom: '1rem' }}>Account Information</h3>
-                                    <div style={{ border: '1px solid #f3f4f6', borderRadius: '1rem', padding: '1.5rem', display: 'flex', gap: '4rem' }}>
+                                    <div className="dr-flex-responsive" style={{ border: '1px solid #f3f4f6', borderRadius: '1rem', padding: '1.5rem', gap: '4rem' }}>
                                          <div><div style={{ fontSize: '0.75rem', color: '#9ca3af' }}>Join Date</div><div style={{ fontWeight: 'bold' }}>{selectedDriver.joinDate}</div></div>
                                          <div><div style={{ fontSize: '0.75rem', color: '#9ca3af' }}>Document Status</div><div style={{ fontWeight: 'bold' }}>{selectedDriver.documentStatus}</div></div>
                                     </div>
@@ -770,7 +936,7 @@ export const Drivers = () => {
                                         </div>
                                     )}
 
-                                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', marginTop: '2rem', marginBottom: '2rem' }}>
+                                    <div className="dr-edit-grid" style={{ marginTop: '2rem', marginBottom: '2rem' }}>
                                          <div>
                                              <div style={{ fontSize: '2.5rem', fontWeight: 'bold' }}>{selectedDriver.stats.cancelationRate}</div>
                                              <div style={{ fontSize: '0.9rem' }}>Cancelation Rate</div>
@@ -782,7 +948,7 @@ export const Drivers = () => {
                                     </div>
                                     
                                     {/* Action Buttons */}
-                                    <div style={{ display: 'flex', gap: '1rem', justifyContent: 'space-between', alignItems: 'center' }}>
+                                    <div className="dr-footer-actions">
                                         <button onClick={() => setModalSubView('Edit')} style={{ flex: 1, padding: '0.8rem', borderRadius: '2rem', border: '1px solid #e5e7eb', backgroundColor: 'white', fontWeight: 'bold', cursor: 'pointer' }}>Edit</button>
                                         <button onClick={() => setModalSubView('Earnings')} style={{ flex: 1, padding: '0.8rem', borderRadius: '2rem', border: 'none', backgroundColor: 'black', color: 'white', fontWeight: 'bold', cursor: 'pointer' }}>Earning</button>
                                         <button onClick={() => setModalSubView('History')} style={{ flex: 1, padding: '0.8rem', borderRadius: '2rem', border: 'none', backgroundColor: '#38AC57', color: 'white', fontWeight: 'bold', cursor: 'pointer' }}>Trips history</button>

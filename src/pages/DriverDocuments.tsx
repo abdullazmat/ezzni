@@ -59,12 +59,13 @@ const Dropdown = ({ label, options, activeValue, onSelect }: { label: string; op
     }, [isOpen]);
 
     return (
-        <div ref={ref} style={{ position: 'relative', display: 'inline-block' }}>
+        <div ref={ref} style={{ position: 'relative', display: 'inline-block', width: '100%', maxWidth: 'max-content' }} className="dd-dropdown-wrapper">
             <button onClick={() => setIsOpen(!isOpen)} style={{
                 display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '24px',
                 border: activeValue !== 'All' ? '1px solid #38AC57' : '1px solid #e5e7eb',
                 backgroundColor: activeValue !== 'All' ? '#eef7f0' : 'white', fontSize: '14px',
-                color: activeValue !== 'All' ? '#2d8a46' : '#374151', cursor: 'pointer', transition: 'all 0.2s', whiteSpace: 'nowrap'
+                color: activeValue !== 'All' ? '#2d8a46' : '#374151', cursor: 'pointer', transition: 'all 0.2s', whiteSpace: 'nowrap',
+                width: '100%', justifyContent: 'space-between'
             }}>
                 {activeValue === 'All' ? label : activeValue}
                 <ChevronDown size={14} style={{ transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.2s' }} />
@@ -139,6 +140,102 @@ export const DriverDocuments = () => {
 
     return (
         <div style={{ padding: '24px', backgroundColor: '#f9fafb', minHeight: '100vh' }}>
+            <style>{`
+                .dd-stats-grid {
+                    display: grid;
+                    grid-template-columns: repeat(4, 1fr);
+                    gap: 20px;
+                    margin-bottom: 32px;
+                }
+                .dd-flex-responsive {
+                    display: flex;
+                    gap: 24px;
+                }
+                .dd-controls-container {
+                    display: flex;
+                    gap: 12px;
+                    align-items: center;
+                    flex-wrap: wrap;
+                    margin-bottom: 24px;
+                }
+                .dd-table-container {
+                    width: 100%;
+                    overflow-x: auto;
+                    border-radius: 12px;
+                }
+                .dd-table-header {
+                    display: grid;
+                    grid-template-columns: 100px 1.5fr 1.5fr 120px 120px 100px;
+                    padding: 16px 24px;
+                    background-color: #38AC57;
+                    color: white;
+                    border-radius: 12px;
+                    font-weight: bold;
+                    font-size: 14px;
+                    margin-bottom: 16px;
+                    min-width: 900px;
+                }
+                .dd-table-row {
+                    display: grid;
+                    grid-template-columns: 100px 1.5fr 1.5fr 120px 120px 100px;
+                    padding: 16px 24px;
+                    background-color: white;
+                    border-radius: 16px;
+                    align-items: center;
+                    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+                    margin-bottom: 12px;
+                    min-width: 900px;
+                    transition: all 0.2s;
+                }
+                
+                @media (max-width: 1024px) {
+                    .dd-stats-grid {
+                        grid-template-columns: repeat(2, 1fr);
+                    }
+                }
+                
+                @media (max-width: 768px) {
+                    .dd-stats-grid {
+                        grid-template-columns: repeat(2, 1fr);
+                        gap: 12px;
+                    }
+                    .dd-flex-responsive {
+                        flex-direction: column;
+                        align-items: stretch;
+                        text-align: center;
+                    }
+                    .dd-controls-container {
+                        flex-direction: column;
+                        align-items: stretch;
+                    }
+                    .dd-controls-container > div {
+                        width: 100% !important;
+                        max-width: none !important;
+                    }
+                    .dd-controls-container button {
+                        width: 100%;
+                        justify-content: space-between;
+                    }
+                    .dd-tabs-container {
+                        flex-wrap: wrap;
+                        border-radius: 16px !important;
+                    }
+                    .dd-tabs-container button {
+                        min-width: 120px;
+                        font-size: 12px !important;
+                    }
+                    .dd-dropdown-wrapper {
+                        max-width: none !important;
+                    }
+                }
+                
+                @media (max-width: 480px) {
+                    .dd-stats-grid {
+                        grid-template-columns: 1fr;
+                    }
+                }
+            `}</style>
+
             {/* Banner */}
             {banner && (
                 <div style={{
@@ -159,7 +256,7 @@ export const DriverDocuments = () => {
             )}
 
             {/* Stat Cards */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '20px', marginBottom: '32px' }}>
+            <div className="dd-stats-grid">
                 {statCards.map(stat => {
                     const isActive = activeStat === stat.key;
                     return (
@@ -169,7 +266,7 @@ export const DriverDocuments = () => {
                                 cursor: 'pointer', transition: 'all 0.3s ease', boxShadow: isActive ? '0 8px 20px rgba(56, 172, 87, 0.15)' : '0 1px 3px rgba(0,0,0,0.06)',
                                 border: isActive ? '2px solid #38AC57' : '2px solid transparent', transform: isActive ? 'translateY(-2px)' : 'none'
                             }}>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px', justifyContent: 'inherit' }}>
                                 <div style={{ padding: '0px', borderRadius: '8px' }}>
                                     <img src={stat.icon} alt="" style={{ width: '32px', height: '32px', objectFit: 'contain' }} />
                                 </div>
@@ -185,14 +282,15 @@ export const DriverDocuments = () => {
             </div>
 
             {/* Title + Add Button */}
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+            <div className="dd-flex-responsive" style={{ justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
                 <div>
                     <h1 style={{ fontSize: '28px', fontWeight: 'bold', margin: 0 }}>Driver Documents</h1>
                     <p style={{ color: '#6b7280', margin: '4px 0 0 0', fontSize: '14px' }}>Review and manage driver document submissions and registration requests with Moroccan documentation standards</p>
                 </div>
                 <button onClick={() => alert('Add New Driver flow coming soon!')} style={{
                     display: 'flex', alignItems: 'center', gap: '8px', padding: '10px 20px', borderRadius: '24px', border: 'none',
-                    backgroundColor: '#38AC57', color: 'white', fontWeight: '600', fontSize: '14px', cursor: 'pointer', transition: 'background-color 0.2s', whiteSpace: 'nowrap'
+                    backgroundColor: '#38AC57', color: 'white', fontWeight: '600', fontSize: '14px', cursor: 'pointer', transition: 'background-color 0.2s', whiteSpace: 'nowrap',
+                    justifyContent: 'center'
                 }}
                 onMouseEnter={e => e.currentTarget.style.backgroundColor = '#2d8a46'}
                 onMouseLeave={e => e.currentTarget.style.backgroundColor = '#38AC57'}
@@ -200,7 +298,7 @@ export const DriverDocuments = () => {
             </div>
 
             {/* Tabs */}
-            <div style={{ display: 'flex', backgroundColor: '#f3f4f6', borderRadius: '32px', padding: '4px', marginBottom: '24px', marginTop: '20px' }}>
+            <div className="dd-tabs-container" style={{ display: 'flex', backgroundColor: '#f3f4f6', borderRadius: '32px', padding: '4px', marginBottom: '24px', marginTop: '20px' }}>
                 {tabs.map(tab => (
                     <button key={tab.key} onClick={() => setActiveTab(tab.key)} style={{
                         flex: 1, padding: '12px', borderRadius: '28px', border: 'none',
@@ -212,7 +310,7 @@ export const DriverDocuments = () => {
             </div>
 
             {/* Filters */}
-            <div style={{ display: 'flex', gap: '12px', alignItems: 'center', marginBottom: '24px', flexWrap: 'wrap' }}>
+            <div className="dd-controls-container">
                 <div style={{ position: 'relative', flex: 1, maxWidth: '300px' }}>
                     <Search size={18} color="#9ca3af" style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)' }} />
                     <input type="text" placeholder="Search" value={searchTerm} onChange={e => setSearchTerm(e.target.value)}
@@ -223,11 +321,12 @@ export const DriverDocuments = () => {
             </div>
 
             {/* Table */}
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.5fr 1.5fr 1fr 1fr 0.8fr', padding: '16px 24px', backgroundColor: '#38AC57', color: 'white', borderRadius: '12px', fontWeight: 'bold', fontSize: '14px', marginBottom: '16px' }}>
-                <div>Driver ID</div><div>Driver Name</div><div>Document Type</div><div>Upload Date</div><div style={{ textAlign: 'center' }}>Status</div><div style={{ textAlign: 'center' }}>Action</div>
-            </div>
+            <div className="dd-table-container">
+                <div className="dd-table-header">
+                    <div>Driver ID</div><div>Driver Name</div><div>Document Type</div><div>Upload Date</div><div style={{ textAlign: 'center' }}>Status</div><div style={{ textAlign: 'center' }}>Action</div>
+                </div>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', minWidth: '900px' }}>
                 {filteredDocs.length === 0 ? (
                     <div style={{ backgroundColor: 'white', padding: '48px', borderRadius: '16px', textAlign: 'center' }}>
                         <div style={{ fontSize: '40px', marginBottom: '16px' }}>📄</div>
@@ -237,14 +336,7 @@ export const DriverDocuments = () => {
                 ) : filteredDocs.map((doc, idx) => {
                     const sc = statusColors[doc.status] || statusColors['Pending'];
                     return (
-                        <div key={idx} style={{
-                            display: 'grid', gridTemplateColumns: '1fr 1.5fr 1.5fr 1fr 1fr 0.8fr',
-                            padding: '16px 24px', backgroundColor: 'white', borderRadius: '16px', alignItems: 'center',
-                            boxShadow: '0 1px 2px rgba(0,0,0,0.05)', transition: 'box-shadow 0.2s, transform 0.2s'
-                        }}
-                        onMouseEnter={e => { e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.08)'; e.currentTarget.style.transform = 'translateY(-1px)'; }}
-                        onMouseLeave={e => { e.currentTarget.style.boxShadow = '0 1px 2px rgba(0,0,0,0.05)'; e.currentTarget.style.transform = 'none'; }}
-                        >
+                        <div key={idx} className="dd-table-row">
                             <div style={{ fontWeight: '600', fontSize: '14px' }}>{doc.driverId}</div>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                                 <img src={doc.avatar} style={{ width: '36px', height: '36px', borderRadius: '50%' }} alt="" />
@@ -271,6 +363,7 @@ export const DriverDocuments = () => {
                         </div>
                     );
                 })}
+                </div>
             </div>
 
             {/* Application Review Modal */}

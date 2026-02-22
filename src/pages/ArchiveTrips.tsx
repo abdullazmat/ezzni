@@ -353,6 +353,123 @@ export const ArchiveTrips = () => {
 
     return (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+            <style dangerouslySetInnerHTML={{ __html: `
+                .at-stats-grid {
+                    display: grid;
+                    grid-template-columns: repeat(6, 1fr);
+                    gap: 1rem;
+                }
+                .at-filters-container {
+                    display: flex;
+                    gap: 1rem;
+                    flex-wrap: wrap;
+                }
+                .at-table-container {
+                    overflow-x: auto;
+                    margin: 0 -1rem;
+                    padding: 0 1rem;
+                }
+                .at-modal-card {
+                    width: 900px;
+                    max-width: 95%;
+                    max-height: 90vh;
+                    overflow-y: auto;
+                    padding: 2.5rem;
+                    border-radius: 1.5rem;
+                    position: relative;
+                    background-color: #ffffff;
+                    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+                    z-index: 1001;
+                }
+                .at-info-row {
+                    display: grid;
+                    grid-template-columns: repeat(4, 1fr);
+                    gap: 1.5rem;
+                }
+                .at-flex-responsive {
+                    display: flex;
+                    gap: 1.5rem;
+                    align-items: flex-start;
+                }
+                .at-info-indent {
+                    padding-left: calc(64px + 1.5rem);
+                }
+                .at-total-field {
+                    text-align: right;
+                }
+                .at-modal-footer {
+                    display: flex;
+                    justify-content: flex-end;
+                    margin-top: 1rem;
+                }
+
+                @media (max-width: 1400px) {
+                    .at-stats-grid {
+                        grid-template-columns: repeat(3, 1fr);
+                    }
+                }
+
+                @media (max-width: 992px) {
+                    .at-info-row {
+                        grid-template-columns: repeat(2, 1fr);
+                    }
+                }
+
+                @media (max-width: 768px) {
+                    .at-stats-grid {
+                        grid-template-columns: repeat(2, 1fr);
+                    }
+                    .at-filters-container {
+                        flex-direction: column;
+                        align-items: stretch;
+                    }
+                    .at-filters-container > div {
+                        width: 100% !important;
+                    }
+                    .at-flex-responsive {
+                        flex-direction: column;
+                        align-items: center;
+                    }
+                    .at-flex-responsive > div:last-child {
+                        width: 100%;
+                    }
+                    .at-info-indent {
+                        padding-left: 0 !important;
+                    }
+                    .at-info-row {
+                        grid-template-columns: 1fr;
+                    }
+                    .at-total-field {
+                        text-align: left !important;
+                    }
+                    .at-modal-card {
+                        padding: 1.5rem;
+                    }
+                    .at-modal-footer button {
+                        width: 100%;
+                    }
+                    .at-payment-grid {
+                        grid-template-columns: 1fr !important;
+                        text-align: left !important;
+                    }
+                    .at-payment-grid > div {
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        padding: 0.5rem 0;
+                        border-bottom: 1px solid #f3f4f6;
+                    }
+                    .at-payment-grid > div:last-child {
+                        border-bottom: none;
+                    }
+                }
+
+                @media (max-width: 480px) {
+                    .at-stats-grid {
+                        grid-template-columns: 1fr;
+                    }
+                }
+            `}} />
             {/* Header */}
             <div>
                 <h1 style={{ fontSize: '1.75rem', fontWeight: 'bold', margin: '0 0 0.5rem 0' }}>Archive Trips</h1>
@@ -360,7 +477,7 @@ export const ArchiveTrips = () => {
             </div>
 
             {/* Stats Cards */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(6, 1fr)', gap: '1rem' }}>
+            <div className="at-stats-grid">
                 {stats.map((stat) => {
                     const isActive = activeStat === stat.id;
                     return (
@@ -402,7 +519,7 @@ export const ArchiveTrips = () => {
             </div>
 
             {/* Controls */}
-            <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+            <div className="at-filters-container">
                  <div style={{ position: 'relative', width: '300px' }}>
                     <Search size={18} color="#9ca3af" style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)' }} />
                     <input 
@@ -421,7 +538,7 @@ export const ArchiveTrips = () => {
             </div>
 
             {/* Table */}
-            <div className="card" style={{ padding: 0, overflow: 'hidden' }}>
+            <div className="card at-table-container" style={{ padding: 0 }}>
                  <table style={{ width: '100%', borderCollapse: 'collapse' }}>
                     <thead>
                         <tr style={{ backgroundColor: '#38AC57', color: 'white', textAlign: 'left' }}>
@@ -495,8 +612,8 @@ export const ArchiveTrips = () => {
 
             {/* Detail Modal */}
             {selectedTrip && (
-                <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.5)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                     <div className="card" style={{ width: '900px', maxHeight: '90vh', overflowY: 'auto', padding: '2rem', borderRadius: '1.5rem', position: 'relative', backgroundColor: '#fdfdfd' }}>
+                 <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.5)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem' }}>
+                      <div className="at-modal-card">
                           {/* Header */}
                           <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1.5rem' }}>
                                 <button 
@@ -512,7 +629,7 @@ export const ArchiveTrips = () => {
                             </div>
 
                             {/* Status Bar */}
-                             <div style={{ backgroundColor: 'white', padding: '1rem 1.5rem', borderRadius: '1rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem', boxShadow: '0 1px 3px rgba(0,0,0,0.05)', border: '1px solid #f3f4f6' }}>
+                             <div style={{ backgroundColor: 'white', padding: '1rem 1.5rem', borderRadius: '1rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem', marginBottom: '1.5rem', boxShadow: '0 1px 3px rgba(0,0,0,0.05)', border: '1px solid #f3f4f6' }}>
                                  <div>
                                      <div style={{ fontSize: '0.75rem', color: '#6b7280', fontWeight: '500' }}>Start Time</div>
                                      <div style={{ fontWeight: 'bold', fontSize: '1rem' }}>{selectedTrip.startTime}</div>
@@ -531,13 +648,13 @@ export const ArchiveTrips = () => {
                              {/* Passenger Information */}
                             <div style={{ marginBottom: '1.5rem' }}>
                                 <h3 style={{ fontSize: '1.1rem', fontWeight: 'bold', marginBottom: '0.75rem' }}>Passenger Information</h3>
-                                <div style={{ backgroundColor: 'white', padding: '1.5rem', borderRadius: '1rem', boxShadow: '0 1px 3px rgba(0,0,0,0.05)', border: '1px solid #f3f4f6' }}>
-                                    <div style={{ display: 'flex', gap: '1rem', marginBottom: '1.5rem' }}>
+                                 <div style={{ backgroundColor: 'white', padding: '1.5rem', borderRadius: '1rem', boxShadow: '0 1px 3px rgba(0,0,0,0.05)', border: '1px solid #f3f4f6' }}>
+                                    <div className="at-flex-responsive" style={{ marginBottom: '1.5rem' }}>
                                             <div style={{ position: 'relative' }}>
                                             <img src={selectedTrip.rider.img} alt="" style={{ width: '64px', height: '64px', borderRadius: '50%' }} />
                                             <div style={{ position: 'absolute', bottom: -5, left: '50%', transform: 'translateX(-50%)', backgroundColor: '#fbbf24', padding: '0.1rem 0.5rem', borderRadius: '1rem', fontSize: '0.7rem', color: 'white', display: 'flex', alignItems: 'center', gap: '2px', whiteSpace: 'nowrap' }}>★ {selectedTrip.rider.rating}</div>
                                             </div>
-                                             <div style={{ flex: 1, display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.5rem' }}>
+                                             <div className="at-info-row" style={{ flex: 1 }}>
                                                 <div>
                                                     <div style={{ fontSize: '0.75rem', color: '#9ca3af' }}>Full Name</div>
                                                     <div style={{ fontWeight: 'bold', fontSize: '0.95rem' }}>{selectedTrip.rider.name}</div>
@@ -557,7 +674,7 @@ export const ArchiveTrips = () => {
                                             </div>
                                     </div>
                                     
-                                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.5rem' }}>
+                                     <div className="at-info-row at-info-indent">
                                         <div>
                                             <div style={{ fontSize: '0.75rem', color: '#9ca3af', marginBottom: '0.2rem' }}>Email</div>
                                             <div style={{ fontWeight: '600', fontSize: '0.9rem' }}>{selectedTrip.rider.email}</div>
@@ -577,8 +694,8 @@ export const ArchiveTrips = () => {
                             {/* Driver Information */}
                             <div style={{ marginBottom: '1.5rem' }}>
                                 <h3 style={{ fontSize: '1.1rem', fontWeight: 'bold', marginBottom: '0.75rem' }}>Driver Information</h3>
-                                <div style={{ backgroundColor: 'white', padding: '1.5rem', borderRadius: '1rem', boxShadow: '0 1px 3px rgba(0,0,0,0.05)', border: '1px solid #f3f4f6' }}>
-                                    <div style={{ display: 'flex', gap: '1rem', marginBottom: '1.5rem' }}>
+                                 <div style={{ backgroundColor: 'white', padding: '1.5rem', borderRadius: '1rem', boxShadow: '0 1px 3px rgba(0,0,0,0.05)', border: '1px solid #f3f4f6' }}>
+                                    <div className="at-flex-responsive" style={{ marginBottom: '1.5rem' }}>
                                             <div style={{ position: 'relative' }}>
                                             <img src={selectedTrip.driver.img} alt="" style={{ width: '64px', height: '64px', borderRadius: '50%' }} />
                                             <div style={{ position: 'absolute', bottom: -5, left: '50%', transform: 'translateX(-50%)', backgroundColor: '#fbbf24', padding: '0.1rem 0.5rem', borderRadius: '1rem', fontSize: '0.7rem', color: 'white', display: 'flex', alignItems: 'center', gap: '2px', whiteSpace: 'nowrap' }}>★ {selectedTrip.driver.rating}</div>
@@ -591,7 +708,7 @@ export const ArchiveTrips = () => {
                                             </div>
                                     </div>
                                     
-                                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.5rem' }}>
+                                     <div className="at-info-row">
                                         <div>
                                             <div style={{ fontSize: '0.75rem', color: '#9ca3af', marginBottom: '0.2rem' }}>Vehicle Type</div>
                                             <div style={{ fontWeight: '600', fontSize: '0.95rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -625,8 +742,8 @@ export const ArchiveTrips = () => {
                             {/* Vehicle Information */}
                             <div style={{ marginBottom: '1.5rem' }}>
                                 <h3 style={{ fontSize: '1.1rem', fontWeight: 'bold', marginBottom: '0.75rem' }}>Vehicle Information</h3>
-                                <div style={{ backgroundColor: 'white', padding: '1.5rem', borderRadius: '1rem', boxShadow: '0 1px 3px rgba(0,0,0,0.05)', border: '1px solid #f3f4f6' }}>
-                                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '1.5rem' }}>
+                                 <div style={{ backgroundColor: 'white', padding: '1.5rem', borderRadius: '1rem', boxShadow: '0 1px 3px rgba(0,0,0,0.05)', border: '1px solid #f3f4f6' }}>
+                                    <div className="at-info-row">
                                             <div>
                                             <div style={{ fontSize: '0.75rem', color: '#9ca3af', marginBottom: '0.2rem' }}>Driver ID</div>
                                             <div style={{ fontWeight: '600', fontSize: '0.95rem' }}>{selectedTrip.driver.driverId}</div>
@@ -685,14 +802,14 @@ export const ArchiveTrips = () => {
                              {/* Payment Information */}
                             <div>
                                 <h3 style={{ fontSize: '1.1rem', fontWeight: 'bold', marginBottom: '0.75rem' }}>Payment Information</h3>
-                                <div style={{ backgroundColor: 'white', padding: '1.5rem', borderRadius: '1rem', boxShadow: '0 1px 3px rgba(0,0,0,0.05)', border: '1px solid #f3f4f6', marginBottom: '1.5rem' }}>
-                                    <div style={{ textAlign: 'center', marginBottom: '1.5rem' }}>
+                                 <div style={{ backgroundColor: 'white', padding: '1.5rem', borderRadius: '1rem', boxShadow: '0 1px 3px rgba(0,0,0,0.05)', border: '1px solid #f3f4f6', marginBottom: '1.5rem' }}>
+                                    <div className="at-flex-responsive" style={{ marginBottom: '1.5rem', justifyContent: 'center' }}>
                                         <div style={{ position: 'relative', display: 'inline-block' }}>
                                                 <img src={selectedTrip.driver.img} alt="" style={{ width: '64px', height: '64px', borderRadius: '50%' }} />
                                                 <div style={{ position: 'absolute', bottom: -5, left: '50%', transform: 'translateX(-50%)', backgroundColor: 'white', border: '1px solid #e5e7eb', padding: '0.1rem 0.5rem', borderRadius: '1rem', fontSize: '0.7rem', color: 'black', display: 'flex', alignItems: 'center', gap: '2px', whiteSpace: 'nowrap' }}>★ {selectedTrip.driver.rating}</div>
                                         </div>
                                     </div>
-                                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '1rem', textAlign: 'center' }}>
+                                    <div className="at-info-row at-payment-grid">
                                         <div>
                                             <div style={{ fontSize: '0.75rem', color: '#9ca3af', marginBottom: '0.2rem' }}>TVA</div>
                                             <div style={{ fontWeight: 'bold' }}>{selectedTrip.payment.tva}</div>
@@ -711,7 +828,7 @@ export const ArchiveTrips = () => {
                                             <div style={{ fontSize: '0.75rem', color: '#9ca3af', marginBottom: '0.2rem' }}>Discount</div>
                                             <div style={{ fontWeight: 'bold' }}>{selectedTrip.payment.discount}</div>
                                         </div>
-                                        <div>
+                                        <div className="at-total-field">
                                             <div style={{ fontSize: '0.75rem', color: '#9ca3af', marginBottom: '0.2rem' }}>Total Amount</div>
                                             <div style={{ fontWeight: 'bold' }}>{selectedTrip.payment.total}</div>
                                         </div>
@@ -723,7 +840,7 @@ export const ArchiveTrips = () => {
                              <div style={{ marginBottom: '2rem' }}>
                                 <h3 style={{ fontSize: '1.1rem', fontWeight: 'bold', marginBottom: '0.75rem' }}>Archive Information</h3>
                                 <div style={{ backgroundColor: 'white', padding: '1.5rem', borderRadius: '1rem', boxShadow: '0 1px 3px rgba(0,0,0,0.05)', border: '1px solid #f3f4f6' }}>
-                                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
+                                    <div className="at-info-row">
                                         <div>
                                             <div style={{ fontSize: '0.75rem', color: '#9ca3af', marginBottom: '0.2rem' }}>Archived Date:</div>
                                             <div style={{ fontWeight: '600' }}>{selectedTrip.archiveInfo.date}</div>
@@ -737,7 +854,7 @@ export const ArchiveTrips = () => {
                             </div>
 
                             {/* Footer / Download */}
-                            <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                            <div className="at-modal-footer">
                                 <button 
                                     style={{ backgroundColor: '#38AC57', color: 'white', border: 'none', padding: '1rem 3rem', borderRadius: '2rem', fontWeight: 'bold', cursor: 'pointer', fontSize: '0.95rem', width: '100%' }}
                                 >

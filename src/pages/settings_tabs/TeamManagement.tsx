@@ -69,251 +69,481 @@ export const TeamManagement = () => {
         setTimeout(() => setLastAction(null), 3000);
     };
 
-    return (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
-            {/* Stats Grid */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1.5rem' }}>
-                {dynamicStats.map((stat, index) => (
-                    <div 
-                        key={index} 
-                        onClick={() => setActiveFilter(stat.label)}
-                        style={{ 
-                            backgroundColor: activeFilter === stat.label ? (stat.color === '#ffffff' ? '#eef7f0' : stat.color) : (stat.color === '#38AC57' ? '#ffffff' : stat.color), 
-                            padding: '1.5rem', 
-                            borderRadius: '1.5rem', 
-                            border: stat.label === activeFilter ? '2px solid #38AC57' : '1px solid #e5e7eb',
-                            boxShadow: activeFilter === stat.label ? '0 10px 15px -3px rgba(56, 172, 87, 0.2)' : '0 4px 6px -1px rgba(0,0,0,0.05)',
-                            color: activeFilter === stat.label ? (stat.color === '#ffffff' ? '#111827' : '#ffffff') : (stat.color === '#38AC57' ? '#38AC57' : stat.textColor),
-                            position: 'relative',
-                            cursor: 'pointer',
-                            transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                            transform: activeFilter === stat.label ? 'translateY(-5px)' : 'none'
-                        }}
-                    >
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem' }}>
-                            <div style={{ 
-                                padding: '0.4rem', 
-                                borderRadius: '0.5rem' 
-                            }}>
-                                <img src={stat.icon} alt="" style={{ width: '32px', height: '32px', objectFit: 'contain' }} />
-                            </div>
-                            <span style={{ fontSize: '0.9rem', fontWeight: '600' }}>{stat.label}</span>
-                        </div>
-                        <div style={{ fontSize: '2.5rem', fontWeight: '800' }}>{stat.value}</div>
-                        <div style={{ 
-                            position: 'absolute', 
-                            right: '1.5rem', 
-                            bottom: '1.5rem',
-                            backgroundColor: (activeFilter === stat.label && stat.color === '#38AC57') ? '#111827' : '#38AC57',
-                            color: 'white',
-                            width: '32px',
-                            height: '32px',
-                            borderRadius: '50%',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center'
-                        }}>
-                            <ArrowUpRight size={18} />
-                        </div>
-                    </div>
-                ))}
+  return (
+    <div className="vp-team-container">
+      <style>{`
+        .vp-team-container {
+            display: flex;
+            flex-direction: column;
+            gap: 2.5rem;
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        .vp-stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .vp-stat-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 32px;
+            border: 1px solid #e2e8f0;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .vp-stat-card.active {
+            background: #38AC57;
+            border-color: #38AC57;
+            box-shadow: 0 20px 25px -5px rgba(56, 172, 87, 0.2);
+            color: white;
+        }
+
+        .vp-stat-card:hover:not(.active) {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+            border-color: #38AC57;
+        }
+
+        .vp-stat-icon-box {
+            width: 56px;
+            height: 56px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f0fdf4;
+            transition: all 0.3s;
+        }
+
+        .vp-stat-card.active .vp-stat-icon-box {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .vp-stat-main .label {
+            display: block;
+            font-size: 1rem;
+            font-weight: 800;
+            color: #64748b;
+            margin-bottom: 0.25rem;
+            transition: all 0.3s;
+        }
+
+        .vp-stat-card.active .label {
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .vp-stat-value {
+            font-size: 2.5rem;
+            font-weight: 900;
+            letter-spacing: -0.025em;
+        }
+
+        .vp-trend-indicator {
+            position: absolute;
+            right: 2rem;
+            bottom: 2rem;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f1f5f9;
+            color: #64748b;
+            transition: all 0.3s;
+        }
+
+        .vp-stat-card.active .vp-trend-indicator {
+            background: rgba(0, 0, 0, 0.15);
+            color: white;
+        }
+
+        .vp-controls-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .vp-search-box {
+            position: relative;
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .vp-search-box input {
+            width: 100%;
+            padding: 0.875rem 1.5rem 0.875rem 3.5rem;
+            border-radius: 100px;
+            border: 1px solid #e2e8f0;
+            font-size: 0.95rem;
+            font-weight: 600;
+            outline: none;
+            transition: all 0.2s;
+        }
+
+        .vp-search-box input:focus {
+            border-color: #38AC57;
+            box-shadow: 0 0 0 4px rgba(56, 172, 87, 0.1);
+        }
+
+        .vp-filter-group {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .vp-filter-btn {
+            background: white;
+            border: 1px solid #e2e8f0;
+            padding: 0.75rem 1.5rem;
+            border-radius: 100px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: #475569;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.625rem;
+            transition: all 0.2s;
+        }
+
+        .vp-filter-btn:hover {
+            border-color: #38AC57;
+            color: #38AC57;
+        }
+
+        .vp-add-btn {
+            background: #38AC57;
+            color: white;
+            border: none;
+            padding: 0.875rem 2rem;
+            border-radius: 100px;
+            font-weight: 800;
+            font-size: 0.95rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            transition: all 0.3s;
+            box-shadow: 0 10px 15px -3px rgba(56, 172, 87, 0.2);
+        }
+
+        .vp-add-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 20px 25px -5px rgba(56, 172, 87, 0.3);
+        }
+
+        .vp-table-card {
+            background: white;
+            border-radius: 32px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+        }
+
+        .vp-table-header {
+            padding: 2.5rem;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .vp-table-header h3 {
+            font-size: 1.5rem;
+            font-weight: 900;
+            margin: 0;
+            color: #1e293b;
+        }
+
+        .vp-table-header p {
+            color: #64748b;
+            font-size: 1rem;
+            margin: 0.5rem 0 0 0;
+            font-weight: 500;
+        }
+
+        .vp-table-scroll {
+            overflow-x: auto;
+        }
+
+        .vp-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 1000px;
+        }
+
+        .vp-table th {
+            background: #f8fafc;
+            padding: 1.25rem 2.5rem;
+            text-align: left;
+            font-size: 0.875rem;
+            font-weight: 800;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .vp-table td {
+            padding: 1.5rem 2.5rem;
+            border-bottom: 1px solid #f1f5f9;
+            vertical-align: middle;
+        }
+
+        .vp-member-cell {
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+        }
+
+        .vp-member-avatar {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #f0fdf4;
+        }
+
+        .vp-member-info .name {
+            display: block;
+            font-weight: 800;
+            font-size: 1.05rem;
+            color: #1e293b;
+        }
+
+        .vp-member-info .email {
+            display: block;
+            font-size: 0.85rem;
+            color: #64748b;
+            font-weight: 600;
+        }
+
+        .vp-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.5rem 1.25rem;
+            border-radius: 100px;
+            font-size: 0.85rem;
+            font-weight: 800;
+        }
+
+        .vp-badge.dept {
+            background: #fef2f2;
+            color: #ef4444;
+        }
+
+        .vp-badge.status-active {
+            background: #f0fdf4;
+            color: #38AC57;
+        }
+
+        .vp-badge.status-pending {
+            background: #fff7ed;
+            color: #c2410c;
+        }
+
+        .vp-last-login {
+            background: #f8fafc;
+            padding: 0.5rem 1.25rem;
+            border-radius: 100px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #1e293b;
+            border: 1px solid #e2e8f0;
+        }
+
+        .vp-action-btn-group {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .vp-controls-bar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .vp-search-box {
+                width: 100%;
+            }
+            .vp-filter-group {
+                justify-content: center;
+            }
+            .vp-add-btn {
+                width: 100%;
+                justify-content: center;
+            }
+            .vp-table-header {
+                padding: 1.5rem;
+                text-align: center;
+            }
+        }
+      `}</style>
+
+      {/* Stats Grid */}
+      <div className="vp-stats-grid">
+        {dynamicStats.map((stat, index) => {
+          const isActive = activeFilter === stat.label;
+          return (
+            <div 
+              key={index} 
+              className={`vp-stat-card ${isActive ? 'active' : ''}`}
+              onClick={() => setActiveFilter(stat.label)}
+            >
+              <div className="vp-stat-icon-box">
+                <img src={stat.icon} alt="" style={{ width: '32px', height: '32px', objectFit: 'contain' }} />
+              </div>
+              
+              <div className="vp-stat-main">
+                <span className="label">{stat.label}</span>
+                <span className="vp-stat-value">{stat.value}</span>
+              </div>
+              
+              <div className="vp-trend-indicator">
+                <ArrowUpRight size={22} />
+              </div>
             </div>
+          );
+        })}
+      </div>
 
-            {/* Controls */}
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
-                <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
-                    <div style={{ position: 'relative' }}>
-                        <input 
-                            type="text" 
-                            placeholder="Search by name or email..." 
-                            value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
-                            style={{ 
-                                padding: '0.6rem 1rem 0.6rem 2.5rem', 
-                                borderRadius: '2rem', 
-                                border: '1px solid #e5e7eb', 
-                                width: '300px',
-                                fontSize: '0.9rem',
-                                outline: 'none',
-                                transition: 'all 0.2s'
-                            }} 
-                            onFocus={(e) => e.target.style.borderColor = '#38AC57'}
-                            onBlur={(e) => e.target.style.borderColor = '#e5e7eb'}
-                        />
-                        <Search size={18} style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: '#9ca3af' }} />
-                    </div>
-                    
-                    <button style={{ backgroundColor: 'white', border: '1px solid #e5e7eb', padding: '0.6rem 1.25rem', borderRadius: '2rem', display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.85rem', color: '#4b5563', cursor: 'pointer', transition: 'all 0.2s' }} onClick={() => handleAction('Filtering by', 'Status')}>
-                        Status <ChevronDown size={16} />
-                    </button>
-                    
-                    <button style={{ backgroundColor: 'white', border: '1px solid #e5e7eb', padding: '0.6rem 1.25rem', borderRadius: '2rem', display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.85rem', color: '#4b5563', cursor: 'pointer' }} onClick={() => handleAction('Filtering by', 'Category')}>
-                        Category <ChevronDown size={16} />
-                    </button>
-                    
-                    <button style={{ backgroundColor: 'white', border: '1px solid #e5e7eb', padding: '0.6rem 1.25rem', borderRadius: '2rem', display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.85rem', color: '#4b5563', cursor: 'pointer' }} onClick={() => handleAction('Opening', 'Advanced Filters')}>
-                        <Filter size={16} /> Filters
-                    </button>
-
-                    {activeFilter !== 'Total Members' && (
-                        <button 
-                            onClick={() => setActiveFilter('Total Members')}
-                            style={{ backgroundColor: '#f3f4f6', border: 'none', padding: '0.4rem 1rem', borderRadius: '2rem', fontSize: '0.75rem', fontWeight: '600', color: '#6b7280', cursor: 'pointer' }}
-                        >
-                            Clear: {activeFilter} ×
-                        </button>
-                    )}
-                </div>
-
-                <button 
-                    onClick={handleAddMember}
-                    style={{ 
-                        backgroundColor: '#38AC57', 
-                        color: 'white', 
-                        border: 'none', 
-                        padding: '0.75rem 1.75rem', 
-                        borderRadius: '2rem', 
-                        display: 'flex', 
-                        alignItems: 'center', 
-                        gap: '0.5rem',
-                        fontWeight: '700',
-                        cursor: 'pointer',
-                        boxShadow: '0 4px 6px -1px rgba(56, 172, 87, 0.4)',
-                        transition: 'all 0.2s'
-                    }}
-                    onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-2px)'}
-                    onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
-                >
-                    <Plus size={20} />
-                    Add new Team Member
-                </button>
-            </div>
-
-            {/* Members Table */}
-            <div style={{ backgroundColor: 'white', padding: '1.5rem', borderRadius: '1.5rem', border: '1px solid #e5e7eb', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.05)', position: 'relative' }}>
-                <div style={{ marginBottom: '1.5rem' }}>
-                    <h3 style={{ fontSize: '1.25rem', fontWeight: '800', margin: 0 }}>Team Members List</h3>
-                    <p style={{ color: '#6b7280', fontSize: '0.85rem', marginTop: '0.25rem' }}>Manage and monitor your platform administrative team</p>
-                </div>
-
-                <div style={{ overflowX: 'auto' }}>
-                    <table style={{ width: '100%', borderCollapse: 'separate', borderSpacing: '0 0.75rem' }}>
-                        <thead>
-                            <tr style={{ backgroundColor: '#38AC57', color: 'white' }}>
-                                <th style={{ padding: '1rem', borderTopLeftRadius: '0.75rem', borderBottomLeftRadius: '0.75rem', textAlign: 'left', fontWeight: '600' }}>Member</th>
-                                <th style={{ padding: '1rem', textAlign: 'left', fontWeight: '600' }}>Department</th>
-                                <th style={{ padding: '1rem', textAlign: 'left', fontWeight: '600' }}>Status</th>
-                                <th style={{ padding: '1rem', textAlign: 'left', fontWeight: '600' }}>2FA</th>
-                                <th style={{ padding: '1rem', textAlign: 'left', fontWeight: '600' }}>Last Login</th>
-                                <th style={{ padding: '1rem', borderTopRightRadius: '0.75rem', borderBottomRightRadius: '0.75rem', textAlign: 'left', fontWeight: '600' }}>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {filteredMembers.length > 0 ? filteredMembers.map((member) => (
-                                <tr key={member.id} style={{ backgroundColor: '#ffffff', boxShadow: '0 1px 3px rgba(0,0,0,0.05)' }}>
-                                    <td style={{ padding: '1rem' }}>
-                                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                                            <img src={member.img} alt="" style={{ width: '40px', height: '40px', borderRadius: '50%', objectFit: 'cover', border: '2px solid #eef7f0' }} />
-                                            <div>
-                                                <div style={{ fontWeight: '700', fontSize: '0.9rem', color: '#111827' }}>{member.name}</div>
-                                                <div style={{ fontSize: '0.75rem', color: '#6b7280', fontWeight: '600' }}>{member.email}</div>
-                                                <div style={{ fontSize: '0.65rem', color: '#38AC57', fontWeight: '600' }}>Super Administrator</div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td style={{ padding: '1rem' }}>
-                                        <span style={{ backgroundColor: '#fee2e2', color: '#ef4444', padding: '0.3rem 0.75rem', borderRadius: '0.5rem', fontSize: '0.8rem', fontWeight: '700' }}>{member.department}</span>
-                                    </td>
-                                    <td style={{ padding: '1rem' }}>
-                                        <span style={{ 
-                                            backgroundColor: member.status === 'Active' ? '#eef7f0' : '#fff7ed', 
-                                            color: member.status === 'Active' ? '#38AC57' : '#c2410c', 
-                                            padding: '0.3rem 0.75rem', 
-                                            borderRadius: '0.5rem', 
-                                            fontSize: '0.8rem', 
-                                            fontWeight: '700' 
-                                        }}>{member.status}</span>
-                                    </td>
-                                    <td style={{ padding: '1rem' }}>
-                                        {member.twoFactorAuth ? <CheckCircle2 size={20} color="#38AC57" fill="#eef7f0" /> : <div style={{ color: '#9ca3af', fontWeight: 'bold' }}>OFF</div>}
-                                    </td>
-                                    <td style={{ padding: '1rem' }}>
-                                        <div style={{ backgroundColor: '#f3f4f6', padding: '0.4rem 1rem', borderRadius: '0.5rem', display: 'inline-block', fontSize: '0.85rem', fontWeight: '600', color: '#111827' }}>
-                                            {member.lastLogin}
-                                        </div>
-                                    </td>
-                                    <td style={{ padding: '1rem' }}>
-                                        <div style={{ display: 'flex', gap: '0.5rem' }}>
-                                            <button 
-                                                onClick={() => handleAction('Viewing details for', member.name)}
-                                                style={{ background: 'white', border: '1px solid #e5e7eb', padding: '0.4rem 1rem', borderRadius: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.4rem', color: '#4b5563', cursor: 'pointer', fontSize: '0.75rem', fontWeight: '600', transition: 'all 0.2s' }}
-                                                onMouseEnter={e => e.currentTarget.style.backgroundColor = '#f9fafb'}
-                                                onMouseLeave={e => e.currentTarget.style.backgroundColor = 'white'}
-                                            >
-                                                <Eye size={14} /> View
-                                            </button>
-                                            <button 
-                                                onClick={() => handleAction('Editing', member.name)}
-                                                style={{ background: 'white', border: '1px solid #e5e7eb', padding: '0.4rem', borderRadius: '0.5rem', color: '#4b5563', cursor: 'pointer', transition: 'all 0.2s' }}
-                                                onMouseEnter={e => e.currentTarget.style.backgroundColor = '#eef7f0'}
-                                                onMouseLeave={e => e.currentTarget.style.backgroundColor = 'white'}
-                                            >
-                                                <Edit2 size={14} />
-                                            </button>
-                                            <button 
-                                                onClick={() => handleDelete(member.id, member.name)}
-                                                style={{ background: 'white', border: '1px solid #fee2e2', padding: '0.4rem', borderRadius: '0.5rem', color: '#ef4444', cursor: 'pointer', transition: 'all 0.2s' }}
-                                                onMouseEnter={e => e.currentTarget.style.backgroundColor = '#fef2f2'}
-                                                onMouseLeave={e => e.currentTarget.style.backgroundColor = 'white'}
-                                            >
-                                                <Trash2 size={14} />
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                            )) : (
-                                <tr>
-                                    <td colSpan={6} style={{ textAlign: 'center', padding: '3rem', color: '#6b7280' }}>
-                                        No members found matching your criteria.
-                                    </td>
-                                </tr>
-                            )}
-                        </tbody>
-                    </table>
-                </div>
-
-                {/* Notifications Toast */}
-                {lastAction && (
-                    <div style={{ 
-                        position: 'fixed', 
-                        bottom: '2rem', 
-                        right: '2rem', 
-                        backgroundColor: '#111827', 
-                        color: 'white', 
-                        padding: '1rem 2rem', 
-                        borderRadius: '1rem', 
-                        boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1)',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '0.75rem',
-                        animation: 'slideUp 0.3s ease-out',
-                        zIndex: 1000
-                    }}>
-                        <CheckCircle2 size={18} color="#38AC57" />
-                        <span style={{ fontWeight: '600', fontSize: '0.9rem' }}>{lastAction}</span>
-                    </div>
-                )}
-            </div>
-            <style>
-                {`
-                    @keyframes slideUp {
-                        from { transform: translateY(100%); opacity: 0; }
-                        to { transform: translateY(0); opacity: 1; }
-                    }
-                `}
-            </style>
+      {/* Controls */}
+      <div className="vp-controls-bar">
+        <div className="vp-search-box">
+          <input 
+            type="text" 
+            placeholder="Search by name or email..." 
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+          <Search size={20} style={{ position: 'absolute', left: '1.25rem', top: '50%', transform: 'translateY(-50%)', color: '#94a3b8' }} />
         </div>
-    );
+        
+        <div className="vp-filter-group">
+          <button className="vp-filter-btn" onClick={() => handleAction('Filtering by', 'Status')}>
+            Status <ChevronDown size={18} />
+          </button>
+          <button className="vp-filter-btn" onClick={() => handleAction('Filtering by', 'Category')}>
+            Category <ChevronDown size={18} />
+          </button>
+          <button className="vp-filter-btn" onClick={() => handleAction('Opening', 'Advanced Filters')}>
+            <Filter size={18} /> Filters
+          </button>
+          {activeFilter !== 'Total Members' && (
+            <button className="vp-filter-btn" style={{ background: '#f1f5f9', color: '#64748b' }} onClick={() => setActiveFilter('Total Members')}>
+              Clear: {activeFilter} ×
+            </button>
+          )}
+        </div>
+
+        <button className="vp-add-btn" onClick={handleAddMember}>
+          <Plus size={22} />
+          Add Team Member
+        </button>
+      </div>
+
+      {/* Members Table */}
+      <div className="vp-table-card">
+        <div className="vp-table-header">
+          <h3>Team Members List</h3>
+          <p>Manage and monitor your platform administrative team</p>
+        </div>
+
+        <div className="vp-table-scroll">
+          <table className="vp-table">
+            <thead>
+              <tr>
+                <th>Member</th>
+                <th>Department</th>
+                <th>Status</th>
+                <th>2FA</th>
+                <th>Last Login</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredMembers.length > 0 ? filteredMembers.map((member) => (
+                <tr key={member.id}>
+                  <td>
+                    <div className="vp-member-cell">
+                      <img src={member.img} alt="" className="vp-member-avatar" />
+                      <div className="vp-member-info">
+                        <span className="name">{member.name}</span>
+                        <span className="email">{member.email}</span>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <span className="vp-badge dept">{member.department}</span>
+                  </td>
+                  <td>
+                    <span className={`vp-badge ${member.status === 'Active' ? 'status-active' : 'status-pending'}`}>
+                      {member.status}
+                    </span>
+                  </td>
+                  <td>
+                    {member.twoFactorAuth ? (
+                      <CheckCircle2 size={24} color="#38AC57" fill="#f0fdf4" />
+                    ) : (
+                      <span style={{ color: '#94a3b8', fontWeight: '800', fontSize: '0.85rem' }}>DISABLED</span>
+                    )}
+                  </td>
+                  <td>
+                    <span className="vp-last-login">{member.lastLogin}</span>
+                  </td>
+                  <td>
+                    <div className="vp-action-btn-group">
+                      <button className="vp-filter-btn" onClick={() => handleAction('Viewing', member.name)}>
+                        <Eye size={16} />
+                      </button>
+                      <button className="vp-filter-btn" onClick={() => handleAction('Editing', member.name)}>
+                        <Edit2 size={16} />
+                      </button>
+                      <button className="vp-filter-btn" style={{ borderColor: '#fee2e2', color: '#ef4444' }} onClick={() => handleDelete(member.id, member.name)}>
+                        <Trash2 size={16} />
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              )) : (
+                <tr>
+                  <td colSpan={6} style={{ textAlign: 'center', padding: '5rem', color: '#64748b', fontWeight: '600' }}>
+                    No members found matching your search.
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {/* Toast */}
+      {lastAction && (
+        <div style={{ position: 'fixed', bottom: '2rem', right: '2rem', background: '#111827', color: 'white', padding: '1rem 2rem', borderRadius: '100px', boxShadow: '0 20px 25px -5px rgba(0,0,0,0.2)', display: 'flex', alignItems: 'center', gap: '0.75rem', zIndex: 1000, animation: 'slideUp 0.3s ease-out' }}>
+          <CheckCircle2 size={20} color="#38AC57" />
+          <span style={{ fontWeight: '700' }}>{lastAction}</span>
+        </div>
+      )}
+
+      <style>{`
+        @keyframes slideUp {
+          from { transform: translateY(100%); opacity: 0; }
+          to { transform: translateY(0); opacity: 1; }
+        }
+        @keyframes fadeIn {
+          from { opacity: 0; transform: translateY(10px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+      `}</style>
+    </div>
+  );
 };
 
 

@@ -66,24 +66,29 @@ interface SupportModalsProps {
 }
 
 export const ComplaintDetailsModal = ({ isOpen, onClose, complaint, onUpdate }: SupportModalsProps) => {
-  if (!isOpen || !complaint) return null;
-
-  const [status, setStatus] = useState(complaint.status);
-  const [assignedTo, setAssignedTo] = useState(complaint.assignedTo || '');
-  const [internalNotes, setInternalNotes] = useState(complaint.internalNotes || '');
+  const [status, setStatus] = useState(complaint?.status || 'New');
+  const [assignedTo, setAssignedTo] = useState(complaint?.assignedTo || '');
+  const [internalNotes, setInternalNotes] = useState(complaint?.internalNotes || '');
   const [messageInput, setMessageInput] = useState('');
   
   // Local state for instant feedback on messages within the modal
-  const [localMessages, setLocalMessages] = useState<Message[]>(complaint.messages);
+  const [localMessages, setLocalMessages] = useState<Message[]>(complaint?.messages || []);
   const chatEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    setLocalMessages(complaint.messages);
+    if (complaint) {
+      setStatus(complaint.status);
+      setAssignedTo(complaint.assignedTo || '');
+      setInternalNotes(complaint.internalNotes || '');
+      setLocalMessages(complaint.messages);
+    }
   }, [complaint]);
 
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [localMessages]);
+
+  if (!isOpen || !complaint) return null;
 
   const statusColors: Record<string, string> = {
     'New': '#FEF2F2',
@@ -139,11 +144,110 @@ export const ComplaintDetailsModal = ({ isOpen, onClose, complaint, onUpdate }: 
   };
 
   return (
-    <div className="modal-overlay" style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, backdropFilter: 'blur(4px)' }} onClick={onClose}>
-      <div className="modal-content" onClick={e => e.stopPropagation()} style={{ width: '1200px', maxWidth: '95vw', padding: 0, borderRadius: '28px', overflow: 'hidden', backgroundColor: 'white', display: 'flex', flexDirection: 'column', height: '85vh' }}>
-        <div style={{ display: 'flex', flex: 1, minHeight: 0 }}>
+    <div className="modal-overlay" style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'flex-start', justifyContent: 'center', zIndex: 1000, backdropFilter: 'blur(4px)', padding: '20px', overflowY: 'auto' }} onClick={onClose}>
+      <style>{`
+        .csm-modal-content {
+            background-color: white;
+            border-radius: 28px;
+            width: 100%;
+            max-width: 1200px;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            min-height: 500px;
+            max-height: none;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+        .csm-layout {
+            display: flex;
+            flex: 1;
+        }
+        .csm-details-panel {
+            flex: 1;
+            padding: 2.5rem;
+            border-right: 1px solid #f3f4f6;
+        }
+        .csm-chat-panel {
+            width: 400px;
+            display: flex;
+            flex-direction: column;
+            background-color: white;
+        }
+        .csm-user-info-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.25rem 1rem;
+        }
+        .csm-complaint-info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1.25fr 1.5fr;
+            gap: 1rem;
+        }
+        .csm-status-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+        .csm-flex-responsive {
+            display: flex;
+            gap: 1rem;
+        }
+
+        @media (max-width: 1024px) {
+            .csm-layout {
+                flex-direction: column;
+            }
+            .csm-details-panel {
+                border-right: none;
+                border-bottom: 1px solid #f3f4f6;
+                padding: 1.5rem;
+            }
+            .csm-chat-panel {
+                width: 100%;
+                height: 500px;
+            }
+            .csm-complaint-info-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .csm-user-info-container {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+            .csm-user-info-grid {
+                grid-template-columns: 1fr 1fr;
+                width: 100%;
+            }
+            .csm-complaint-info-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            .csm-status-grid {
+                grid-template-columns: 1fr;
+            }
+            .csm-flex-responsive {
+                flex-direction: column;
+            }
+            .csm-flex-responsive button {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .csm-user-info-grid, .csm-complaint-info-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+      `}</style>
+      <div className="csm-modal-content" onClick={e => e.stopPropagation()}>
+        <div className="csm-layout">
           {/* Left Side: Details */}
-          <div style={{ flex: 1, padding: '2.5rem', overflowY: 'auto', borderRight: '1px solid #f3f4f6' }}>
+          <div className="csm-details-panel">
             <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem', marginBottom: '2rem' }}>
               <button onClick={onClose} style={{ border: '1px solid #e5e7eb', background: 'white', cursor: 'pointer', padding: '0.6rem', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <ArrowLeft size={22} />
@@ -157,7 +261,7 @@ export const ComplaintDetailsModal = ({ isOpen, onClose, complaint, onUpdate }: 
             {/* User Information Box */}
             <div style={{ marginBottom: '2.5rem' }}>
               <h3 style={{ fontSize: '1.125rem', fontWeight: '800', marginBottom: '1rem', color: '#111827' }}>User Information</h3>
-              <div style={{ 
+              <div className="csm-user-info-container" style={{ 
                 backgroundColor: '#F9FAFB', 
                 borderRadius: '24px', 
                 padding: '1.5rem', 
@@ -174,7 +278,7 @@ export const ComplaintDetailsModal = ({ isOpen, onClose, complaint, onUpdate }: 
                   </div>
                 </div>
                 
-                <div style={{ flex: 1, display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1.25rem 1rem' }}>
+                <div className="csm-user-info-grid">
                   <div style={{ minWidth: 0 }}>
                     <label style={{ color: '#9CA3AF', fontSize: '10px', display: 'block', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '4px' }}>Full Name</label>
                     <p style={{ margin: 0, fontWeight: '700', color: '#111827', fontSize: '14px' }}>{complaint.user.name}</p>
@@ -197,7 +301,7 @@ export const ComplaintDetailsModal = ({ isOpen, onClose, complaint, onUpdate }: 
                   </div>
                   <div style={{ minWidth: 0 }}>
                     <label style={{ color: '#9CA3AF', fontSize: '10px', display: 'block', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '4px' }}>Email</label>
-                    <p style={{ margin: 0, fontWeight: '700', color: '#111827', fontSize: '14px', whiteSpace: 'nowrap' }}>{complaint.user.email}</p>
+                    <p style={{ margin: 0, fontWeight: '700', color: '#111827', fontSize: '14px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{complaint.user.email}</p>
                   </div>
                 </div>
               </div>
@@ -206,7 +310,7 @@ export const ComplaintDetailsModal = ({ isOpen, onClose, complaint, onUpdate }: 
             {/* Complaint Info */}
             <div style={{ marginBottom: '2.5rem' }}>
               <h3 style={{ fontSize: '1.125rem', fontWeight: '800', marginBottom: '1rem', color: '#111827' }}>Complaint Details</h3>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1.25fr 1.5fr', gap: '1rem', backgroundColor: '#fff', border: '1px solid #f3f4f6', borderRadius: '20px', padding: '1.5rem', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.02)' }}>
+              <div className="csm-complaint-info-grid" style={{ backgroundColor: '#fff', border: '1px solid #f3f4f6', borderRadius: '20px', padding: '1.5rem', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.02)' }}>
                 <div>
                   <label style={{ color: '#9CA3AF', fontSize: '10px', fontWeight: '800', textTransform: 'uppercase' }}>Ticket ID</label>
                   <p style={{ fontWeight: '800', margin: '4px 0 0', color: '#111827', fontSize: '13px' }}>{complaint.ticketId}</p>
@@ -236,12 +340,12 @@ export const ComplaintDetailsModal = ({ isOpen, onClose, complaint, onUpdate }: 
                 </div>
                 <div>
                   <label style={{ color: '#9CA3AF', fontSize: '10px', fontWeight: '800', textTransform: 'uppercase' }}>Complain</label>
-                  <p style={{ fontWeight: '700', margin: '4px 0 0', display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px', color: '#111827' }}>
+                  <div style={{ fontWeight: '700', margin: '4px 0 0', display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px', color: '#111827' }}>
                     <div style={{ width: '20px', height: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                       <img src={categoryIcons[complaint.category] || otherIcon} alt="" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
                     </div>
                     {complaint.category}
-                  </p>
+                  </div>
                 </div>
               </div>
             </div>
@@ -257,7 +361,7 @@ export const ComplaintDetailsModal = ({ isOpen, onClose, complaint, onUpdate }: 
             {/* Management Section */}
             <div>
               <h3 style={{ fontSize: '1.125rem', fontWeight: '800', marginBottom: '1rem', color: '#111827' }}>Status Management</h3>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', marginBottom: '1.5rem' }}>
+              <div className="csm-status-grid" style={{ marginBottom: '1.5rem' }}>
                 <div>
                   <label style={{ fontSize: '13px', fontWeight: '700', display: 'block', marginBottom: '0.75rem', color: '#374151' }}>Update Status</label>
                   <select 
@@ -297,7 +401,7 @@ export const ComplaintDetailsModal = ({ isOpen, onClose, complaint, onUpdate }: 
                   style={{ width: '100%', padding: '1.25rem', borderRadius: '20px', border: '1px solid #e5e7eb', height: '120px', resize: 'none', outline: 'none', fontSize: '14px', lineHeight: '1.6' }}
                 />
               </div>
-              <div style={{ display: 'flex', gap: '1rem' }}>
+              <div className="csm-flex-responsive">
                 <button 
                   onClick={() => {}}
                   style={{ flex: 1, padding: '1.1rem', borderRadius: '16px', border: '1px solid #374151', background: 'white', fontWeight: '800', cursor: 'pointer', fontSize: '14px', transition: 'all 0.2s' }}
@@ -315,7 +419,7 @@ export const ComplaintDetailsModal = ({ isOpen, onClose, complaint, onUpdate }: 
           </div>
 
           {/* Right Side: Chat Sidebar */}
-          <div style={{ width: '400px', display: 'flex', flexDirection: 'column', backgroundColor: 'white' }}>
+          <div className="csm-chat-panel">
             {/* Chat Header */}
             <div style={{ padding: '1.5rem 2rem', borderBottom: '1px solid #f3f4f6', display: 'flex', alignItems: 'center', gap: '1rem' }}>
               <div style={{ position: 'relative', flexShrink: 0 }}>

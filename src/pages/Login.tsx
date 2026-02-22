@@ -8,8 +8,8 @@ interface LoginProps {
 }
 
 export const Login = ({ onLogin, onForgotPassword }: LoginProps) => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('admin@hezzni.com');
+  const [password, setPassword] = useState('admin123');
   const [errors, setErrors] = useState({ email: '', password: '' });
   const [isLoading, setIsLoading] = useState(false);
 
@@ -42,9 +42,9 @@ export const Login = ({ onLogin, onForgotPassword }: LoginProps) => {
     if (validate()) {
       setIsLoading(true);
       // Hardcoded check for demo purposes (Vercel deployment)
-      if (email === 'admin@ezzni.com' && password === 'admin123') {
+      if (email === 'admin@hezzni.com' && password === 'admin123') {
         localStorage.setItem('token', 'demo-token');
-        localStorage.setItem('user', JSON.stringify({ name: 'Admin User', email: 'admin@ezzni.com' }));
+        localStorage.setItem('user', JSON.stringify({ name: 'Admin User', email: 'admin@hezzni.com' }));
         onLogin();
         setIsLoading(false);
         return;
@@ -97,7 +97,7 @@ export const Login = ({ onLogin, onForgotPassword }: LoginProps) => {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="you@hezzni.com"
+                placeholder="admin@hezzni.com"
                 style={{
                   width: '100%',
                   padding: '0.875rem 1rem',

@@ -217,16 +217,136 @@ export const LiveTrips = () => {
     return (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
             <style dangerouslySetInnerHTML={{ __html: `
-                @media (max-width: 1024px) {
+                .stats-container {
+                    display: grid;
+                    grid-template-columns: repeat(5, 1fr);
+                    gap: 1rem;
+                }
+                .filter-bar {
+                    display: flex;
+                    gap: 0.75rem;
+                    align-items: center;
+                    flex-wrap: wrap;
+                    background-color: white;
+                    padding: 0.5rem;
+                    border-radius: 3rem;
+                    border: 1px solid #f1f5f9;
+                }
+                .search-container {
+                    position: relative;
+                    flex: 1;
+                    min-width: 200px;
+                }
+                .dropdown-container {
+                    flex-shrink: 0;
+                }
+                @media (max-width: 1400px) {
                     .stats-container {
-                        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)) !important;
+                        grid-template-columns: repeat(3, 1fr);
                     }
                 }
-                @media (max-width: 640px) {
-                    .page-header {
-                        flex-direction: column;
-                        align-items: flex-start !important;
+                .stat-card-clickable:hover {
+                    transform: translateY(-5px);
+                    box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1) !important;
+                }
+                .stat-card-clickable {
+                    transition: all 0.3s ease !important;
+                }
+                @media (max-width: 1024px) {
+                    .stats-container {
+                        grid-template-columns: repeat(2, 1fr);
                     }
+                    .filter-bar {
+                        border-radius: 1.5rem;
+                        padding: 1rem;
+                    }
+                }
+                @media (max-width: 768px) {
+                    .page-header h1 {
+                        font-size: 1.5rem !important;
+                    }
+                    .page-header p {
+                        font-size: 0.85rem;
+                    }
+                    .stats-container {
+                        grid-template-columns: 1fr;
+                    }
+                    .filter-bar {
+                        gap: 0.5rem;
+                        border-radius: 1rem;
+                    }
+                    .search-container {
+                        width: 100%;
+                        flex: none;
+                    }
+                    .dropdown-container {
+                        flex: 1;
+                        min-width: calc(50% - 0.25rem);
+                    }
+                    .clear-btn {
+                        width: 100%;
+                        justify-content: center;
+                        margin-top: 0.5rem;
+                    }
+                }
+                @media (max-width: 480px) {
+                    .dropdown-container {
+                        min-width: 100%;
+                    }
+                    .stats-container {
+                        gap: 0.75rem;
+                    }
+                }
+                .table-container {
+                    width: 100%;
+                    overflow-x: auto;
+                    background: white;
+                    border-radius: 1.5rem;
+                    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+                    border: 1px solid #f1f5f9;
+                }
+                table {
+                    width: 100%;
+                    border-collapse: collapse;
+                    min-width: 1000px;
+                }
+                @media (max-width: 1200px) {
+                    table {
+                        min-width: 900px;
+                    }
+                }
+                @media (max-width: 1024px) {
+                    .hide-on-tablet {
+                        display: none;
+                    }
+                    table {
+                        min-width: 700px;
+                    }
+                }
+                @media (max-width: 768px) {
+                    .hide-on-mobile {
+                        display: none;
+                    }
+                    table {
+                        min-width: 600px;
+                    }
+                }
+                .service-badge {
+                    display: inline-flex;
+                    align-items: center;
+                    justify-content: center;
+                    padding: 0.4rem 1rem;
+                    border-radius: 2rem;
+                    font-size: 0.85rem;
+                    font-weight: 700;
+                    white-space: nowrap;
+                    text-align: center;
+                    line-height: 1;
+                }
+                .trip-id-cell {
+                    white-space: nowrap;
+                    font-weight: 700;
+                    color: #111827;
                 }
             `}} />
             <div className="page-header" style={{ marginBottom: '1rem' }}>
@@ -235,7 +355,7 @@ export const LiveTrips = () => {
             </div>
 
             {/* Stats Cards */}
-            <div className="stats-container" style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '1rem' }}>
+            <div className="stats-container">
                 {stats.map((stat, idx) => {
                     const isActive = filterStatus === stat.id;
 
@@ -243,6 +363,7 @@ export const LiveTrips = () => {
                         <div 
                             key={idx} 
                             onClick={() => handleStatClick(stat.id)}
+                            className="stat-card-clickable"
                             style={{ 
                                 backgroundColor: isActive ? '#38AC57' : 'white', 
                                 padding: '1.25rem', 
@@ -252,7 +373,8 @@ export const LiveTrips = () => {
                                 color: isActive ? 'white' : '#111827',
                                 cursor: 'pointer',
                                 transition: 'all 0.2s',
-                                border: isActive ? 'none' : '1px solid #f1f5f9'
+                                border: isActive ? 'none' : '1px solid #f1f5f9',
+                                minHeight: '140px'
                              }}
                         >
                             <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '1rem' }}>
@@ -289,8 +411,8 @@ export const LiveTrips = () => {
             </div>
 
             {/* Filter Bar */}
-            <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center', flexWrap: 'wrap', backgroundColor: 'white', padding: '0.5rem', borderRadius: '3rem', border: '1px solid #f1f5f9' }}>
-                <div style={{ position: 'relative', flex: 1, minWidth: '200px' }}>
+            <div className="filter-bar">
+                <div className="search-container">
                     <Search size={18} color="#94a3b8" style={{ position: 'absolute', left: '1.25rem', top: '50%', transform: 'translateY(-50%)' }} />
                     <input 
                         type="text" 
@@ -298,38 +420,49 @@ export const LiveTrips = () => {
                         style={{ width: '100%', padding: '0.7rem 1rem 0.7rem 3.25rem', borderRadius: '2rem', border: 'none', backgroundColor: '#f9fafb', outline: 'none', fontSize: '0.9rem' }} 
                     />
                 </div>
-                <SelectDropdown 
-                    label="Status" 
-                    options={['Searching', 'Accepted', 'Arriving', 'Arrived', 'Started', 'In_progress', 'Completed', 'Cancelled']}
-                    value={filters.status}
-                    onChange={(val) => handleFilterChange('status', val)}
-                />
-                <SelectDropdown 
-                    label="City" 
-                    options={['Casablanca', 'Rabat', 'Marrakech', 'Tangier', 'Fes']}
-                    value={filters.city}
-                    onChange={(val) => handleFilterChange('city', val)}
-                />
-                <SelectDropdown 
-                    label="Service Type" 
-                    options={['Regular Ride', 'Motorcycle', 'Car Ride', 'Taxi']}
-                    value={filters.service}
-                    onChange={(val) => handleFilterChange('service', val)}
-                />
-                <SelectDropdown 
-                    label="Method" 
-                    options={['Visa', 'Mastercard', 'Cash']}
-                    value={filters.method}
-                    onChange={(val) => handleFilterChange('method', val)}
-                />
-                 <SelectDropdown 
-                    label="Periods" 
-                    options={['Today', 'Yesterday', 'Last Week', 'Last Month']}
-                    value={filters.period}
-                    onChange={(val) => handleFilterChange('period', val)}
-                />
+                <div className="dropdown-container">
+                    <SelectDropdown 
+                        label="Status" 
+                        options={['Searching', 'Accepted', 'Arriving', 'Arrived', 'Started', 'In_progress', 'Completed', 'Cancelled']}
+                        value={filters.status}
+                        onChange={(val) => handleFilterChange('status', val)}
+                    />
+                </div>
+                <div className="dropdown-container">
+                    <SelectDropdown 
+                        label="City" 
+                        options={['Casablanca', 'Rabat', 'Marrakech', 'Tangier', 'Fes']}
+                        value={filters.city}
+                        onChange={(val) => handleFilterChange('city', val)}
+                    />
+                </div>
+                <div className="dropdown-container">
+                    <SelectDropdown 
+                        label="Service Type" 
+                        options={['Regular Ride', 'Motorcycle', 'Car Ride', 'Taxi']}
+                        value={filters.service}
+                        onChange={(val) => handleFilterChange('service', val)}
+                    />
+                </div>
+                <div className="dropdown-container">
+                    <SelectDropdown 
+                        label="Method" 
+                        options={['Visa', 'Mastercard', 'Cash']}
+                        value={filters.method}
+                        onChange={(val) => handleFilterChange('method', val)}
+                    />
+                </div>
+                <div className="dropdown-container">
+                     <SelectDropdown 
+                        label="Periods" 
+                        options={['Today', 'Yesterday', 'Last Week', 'Last Month']}
+                        value={filters.period}
+                        onChange={(val) => handleFilterChange('period', val)}
+                    />
+                </div>
                 <button 
                     onClick={clearFilters}
+                    className="clear-btn"
                     style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.7rem 1.25rem', borderRadius: '2rem', border: '1px solid #e5e7eb', backgroundColor: 'white', cursor: 'pointer', fontSize: '0.9rem', fontWeight: '600', color: '#374151' }}
                 >
                     <SlidersHorizontal size={16} /> Clear
@@ -337,16 +470,16 @@ export const LiveTrips = () => {
             </div>
 
             {/* Table */}
-            <div className="card table-responsive" style={{ padding: 0, overflow: 'hidden' }}>
-                <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+            <div className="table-container">
+                <table>
                     <thead>
                         <tr style={{ backgroundColor: '#38AC57', color: 'white', textAlign: 'left' }}>
                             <th style={{ padding: '1rem 1.5rem', fontWeight: '600' }}>Trip ID</th>
                             <th style={{ padding: '1rem 1.5rem', fontWeight: '600' }}>Service</th>
                             <th style={{ padding: '1rem 1.5rem', fontWeight: '600' }}>Rider</th>
-                            <th style={{ padding: '1rem 1.5rem', fontWeight: '600' }}>Driver</th>
-                            <th style={{ padding: '1rem 1.5rem', fontWeight: '600' }}>Vehicle</th>
-                            <th style={{ padding: '1rem 1.5rem', fontWeight: '600' }}>Time</th>
+                            <th className="hide-on-tablet" style={{ padding: '1rem 1.5rem', fontWeight: '600' }}>Driver</th>
+                            <th className="hide-on-mobile" style={{ padding: '1rem 1.5rem', fontWeight: '600' }}>Vehicle</th>
+                            <th className="hide-on-mobile" style={{ padding: '1rem 1.5rem', fontWeight: '600' }}>Time</th>
                             <th style={{ padding: '1rem 1.5rem', fontWeight: '600' }}>Status</th>
                             <th style={{ padding: '1rem 1.5rem', fontWeight: '600' }}>Fare</th>
                             <th style={{ padding: '1rem 1.5rem', fontWeight: '600' }}>Action</th>
@@ -355,9 +488,11 @@ export const LiveTrips = () => {
                     <tbody>
                         {filteredTrips.length > 0 ? filteredTrips.map((trip, idx) => (
                             <tr key={idx} style={{ borderBottom: '1px solid #f3f4f6', backgroundColor: 'white' }}>
-                                <td style={{ padding: '1rem 1.5rem', fontWeight: '600' }}>{trip.id}</td>
+                                <td className="trip-id-cell" style={{ padding: '1rem 1.5rem' }}>{trip.id}</td>
                                 <td style={{ padding: '1rem 1.5rem' }}>
-                                    <span style={{ backgroundColor: trip.serviceColor, color: trip.serviceTextColor, padding: '0.3rem 0.8rem', borderRadius: '1rem', fontSize: '0.85rem' }}>{trip.service}</span>
+                                    <span className="service-badge" style={{ backgroundColor: trip.serviceColor, color: trip.serviceTextColor }}>
+                                        {trip.service}
+                                    </span>
                                 </td>
                                 <td style={{ padding: '1rem 1.5rem' }}>
                                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
@@ -389,7 +524,7 @@ export const LiveTrips = () => {
                                         </div>
                                      </div>
                                 </td>
-                                <td style={{ padding: '1rem 1.5rem' }}>
+                                <td className="hide-on-tablet" style={{ padding: '1rem 1.5rem' }}>
                                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
                                         <div style={{ position: 'relative' }}>
                                             <img src={trip.driver.img} alt="" style={{ width: '48px', height: '48px', borderRadius: '50%', objectFit: 'cover' }} />
@@ -418,7 +553,7 @@ export const LiveTrips = () => {
                                         </div>
                                      </div>
                                 </td>
-                                <td style={{ padding: '1rem 1.5rem' }}>
+                                <td className="hide-on-mobile" style={{ padding: '1rem 1.5rem' }}>
                                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', fontWeight: '700', color: '#111827' }}>
                                         <img 
                                             src={trip.vehicle === 'Motorcycle' ? bikeIcon : trip.vehicle === 'Car' ? carIcon : taxiIcon} 
@@ -428,7 +563,7 @@ export const LiveTrips = () => {
                                         {trip.vehicle}
                                     </div>
                                 </td>
-                                <td style={{ padding: '1rem 1.5rem' }}>
+                                <td className="hide-on-mobile" style={{ padding: '1rem 1.5rem' }}>
                                     <div style={{ fontWeight: '800', color: '#111827', fontSize: '0.95rem' }}>{trip.time}</div>
                                     <div style={{ fontSize: '0.8rem', color: '#94a3b8', fontWeight: '500' }}>{trip.duration}</div>
                                 </td>
@@ -477,7 +612,7 @@ interface SelectDropdownProps {
 }
 
 const SelectDropdown = ({ label, options = [], value, onChange }: SelectDropdownProps) => (
-    <div style={{ position: 'relative' }}>
+    <div style={{ position: 'relative', width: '100%' }}>
         <select 
             value={value || label}
             onChange={(e) => onChange && onChange(e.target.value)}
@@ -488,9 +623,11 @@ const SelectDropdown = ({ label, options = [], value, onChange }: SelectDropdown
                 outline: 'none', 
                 appearance: 'none', 
                 backgroundColor: 'white', 
+                width: '100%',
                 minWidth: '120px', 
                 cursor: 'pointer',
-                color: value && value !== label ? 'black' : '#6b7280'
+                color: value && value !== label ? 'black' : '#6b7280',
+                fontSize: '0.9rem'
             }}
         >
             <option value="">{label}</option>

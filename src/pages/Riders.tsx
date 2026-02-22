@@ -91,7 +91,7 @@ const Dropdown = ({ label, options, activeValue, onSelect }: { label: string, op
     }, [isOpen]);
 
     return (
-        <div ref={dropdownRef} style={{ position: 'relative', display: 'inline-block' }}>
+        <div ref={dropdownRef} style={{ position: 'relative', display: 'inline-block', width: '100%' }}>
             <button 
                 onClick={() => setIsOpen(!isOpen)}
                 style={{ 
@@ -103,7 +103,9 @@ const Dropdown = ({ label, options, activeValue, onSelect }: { label: string, op
                     color: activeValue !== 'All' ? '#2d8a46' : '#374151',
                     cursor: 'pointer', 
                     transition: 'all 0.2s',
-                    whiteSpace: 'nowrap'
+                    whiteSpace: 'nowrap',
+                    width: '100%',
+                    justifyContent: 'space-between'
                 }}
             >
                 {activeValue === 'All' ? label : activeValue}
@@ -198,7 +200,7 @@ export const Riders = () => {
     };
 
     // Handler: suspend rider
-    const handleSuspendConfirm = (_reason: string, _hours: string) => {
+    const handleSuspendConfirm = () => {
         setShowSuspendModal(false);
         closeModal();
         setShowSuspensionBanner(true);
@@ -242,6 +244,159 @@ export const Riders = () => {
 
     return (
         <div style={{ padding: '24px', backgroundColor: '#f9fafb', minHeight: '100vh' }}>
+            <style>{`
+                .rm-stats-grid {
+                    display: grid;
+                    grid-template-columns: repeat(4, 1fr);
+                    gap: 20px;
+                    margin-bottom: 32px;
+                }
+                .rm-controls-container {
+                    display: flex;
+                    gap: 12px;
+                    align-items: center;
+                    flex-wrap: wrap;
+                }
+                .rm-table-container {
+                    width: 100%;
+                    overflow-x: auto;
+                    border-radius: 12px;
+                }
+                .rm-table-header {
+                    display: grid;
+                    grid-template-columns: minmax(200px, 1.5fr) 1.5fr 1fr 1fr 1fr 1fr;
+                    padding: 16px 24px;
+                    background-color: #38AC57;
+                    color: white;
+                    border-radius: 12px;
+                    font-weight: bold;
+                    font-size: 14px;
+                    margin-bottom: 16px;
+                    min-width: 900px;
+                }
+                .rm-table-row {
+                    display: grid;
+                    grid-template-columns: minmax(200px, 1.5fr) 1.5fr 1fr 1fr 1fr 1fr;
+                    padding: 16px 24px;
+                    background-color: white;
+                    border-radius: 16px;
+                    align-items: center;
+                    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+                    margin-bottom: 12px;
+                    min-width: 900px;
+                    transition: all 0.2s;
+                }
+                .rm-modal-overlay {
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    background-color: rgba(0,0,0,0.4);
+                    backdrop-filter: blur(4px);
+                    z-index: 1000;
+                    display: flex;
+                    align-items: flex-start;
+                    justify-content: center;
+                    padding: 20px;
+                    overflow-y: auto;
+                }
+                .rm-modal-content {
+                    background-color: white;
+                    border-radius: 24px;
+                    width: 100%;
+                    max-width: 750px;
+                    margin-top: 20px;
+                    margin-bottom: 20px;
+                    position: relative;
+                    padding: 32px;
+                    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+                    overscroll-behavior: contain;
+                }
+                .rm-info-grid {
+                    display: grid;
+                    grid-template-columns: repeat(3, 1fr);
+                    gap: 16px;
+                }
+                .rm-account-grid {
+                    display: grid;
+                    grid-template-columns: repeat(3, 1fr);
+                    gap: 20px;
+                }
+                .rm-flex-responsive {
+                    display: flex;
+                    gap: 24px;
+                }
+                .rm-footer-actions {
+                    display: flex;
+                    gap: 12px;
+                }
+                .rm-chart-container {
+                    width: 100%;
+                    overflow-x: auto;
+                    padding-bottom: 12px;
+                }
+                .rm-chart-inner {
+                    min-width: 500px;
+                }
+                .rm-divider-v {
+                    width: 1px;
+                    background-color: #e5e7eb;
+                }
+
+                @media (max-width: 1024px) {
+                    .rm-stats-grid {
+                        grid-template-columns: repeat(2, 1fr);
+                    }
+                    .rm-info-grid {
+                        grid-template-columns: repeat(2, 1fr);
+                    }
+                }
+
+                @media (max-width: 768px) {
+                    .rm-stats-grid {
+                        grid-template-columns: repeat(2, 1fr);
+                        gap: 12px;
+                    }
+                    .rm-controls-container {
+                        flex-direction: column;
+                        align-items: stretch;
+                    }
+                    .rm-controls-container > div {
+                        width: 100% !important;
+                        max-width: none !important;
+                    }
+                    .rm-modal-content {
+                        padding: 20px;
+                        margin-top: 10px;
+                        margin-bottom: 10px;
+                    }
+                    .rm-info-grid, .rm-account-grid {
+                        grid-template-columns: 1fr;
+                    }
+                    .rm-flex-responsive {
+                        flex-direction: column;
+                        align-items: center;
+                        text-align: center;
+                    }
+                    .rm-footer-actions {
+                        flex-direction: column;
+                        align-items: stretch;
+                    }
+                    .rm-divider-v {
+                        display: none;
+                    }
+                }
+
+                @media (max-width: 480px) {
+                    .rm-stats-grid {
+                        grid-template-columns: 1fr;
+                    }
+                    .rm-modal-inner {
+                        padding: 16px !important;
+                    }
+                }
+            `}</style>
             
             {/* Suspension Banner */}
             {showSuspensionBanner && (
@@ -260,7 +415,7 @@ export const Riders = () => {
             </div>
 
             {/* Stats Cards - Interactive */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '20px', marginBottom: '32px' }}>
+            <div className="rm-stats-grid">
                 {statCards.map((stat) => {
                     const isActive = activeStat === stat.key;
                     const isGreenCard = stat.isAlwaysGreen;
@@ -337,7 +492,7 @@ export const Riders = () => {
 
             {/* Filters */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '32px' }}>
-                <div style={{ display: 'flex', gap: '12px', alignItems: 'center', flexWrap: 'wrap' }}>
+                <div className="rm-controls-container">
                     <div style={{ position: 'relative', flex: 1, maxWidth: '350px' }}>
                         <Search size={18} color="#9ca3af" style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)' }} />
                         <input 
@@ -386,16 +541,19 @@ export const Riders = () => {
                 <h2 style={{ fontSize: '20px', fontWeight: 'bold', marginBottom: '8px' }}>Rider Management Overview</h2>
                 <p style={{ color: '#6b7280', fontSize: '14px', marginBottom: '24px' }}>Manage driver accounts and generate IDs by vehicle type</p>
 
-                <div style={{ display: 'grid', gridTemplateColumns: 'minmax(250px, 1.5fr) 1.5fr 1fr 1fr 1fr 1fr', padding: '16px 24px', backgroundColor: '#38AC57', color: 'white', borderRadius: '12px', fontWeight: 'bold', fontSize: '14px', marginBottom: '16px' }}>
-                    <div>Riders</div>
-                    <div>Contact</div>
-                    <div style={{ textAlign: 'center' }}>Status</div>
-                    <div style={{ textAlign: 'center' }}>Total Trips</div>
-                    <div style={{ textAlign: 'center' }}>Total Spent</div>
-                    <div style={{ textAlign: 'center' }}>Action</div>
+                <div className="rm-table-container">
+                    <div className="rm-table-header">
+                        <div>Riders</div>
+                        <div>Contact</div>
+                        <div style={{ textAlign: 'center' }}>Status</div>
+                        <div style={{ textAlign: 'center' }}>Total Trips</div>
+                        <div style={{ textAlign: 'center' }}>Total Spent</div>
+                        <div style={{ textAlign: 'center' }}>Action</div>
+                    </div>
                 </div>
 
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                <div className="rm-table-container">
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', minWidth: '900px' }}>
                     {filteredRiders.length === 0 ? (
                         <div style={{ backgroundColor: 'white', padding: '48px', borderRadius: '16px', textAlign: 'center' }}>
                             <div style={{ fontSize: '40px', marginBottom: '16px' }}>🔍</div>
@@ -413,15 +571,7 @@ export const Riders = () => {
                             </button>
                         </div>
                     ) : filteredRiders.map((rider) => (
-                        <div key={rider.id + rider.email} style={{ 
-                            display: 'grid', gridTemplateColumns: 'minmax(250px, 1.5fr) 1.5fr 1fr 1fr 1fr 1fr', 
-                            padding: '16px 24px', backgroundColor: 'white', borderRadius: '16px', 
-                            alignItems: 'center', boxShadow: '0 1px 2px rgba(0,0,0,0.05)',
-                            transition: 'box-shadow 0.2s, transform 0.2s',
-                        }}
-                        onMouseEnter={e => { e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.08)'; e.currentTarget.style.transform = 'translateY(-1px)'; }}
-                        onMouseLeave={e => { e.currentTarget.style.boxShadow = '0 1px 2px rgba(0,0,0,0.05)'; e.currentTarget.style.transform = 'none'; }}
-                        >
+                        <div key={rider.id + rider.email} className="rm-table-row">
                             <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                                 <div style={{ position: 'relative' }}>
                                     <img src={rider.avatar} style={{ width: '48px', height: '48px', borderRadius: '50%' }} alt="" />
@@ -482,21 +632,14 @@ export const Riders = () => {
                             </div>
                         </div>
                     ))}
+                    </div>
                 </div>
             </div>
 
             {/* ============ MAIN MODAL ============ */}
             {selectedRider && (
-                <div style={{ 
-                    position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, 
-                    backgroundColor: 'rgba(0,0,0,0.4)', backdropFilter: 'blur(4px)',
-                    zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    padding: '20px'
-                }}>
-                    <div style={{ 
-                        backgroundColor: 'white', borderRadius: '24px', width: '100%', maxWidth: '650px',
-                        maxHeight: '90vh', overflowY: 'auto', position: 'relative', padding: '32px'
-                    }}>
+                <div className="rm-modal-overlay" onClick={() => setSelectedRider(null)}>
+                    <div className="rm-modal-content" onClick={e => e.stopPropagation()}>
                         {/* Modal Header Navigation */}
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
                             {modalSubView !== 'Details' ? (

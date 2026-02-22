@@ -18,8 +18,126 @@ interface TripDetailsModalProps {
 
 export const TripDetailsModal = ({ trip, onClose }: TripDetailsModalProps) => {
   return (
-    <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.4)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '2rem' }}>
-      <div className="card" style={{ width: '100%', maxWidth: '900px', maxHeight: '90vh', overflowY: 'auto', padding: '2rem', backgroundColor: '#f8fafc', borderRadius: '1.5rem', boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)' }}>
+    <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.6)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem', backdropFilter: 'blur(8px)' }}>
+      <style dangerouslySetInnerHTML={{ __html: `
+        .modal-card {
+            width: 100%;
+            max-width: 900px;
+            max-height: 95vh;
+            overflow-y: auto;
+            padding: 2.5rem;
+            background-color: #f8fafc;
+            border-radius: 2rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
+            position: relative;
+        }
+        .section-card {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02), 0 2px 4px -1px rgba(0,0,0,0.01);
+            border: 1px solid #f1f5f9;
+        }
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            color: #111827;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .info-layout {
+            display: flex;
+            gap: 2.5rem;
+            align-items: flex-start;
+        }
+        .info-fields-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 2rem;
+            flex: 1;
+            width: 100%;
+        }
+        .info-item {
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+        }
+        .info-label {
+            font-size: 0.8rem;
+            color: #64748b;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.025em;
+        }
+        .info-value {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #0f172a;
+            word-break: break-all;
+        }
+        .stats-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #ffffff;
+            padding: 1.5rem 2.5rem;
+            border-radius: 1.25rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.04);
+            border: 1px solid #f1f5f9;
+        }
+        @media (max-width: 1024px) {
+            .info-fields-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        @media (max-width: 768px) {
+            .modal-card {
+                padding: 1.5rem;
+                padding-top: 3.5rem;
+            }
+            .info-layout {
+                flex-direction: column;
+                align-items: center;
+                gap: 2rem;
+            }
+            .info-fields-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1.5rem;
+                text-align: left;
+            }
+            .section-card {
+                padding: 1.5rem;
+            }
+            .stats-bar {
+                flex-wrap: wrap;
+                gap: 1.5rem;
+                padding: 1.5rem;
+            }
+            .stats-bar > div {
+                flex: 1;
+                min-width: calc(50% - 0.75rem);
+            }
+        }
+        @media (max-width: 480px) {
+            .info-fields-grid {
+                grid-template-columns: 1fr;
+                gap: 1.25rem;
+            }
+            .stats-bar > div {
+                min-width: 100%;
+                text-align: center;
+            }
+            .info-item {
+                align-items: center;
+                text-align: center;
+            }
+        }
+      `}} />
+      <div className="modal-card">
         
         {/* Header */}
         <div style={{ display: 'flex', alignItems: 'center', marginBottom: '2rem' }}>
@@ -36,7 +154,7 @@ export const TripDetailsModal = ({ trip, onClose }: TripDetailsModalProps) => {
         </div>
 
         {/* Stats Bar */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', backgroundColor: 'white', padding: '1.25rem 2rem', borderRadius: '1rem', marginBottom: '1.5rem', boxShadow: '0 1px 3px rgba(0,0,0,0.05)' }}>
+        <div className="stats-bar">
            <div>
                <div style={{ fontSize: '0.85rem', color: '#94a3b8', marginBottom: '0.25rem', fontWeight: '500' }}>Start Time</div>
                <div style={{ fontSize: '1.1rem', fontWeight: '700', color: '#111827' }}>14:30</div>
@@ -55,132 +173,126 @@ export const TripDetailsModal = ({ trip, onClose }: TripDetailsModalProps) => {
         </div>
 
         {/* Passenger Information */}
-        <div className="card" style={{ marginBottom: '1.5rem', backgroundColor: 'white', padding: '1.5rem 2rem', borderRadius: '1.25rem', boxShadow: '0 1px 3px rgba(0,0,0,0.05)', border: '1px solid #f1f5f9' }}>
-            <h3 style={{ fontSize: '1.4rem', fontWeight: '800', marginBottom: '1.25rem', color: '#111827' }}>Passenger Information</h3>
-            <div style={{ display: 'flex', gap: '2rem', alignItems: 'flex-start' }}>
+        <div className="section-card">
+            <h3 className="section-title">Passenger Information</h3>
+            <div className="info-layout">
                 <div style={{ position: 'relative', flexShrink: 0 }}>
-                    <img src={trip.rider.img} alt={trip.rider.name} style={{ width: '80px', height: '80px', borderRadius: '50%', objectFit: 'cover' }} />
+                    <img src={trip.rider.img} alt={trip.rider.name} style={{ width: '100px', height: '100px', borderRadius: '50%', objectFit: 'cover', border: '4px solid #f1f5f9' }} />
                     <div style={{ 
                         position: 'absolute', 
                         bottom: '-8px', 
                         left: '50%', 
                         transform: 'translateX(-50%)', 
                         backgroundColor: 'white', 
-                        padding: '2px 8px', 
-                        borderRadius: '1rem', 
-                        fontSize: '0.8rem', 
-                        fontWeight: '700',
+                        padding: '4px 12px', 
+                        borderRadius: '2rem', 
+                        fontSize: '0.85rem', 
+                        fontWeight: '800',
                         display: 'flex', 
                         alignItems: 'center', 
-                        gap: '3px', 
-                        boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+                        gap: '4px', 
+                        boxShadow: '0 4px 6px -1px rgba(0,0,0,0.1)',
                         whiteSpace: 'nowrap',
-                        border: '1px solid #f1f5f9'
+                        border: '1px solid #f1f5f9',
+                        color: '#111827'
                     }}>
-                        <Star size={12} fill="#fbbf24" color="#fbbf24" /> {trip.rider.rating}
+                        <Star size={14} fill="#fbbf24" color="#fbbf24" /> {trip.rider.rating}
                     </div>
                 </div>
-                <div style={{ flex: 1 }}>
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.5rem', marginBottom: '1.25rem' }}>
-                        <div>
-                            <div style={{ fontSize: '0.85rem', color: '#94a3b8', marginBottom: '0.4rem', fontWeight: '500' }}>Full Name</div>
-                            <div style={{ fontSize: '1.1rem', fontWeight: '700', color: '#111827' }}>{trip.rider.name}</div>
-                        </div>
-                        <div>
-                             <div style={{ fontSize: '0.85rem', color: '#94a3b8', marginBottom: '0.4rem', fontWeight: '500' }}>Customer ID</div>
-                            <div style={{ fontSize: '1.1rem', fontWeight: '700', color: '#111827' }}>{trip.rider.id}</div>
-                        </div>
-                         <div>
-                             <div style={{ fontSize: '0.85rem', color: '#94a3b8', marginBottom: '0.4rem', fontWeight: '500' }}>Category</div>
-                            <div style={{ fontSize: '1.1rem', fontWeight: '700', color: '#111827' }}>Taxi</div>
-                        </div>
-                         <div>
-                             <div style={{ fontSize: '0.85rem', color: '#94a3b8', marginBottom: '0.4rem', fontWeight: '500' }}>Gender</div>
-                            <div style={{ fontSize: '1.1rem', fontWeight: '700', color: '#111827', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                               <span style={{ fontSize: '1.1rem' }}>♂</span> Male
-                            </div>
+                <div className="info-fields-grid">
+                    <div className="info-item">
+                        <span className="info-label">Full Name</span>
+                        <span className="info-value">{trip.rider.name}</span>
+                    </div>
+                    <div className="info-item">
+                         <span className="info-label">Customer ID</span>
+                        <span className="info-value">{trip.rider.id}</span>
+                    </div>
+                     <div className="info-item">
+                         <span className="info-label">Category</span>
+                        <span className="info-value">Taxi</span>
+                    </div>
+                     <div className="info-item">
+                         <span className="info-label">Gender</span>
+                        <div className="info-value" style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                           <span style={{ fontSize: '1.1rem' }}>♂</span> Male
                         </div>
                     </div>
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.5rem' }}>
-                        <div>
-                            <div style={{ fontSize: '0.85rem', color: '#94a3b8', marginBottom: '0.4rem', fontWeight: '500' }}>Email</div>
-                            <div style={{ fontSize: '1rem', fontWeight: '700', color: '#111827' }}>{trip.rider.name.toLowerCase().replace(' ', '')}@gmail.com</div>
-                        </div>
-                        <div>
-                             <div style={{ fontSize: '0.85rem', color: '#94a3b8', marginBottom: '0.4rem', fontWeight: '500' }}>Phone</div>
-                            <div style={{ fontSize: '1rem', fontWeight: '700', color: '#111827' }}>+212 6 12 34 56</div>
-                        </div>
-                        <div>
-                             <div style={{ fontSize: '0.85rem', color: '#94a3b8', marginBottom: '0.4rem', fontWeight: '500' }}>City</div>
-                            <div style={{ fontSize: '1rem', fontWeight: '700', color: '#111827' }}>Casablanca</div>
-                        </div>
+                    <div className="info-item">
+                        <span className="info-label">Email</span>
+                        <span className="info-value">{trip.rider.name.toLowerCase().replace(' ', '')}@gmail.com</span>
+                    </div>
+                    <div className="info-item">
+                         <span className="info-label">Phone</span>
+                        <span className="info-value">+212 6 12 34 56</span>
+                    </div>
+                    <div className="info-item">
+                         <span className="info-label">City</span>
+                        <span className="info-value">Casablanca</span>
                     </div>
                 </div>
             </div>
         </div>
 
         {/* Driver Information */}
-        <div className="card" style={{ marginBottom: '1.5rem', backgroundColor: 'white', padding: '1.5rem 2rem', borderRadius: '1.25rem', boxShadow: '0 1px 3px rgba(0,0,0,0.05)', border: '1px solid #f1f5f9' }}>
-            <h3 style={{ fontSize: '1.4rem', fontWeight: '800', marginBottom: '1.25rem', color: '#111827' }}>Driver Information</h3>
-             <div style={{ display: 'flex', gap: '2rem', alignItems: 'flex-start' }}>
+        <div className="section-card">
+            <h3 className="section-title">Driver Information</h3>
+             <div className="info-layout">
                 <div style={{ position: 'relative', flexShrink: 0 }}>
-                    <img src={trip.driver.img} alt={trip.driver.name} style={{ width: '80px', height: '80px', borderRadius: '50%', objectFit: 'cover' }} />
+                    <img src={trip.driver.img} alt={trip.driver.name} style={{ width: '100px', height: '100px', borderRadius: '50%', objectFit: 'cover', border: '4px solid #f1f5f9' }} />
                      <div style={{ 
                          position: 'absolute', 
                          bottom: '-8px', 
                          left: '50%', 
                          transform: 'translateX(-50%)', 
                          backgroundColor: 'white', 
-                         padding: '2px 8px', 
-                         borderRadius: '1rem', 
-                         fontSize: '0.8rem', 
-                         fontWeight: '700',
+                         padding: '4px 12px', 
+                         borderRadius: '2rem', 
+                         fontSize: '0.85rem', 
+                         fontWeight: '800',
                          display: 'flex', 
                          alignItems: 'center', 
-                         gap: '3px', 
-                         boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+                         gap: '4px', 
+                         boxShadow: '0 4px 6px -1px rgba(0,0,0,0.1)',
                          whiteSpace: 'nowrap',
-                         border: '1px solid #f1f5f9'
+                         border: '1px solid #f1f5f9',
+                         color: '#111827'
                      }}>
-                        <Star size={12} fill="#fbbf24" color="#fbbf24" /> {trip.driver.rating}
+                        <Star size={14} fill="#fbbf24" color="#fbbf24" /> {trip.driver.rating}
                     </div>
                 </div>
-                 <div style={{ flex: 1 }}>
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.5rem', marginBottom: '1.25rem' }}>
-                        <div>
-                            <div style={{ fontSize: '0.85rem', color: '#94a3b8', marginBottom: '0.4rem', fontWeight: '500' }}>Full Name</div>
-                            <div style={{ fontSize: '1rem', fontWeight: '700', color: '#111827' }}>{trip.driver.name}</div>
-                        </div>
-                        <div>
-                             <div style={{ fontSize: '0.85rem', color: '#94a3b8', marginBottom: '0.4rem', fontWeight: '500' }}>Vehicle Type</div>
-                            <div style={{ fontSize: '1rem', fontWeight: '700', color: '#111827', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                <img src={trip.vehicle === 'Motorcycle' ? bikeIcon : trip.vehicle === 'Car' ? carIcon : taxiIcon} alt="" style={{ height: '32px', width: 'auto' }} />
-                                {trip.vehicle}
-                            </div>
-                        </div>
-                        <div>
-                             <div style={{ fontSize: '0.85rem', color: '#94a3b8', marginBottom: '0.4rem', fontWeight: '500' }}>Phone</div>
-                            <div style={{ fontSize: '1rem', fontWeight: '700', color: '#111827' }}>+212 6 12 34 56</div>
+                 <div className="info-fields-grid">
+                    <div className="info-item">
+                        <span className="info-label">Full Name</span>
+                        <span className="info-value">{trip.driver.name}</span>
+                    </div>
+                    <div className="info-item">
+                         <span className="info-label">Vehicle Type</span>
+                        <div className="info-value" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                            <img src={trip.vehicle === 'Motorcycle' ? bikeIcon : trip.vehicle === 'Car' ? carIcon : taxiIcon} alt="" style={{ height: '24px', width: 'auto' }} />
+                            {trip.vehicle}
                         </div>
                     </div>
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.5rem' }}>
-                        <div>
-                             <div style={{ fontSize: '0.85rem', color: '#94a3b8', marginBottom: '0.4rem', fontWeight: '500' }}>Email</div>
-                            <div style={{ fontSize: '1rem', fontWeight: '700', color: '#111827' }}>{trip.driver.name.toLowerCase().replace(' ', '')}@gmail.com</div>
-                        </div>
-                         <div>
-                             <div style={{ fontSize: '0.85rem', color: '#94a3b8', marginBottom: '0.4rem', fontWeight: '500' }}>Driver ID</div>
-                            <div style={{ fontSize: '1rem', fontWeight: '700', color: '#111827' }}>{trip.driver.id}</div>
-                        </div>
-                         <div>
-                             <div style={{ fontSize: '0.85rem', color: '#94a3b8', marginBottom: '0.4rem', fontWeight: '500' }}>City</div>
-                            <div style={{ fontSize: '1rem', fontWeight: '700', color: '#111827' }}>Casablanca</div>
-                        </div>
-                         <div>
-                             <div style={{ fontSize: '0.85rem', color: '#94a3b8', marginBottom: '0.4rem', fontWeight: '500' }}>Gender</div>
-                            <div style={{ fontSize: '1rem', fontWeight: '700', color: '#111827', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                               <span style={{ fontSize: '1.1rem' }}>♂</span> Male
-                            </div>
+                    <div className="info-item">
+                         <span className="info-label">Phone</span>
+                        <span className="info-value">+212 6 12 34 56</span>
+                    </div>
+                    <div className="info-item">
+                         <span className="info-label">Email</span>
+                        <span className="info-value">{trip.driver.name.toLowerCase().replace(' ', '')}@gmail.com</span>
+                    </div>
+                    <div className="info-item">
+                         <span className="info-label">Driver ID</span>
+                        <span className="info-value">{trip.driver.id}</span>
+                    </div>
+                    <div className="info-item">
+                         <span className="info-label">City</span>
+                        <span className="info-value">Casablanca</span>
+                    </div>
+                    <div className="info-item">
+                         <span className="info-label">Gender</span>
+                        <div className="info-value" style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                           <span style={{ fontSize: '1.1rem' }}>♂</span> Male
                         </div>
                     </div>
                 </div>
@@ -188,35 +300,35 @@ export const TripDetailsModal = ({ trip, onClose }: TripDetailsModalProps) => {
         </div>
 
         {/* Vehicle Information */}
-        <div className="card" style={{ marginBottom: '1.5rem', backgroundColor: 'white', padding: '1.5rem 2rem', borderRadius: '1.25rem', boxShadow: '0 1px 3px rgba(0,0,0,0.05)', border: '1px solid #f1f5f9' }}>
-            <h3 style={{ fontSize: '1.4rem', fontWeight: '700', marginBottom: '1.25rem', color: '#111827', fontFamily: 'Inter, sans-serif' }}>Vehicle Information</h3>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.5rem' }}>
-                 <div>
-                    <div style={{ fontSize: '0.85rem', color: '#94a3b8', marginBottom: '0.4rem', fontWeight: '500' }}>Driver ID</div>
-                    <div style={{ fontSize: '1.1rem', fontWeight: '700', color: '#111827' }}>D-00045</div>
+        <div className="section-card">
+            <h3 className="section-title">Vehicle Information</h3>
+            <div className="info-fields-grid">
+                 <div className="info-item">
+                    <span className="info-label">Driver ID</span>
+                    <span className="info-value">D-00045</span>
                  </div>
-                 <div>
-                    <div style={{ fontSize: '0.85rem', color: '#94a3b8', marginBottom: '0.4rem', fontWeight: '500' }}>Vehicle Colour</div>
-                    <div style={{ fontSize: '1.1rem', fontWeight: '700', color: '#111827', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                        <span style={{ width: '16px', height: '16px', borderRadius: '50%', border: '1px solid #e2e8f0', backgroundColor: 'white' }}></span>
+                 <div className="info-item">
+                    <span className="info-label">Vehicle Colour</span>
+                    <div className="info-value" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                        <span style={{ width: '12px', height: '12px', borderRadius: '50%', border: '1px solid #e2e8f0', backgroundColor: 'white' }}></span>
                         White
                     </div>
                  </div>
-                 <div>
-                    <div style={{ fontSize: '0.85rem', color: '#94a3b8', marginBottom: '0.4rem', fontWeight: '500' }}>Licence Plate Num</div>
-                    <div style={{ fontSize: '1.1rem', fontWeight: '700', color: '#111827' }}>8 | 1 | 26363</div>
+                 <div className="info-item">
+                    <span className="info-label">Licence Plate Num</span>
+                    <span className="info-value">8 | 1 | 26363</span>
                  </div>
-                 <div>
-                    <div style={{ fontSize: '0.85rem', color: '#94a3b8', marginBottom: '0.4rem', fontWeight: '500' }}>Make & Model</div>
-                    <div style={{ fontSize: '1.1rem', fontWeight: '700', color: '#111827' }}>Dacia Logan</div>
+                 <div className="info-item">
+                    <span className="info-label">Make & Model</span>
+                    <span className="info-value">Dacia Logan</span>
                  </div>
-                 <div>
-                    <div style={{ fontSize: '0.85rem', color: '#94a3b8', marginBottom: '0.4rem', fontWeight: '500' }}>Year</div>
-                    <div style={{ fontSize: '1.1rem', fontWeight: '700', color: '#111827' }}>2020</div>
+                 <div className="info-item">
+                    <span className="info-label">Year</span>
+                    <span className="info-value">2020</span>
                  </div>
-                 <div>
-                    <div style={{ fontSize: '0.85rem', color: '#94a3b8', marginBottom: '0.4rem', fontWeight: '500' }}>Join Date</div>
-                    <div style={{ fontSize: '1.1rem', fontWeight: '700', color: '#111827' }}>2023-01-15</div>
+                 <div className="info-item">
+                    <span className="info-label">Join Date</span>
+                    <span className="info-value">2023-01-15</span>
                  </div>
             </div>
         </div>
@@ -224,11 +336,11 @@ export const TripDetailsModal = ({ trip, onClose }: TripDetailsModalProps) => {
         {/* Pickup & Destination Cards */}
         <div style={{ marginBottom: '1.5rem', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px', position: 'relative' }}>
             {/* Pickup Card */}
-            <div className="card" style={{ width: '100%', backgroundColor: 'white', padding: '1.25rem 1.5rem', borderRadius: '1rem', boxShadow: '0 1px 3px rgba(0,0,0,0.05)', display: 'flex', alignItems: 'center', gap: '1rem', position: 'relative' }}>
-                <img src={pickupIcon} alt="pickup" style={{ width: '32px', height: '32px', objectFit: 'contain' }} />
-                <div style={{ flex: 1 }}>
+            <div className="card" style={{ width: '100%', backgroundColor: 'white', padding: '1rem', borderRadius: '1rem', boxShadow: '0 1px 3px rgba(0,0,0,0.05)', display: 'flex', alignItems: 'center', gap: '1rem', position: 'relative' }}>
+                <img src={pickupIcon} alt="pickup" style={{ width: '32px', height: '32px', objectFit: 'contain', flexShrink: 0 }} />
+                <div style={{ flex: 1, minWidth: 0 }}>
                      <div style={{ fontSize: '0.9rem', color: '#94a3b8', fontWeight: '400', fontFamily: 'Outfit, Inter, sans-serif' }}>Pickup</div>
-                     <div style={{ fontSize: '1.1rem', fontWeight: '600', color: '#111827', marginTop: '2px', fontFamily: 'Outfit, Inter, sans-serif' }}>Current Location, Marrakech</div>
+                     <div style={{ fontSize: '1.1rem', fontWeight: '600', color: '#111827', marginTop: '2px', fontFamily: 'Outfit, Inter, sans-serif', wordBreak: 'break-word' }}>Current Location, Marrakech</div>
                 </div>
             </div>
 
@@ -250,73 +362,73 @@ export const TripDetailsModal = ({ trip, onClose }: TripDetailsModalProps) => {
             </div>
 
             {/* Destination Card */}
-            <div className="card" style={{ width: '100%', backgroundColor: 'white', padding: '1.25rem 1.5rem', borderRadius: '1rem', boxShadow: '0 1px 3px rgba(0,0,0,0.05)', display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                <img src={destinationIcon} alt="destination" style={{ width: '32px', height: '32px', objectFit: 'contain' }} />
-                <div>
+            <div className="card" style={{ width: '100%', backgroundColor: 'white', padding: '1rem', borderRadius: '1rem', boxShadow: '0 1px 3px rgba(0,0,0,0.05)', display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                <img src={destinationIcon} alt="destination" style={{ width: '32px', height: '32px', objectFit: 'contain', flexShrink: 0 }} />
+                <div style={{ flex: 1, minWidth: 0 }}>
                      <div style={{ fontSize: '0.9rem', color: '#94a3b8', fontWeight: '400', fontFamily: 'Outfit, Inter, sans-serif' }}>Destination</div>
-                     <div style={{ fontSize: '1.1rem', fontWeight: '600', color: '#111827', marginTop: '2px', fontFamily: 'Outfit, Inter, sans-serif' }}>Current Location, Marrakech</div>
+                     <div style={{ fontSize: '1.1rem', fontWeight: '600', color: '#111827', marginTop: '2px', fontFamily: 'Outfit, Inter, sans-serif', wordBreak: 'break-word' }}>Current Location, Marrakech</div>
                 </div>
             </div>
         </div>
 
         {/* Payment Information */}
-         <div style={{ marginBottom: '1.5rem' }}>
-            <h3 style={{ fontSize: '1.4rem', fontWeight: '800', marginBottom: '1rem', color: '#111827' }}>Payment Information</h3>
-            <div className="card" style={{ backgroundColor: 'white', padding: '2rem', borderRadius: '1.25rem', boxShadow: '0 1px 3px rgba(0,0,0,0.05)', border: '1px solid #f1f5f9' }}>
-                
+         <div className="section-card" style={{ marginBottom: '1rem' }}>
+            <h3 className="section-title">Payment Information</h3>
+            <div>
                 {/* Profile/Avatar Section */}
                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: '2.5rem' }}>
                      <div style={{ position: 'relative' }}>
-                        <img src={trip.rider.img} alt="" style={{ width: '80px', height: '80px', borderRadius: '50%', objectFit: 'cover' }} />
+                        <img src={trip.rider.img} alt="" style={{ width: '80px', height: '80px', borderRadius: '50%', objectFit: 'cover', border: '3px solid #f1f5f9' }} />
                          <div style={{ 
                              position: 'absolute', 
                              bottom: '-10px', 
                              left: '50%', 
                              transform: 'translateX(-50%)', 
                              backgroundColor: 'white', 
-                             padding: '2px 10px', 
-                             borderRadius: '1rem', 
-                             fontSize: '0.85rem', 
-                             fontWeight: '700',
+                             padding: '4px 12px', 
+                             borderRadius: '2rem', 
+                             fontSize: '0.8rem', 
+                             fontWeight: '800',
                              display: 'flex', 
                              alignItems: 'center', 
-                             gap: '3px', 
-                             boxShadow: '0 2px 4px rgba(0,0,0,0.1)', 
-                             border: '1px solid #f1f5f9' 
+                             gap: '4px', 
+                             boxShadow: '0 4px 6px -1px rgba(0,0,0,0.1)', 
+                             border: '1px solid #f1f5f9',
+                             color: '#111827'
                          }}>
                             <Star size={12} fill="#fbbf24" color="#fbbf24" /> {trip.rider.rating}
                         </div>
                     </div>
                 </div>
 
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '1.5rem', alignItems: 'flex-start' }}>
-                    <div style={{ textAlign: 'left' }}>
-                         <div style={{ fontSize: '0.85rem', color: '#94a3b8', marginBottom: '0.5rem', fontWeight: '500' }}>TVA</div>
-                         <div style={{ fontSize: '1rem', fontWeight: '800', color: '#111827' }}>1%</div>
+                <div className="info-fields-grid">
+                    <div className="info-item">
+                         <span className="info-label">TVA</span>
+                         <span className="info-value">1%</span>
                     </div>
-                    <div style={{ textAlign: 'left' }}>
-                         <div style={{ fontSize: '0.85rem', color: '#94a3b8', marginBottom: '0.5rem', fontWeight: '500' }}>Service fee</div>
-                         <div style={{ fontSize: '1.1rem', fontWeight: '800', color: '#111827' }}>0.00 MAD</div>
+                    <div className="info-item">
+                         <span className="info-label">Service fee</span>
+                         <span className="info-value">0.00 MAD</span>
                     </div>
                     
-                    <div style={{ textAlign: 'center' }}>
-                         <div style={{ fontSize: '0.85rem', color: '#94a3b8', marginBottom: '0.5rem', fontWeight: '500' }}>Payment Method</div>
-                         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px', height: '1.5rem' }}>
+                    <div className="info-item">
+                         <span className="info-label">Payment Method</span>
+                         <div className="info-value" style={{ display: 'flex', alignItems: 'center', gap: '8px', height: '1.5rem' }}>
                             <img 
                                 src={trip.paymentMethod === 'visa' ? visaIcon : trip.paymentMethod === 'mastercard' ? mastercardIcon : cashIcon} 
                                 alt="" 
                                 style={{ height: '16px', width: 'auto', display: 'block', imageRendering: 'pixelated' }} 
                             />
-                            <span style={{ fontWeight: '800', fontSize: '1rem', color: '#111827' }}>{trip.paymentMethod.toUpperCase()}</span>
+                            <span>{trip.paymentMethod.toUpperCase()}</span>
                          </div>
                     </div>
-                    <div style={{ textAlign: 'right' }}>
-                         <div style={{ fontSize: '0.85rem', color: '#94a3b8', marginBottom: '0.5rem', fontWeight: '500' }}>Discount</div>
-                         <div style={{ fontSize: '1rem', fontWeight: '800', color: '#111827' }}>0%</div>
+                    <div className="info-item">
+                         <span className="info-label">Discount</span>
+                         <span className="info-value">0%</span>
                     </div>
-                     <div style={{ textAlign: 'right' }}>
-                         <div style={{ fontSize: '0.85rem', color: '#94a3b8', marginBottom: '0.5rem', fontWeight: '500' }}>Total Amount</div>
-                         <div style={{ fontSize: '1.25rem', fontWeight: '800', color: '#111827' }}>{trip.fare}</div>
+                     <div className="info-item">
+                         <span className="info-label">Total Amount</span>
+                         <span className="info-value" style={{ fontSize: '1.25rem', color: '#38AC57' }}>{trip.fare}</span>
                     </div>
                 </div>
             </div>

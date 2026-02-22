@@ -302,6 +302,160 @@ export const RideAssignment = () => {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+      <style dangerouslySetInnerHTML={{ __html: `
+        .ra-stats-grid {
+          display: grid;
+          grid-template-columns: repeat(4, 1fr);
+          gap: 1.5rem;
+        }
+        .ra-form-grid {
+          display: grid;
+          grid-template-columns: repeat(5, 1fr);
+          gap: 1.25rem;
+        }
+        .ra-lists-container {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 2rem;
+        }
+        .ra-search-filter-bar {
+          display: flex;
+          gap: 1rem;
+          align-items: center;
+        }
+        .ra-modal-card {
+          width: 900px;
+          max-width: 100%;
+          max-height: 95vh;
+          overflow-y: auto;
+          padding: 2.5rem;
+          border-radius: 1.5rem;
+          position: relative;
+          background-color: #ffffff;
+          box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+          z-index: 1001;
+        }
+        .ra-table-container {
+          overflow-x: auto;
+          margin: 0 -1rem;
+          padding: 0 1rem;
+        }
+        .ra-info-row {
+          display: grid;
+          grid-template-columns: repeat(4, 1fr);
+          gap: 1.5rem;
+        }
+        .ra-customer-card {
+          padding: 1.25rem;
+          border: 1px solid #f1f5f9;
+          border-radius: 1.25rem;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          background-color: #fff;
+        }
+        .ra-total-field {
+          text-align: right;
+        }
+        .ra-info-indent {
+          padding-left: calc(64px + 1.5rem);
+        }
+        .ra-flex-responsive {
+          display: flex;
+          gap: 1.5rem;
+          align-items: flex-start;
+        }
+
+        @media (max-width: 1200px) {
+          .ra-stats-grid {
+            grid-template-columns: repeat(2, 1fr);
+          }
+          .ra-form-grid {
+            grid-template-columns: repeat(3, 1fr);
+          }
+        }
+
+        @media (max-width: 992px) {
+          .ra-lists-container {
+            grid-template-columns: 1fr;
+          }
+          .ra-modal-card {
+            width: 95%;
+            padding: 1.5rem;
+          }
+          .ra-info-row {
+            grid-template-columns: repeat(2, 1fr);
+          }
+        }
+
+        @media (max-width: 768px) {
+          .ra-search-filter-bar {
+            flex-direction: column;
+            align-items: stretch;
+          }
+          .ra-search-filter-bar > div {
+            width: 100% !important;
+          }
+          .ra-form-grid {
+            grid-template-columns: 1fr;
+          }
+          .ra-stats-grid {
+            grid-template-columns: 1fr;
+          }
+          .ra-customer-card {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 1rem;
+          }
+          .ra-customer-card > div:last-child {
+            text-align: left !important;
+            width: 100%;
+          }
+          .ra-customer-card button {
+            width: 100%;
+          }
+          .ra-flex-responsive {
+            flex-direction: column;
+            align-items: center;
+          }
+          .ra-flex-responsive > div:last-child {
+            padding-left: 0 !important;
+            width: 100%;
+          }
+          .ra-info-row {
+            grid-template-columns: 1fr;
+            text-align: left;
+          }
+          .ra-total-field {
+            text-align: left !important;
+          }
+          .ra-info-indent {
+            padding-left: 0 !important;
+          }
+        }
+
+
+        @media (max-width: 480px) {
+          .ra-info-row {
+            grid-template-columns: 1fr;
+          }
+          .ra-modal-card h2 {
+            font-size: 1.5rem !important;
+          }
+          .ra-modal-footer {
+            justify-content: center !important;
+          }
+          .ra-modal-footer button {
+            width: 100%;
+          }
+        }
+
+        /* Animation for refresh icon */
+        @keyframes spin {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
+        }
+      `}} />
       
       {/* Header */}
       <div>
@@ -310,7 +464,7 @@ export const RideAssignment = () => {
       </div>
 
       {/* Stats Cards */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.5rem' }}>
+      <div className="ra-stats-grid">
         {stats.map((stat, idx) => {
           const isActive = activeStat === stat.id;
           return (
@@ -361,7 +515,7 @@ export const RideAssignment = () => {
       {/* New Assignment Form */}
       <div className="card" style={{ padding: '2rem', borderRadius: '1.5rem', backgroundColor: 'white', border: '1px solid #f1f5f9' }}>
         <h2 style={{ fontSize: '1.5rem', fontWeight: '800', marginBottom: '1.5rem', color: '#111827' }}>New Assignment</h2>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '1.25rem', marginBottom: '1.5rem' }}>
+        <div className="ra-form-grid" style={{ marginBottom: '1.5rem' }}>
            <FormSelect label="Select Category*" value={formCategory} options={['Hezzni XL', 'Standard', 'Lux']} onChange={(val: string) => setFormCategory(val)} />
            <FormSelect label="Select Customer*" value={selectedCustomer?.name || ''} options={customers.map(c => c.name)} onChange={(val: string) => setSelectedCustomer(customers.find(c => c.name === val) || null)} />
            <FormSelect label="Select Driver*" value={selectedDriver?.name || ''} options={drivers.map(d => d.name)} onChange={(val: string) => setSelectedDriver(drivers.find(d => d.name === val) || null)} />
@@ -401,7 +555,7 @@ export const RideAssignment = () => {
       </div>
 
       {/* Search & Filter Bar */}
-      <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+      <div className="ra-search-filter-bar">
          <div style={{ position: 'relative', width: '320px' }}>
             <Search size={18} color="#94a3b8" style={{ position: 'absolute', left: '1.25rem', top: '50%', transform: 'translateY(-50%)' }} />
             <input 
@@ -468,7 +622,7 @@ export const RideAssignment = () => {
       </div>
 
       {/* Lists Section */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem' }}>
+      <div className="ra-lists-container">
          {/* Waiting Customers */}
          <div className="card" style={{ padding: '2rem', borderRadius: '1.5rem', backgroundColor: 'white', border: '1px solid #f1f5f9' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
@@ -495,7 +649,7 @@ export const RideAssignment = () => {
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', maxHeight: '500px', overflowY: 'auto', paddingRight: '0.5rem' }}>
                 {filteredCustomers.map((c, idx) => (
-                    <div key={idx} style={{ padding: '1.25rem', border: '1px solid #f1f5f9', borderRadius: '1.25rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', backgroundColor: '#fff' }}>
+                    <div key={idx} className="ra-customer-card">
                         <div style={{ display: 'flex', gap: '1.25rem' }}>
                              <div style={{ position: 'relative' }}>
                                 <img src={c.img} alt="" style={{ width: '56px', height: '56px', borderRadius: '50%', objectFit: 'cover' }} />
@@ -558,7 +712,7 @@ export const RideAssignment = () => {
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', maxHeight: '500px', overflowY: 'auto', paddingRight: '0.5rem' }}>
                  {filteredDrivers.map((d, idx) => (
-                    <div key={idx} style={{ padding: '1.25rem', border: '1px solid #f1f5f9', borderRadius: '1.25rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', backgroundColor: '#fff' }}>
+                    <div key={idx} className="ra-customer-card">
                         <div style={{ display: 'flex', gap: '1.25rem' }}>
                              <div style={{ position: 'relative' }}>
                                 <img src={d.img} alt="" style={{ width: '56px', height: '56px', borderRadius: '50%', objectFit: 'cover' }} />
@@ -601,7 +755,7 @@ export const RideAssignment = () => {
       {/* Recent Assignments Table */}
        <div>
            <h2 style={{ fontSize: '1.75rem', fontWeight: '800', marginBottom: '1.5rem', color: '#111827' }}>Recent Assignments</h2>
-           <div style={{ padding: 0, overflowX: 'auto' }}>
+           <div className="ra-table-container">
               <table style={{ width: '100%', borderCollapse: 'separate', borderSpacing: '0 0.75rem' }}>
                   <thead>
                       <tr style={{ backgroundColor: '#38AC57', color: 'white' }}>
@@ -694,8 +848,8 @@ export const RideAssignment = () => {
 
        {/* Assignment Modal */}
        {showPreviewModal && previewAssignment && (
-        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.5)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <div className="card" style={{ width: '900px', maxHeight: '95vh', overflowY: 'auto', padding: '2.5rem', borderRadius: '1.5rem', position: 'relative', backgroundColor: '#fdfdfd' }}>
+        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.5)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem' }}>
+            <div className="ra-modal-card">
                 
                 {/* Header */}
                 <div style={{ marginBottom: '2rem' }}>
@@ -710,7 +864,7 @@ export const RideAssignment = () => {
                 </div>
 
                 {/* Status Bar */}
-                <div style={{ backgroundColor: 'white', padding: '1.25rem 2rem', borderRadius: '1.25rem', display: 'flex', alignItems: 'center', gap: '2.5rem', marginBottom: '2rem', boxShadow: '0 1px 3px rgba(0,0,0,0.05)', border: '1px solid #f1f5f9' }}>
+                <div style={{ backgroundColor: 'white', padding: '1.25rem 2rem', borderRadius: '1.25rem', display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '2rem', marginBottom: '2rem', boxShadow: '0 1px 3px rgba(0,0,0,0.05)', border: '1px solid #f1f5f9' }}>
                      <div>
                          <div style={{ fontSize: '0.8rem', color: '#94a3b8', fontWeight: '500', marginBottom: '0.2rem' }}>Start Time</div>
                          <div style={{ fontWeight: '800', fontSize: '1.1rem', color: '#111827' }}>{previewAssignment.startTime}</div>
@@ -748,14 +902,14 @@ export const RideAssignment = () => {
                     <h3 style={{ fontSize: '1.4rem', fontWeight: '800', marginBottom: '1rem', color: '#111827' }}>Passenger Information</h3>
                     <div style={{ backgroundColor: 'white', padding: '1.5rem 2rem', borderRadius: '1.25rem', boxShadow: '0 1px 3px rgba(0,0,0,0.05)', border: '1px solid #f1f5f9' }}>
                         {/* Row 1: Avatar + Full Name, Customer ID, Category, Gender */}
-                        <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'flex-start', marginBottom: '1.25rem' }}>
+                        <div className="ra-flex-responsive" style={{ marginBottom: '1.25rem' }}>
                              <div style={{ position: 'relative', flexShrink: 0 }}>
                                 <img src={previewAssignment.rider.img} alt="" style={{ width: '64px', height: '64px', borderRadius: '50%', border: '2px solid #f1f5f9' }} />
                                 <div style={{ position: 'absolute', bottom: -6, left: '50%', transform: 'translateX(-50%)', backgroundColor: 'white', padding: '0.15rem 0.5rem', borderRadius: '1rem', fontSize: '0.7rem', color: '#111827', display: 'flex', alignItems: 'center', gap: '3px', whiteSpace: 'nowrap', boxShadow: '0 2px 4px rgba(0,0,0,0.05)', border: '1px solid #f1f5f9', fontWeight: '700' }}>
                                     <Star size={10} fill="#fbbf24" color="#fbbf24" /> {previewAssignment.rider.rating}
                                 </div>
                              </div>
-                             <div style={{ flex: 1, display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.5rem' }}>
+                             <div className="ra-info-row" style={{ flex: 1, gap: '1.5rem' }}>
                                   <div>
                                       <div style={{ fontSize: '0.8rem', color: '#94a3b8', fontWeight: '500', marginBottom: '0.3rem' }}>Full Name</div>
                                       <div style={{ fontWeight: '700', fontSize: '1rem', color: '#111827' }}>{previewAssignment.rider.name}</div>
@@ -777,7 +931,7 @@ export const RideAssignment = () => {
                              </div>
                         </div>
                         {/* Row 2: Email, Phone, City */}
-                         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.5rem', paddingLeft: 'calc(64px + 1.5rem)' }}>
+                         <div className="ra-info-row ra-info-indent" style={{ gap: '1.5rem' }}>
                                <div>
                                    <div style={{ fontSize: '0.8rem', color: '#94a3b8', fontWeight: '500', marginBottom: '0.3rem' }}>Email</div>
                                    <div style={{ fontWeight: '700', fontSize: '1rem', color: '#111827' }}>{previewAssignment.rider.email}</div>
@@ -797,7 +951,7 @@ export const RideAssignment = () => {
                 {/* Driver Information */}
                 <div style={{ marginBottom: '2rem' }}>
                    <h3 style={{ fontSize: '1.4rem', fontWeight: '800', marginBottom: '1rem', color: '#111827' }}>Driver Information</h3>
-                   <div style={{ backgroundColor: 'white', padding: '1.5rem 2rem', borderRadius: '1.25rem', boxShadow: '0 1px 3px rgba(0,0,0,0.05)', border: '1px solid #f1f5f9', display: 'flex', gap: '1.5rem', alignItems: 'flex-start' }}>
+                   <div className="ra-flex-responsive" style={{ backgroundColor: 'white', padding: '1.5rem 2rem', borderRadius: '1.25rem', boxShadow: '0 1px 3px rgba(0,0,0,0.05)', border: '1px solid #f1f5f9' }}>
                         <div style={{ position: 'relative', flexShrink: 0 }}>
                            <img src={previewAssignment.driver.img} alt="" style={{ width: '64px', height: '64px', borderRadius: '50%', border: '2px solid #f1f5f9' }} />
                            <div style={{ position: 'absolute', bottom: -6, left: '50%', transform: 'translateX(-50%)', backgroundColor: 'white', padding: '0.15rem 0.5rem', borderRadius: '1rem', fontSize: '0.7rem', color: '#111827', display: 'flex', alignItems: 'center', gap: '3px', whiteSpace: 'nowrap', boxShadow: '0 2px 4px rgba(0,0,0,0.05)', border: '1px solid #f1f5f9', fontWeight: '700' }}>
@@ -805,7 +959,7 @@ export const RideAssignment = () => {
                            </div>
                         </div>
                         <div style={{ flex: 1 }}>
-                             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.5rem', marginBottom: '1.25rem' }}>
+                             <div className="ra-info-row" style={{ gap: '1.5rem', marginBottom: '1.25rem' }}>
                                   <div>
                                       <div style={{ fontSize: '0.8rem', color: '#94a3b8', fontWeight: '500', marginBottom: '0.3rem' }}>Full Name</div>
                                       <div style={{ fontWeight: '700', fontSize: '1rem', color: '#111827' }}>{previewAssignment.driver.name}</div>
@@ -821,7 +975,7 @@ export const RideAssignment = () => {
                                       <div style={{ fontWeight: '700', fontSize: '1rem', color: '#111827' }}>{previewAssignment.driver.phone}</div>
                                   </div>
                              </div>
-                             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.5rem' }}>
+                             <div className="ra-info-row" style={{ gap: '1.5rem' }}>
                                   <div>
                                       <div style={{ fontSize: '0.8rem', color: '#94a3b8', fontWeight: '500', marginBottom: '0.3rem' }}>Email</div>
                                       <div style={{ fontWeight: '700', fontSize: '1rem', color: '#111827' }}>{previewAssignment.driver.email}</div>
@@ -849,7 +1003,7 @@ export const RideAssignment = () => {
                 <div style={{ marginBottom: '2rem' }}>
                    <h3 style={{ fontSize: '1.4rem', fontWeight: '800', marginBottom: '1rem', color: '#111827' }}>Vehicle Information</h3>
                    <div style={{ backgroundColor: 'white', padding: '1.5rem 2rem', borderRadius: '1.25rem', boxShadow: '0 1px 3px rgba(0,0,0,0.05)', border: '1px solid #f1f5f9' }}>
-                       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr', gap: '1.25rem', marginBottom: '1.25rem' }}>
+                       <div className="ra-info-row" style={{ gap: '1.25rem', marginBottom: '1.25rem' }}>
                             <div>
                                <div style={{ fontSize: '0.8rem', color: '#94a3b8', fontWeight: '500', marginBottom: '0.3rem' }}>Driver ID</div>
                                <div style={{ fontWeight: '700', fontSize: '1rem', color: '#111827' }}>{previewAssignment.driver.driverId}</div>
@@ -869,7 +1023,7 @@ export const RideAssignment = () => {
                                <div style={{ fontWeight: '700', fontSize: '1rem', color: '#111827' }}>{previewAssignment.driver.makeModel}</div>
                            </div>
                        </div>
-                       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr', gap: '1.25rem' }}>
+                       <div className="ra-info-row" style={{ gap: '1.25rem' }}>
                            <div>
                                <div style={{ fontSize: '0.8rem', color: '#94a3b8', fontWeight: '500', marginBottom: '0.3rem' }}>Year</div>
                                <div style={{ fontWeight: '700', fontSize: '1rem', color: '#111827' }}>{previewAssignment.driver.year}</div>
@@ -934,7 +1088,7 @@ export const RideAssignment = () => {
                     <h3 style={{ fontSize: '1.4rem', fontWeight: '600', marginBottom: '1rem', color: '#111827' }}>Payment Information</h3>
                     <div style={{ backgroundColor: 'white', padding: '2rem', borderRadius: '1.25rem', boxShadow: '0 1px 3px rgba(0,0,0,0.05)', border: '1px solid #f1f5f9' }}>
                          {/* Driver Profile Section */}
-                         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: '2.5rem' }}>
+                         <div className="ra-flex-responsive" style={{ marginBottom: '2.5rem', justifyContent: 'center' }}>
                               <div style={{ position: 'relative' }}>
                                   <img src={previewAssignment.driver.img} alt="" style={{ width: '90px', height: '90px', borderRadius: '50%', objectFit: 'cover' }} />
                                   <div style={{ 
@@ -959,7 +1113,7 @@ export const RideAssignment = () => {
                               </div>
                          </div>
 
-                         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '1rem', alignItems: 'center', textAlign: 'left' }}>
+                                                   <div className="ra-info-row" style={{ gap: '1rem', alignItems: 'center' }}>
                               <div>
                                   <div style={{ fontSize: '0.85rem', color: '#94a3b8', fontWeight: '400', marginBottom: '0.4rem' }}>TVA</div>
                                   <div style={{ fontWeight: '600', fontSize: '1.1rem', color: '#111827' }}>{previewAssignment.payment.tva}</div>
@@ -983,7 +1137,7 @@ export const RideAssignment = () => {
                                   <div style={{ fontSize: '0.85rem', color: '#94a3b8', fontWeight: '400', marginBottom: '0.4rem' }}>Discount</div>
                                   <div style={{ fontWeight: '600', fontSize: '1.1rem', color: '#111827' }}>{previewAssignment.payment.discount}</div>
                               </div>
-                              <div style={{ textAlign: 'right' }}>
+                              <div className="ra-total-field">
                                   <div style={{ fontSize: '0.85rem', color: '#94a3b8', fontWeight: '400', marginBottom: '0.4rem' }}>Total Amount</div>
                                   <div style={{ fontWeight: '600', fontSize: '1.1rem', color: '#111827' }}>{previewAssignment.payment.total}</div>
                               </div>
@@ -992,7 +1146,7 @@ export const RideAssignment = () => {
                 </div>
 
                  {/* Cancel Button */}
-                 <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '1rem' }}>
+                                   <div className="ra-modal-footer" style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '1rem' }}>
                      {previewAssignment.status !== 'Cancelled' && (
                          <button 
                             onClick={handleCancelAssignment}

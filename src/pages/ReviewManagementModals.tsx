@@ -89,7 +89,7 @@ export const ReviewsModal = ({ isOpen, onClose, review, onUpdate, onDelete }: Re
 
   return (
     <div 
-      className="modal-overlay" 
+      className="rmo-overlay" 
       onClick={handleBackdropClick}
       style={{
         position: 'fixed',
@@ -99,80 +99,174 @@ export const ReviewsModal = ({ isOpen, onClose, review, onUpdate, onDelete }: Re
         bottom: 0,
         backgroundColor: 'rgba(0, 0, 0, 0.5)',
         display: 'flex',
-        alignItems: 'center',
+        alignItems: 'flex-start',
         justifyContent: 'center',
         zIndex: 1000,
-        backdropFilter: 'blur(4px)'
+        backdropFilter: 'blur(4px)',
+        padding: '20px',
+        overflowY: 'auto'
       }}
     >
-      <div 
-        className="modal-container"
-        style={{
-          backgroundColor: 'white',
-          borderRadius: '32px',
-          width: '90%',
-          maxWidth: '800px',
-          maxHeight: '90vh',
-          overflowY: 'auto',
-          position: 'relative',
-          padding: '2rem',
-          color: '#111827',
-          border: '1px solid #e5e7eb',
-          boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)'
-        }}
-      >
-        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1.5rem' }}>
+      <style>{`
+        .rmo-container {
+            background-color: white;
+            border-radius: 32px;
+            width: 100%;
+            max-width: 800px;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            position: relative;
+            padding: 2.5rem;
+            color: '#111827';
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            display: flex;
+            flex-direction: column;
+        }
+        .rmo-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        .rmo-tabs-wrapper {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 2.5rem;
+        }
+        .rmo-tabs {
+            background-color: #f3f4f6;
+            padding: 6px;
+            border-radius: 100px;
+            display: flex;
+            gap: 4px;
+        }
+        .rmo-tab-btn {
+            padding: 10px 30px;
+            border-radius: 100px;
+            font-size: 14px;
+            font-weight: 800;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .rmo-review-card {
+            border: 1px solid #e5e7eb;
+            border-radius: 28px;
+            padding: 1.75rem;
+            background-color: #f9fafb;
+            margin-bottom: 1.5rem;
+        }
+        .rmo-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1.25rem;
+        }
+        .rmo-user-meta {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            margin-bottom: 1.25rem;
+        }
+        .rmo-footer-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+        .rmo-action-btn {
+            flex: 1;
+            padding: 16px;
+            border-radius: 100px;
+            font-weight: 800;
+            font-size: 15px;
+            cursor: pointer;
+            transition: all 0.22s;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .rmo-tags-container {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        @media (max-width: 768px) {
+            .rmo-container {
+                padding: 1.5rem;
+                border-radius: 24px;
+            }
+            .rmo-tab-btn {
+                padding: 10px 15px;
+                flex: 1;
+            }
+            .rmo-tabs {
+                width: 100%;
+            }
+            .rmo-card-header {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+            .rmo-user-meta {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+            .rmo-footer-actions {
+                flex-direction: column;
+            }
+            .rmo-action-btn {
+                width: 100%;
+            }
+            .rmo-tags-container {
+                justify-content: center;
+            }
+        }
+      `}</style>
+      <div className="rmo-container" onClick={e => e.stopPropagation()}>
+        <div className="rmo-header">
           <button 
             onClick={onClose}
             style={{ 
                 border: 'none', 
-                background: 'none', 
+                background: '#f3f4f6', 
                 cursor: 'pointer', 
-                padding: '0.5rem',
-                borderRadius: '50%',
+                padding: '0.6rem',
+                borderRadius: '12px',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 color: '#374151'
             }}
           >
-            <ArrowLeft size={24} />
+            <ArrowLeft size={22} />
           </button>
-          <h2 style={{ fontSize: '1.5rem', fontWeight: '800', margin: 0 }}>Reviews</h2>
+          <h2 style={{ fontSize: '1.5rem', fontWeight: '900', margin: 0 }}>Review Details</h2>
         </div>
 
-        <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '2rem' }}>
-           <div style={{ backgroundColor: '#f3f4f6', padding: '6px', borderRadius: '100px', width: 'fit-content', display: 'flex' }}>
+        <div className="rmo-tabs-wrapper">
+           <div className="rmo-tabs">
               <button 
                 onClick={() => setActiveTab('Given')}
+                className="rmo-tab-btn"
                 style={{ 
-                    padding: '10px 30px', 
-                    borderRadius: '100px', 
-                    fontSize: '14px', 
-                    fontWeight: '700',
-                    border: 'none',
                     backgroundColor: activeTab === 'Given' ? 'white' : 'transparent',
-                    color: activeTab === 'Given' ? '#111827' : '#6B7280',
-                    cursor: 'pointer',
-                    boxShadow: activeTab === 'Given' ? '0 1px 3px rgba(0,0,0,0.1)' : 'none',
-                    transition: 'all 0.2s'
+                    color: activeTab === 'Given' ? '#38AC57' : '#6B7280',
+                    boxShadow: activeTab === 'Given' ? '0 4px 6px -1px rgba(0,0,0,0.1)' : 'none',
                 }}
               >
                 Ratings Given
               </button>
               <button 
                 onClick={() => setActiveTab('Received')}
+                className="rmo-tab-btn"
                 style={{ 
-                    padding: '10px 30px', 
-                    borderRadius: '100px', 
-                    fontSize: '14px', 
-                    fontWeight: '700',
-                    border: 'none',
                     backgroundColor: activeTab === 'Received' ? 'white' : 'transparent',
-                    color: activeTab === 'Received' ? '#111827' : '#6B7280',
-                    cursor: 'pointer',
-                    boxShadow: activeTab === 'Received' ? '0 1px 3px rgba(0,0,0,0.1)' : 'none',
-                    transition: 'all 0.2s'
+                    color: activeTab === 'Received' ? '#38AC57' : '#6B7280',
+                    boxShadow: activeTab === 'Received' ? '0 4px 6px -1px rgba(0,0,0,0.1)' : 'none',
                 }}
               >
                 Ratings Received
@@ -180,39 +274,31 @@ export const ReviewsModal = ({ isOpen, onClose, review, onUpdate, onDelete }: Re
            </div>
         </div>
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', marginBottom: '2rem' }}>
+        <div style={{ display: 'flex', flexDirection: 'column' }}>
            {currentList.map((item, idx) => (
-               <div 
-                 key={idx}
-                 style={{ 
-                     border: '1px solid #e5e7eb', 
-                     borderRadius: '24px', 
-                     padding: '1.5rem',
-                     backgroundColor: '#f9fafb'
-                 }}
-               >
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1rem' }}>
+               <div key={idx} className="rmo-review-card">
+                  <div className="rmo-card-header">
                      <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
                         {[...Array(5)].map((_, i) => (
                             <Star key={i} size={18} fill={i < item.rating ? "#FBBF24" : "none"} color="#FBBF24" />
                         ))}
-                        <span style={{ marginLeft: '8px', fontWeight: '800', fontSize: '16px', color: '#111827' }}>{item.rating.toFixed(1)}</span>
+                        <span style={{ marginLeft: '8px', fontWeight: '900', fontSize: '18px', color: '#111827' }}>{item.rating.toFixed(1)}</span>
                      </div>
-                     <div style={{ width: '20px', height: '20px', borderRadius: '50%', border: '2px solid #38AC57', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                     <div style={{ width: '22px', height: '22px', borderRadius: '50%', border: '2px solid #38AC57', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                         <div style={{ width: '12px', height: '12px', borderRadius: '50%', backgroundColor: '#38AC57' }}></div>
                      </div>
                   </div>
 
-                  <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', marginBottom: '1rem' }}>
-                     <img src={item.avatar} alt="" style={{ width: '48px', height: '48px', borderRadius: '50%', objectFit: 'cover' }} />
+                  <div className="rmo-user-meta">
+                     <img src={item.avatar} alt="" style={{ width: '56px', height: '56px', borderRadius: '50%', objectFit: 'cover', border: '3px solid white', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.1)' }} />
                      <div style={{ flex: 1 }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                           <span style={{ fontWeight: '800', fontSize: '15px' }}>{item.userName}</span>
-                           <span style={{ fontSize: '11px', color: '#38AC57', backgroundColor: '#eef7f0', padding: '2px 8px', borderRadius: '6px', fontWeight: '700' }}>{item.userType}</span>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+                           <span style={{ fontWeight: '800', fontSize: '16px' }}>{item.userName}</span>
+                           <span style={{ fontSize: '10px', color: '#38AC57', backgroundColor: '#eef7f0', padding: '2px 10px', borderRadius: '8px', fontWeight: '800', textTransform: 'uppercase' }}>{item.userType}</span>
                         </div>
-                        <span style={{ fontSize: '12px', color: '#6B7280' }}>{item.date}</span>
+                        <span style={{ fontSize: '12px', color: '#9CA3AF', fontWeight: '600' }}>{item.date}</span>
                      </div>
-                     <div style={{ backgroundColor: '#38AC57', color: 'white', padding: '6px 16px', borderRadius: '100px', fontSize: '12px', fontWeight: '700' }}>
+                     <div style={{ backgroundColor: '#38AC57', color: 'white', padding: '6px 20px', borderRadius: '100px', fontSize: '12px', fontWeight: '800' }}>
                         {item.status}
                      </div>
                   </div>
@@ -221,17 +307,18 @@ export const ReviewsModal = ({ isOpen, onClose, review, onUpdate, onDelete }: Re
                       <textarea 
                         value={editComment}
                         onChange={(e) => setEditComment(e.target.value)}
-                        style={{ width: '100%', backgroundColor: 'white', border: '1px solid #d1d5db', color: '#111827', borderRadius: '12px', padding: '1rem', fontSize: '14px', minHeight: '100px', marginBottom: '1rem', outline: 'none' }}
+                        placeholder="Update review comment..."
+                        style={{ width: '100%', backgroundColor: 'white', border: '1px solid #e5e7eb', color: '#111827', borderRadius: '16px', padding: '1.25rem', fontSize: '14px', minHeight: '120px', marginBottom: '1.5rem', outline: 'none', lineHeight: '1.6' }}
                       />
                   ) : (
-                      <p style={{ margin: '0 0 1.5rem 0', color: '#4B5563', fontSize: '14px', lineHeight: '1.6' }}>
+                      <p style={{ margin: '0 0 1.5rem 0', color: '#4B5563', fontSize: '14px', lineHeight: '1.7', fontWeight: '500' }}>
                          {item.comment}
                       </p>
                   )}
 
-                  <div style={{ display: 'flex', gap: '0.75rem' }}>
+                  <div className="rmo-tags-container">
                     {item.tags.map((tag: string, tIdx: number) => (
-                        <span key={tIdx} style={{ backgroundColor: '#38AC57', color: 'white', padding: '6px 14px', borderRadius: '8px', fontSize: '12px', fontWeight: '700' }}>
+                        <span key={tIdx} style={{ backgroundColor: '#fff', color: '#38AC57', border: '1px solid #38AC57', padding: '6px 14px', borderRadius: '10px', fontSize: '12px', fontWeight: '800' }}>
                            {tag}
                         </span>
                     ))}
@@ -240,77 +327,50 @@ export const ReviewsModal = ({ isOpen, onClose, review, onUpdate, onDelete }: Re
            ))}
         </div>
 
-        <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', marginTop: '1rem' }}>
+        <div className="rmo-footer-actions">
            <button 
              onClick={handleFlagToggle}
+             className="rmo-action-btn"
              style={{ 
-                flex: 1, 
                 backgroundColor: 'white', 
-                border: '1px solid #e5e7eb', 
-                padding: '16px', 
-                borderRadius: '100px', 
-                fontWeight: 'bold', 
-                fontSize: '16px',
-                cursor: 'pointer',
+                border: '2px solid #e5e7eb', 
                 color: '#374151',
-                transition: 'all 0.2s'
              }}
            >
-             {review.isFlagged ? 'Unflagged' : 'Flagged'}
+             {review.isFlagged ? 'Unflag Review' : 'Flag Review'}
            </button>
            {isEditing ? (
                <button 
                  onClick={handleSaveEdit}
+                 className="rmo-action-btn"
                  style={{ 
-                    flex: 1, 
                     backgroundColor: '#38AC57', 
                     color: 'white', 
-                    border: 'none', 
-                    padding: '16px', 
-                    borderRadius: '100px', 
-                    fontWeight: 'bold', 
-                    fontSize: '16px',
-                    cursor: 'pointer',
-                    transition: 'all 0.2s'
                  }}
                >
-                 Save
+                 Save Changes
                </button>
            ) : (
                <button 
                  onClick={() => setIsEditing(true)}
+                 className="rmo-action-btn"
                  style={{ 
-                    flex: 1, 
                     backgroundColor: '#111827', 
                     color: 'white', 
-                    border: 'none', 
-                    padding: '16px', 
-                    borderRadius: '100px', 
-                    fontWeight: 'bold', 
-                    fontSize: '16px',
-                    cursor: 'pointer',
-                    transition: 'all 0.2s'
                  }}
                >
-                 Edit
+                 Edit Review
                </button>
            )}
            <button 
              onClick={() => setShowDeleteConfirm(true)}
+             className="rmo-action-btn"
              style={{ 
-                flex: 1, 
-                backgroundColor: '#DC2626', 
+                backgroundColor: '#EF4444', 
                 color: 'white', 
-                border: 'none', 
-                padding: '16px', 
-                borderRadius: '100px', 
-                fontWeight: 'bold', 
-                fontSize: '16px',
-                cursor: 'pointer',
-                transition: 'all 0.2s'
              }}
            >
-             Delete
+             Delete Permanently
            </button>
         </div>
 
@@ -322,9 +382,11 @@ export const ReviewsModal = ({ isOpen, onClose, review, onUpdate, onDelete }: Re
                <span style={{ fontWeight: '700', fontSize: '16px' }}>Review has been deleted</span>
                <button 
                   onClick={() => {
-                      onDelete(review.id);
-                      setShowDeleteConfirm(false);
-                      onClose();
+                      if (review) {
+                        onDelete(review.id);
+                        setShowDeleteConfirm(false);
+                        onClose();
+                      }
                   }}
                   style={{ border: 'none', background: 'none', cursor: 'pointer', fontWeight: '800', color: '#38AC57', fontSize: '14px', marginLeft: '1rem' }}
                >

@@ -14,21 +14,85 @@ export const Profile = () => {
   ];
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+    <div className="profile-page-container" style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+      <style dangerouslySetInnerHTML={{ __html: `
+        @media (max-width: 1024px) {
+           .profile-header-content {
+             flex-direction: column !important;
+             align-items: center !important;
+             text-align: center;
+           }
+           .profile-info-main {
+             flex-direction: column !important;
+             gap: 1rem !important;
+             margin-top: -3rem !important;
+           }
+           .profile-name-status {
+             margin-top: 1rem !important;
+           }
+           .logout-btn-wrapper {
+             margin-top: 1.5rem !important;
+             width: 100%;
+             display: flex;
+             justify-content: center;
+           }
+           .profile-tabs-wrapper {
+             padding: 0 1rem !important;
+           }
+           .profile-content-wrapper {
+             padding: 0 1rem 2rem 1rem !important;
+           }
+        }
+        @media (max-width: 640px) {
+           .profile-img {
+             width: 120px !important;
+             height: 120px !important;
+           }
+           .profile-name-status h1 {
+             font-size: 1.75rem !important;
+           }
+           .profile-tabs-container {
+             border-radius: 1.5rem !important;
+           }
+           .profile-tabs-container button {
+             padding: 0.6rem 1.25rem !important;
+             font-size: 0.9rem !important;
+           }
+           .edit-profile-grid {
+             grid-template-columns: 1fr !important;
+             gap: 1.25rem !important;
+           }
+           .location-timezone-flex {
+             flex-direction: column !important;
+           }
+           .location-input-wrapper, .timezone-input-wrapper {
+             flex: 1 !important;
+             width: 100% !important;
+             min-width: 0 !important;
+           }
+           .profile-header-outer {
+             padding: 0 1rem !important;
+           }
+           .profile-cover {
+             height: 150px !important;
+           }
+        }
+      `}} />
       
       {/* Header Profile Section */}
       <div className="card" style={{ padding: 0, overflow: 'visible', position: 'relative', border: 'none', boxShadow: 'none', backgroundColor: 'transparent' }}>
           {/* Cover Image */}
-          <div style={{ height: '200px', backgroundColor: '#38AC57', width: '100%', borderRadius: '1rem' }}></div>
+          <div className="profile-cover" style={{ height: '200px', backgroundColor: '#38AC57', width: '100%', borderRadius: '1rem' }}></div>
           
-          <div style={{ padding: '0 2rem', position: 'relative' }}>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '-4rem' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '2rem' }}>
+          <div className="profile-header-outer" style={{ padding: '0 2rem', position: 'relative' }}>
+              <div className="profile-header-content" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '-4rem' }}>
+                <div className="profile-info-main" style={{ display: 'flex', alignItems: 'center', gap: '2rem' }}>
                     {/* Profile Image with Camera Icon */}
                     <div style={{ position: 'relative' }}>
                         <img 
                             src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" 
                             alt="Profile" 
+                            className="profile-img"
                             style={{ width: '160px', height: '160px', borderRadius: '50%', border: '6px solid white', objectFit: 'cover' }}
                         />
                         <button style={{ 
@@ -48,9 +112,9 @@ export const Profile = () => {
                             <Camera size={20} />
                         </button>
                     </div>
-
+ 
                     {/* Name and Status */}
-                    <div style={{ marginTop: '4rem' }}>
+                    <div className="profile-name-status" style={{ marginTop: '4rem' }}>
                         <h1 style={{ fontSize: '2.25rem', fontWeight: '800', margin: '0 0 0.5rem 0', color: '#111827' }}>Paityn Calzo</h1>
                         <div style={{ 
                             display: 'flex', 
@@ -61,15 +125,16 @@ export const Profile = () => {
                             borderRadius: '2rem', 
                             width: 'fit-content',
                             cursor: 'pointer',
-                            border: '1px solid #eef7f0'
+                            border: '1px solid #eef7f0',
+                            margin: '0 auto' // Center on mobile if text-align is center
                         }}>
                             <span style={{ height: '10px', width: '10px', backgroundColor: '#38AC57', borderRadius: '50%' }}></span>
                             <span style={{ color: '#2d8a46', fontSize: '1rem', fontWeight: '700' }}>Available ⌄</span>
                         </div>
                     </div>
                 </div>
-
-                <div style={{ marginTop: '4rem' }}>
+ 
+                <div className="logout-btn-wrapper" style={{ marginTop: '4rem' }}>
                     <button style={{ 
                         display: 'flex', 
                         alignItems: 'center', 
@@ -93,12 +158,12 @@ export const Profile = () => {
               </div>
           </div>
       </div>
-
+ 
       <hr style={{ border: 'none', borderTop: '1px solid #e5e7eb', margin: '0 2rem' }} />
-
+ 
       {/* Tabs Container */}
-      <div style={{ padding: '0 2rem' }}>
-          <div className="card" style={{ 
+      <div className="profile-tabs-wrapper" style={{ padding: '0 2rem' }}>
+          <div className="profile-tabs-container card" style={{ 
               display: 'flex', 
               gap: '0.5rem', 
               padding: '0.5rem', 
@@ -130,9 +195,9 @@ export const Profile = () => {
               ))}
           </div>
       </div>
-
+ 
       {/* Tab Content */}
-      <div style={{ padding: '0 2rem 2rem 2rem' }}>
+      <div className="profile-content-wrapper" style={{ padding: '0 2rem 2rem 2rem' }}>
           {activeTab === 'edit-profile' && <EditProfileForm />}
           {activeTab === 'change-password' && <ChangePasswordForm />}
           {activeTab === 'login-history' && <LoginHistory />}
@@ -178,7 +243,7 @@ const EditProfileForm = () => {
 
     return (
         <form onSubmit={handleSubmit} style={{ position: 'relative' }}>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem 2rem' }}>
+            <div className="edit-profile-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem 2rem' }}>
                 <FormGroup label="Full Name" value="Paityn Calzo" />
                 <FormGroup label="Department" value="Product Design" />
                 <FormGroup label="Direct Manager" value="Michael Torres" />
@@ -196,11 +261,11 @@ const EditProfileForm = () => {
                 {/* Location & Timezone Split */}
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                      <label style={{ display: 'block', fontWeight: 'bold', fontSize: '0.9rem', color: '#374151' }}>Location & Time Zone</label>
-                     <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
-                        <div style={{ flex: '2', minWidth: '200px' }}>
+                     <div className="location-timezone-flex" style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+                        <div className="location-input-wrapper" style={{ flex: '2', minWidth: '200px' }}>
                              <input type="text" defaultValue="Hybrid · San Francisco HQ" style={inputStyle} />
                         </div>
-                        <div style={{ flex: '1', minWidth: '150px' }}>
+                        <div className="timezone-input-wrapper" style={{ flex: '1', minWidth: '150px' }}>
                              <TimezoneSelect />
                         </div>
                      </div>
