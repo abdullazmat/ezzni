@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import logo from '../assets/Logo.png';
+import { forgotPasswordApi } from '../services/api';
 
 interface ForgotPasswordProps {
   onBackToLogin: () => void;
@@ -9,17 +10,33 @@ export const ForgotPassword = ({ onBackToLogin }: ForgotPasswordProps) => {
   const [email, setEmail] = useState('');
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email || !/\S+@\S+\.\S+/.test(email)) {
       setError('Please enter a valid email address');
       return;
     }
     
-    // Simulate API call
+    setIsLoading(true);
     setError('');
-    setIsSubmitted(true);
+
+    try {
+      const result = await forgotPasswordApi({ email });
+
+      if (!result.ok) {
+        const errorMsg = result.data?.message || 'Failed to send reset link. Please try again.';
+        throw new Error(errorMsg);
+      }
+
+      setIsSubmitted(true);
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'An error occurred. Please try again.';
+      setError(message);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -61,6 +78,7 @@ export const ForgotPassword = ({ onBackToLogin }: ForgotPasswordProps) => {
 
           <button
             type="submit"
+            disabled={isLoading}
             style={{
               backgroundColor: '#38AC57',
               color: 'white',
@@ -69,7 +87,8 @@ export const ForgotPassword = ({ onBackToLogin }: ForgotPasswordProps) => {
               border: 'none',
               fontSize: '1rem',
               fontWeight: '700',
-              cursor: 'pointer',
+              cursor: isLoading ? 'not-allowed' : 'pointer',
+              opacity: isLoading ? 0.7 : 1,
               marginTop: '1.5rem',
               boxShadow: '0 4px 6px -1px rgba(56, 172, 87, 0.2)',
               transition: 'background-color 0.2s'
@@ -77,7 +96,7 @@ export const ForgotPassword = ({ onBackToLogin }: ForgotPasswordProps) => {
             onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#2d8a46'}
             onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#38AC57'}
           >
-            Send Reset Link
+            {isLoading ? 'Sending...' : 'Send Reset Link'}
           </button>
         </form>
 

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import loginImage from '../assets/login_page.jpg';
 import logo from '../assets/Logo.png';
+import { loginApi } from '../services/api';
 
 interface LoginProps {
   onLogin: () => void;
@@ -9,7 +10,7 @@ interface LoginProps {
 
 export const Login = ({ onLogin, onForgotPassword }: LoginProps) => {
   const [email, setEmail] = useState('admin@hezzni.com');
-  const [password, setPassword] = useState('admin123');
+  const [password, setPassword] = useState('Admin@123');
   const [errors, setErrors] = useState({ email: '', password: '' });
   const [isLoading, setIsLoading] = useState(false);
 
@@ -41,37 +42,23 @@ export const Login = ({ onLogin, onForgotPassword }: LoginProps) => {
     e.preventDefault();
     if (validate()) {
       setIsLoading(true);
-      // Hardcoded check for demo purposes (Vercel deployment)
-      if (email === 'admin@hezzni.com' && password === 'admin123') {
-        localStorage.setItem('token', 'demo-token');
-        localStorage.setItem('user', JSON.stringify({ name: 'Admin User', email: 'admin@hezzni.com' }));
-        onLogin();
-        setIsLoading(false);
-        return;
-      }
 
       try {
-        const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/auth/login`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ email, password }),
-        });
+        const result = await loginApi({ email, password });
 
-        const data = await response.json();
-
-        if (!response.ok) {
-          throw new Error(data.message || 'Login failed');
+        if (!result.ok) {
+          const errorMsg = result.data?.message || 'Login failed. Please check your credentials.';
+          throw new Error(errorMsg);
         }
 
-        // Store token and user data
-        localStorage.setItem('token', data.token);
-        localStorage.setItem('user', JSON.stringify(data.user));
+        // Store token and user data from API response
+        localStorage.setItem('token', result.data.token);
+        localStorage.setItem('user', JSON.stringify(result.data.user));
         
         onLogin();
-      } catch (err: any) {
-        setErrors({ ...errors, email: err.message || 'An error occurred' });
+      } catch (err: unknown) {
+        const message = err instanceof Error ? err.message : 'An error occurred. Please try again.';
+        setErrors({ email: message, password: '' });
       } finally {
         setIsLoading(false);
       }

@@ -1,16 +1,9 @@
 import { useState, useMemo, useEffect, useRef } from 'react';
 import { 
-  Search, 
-  Download, 
-  Filter, 
-  Eye, 
-  MessageSquare, 
-  MoreVertical,
-  Paperclip,
-  Smile,
-  Send,
-  ArrowUpRight,
+    Search, Download, Eye, MessageSquare, MoreVertical,
+    Paperclip, Smile, Send, ArrowUpRight, X
 } from 'lucide-react';
+import { UserAvatar } from '../components/UserAvatar';
 import { ComplaintDetailsModal } from './SupportModals';
 
 // Specialized Icons
@@ -141,7 +134,7 @@ export const Support = () => {
   const [filterStats, setFilterStats] = useState<string>('all');
   const [ticketSearchQuery, setTicketSearchQuery] = useState('');
   const [chatSearchQuery, setChatSearchQuery] = useState('');
-  
+
   const [dropdownStatus, setDropdownStatus] = useState('All Status');
   const [dropdownUser, setDropdownUser] = useState('All Users');
   const [dropdownCategory, setDropdownCategory] = useState('All Categories');
@@ -169,11 +162,11 @@ export const Support = () => {
 
   const filteredTickets = useMemo(() => {
     return complaints.filter(c => {
-      const matchesStats = filterStats === 'all' || 
+      const matchesStats = filterStats === 'all' ||
         (filterStats === 'open' && (c.status === 'New' || c.status === 'Pending')) ||
         (filterStats === 'in-progress' && c.status === 'In Progress') ||
         (filterStats === 'resolved' && (c.status === 'Resolved' || c.status === 'Closed'));
-      
+
       const matchesDropdownStatus = dropdownStatus === 'All Status' || c.status === dropdownStatus;
       const matchesDropdownUser = dropdownUser === 'All Users' || c.user.type.toLowerCase() === dropdownUser.toLowerCase();
       const matchesDropdownCategory = dropdownCategory === 'All Categories' || c.category === dropdownCategory;
@@ -181,20 +174,20 @@ export const Support = () => {
       const matchesSearch = c.ticketId.toLowerCase().includes(ticketSearchQuery.toLowerCase()) ||
                            c.user.name.toLowerCase().includes(ticketSearchQuery.toLowerCase()) ||
                            c.category.toLowerCase().includes(ticketSearchQuery.toLowerCase());
-      
+
       return matchesStats && matchesDropdownStatus && matchesDropdownUser && matchesDropdownCategory && matchesSearch;
     });
   }, [complaints, filterStats, ticketSearchQuery, dropdownStatus, dropdownUser, dropdownCategory]);
 
   const filteredChatSidebar = useMemo(() => {
-    return complaints.filter(c => 
+    return complaints.filter(c =>
       c.user.name.toLowerCase().includes(chatSearchQuery.toLowerCase()) ||
       c.ticketId.toLowerCase().includes(chatSearchQuery.toLowerCase()) ||
       c.user.id.toLowerCase().includes(chatSearchQuery.toLowerCase())
     );
   }, [complaints, chatSearchQuery]);
 
-  const activeChat = useMemo(() => 
+  const activeChat = useMemo(() =>
     complaints.find(c => c.id === selectedChatId) || null
   , [complaints, selectedChatId]);
 
@@ -221,7 +214,7 @@ export const Support = () => {
       time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false })
     };
 
-    setComplaints(prev => prev.map(c => 
+    setComplaints(prev => prev.map(c =>
       c.id === selectedChatId ? { ...c, messages: [...c.messages, newMessage] } : c
     ));
     setChatInput('');
@@ -243,11 +236,11 @@ export const Support = () => {
   const renderTicketsTab = () => (
     <>
       <div className="cs-stats-grid">
-        <div 
+        <div
           className={`stat-card ${filterStats === 'all' ? 'active' : ''}`}
           onClick={() => setFilterStats('all')}
-          style={{ 
-            cursor: 'pointer', 
+          style={{
+            cursor: 'pointer',
             border: filterStats === 'all' ? '2px solid #38AC57' : '1px solid #e5e7eb',
             backgroundColor: filterStats === 'all' ? '#eef7f0' : 'white'
           }}
@@ -266,13 +259,13 @@ export const Support = () => {
           </div>
         </div>
 
-        <div 
+        <div
           className={`stat-card ${filterStats === 'open' ? 'active' : ''}`}
           onClick={() => setFilterStats('open')}
-          style={{ 
-            cursor: 'pointer', 
-            backgroundColor: filterStats === 'open' ? '#38AC57' : 'white', 
-            border: filterStats === 'open' ? 'none' : '1px solid #e5e7eb' 
+          style={{
+            cursor: 'pointer',
+            backgroundColor: filterStats === 'open' ? '#38AC57' : 'white',
+            border: filterStats === 'open' ? 'none' : '1px solid #e5e7eb'
           }}
         >
           <div className="stat-header">
@@ -289,11 +282,11 @@ export const Support = () => {
           </div>
         </div>
 
-        <div 
+        <div
           className={`stat-card ${filterStats === 'in-progress' ? 'active' : ''}`}
           onClick={() => setFilterStats('in-progress')}
-          style={{ 
-            cursor: 'pointer', 
+          style={{
+            cursor: 'pointer',
             border: filterStats === 'in-progress' ? '2px solid #38AC57' : '1px solid #e5e7eb',
             backgroundColor: filterStats === 'in-progress' ? '#eef7f0' : 'white'
           }}
@@ -312,11 +305,11 @@ export const Support = () => {
           </div>
         </div>
 
-        <div 
+        <div
           className={`stat-card ${filterStats === 'resolved' ? 'active' : ''}`}
           onClick={() => setFilterStats('resolved')}
-          style={{ 
-            cursor: 'pointer', 
+          style={{
+            cursor: 'pointer',
             border: filterStats === 'resolved' ? '2px solid #38AC57' : '1px solid #e5e7eb',
             backgroundColor: filterStats === 'resolved' ? '#eef7f0' : 'white'
           }}
@@ -339,17 +332,17 @@ export const Support = () => {
       <div className="cs-filters-container">
         <div className="cs-search-wrapper">
           <Search size={20} color="#9CA3AF" />
-          <input 
-            type="text" 
-            placeholder="Search by ID, Name or Category..." 
+          <input
+            type="text"
+            placeholder="Search by ID, Name or Category..."
             value={ticketSearchQuery}
             onChange={(e) => setTicketSearchQuery(e.target.value)}
           />
         </div>
         <div className="cs-filter-group">
-          <select 
-            className="cs-filter-select" 
-            value={dropdownStatus} 
+          <select
+            className="cs-filter-select"
+            value={dropdownStatus}
             onChange={(e) => setDropdownStatus(e.target.value)}
           >
             <option>All Status</option>
@@ -361,18 +354,18 @@ export const Support = () => {
             <option value="Resolved">Resolved</option>
             <option value="Closed">Closed</option>
           </select>
-          <select 
-            className="cs-filter-select" 
-            value={dropdownUser} 
+          <select
+            className="cs-filter-select"
+            value={dropdownUser}
             onChange={(e) => setDropdownUser(e.target.value)}
           >
             <option>All Users</option>
             <option value="Passenger">Passenger</option>
             <option value="Driver">Driver</option>
           </select>
-          <select 
-            className="cs-filter-select" 
-            value={dropdownCategory} 
+          <select
+            className="cs-filter-select"
+            value={dropdownCategory}
             onChange={(e) => setDropdownCategory(e.target.value)}
           >
             <option>All Categories</option>
@@ -384,8 +377,8 @@ export const Support = () => {
             <option value="App Issue">App Issue</option>
             <option value="Other">Other</option>
           </select>
-          <button className="filter-btn" style={{ padding: '10px 16px', borderRadius: '12px', display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', backgroundColor: 'white', border: '1px solid #e5e7eb', fontSize: '13px', fontWeight: '600' }} onClick={clearFilters}>
-            <Filter size={18} />
+          <button className="filter-btn cs-filter-select" style={{ display: 'flex', alignItems: 'center', gap: '8px' }} onClick={clearFilters}>
+            <X size={18} />
             Clear
           </button>
         </div>
@@ -411,7 +404,7 @@ export const Support = () => {
                 <td>
                   <div className="flex items-center gap-3">
                     <div className="relative" style={{ flexShrink: 0 }}>
-                      <img src={item.user.avatar} style={{ width: '40px', height: '40px', borderRadius: '50%', objectFit: 'cover' }} alt="" />
+                      <UserAvatar src={item.user.avatar} size={40} rating={4.8} showBadge={true} />
                     </div>
                     <div>
                       <div style={{ fontWeight: '700', fontSize: '13px' }}>{item.user.name}</div>
@@ -430,8 +423,8 @@ export const Support = () => {
                 </td>
                 <td style={{ textAlign: 'center' }}>
                   <div style={{ display: 'flex', justifyContent: 'center' }}>
-                    <span 
-                      style={{ 
+                    <span
+                      style={{
                         ...getStatusStyle(item.status),
                         padding: '6px 12px',
                         borderRadius: '8px',
@@ -448,18 +441,18 @@ export const Support = () => {
                 <td style={{ fontSize: '13px', color: '#4B5563' }}>{item.dateTime}</td>
                 <td style={{ fontSize: '13px', color: '#4B5563' }}>{item.assignedTo}</td>
                 <td style={{ textAlign: 'right' }}>
-                   <button 
+                   <button
                     onClick={() => {
                         setSelectedComplaint(item);
                         setIsModalOpen(true);
                     }}
-                    style={{ 
-                      display: 'inline-flex', 
-                      alignItems: 'center', 
-                      gap: '6px', 
-                      border: '1px solid #e5e7eb', 
-                      borderRadius: '8px', 
-                      padding: '6px 12px', 
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '6px',
+                      border: '1px solid #e5e7eb',
+                      borderRadius: '8px',
+                      padding: '6px 12px',
                       fontSize: '13px',
                       cursor: 'pointer',
                       backgroundColor: 'white'
@@ -488,9 +481,9 @@ export const Support = () => {
         <div style={{ padding: '1.5rem', borderBottom: '1px solid #f3f4f6' }}>
           <div className="cs-search-wrapper" style={{ minWidth: '100%', margin: 0 }}>
             <Search size={20} color="#9CA3AF" />
-            <input 
-              type="text" 
-              placeholder="Search conversations..." 
+            <input
+              type="text"
+              placeholder="Search conversations..."
               value={chatSearchQuery}
               onChange={(e) => setChatSearchQuery(e.target.value)}
             />
@@ -498,12 +491,12 @@ export const Support = () => {
         </div>
         <div style={{ flex: 1, overflowY: 'auto' }}>
           {filteredChatSidebar.map(complaint => (
-            <div 
+            <div
               key={complaint.id}
               onClick={() => setSelectedChatId(complaint.id)}
-              style={{ 
-                padding: '1.25rem 1.5rem', 
-                borderBottom: '1px solid #f3f4f6', 
+              style={{
+                padding: '1.25rem 1.5rem',
+                borderBottom: '1px solid #f3f4f6',
                 cursor: 'pointer',
                 backgroundColor: selectedChatId === complaint.id ? '#eef7f0' : 'transparent',
                 display: 'flex',
@@ -512,8 +505,7 @@ export const Support = () => {
               }}
             >
               <div className="relative" style={{ flexShrink: 0 }}>
-                <img src={complaint.user.avatar} style={{ width: '48px', height: '48px', borderRadius: '50%', objectFit: 'cover' }} alt="" />
-                <div style={{ position: 'absolute', bottom: '2px', right: '2px', width: '12px', height: '12px', backgroundColor: '#38AC57', borderRadius: '50%', border: '2px solid white' }}></div>
+                <UserAvatar src={complaint.user.avatar} size={48} rating={4.8} showBadge={true} />
               </div>
               <div style={{ flex: 1, minWidth: 0 }}>
                 <div className="flex justify-between" style={{ marginBottom: '4px' }}>
@@ -542,11 +534,10 @@ export const Support = () => {
              <div className="flex h-full" style={{ flexDirection: 'column' }}>
                  {/* Chat Header */}
                 <div className="flex items-center gap-3" style={{ padding: '1rem 1.5rem', borderBottom: '1px solid #f3f4f6' }}>
-                    <img src={activeChat.user.avatar} alt="" style={{ width: '40px', height: '40px', borderRadius: '50%', objectFit: 'cover' }} />
+                    <UserAvatar src={activeChat.user.avatar} size={40} rating={4.8} showBadge={true} />
                     <div style={{ flex: 1 }}>
                         <div className="flex items-center gap-2">
                           <h4 style={{ margin: 0, fontSize: '15px', fontWeight: 'bold' }}>{activeChat.user.name}</h4>
-                          <div style={{ width: '10px', height: '10px', backgroundColor: '#38AC57', borderRadius: '50%', border: '2px solid white' }}></div>
                         </div>
                         <p style={{ margin: 0, fontSize: '11px', color: '#6B7280' }}>{activeChat.user.type}</p>
                     </div>
@@ -652,6 +643,13 @@ export const Support = () => {
             flex: 1;
             min-width: 300px;
         }
+        .cs-search-wrapper svg {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 1;
+        }
         .cs-search-wrapper input {
             width: 100%;
             padding: 12px 16px 12px 48px;
@@ -659,6 +657,12 @@ export const Support = () => {
             border: 1px solid #e5e7eb;
             outline: none;
             font-size: 14px;
+            transition: all 0.2s ease;
+            background-color: white;
+        }
+        .cs-search-wrapper input:focus {
+            border-color: #38AC57;
+            box-shadow: 0 0 0 4px rgba(56, 172, 87, 0.1);
         }
         .cs-sidebar {
             width: 380px;
@@ -682,6 +686,22 @@ export const Support = () => {
             width: 100%;
             overflow-x: auto;
             border-radius: 12px;
+            background-color: white;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .cs-table-container::-webkit-scrollbar {
+            height: 8px;
+        }
+        .cs-table-container::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+        .cs-table-container::-webkit-scrollbar-thumb {
+            background: #d1d5db;
+            border-radius: 10px;
+        }
+        .cs-table-container::-webkit-scrollbar-thumb:hover {
+            background: #9ca3af;
         }
         .cs-table {
             width: 100%;
@@ -693,6 +713,27 @@ export const Support = () => {
             color: white;
             padding: 16px;
             text-align: left;
+            font-size: 13px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .cs-table td {
+            padding: 16px;
+            border-bottom: 1px solid #f3f4f6;
+            background-color: white;
+        }
+        .cs-table tr:last-child td {
+            border-bottom: none;
+        }
+        .cs-table tr:hover td {
+            background-color: #f9fafb;
+        }
+        .cs-table th:first-child {
+            border-top-left-radius: 12px;
+        }
+        .cs-table th:last-child {
+            border-top-right-radius: 12px;
         }
         .cs-filter-group {
             display: flex;
@@ -706,6 +747,18 @@ export const Support = () => {
             background-color: white;
             font-size: 13px;
             font-weight: 600;
+            outline: none;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            min-width: 140px;
+        }
+        .cs-filter-select:focus {
+            border-color: #38AC57;
+            box-shadow: 0 0 0 4px rgba(56, 172, 87, 0.1);
+        }
+        .filter-btn:hover {
+            background-color: #f9fafb !important;
+            border-color: #d1d5db !important;
         }
 
         @media (max-width: 1024px) {

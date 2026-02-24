@@ -2,6 +2,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { Search, Eye, ArrowUpRight, ChevronDown, Plus } from 'lucide-react';
 import { ApplicationReviewModal } from './DriverDocumentsModals';
+import { UserAvatar } from '../components/UserAvatar';
 
 // Specialized Icons
 import driverDocumentsIcon from '../assets/icons/Driver Documents.png';
@@ -339,7 +340,7 @@ export const DriverDocuments = () => {
                         <div key={idx} className="dd-table-row">
                             <div style={{ fontWeight: '600', fontSize: '14px' }}>{doc.driverId}</div>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                                <img src={doc.avatar} style={{ width: '36px', height: '36px', borderRadius: '50%' }} alt="" />
+                                <UserAvatar src={doc.avatar} size={36} rating={4.8} showBadge={true} />
                                 <div>
                                     <div style={{ fontWeight: '600', fontSize: '14px' }}>{doc.driverName}</div>
                                     <div style={{ fontSize: '11px', color: '#9ca3af' }}>Casablanca-Settat</div>

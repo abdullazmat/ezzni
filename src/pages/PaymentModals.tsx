@@ -1,4 +1,5 @@
 import { ArrowLeft, X } from 'lucide-react';
+import { UserAvatar } from '../components/UserAvatar';
 
 // Specialized Icons
 import mastercardIcon from '../assets/icons/mastercard.png';
@@ -218,12 +219,9 @@ export const TransactionHistoryModal = ({ onClose, transaction, onProcessRefund 
                     <h3 style={{ fontSize: '1rem', fontWeight: '700', margin: '0 0 1rem 0' }}>User Information</h3>
                     
                     <div className="pmo-history-user-info" style={{ marginBottom: '1.5rem' }}>
-                         <div style={{ position: 'relative', flexShrink: 0 }}>
-                             <img src={transaction.riderAvatar} alt={transaction.rider} style={{ width: 64, height: 64, borderRadius: '50%' }} />
-                             <div style={{ position: 'absolute', bottom: -5, left: '50%', transform: 'translateX(-50%)', backgroundColor: 'white', padding: '0.1rem 0.4rem', borderRadius: '0.5rem', fontSize: '0.65rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '2px', border: '1px solid #e5e7eb' }}>
-                                 <span style={{color:'#fbbf24'}}>★</span> 4.8
-                             </div>
-                         </div>
+                          <div style={{ position: 'relative', flexShrink: 0 }}>
+                              <UserAvatar src={transaction.riderAvatar} size={64} rating={4.8} />
+                          </div>
                          <div className="pmo-user-details-grid">
                             <div>
                                 <div style={{ fontSize: '0.7rem', color: '#6b7280' }}>Full Name</div>

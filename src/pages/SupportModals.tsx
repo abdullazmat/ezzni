@@ -4,9 +4,9 @@ import {
   Send, 
   Paperclip, 
   Smile, 
-  MoreVertical, 
-  Star 
+  MoreVertical
 } from 'lucide-react';
+import { UserAvatar } from '../components/UserAvatar';
 
 // Category Icons
 import rideOrDriverIcon from '../assets/icons/Ride or Driver.png';
@@ -272,10 +272,7 @@ export const ComplaintDetailsModal = ({ isOpen, onClose, complaint, onUpdate }: 
                 boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.02)'
               }}>
                 <div style={{ position: 'relative', flexShrink: 0 }}>
-                  <img src={complaint.user.avatar} alt={complaint.user.name} style={{ width: '96px', height: '96px', borderRadius: '50%', objectFit: 'cover', border: '4px solid white', boxShadow: '0 8px 16px -4px rgba(0,0,0,0.1)' }} />
-                  <div style={{ position: 'absolute', bottom: -2, right: -2, backgroundColor: 'white', border: '1px solid #e5e7eb', borderRadius: '14px', padding: '4px 10px', fontSize: '0.8rem', display: 'flex', alignItems: 'center', gap: '4px', fontWeight: '800', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.05)' }}>
-                    <Star size={14} fill="#F59E0B" color="#F59E0B" /> 4.8
-                  </div>
+                  <UserAvatar src={complaint.user.avatar} size={96} rating={4.8} />
                 </div>
                 
                 <div className="csm-user-info-grid">
@@ -423,8 +420,7 @@ export const ComplaintDetailsModal = ({ isOpen, onClose, complaint, onUpdate }: 
             {/* Chat Header */}
             <div style={{ padding: '1.5rem 2rem', borderBottom: '1px solid #f3f4f6', display: 'flex', alignItems: 'center', gap: '1rem' }}>
               <div style={{ position: 'relative', flexShrink: 0 }}>
-                <img src={complaint.user.avatar} alt="" style={{ width: '48px', height: '48px', borderRadius: '50%', objectFit: 'cover', border: '2px solid #eef7f0' }} />
-                <div style={{ position: 'absolute', bottom: '2px', right: '2px', width: '12px', height: '12px', backgroundColor: '#38AC57', borderRadius: '50%', border: '2px solid white' }}></div>
+                <UserAvatar src={complaint.user.avatar} size={48} rating={4.8} showBadge={true} />
               </div>
               <div style={{ flex: 1, minWidth: 0 }}>
                 <h4 style={{ margin: 0, fontSize: '15px', fontWeight: '800', color: '#111827', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{complaint.user.name}</h4>

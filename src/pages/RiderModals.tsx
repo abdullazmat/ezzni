@@ -4,6 +4,7 @@ import {
     Star, MapPin, 
     CheckCircle2, X, ChevronDown
 } from 'lucide-react';
+import { UserAvatar } from '../components/UserAvatar';
 
 // --- Status Badge ---
 const StatusBadge = ({ status }: { status: string }) => {
@@ -75,20 +76,12 @@ export const RiderDetailsContent = ({ rider, onViewSpending, onViewHistory, onSu
                 <h3 style={{ fontSize: '18px', fontWeight: 'bold', marginBottom: '16px' }}>Customer Information</h3>
                 <div style={{ border: '1px solid #f3f4f6', borderRadius: '16px', padding: '20px' }}>
                     <div className="rm-flex-responsive">
-                        <div style={{ position: 'relative', flexShrink: 0 }}>
-                            <img 
-                                src={rider.avatar || 'https://i.pravatar.cc/150?u=rider1'} 
-                                style={{ width: '80px', height: '80px', borderRadius: '50%', objectFit: 'cover' }} 
-                                alt="Rider"
-                            />
-                            <div style={{ 
-                                position: 'absolute', bottom: '-8px', left: '50%', transform: 'translateX(-50%)',
-                                backgroundColor: 'white', border: '1px solid #f3f4f6', borderRadius: '10px',
-                                padding: '2px 8px', fontSize: '12px', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '4px'
-                            }}>
-                                <Star size={12} fill="#fbbf24" stroke="none" /> {rider.rating || '4.8'}
-                            </div>
-                        </div>
+                        <UserAvatar 
+                            src={rider.avatar || 'https://i.pravatar.cc/150?u=rider1'} 
+                            rating={Number(rider.rating) || 4.8} 
+                            size={80} 
+                            showBadge={true} 
+                        />
                         <div className="rm-info-grid" style={{ flex: 1, textAlign: 'inherit' }}>
                             <div>
                                 <div style={{ fontSize: '12px', color: '#9ca3af', marginBottom: '4px' }}>Name</div>
@@ -451,7 +444,7 @@ export const TripsHistoryContent = ({ onViewSummary }: { onViewSummary: (tripId:
                         </div>
 
                         <div className="rm-flex-responsive" style={{ alignItems: 'center', marginBottom: '16px' }}>
-                            <img src={`https://i.pravatar.cc/150?u=d${trip.id}`} style={{ width: '40px', height: '40px', borderRadius: '50%' }} alt="Driver" />
+                            <UserAvatar src={`https://i.pravatar.cc/150?u=d${trip.id}`} rating={trip.rating || undefined} size={40} showBadge={true} />
                             <div style={{ flex: 1, textAlign: 'inherit' }}>
                                 <div style={{ fontWeight: 'bold', fontSize: '14px' }}>{trip.driver}</div>
                                 <div style={{ fontSize: '12px', color: '#9ca3af' }}>{trip.date}</div>
@@ -498,12 +491,7 @@ export const TripSummaryContent = () => {
 
             {/* Driver Info */}
             <div className="rm-flex-responsive" style={{ border: '1px solid #f3f4f6', borderRadius: '16px', padding: '16px', alignItems: 'center', marginBottom: '16px' }}>
-                <div style={{ position: 'relative', flexShrink: 0 }}>
-                    <img src="https://i.pravatar.cc/150?u=ahmed" style={{ width: '50px', height: '50px', borderRadius: '50%' }} alt="Driver" />
-                    <div style={{ position: 'absolute', bottom: '-5px', left: '50%', transform: 'translateX(-50%)', backgroundColor: '#fbbf24', borderRadius: '6px', padding: '0 4px', fontSize: '10px', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '2px' }}>
-                        ★ 4.8
-                    </div>
-                </div>
+                <UserAvatar src="https://i.pravatar.cc/150?u=ahmed" rating={4.8} size={50} />
                 <div style={{ flex: 1, textAlign: 'inherit' }}>
                     <div style={{ fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '4px', justifyContent: 'inherit' }}>
                         Ahmed Hassan <CheckCircle2 size={14} color="#3b82f6" fill="#3b82f6" stroke="#fff" />

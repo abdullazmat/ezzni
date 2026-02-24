@@ -5,6 +5,7 @@ import {
   Star
 } from 'lucide-react';
 import { Review } from './ReviewTypes';
+import { UserAvatar } from '../components/UserAvatar';
 
 interface ReviewsModalProps {
   isOpen: boolean;
@@ -97,7 +98,7 @@ export const ReviewsModal = ({ isOpen, onClose, review, onUpdate, onDelete }: Re
         left: 0,
         right: 0,
         bottom: 0,
-        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        backgroundColor: 'rgba(0,0,0,0.5)',
         display: 'flex',
         alignItems: 'flex-start',
         justifyContent: 'center',
@@ -117,7 +118,6 @@ export const ReviewsModal = ({ isOpen, onClose, review, onUpdate, onDelete }: Re
             margin-bottom: 20px;
             position: relative;
             padding: 2.5rem;
-            color: '#111827';
             border: 1px solid #e5e7eb;
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
             display: flex;
@@ -290,9 +290,9 @@ export const ReviewsModal = ({ isOpen, onClose, review, onUpdate, onDelete }: Re
                   </div>
 
                   <div className="rmo-user-meta">
-                     <img src={item.avatar} alt="" style={{ width: '56px', height: '56px', borderRadius: '50%', objectFit: 'cover', border: '3px solid white', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.1)' }} />
-                     <div style={{ flex: 1 }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+                     <UserAvatar src={item.avatar} rating={item.rating} size={56} showBadge={true} />
+                     <div style={{ flex: 1, textAlign: 'inherit' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap', justifyContent: 'inherit' }}>
                            <span style={{ fontWeight: '800', fontSize: '16px' }}>{item.userName}</span>
                            <span style={{ fontSize: '10px', color: '#38AC57', backgroundColor: '#eef7f0', padding: '2px 10px', borderRadius: '8px', fontWeight: '800', textTransform: 'uppercase' }}>{item.userType}</span>
                         </div>

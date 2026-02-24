@@ -5,6 +5,7 @@ import {
     ArrowUpRight,
     Download, ExternalLink
 } from 'lucide-react';
+import { UserAvatar } from '../components/UserAvatar';
 import { TransactionDetailsModal, TransactionHistoryModal, ProcessRefundModal } from './PaymentModals';
 
 // Specialized Icons
@@ -503,7 +504,7 @@ export const Payment = () => {
                             <div style={{ fontWeight: '800' }}>{tx.id}</div>
                             <div style={{ fontWeight: '600', color: '#6b7280' }}>{activeView === 'Trip Payments' ? tx.tripId : 'R-00045'}</div>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
-                                <img src={tx.riderAvatar} alt={tx.rider} style={{ width: 32, height: 32, borderRadius: '50%' }} />
+                                <UserAvatar src={tx.riderAvatar} size={32} rating={4.8} showBadge={true} />
                                 <div style={{ fontWeight: '700', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{tx.rider}</div>
                             </div>
                             <div style={{ fontWeight: '800' }}>{tx.amount}</div>

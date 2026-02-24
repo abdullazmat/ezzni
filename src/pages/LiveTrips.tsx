@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { ArrowUpRight, Search, SlidersHorizontal, Eye, Star } from 'lucide-react';
+import { ArrowUpRight, Search, SlidersHorizontal, Eye } from 'lucide-react';
+import { UserAvatar } from '../components/UserAvatar';
 import { TripDetailsModal } from '../components/TripDetailsModal';
 
 // Vehicle Icons
@@ -496,28 +497,7 @@ export const LiveTrips = () => {
                                 </td>
                                 <td style={{ padding: '1rem 1.5rem' }}>
                                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                                        <div style={{ position: 'relative' }}>
-                                            <img src={trip.rider.img} alt="" style={{ width: '48px', height: '48px', borderRadius: '50%', objectFit: 'cover' }} />
-                                            {/* Rating Star Badge */}
-                                            <div style={{ 
-                                                position: 'absolute', 
-                                                bottom: '-4px', 
-                                                left: '50%', 
-                                                transform: 'translateX(-50%)',
-                                                backgroundColor: 'white',
-                                                borderRadius: '1rem',
-                                                padding: '1px 6px',
-                                                fontSize: '10px',
-                                                fontWeight: '800',
-                                                boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-                                                display: 'flex',
-                                                alignItems: 'center',
-                                                gap: '2px',
-                                                whiteSpace: 'nowrap'
-                                            }}>
-                                                <Star size={8} fill="#fbbf24" color="#fbbf24" /> {trip.rider.rating}
-                                            </div>
-                                        </div>
+                                             <UserAvatar src={trip.rider.img} rating={trip.rider.rating} size={48} />
                                         <div>
                                             <div style={{ fontWeight: '700', fontSize: '0.95rem', color: '#111827' }}>{trip.rider.name}</div>
                                             <div style={{ fontSize: '0.8rem', color: '#94a3b8', fontWeight: '500' }}>{trip.rider.id}</div>
@@ -526,27 +506,7 @@ export const LiveTrips = () => {
                                 </td>
                                 <td className="hide-on-tablet" style={{ padding: '1rem 1.5rem' }}>
                                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                                        <div style={{ position: 'relative' }}>
-                                            <img src={trip.driver.img} alt="" style={{ width: '48px', height: '48px', borderRadius: '50%', objectFit: 'cover' }} />
-                                            <div style={{ 
-                                                position: 'absolute', 
-                                                bottom: '-4px', 
-                                                left: '50%', 
-                                                transform: 'translateX(-50%)',
-                                                backgroundColor: 'white',
-                                                borderRadius: '1rem',
-                                                padding: '1px 6px',
-                                                fontSize: '10px',
-                                                fontWeight: '800',
-                                                boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-                                                display: 'flex',
-                                                alignItems: 'center',
-                                                gap: '2px',
-                                                whiteSpace: 'nowrap'
-                                            }}>
-                                                <Star size={8} fill="#fbbf24" color="#fbbf24" /> {trip.driver.rating}
-                                            </div>
-                                        </div>
+                                             <UserAvatar src={trip.driver.img} rating={trip.driver.rating} size={48} />
                                         <div>
                                             <div style={{ fontWeight: '700', fontSize: '0.95rem', color: '#111827' }}>{trip.driver.name}</div>
                                             <div style={{ fontSize: '0.8rem', color: '#94a3b8', fontWeight: '500' }}>{trip.driver.id}</div>

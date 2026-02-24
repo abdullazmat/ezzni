@@ -17,6 +17,9 @@ import carIcon from '../assets/icons/car.png';
 import taxiIcon from '../assets/icons/taxi.png';
 import bikeIcon from '../assets/icons/bike.png';
 
+// Components
+import { UserAvatar } from '../components/UserAvatar';
+
 // Payment Icons
 import visaIcon from '../assets/icons/visa.png';
 import mastercardIcon from '../assets/icons/mastercard.png';
@@ -560,25 +563,23 @@ export const ArchiveTrips = () => {
                                 <td style={{ padding: '1rem' }}>
                                     <span style={{ backgroundColor: trip.serviceColor, color: trip.serviceTextColor, padding: '0.3rem 0.8rem', borderRadius: '1rem', fontSize: '0.85rem' }}>{trip.serviceType}</span>
                                 </td>
-                                <td style={{ padding: '1rem' }}>
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                                        <img src={trip.rider.img} alt="" style={{ width: '32px', height: '32px', borderRadius: '50%' }} />
-                                        <div>
-                                            <div style={{ fontWeight: '600', fontSize: '0.9rem' }}>{trip.rider.name}</div>
-                                            <div style={{ fontSize: '0.7rem', color: '#9ca3af' }}>{trip.rider.id}</div>
+                                <td style={{ padding: '0.75rem 1rem' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                                        <UserAvatar src={trip.rider.img} rating={trip.rider.rating} size={48} />
+                                        <div style={{ display: 'flex', flexDirection: 'column', gap: '1px' }}>
+                                            <div style={{ fontWeight: '700', fontSize: '0.95rem', color: '#111827' }}>{trip.rider.name}</div>
+                                            <div style={{ fontSize: '0.8rem', color: '#9ca3af', fontWeight: '500' }}>{trip.rider.id}</div>
                                         </div>
                                     </div>
-                                    <div style={{ fontSize: '0.7rem', color: '#fbbf24', marginTop: '0.2rem' }}>★ {trip.rider.rating}</div>
                                 </td>
-                                <td style={{ padding: '1rem' }}>
-                                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                                        <img src={trip.driver.img} alt="" style={{ width: '32px', height: '32px', borderRadius: '50%' }} />
-                                        <div>
-                                            <div style={{ fontWeight: '600', fontSize: '0.9rem' }}>{trip.driver.name}</div>
-                                            <div style={{ fontSize: '0.7rem', color: '#9ca3af' }}>{trip.driver.id}</div>
+                                <td style={{ padding: '0.75rem 1rem' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                                        <UserAvatar src={trip.driver.img} rating={trip.driver.rating} size={48} />
+                                        <div style={{ display: 'flex', flexDirection: 'column', gap: '1px' }}>
+                                            <div style={{ fontWeight: '700', fontSize: '0.95rem', color: '#111827' }}>{trip.driver.name}</div>
+                                            <div style={{ fontSize: '0.8rem', color: '#9ca3af', fontWeight: '500' }}>{trip.driver.id}</div>
                                         </div>
                                     </div>
-                                    <div style={{ fontSize: '0.7rem', color: '#fbbf24', marginTop: '0.2rem' }}>★ {trip.driver.rating}</div>
                                 </td>
                                 <td style={{ padding: '1rem' }}>
                                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontWeight: '500' }}>
@@ -650,10 +651,7 @@ export const ArchiveTrips = () => {
                                 <h3 style={{ fontSize: '1.1rem', fontWeight: 'bold', marginBottom: '0.75rem' }}>Passenger Information</h3>
                                  <div style={{ backgroundColor: 'white', padding: '1.5rem', borderRadius: '1rem', boxShadow: '0 1px 3px rgba(0,0,0,0.05)', border: '1px solid #f3f4f6' }}>
                                     <div className="at-flex-responsive" style={{ marginBottom: '1.5rem' }}>
-                                            <div style={{ position: 'relative' }}>
-                                            <img src={selectedTrip.rider.img} alt="" style={{ width: '64px', height: '64px', borderRadius: '50%' }} />
-                                            <div style={{ position: 'absolute', bottom: -5, left: '50%', transform: 'translateX(-50%)', backgroundColor: '#fbbf24', padding: '0.1rem 0.5rem', borderRadius: '1rem', fontSize: '0.7rem', color: 'white', display: 'flex', alignItems: 'center', gap: '2px', whiteSpace: 'nowrap' }}>★ {selectedTrip.rider.rating}</div>
-                                            </div>
+                                            <UserAvatar src={selectedTrip.rider.img} rating={selectedTrip.rider.rating} size={64} />
                                              <div className="at-info-row" style={{ flex: 1 }}>
                                                 <div>
                                                     <div style={{ fontSize: '0.75rem', color: '#9ca3af' }}>Full Name</div>
@@ -696,10 +694,7 @@ export const ArchiveTrips = () => {
                                 <h3 style={{ fontSize: '1.1rem', fontWeight: 'bold', marginBottom: '0.75rem' }}>Driver Information</h3>
                                  <div style={{ backgroundColor: 'white', padding: '1.5rem', borderRadius: '1rem', boxShadow: '0 1px 3px rgba(0,0,0,0.05)', border: '1px solid #f3f4f6' }}>
                                     <div className="at-flex-responsive" style={{ marginBottom: '1.5rem' }}>
-                                            <div style={{ position: 'relative' }}>
-                                            <img src={selectedTrip.driver.img} alt="" style={{ width: '64px', height: '64px', borderRadius: '50%' }} />
-                                            <div style={{ position: 'absolute', bottom: -5, left: '50%', transform: 'translateX(-50%)', backgroundColor: '#fbbf24', padding: '0.1rem 0.5rem', borderRadius: '1rem', fontSize: '0.7rem', color: 'white', display: 'flex', alignItems: 'center', gap: '2px', whiteSpace: 'nowrap' }}>★ {selectedTrip.driver.rating}</div>
-                                            </div>
+                                            <UserAvatar src={selectedTrip.driver.img} rating={selectedTrip.driver.rating} size={64} />
                                             <div style={{ flex: 1 }}>
                                                 <div style={{ marginBottom: '0.5rem' }}>
                                                     <div style={{ fontSize: '0.75rem', color: '#9ca3af' }}>Full Name</div>

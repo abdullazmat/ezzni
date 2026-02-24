@@ -2,8 +2,9 @@
 import { useState, useRef, useEffect } from 'react';
 import { 
     Search, Eye, ArrowUpRight, 
-    Star, ChevronDown, ArrowLeft, X
+    ChevronDown, ArrowLeft, X
 } from 'lucide-react';
+import { UserAvatar } from '../components/UserAvatar';
 
 // Specialized Icons
 import totalRidersIcon from '../assets/icons/total riders.png';
@@ -573,16 +574,7 @@ export const Riders = () => {
                     ) : filteredRiders.map((rider) => (
                         <div key={rider.id + rider.email} className="rm-table-row">
                             <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                                <div style={{ position: 'relative' }}>
-                                    <img src={rider.avatar} style={{ width: '48px', height: '48px', borderRadius: '50%' }} alt="" />
-                                    <div style={{ 
-                                        position: 'absolute', bottom: '-4px', left: '50%', transform: 'translateX(-50%)',
-                                        backgroundColor: 'white', border: '1px solid #f3f4f6', borderRadius: '8px',
-                                        padding: '0 4px', fontSize: '10px', fontWeight: 'bold', display: 'flex', alignItems: 'center'
-                                    }}>
-                                        <Star size={10} fill="#fbbf24" stroke="none" /> {rider.rating}
-                                    </div>
-                                </div>
+                                <UserAvatar src={rider.avatar} rating={rider.rating} size={48} />
                                 <div>
                                     <div style={{ fontWeight: 'bold', fontSize: '14px' }}>{rider.name}</div>
                                     <div style={{ fontSize: '12px', color: '#9ca3af' }}>{rider.location}</div>

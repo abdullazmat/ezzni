@@ -143,7 +143,13 @@ function App() {
       />
       <main className="main-content">
         <Header 
-          onLogout={() => {
+          onLogout={async () => {
+            try {
+              const { logoutApi } = await import('./services/api');
+              await logoutApi();
+            } catch {
+              // Logout locally even if API fails
+            }
             localStorage.removeItem('token');
             localStorage.removeItem('user');
             setIsAuthenticated(false);

@@ -1,5 +1,9 @@
 import { useState, useRef, useEffect } from 'react';
-import { ArrowUpRight, Search, SlidersHorizontal, Eye, RefreshCw, ArrowLeft, Star } from 'lucide-react';
+import { 
+    Search, Eye, RefreshCw, ArrowLeft,
+    ArrowUpRight, SlidersHorizontal
+} from 'lucide-react';
+import { UserAvatar } from '../components/UserAvatar';
 
 // Icons
 import waitingCustomersIcon from '../assets/icons/Waiting Customers.png';
@@ -651,12 +655,7 @@ export const RideAssignment = () => {
                 {filteredCustomers.map((c, idx) => (
                     <div key={idx} className="ra-customer-card">
                         <div style={{ display: 'flex', gap: '1.25rem' }}>
-                             <div style={{ position: 'relative' }}>
-                                <img src={c.img} alt="" style={{ width: '56px', height: '56px', borderRadius: '50%', objectFit: 'cover' }} />
-                                <div style={{ position: 'absolute', bottom: -4, left: '50%', transform: 'translateX(-50%)', backgroundColor: 'white', padding: '2px 8px', borderRadius: '1rem', fontSize: '0.7rem', color: '#111827', display: 'flex', alignItems: 'center', gap: '2px', boxShadow: '0 2px 4px rgba(0,0,0,0.05)', fontWeight: '700' }}>
-                                    <Star size={10} fill="#fbbf24" color="#fbbf24" /> {c.rating}
-                                </div>
-                             </div>
+                     <UserAvatar src={c.img} rating={c.rating} size={56} />
                              <div>
                                  <div style={{ fontWeight: '700', fontSize: '1.1rem', color: '#111827' }}>{c.id} · {c.name}</div>
                                  <div style={{ fontSize: '0.9rem', color: '#64748b', margin: '0.35rem 0' }}>{c.from} → {c.to}</div>
@@ -714,12 +713,7 @@ export const RideAssignment = () => {
                  {filteredDrivers.map((d, idx) => (
                     <div key={idx} className="ra-customer-card">
                         <div style={{ display: 'flex', gap: '1.25rem' }}>
-                             <div style={{ position: 'relative' }}>
-                                <img src={d.img} alt="" style={{ width: '56px', height: '56px', borderRadius: '50%', objectFit: 'cover' }} />
-                                <div style={{ position: 'absolute', bottom: -4, left: '50%', transform: 'translateX(-50%)', backgroundColor: 'white', padding: '2px 8px', borderRadius: '1rem', fontSize: '0.7rem', color: '#111827', display: 'flex', alignItems: 'center', gap: '2px', boxShadow: '0 2px 4px rgba(0,0,0,0.05)', fontWeight: '700' }}>
-                                    <Star size={10} fill="#fbbf24" color="#fbbf24" /> {d.rating}
-                                </div>
-                             </div>
+                     <UserAvatar src={d.img} rating={d.rating} size={56} />
                              <div>
                                  <div style={{ fontWeight: '700', fontSize: '1.1rem', color: '#111827' }}>{d.id} · {d.name}</div>
                                  <div style={{ fontSize: '0.9rem', color: '#64748b', margin: '0.35rem 0' }}>City: <span style={{ color: '#111827', fontWeight: '700' }}>{d.city}</span> Distance: <span style={{ color: '#111827', fontWeight: '700' }}>{d.distance}</span> Location: <span style={{ color: '#111827', fontWeight: '700' }}>{d.location}</span></div>
@@ -786,12 +780,7 @@ export const RideAssignment = () => {
                               </td>
                               <td style={{ padding: '1.25rem' }}>
                                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                                      <div style={{ position: 'relative' }}>
-                                        <img src={assign.rider.img} alt="" style={{ width: '40px', height: '40px', borderRadius: '50%' }} />
-                                        <div style={{ position: 'absolute', bottom: -2, right: -2, backgroundColor: 'white', padding: '1px 3px', borderRadius: '4px', border: '1px solid #f1f5f9', display: 'flex', alignItems: 'center', gap: '1px', fontSize: '0.6rem' }}>
-                                            <Star size={8} fill="#fbbf24" color="#fbbf24" /> {assign.rider.rating}
-                                        </div>
-                                      </div>
+                                      <UserAvatar src={assign.rider.img} rating={assign.rider.rating} size={40} />
                                       <div>
                                           <div style={{ fontWeight: '700', fontSize: '0.95rem', color: '#111827' }}>{assign.rider.name}</div>
                                           <div style={{ fontSize: '0.75rem', color: '#94a3b8' }}>{assign.rider.id}</div>
@@ -800,12 +789,7 @@ export const RideAssignment = () => {
                               </td>
                               <td style={{ padding: '1.25rem' }}>
                                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                                      <div style={{ position: 'relative' }}>
-                                        <img src={assign.driver.img} alt="" style={{ width: '40px', height: '40px', borderRadius: '50%' }} />
-                                        <div style={{ position: 'absolute', bottom: -2, right: -2, backgroundColor: 'white', padding: '1px 3px', borderRadius: '4px', border: '1px solid #f1f5f9', display: 'flex', alignItems: 'center', gap: '1px', fontSize: '0.6rem' }}>
-                                            <Star size={8} fill="#fbbf24" color="#fbbf24" /> {assign.driver.rating}
-                                        </div>
-                                      </div>
+                                      <UserAvatar src={assign.driver.img} rating={assign.driver.rating} size={40} />
                                       <div>
                                           <div style={{ fontWeight: '700', fontSize: '0.95rem', color: '#111827' }}>{assign.driver.name}</div>
                                           <div style={{ fontSize: '0.75rem', color: '#94a3b8' }}>{assign.driver.id}</div>
@@ -903,12 +887,7 @@ export const RideAssignment = () => {
                     <div style={{ backgroundColor: 'white', padding: '1.5rem 2rem', borderRadius: '1.25rem', boxShadow: '0 1px 3px rgba(0,0,0,0.05)', border: '1px solid #f1f5f9' }}>
                         {/* Row 1: Avatar + Full Name, Customer ID, Category, Gender */}
                         <div className="ra-flex-responsive" style={{ marginBottom: '1.25rem' }}>
-                             <div style={{ position: 'relative', flexShrink: 0 }}>
-                                <img src={previewAssignment.rider.img} alt="" style={{ width: '64px', height: '64px', borderRadius: '50%', border: '2px solid #f1f5f9' }} />
-                                <div style={{ position: 'absolute', bottom: -6, left: '50%', transform: 'translateX(-50%)', backgroundColor: 'white', padding: '0.15rem 0.5rem', borderRadius: '1rem', fontSize: '0.7rem', color: '#111827', display: 'flex', alignItems: 'center', gap: '3px', whiteSpace: 'nowrap', boxShadow: '0 2px 4px rgba(0,0,0,0.05)', border: '1px solid #f1f5f9', fontWeight: '700' }}>
-                                    <Star size={10} fill="#fbbf24" color="#fbbf24" /> {previewAssignment.rider.rating}
-                                </div>
-                             </div>
+                                 <UserAvatar src={previewAssignment.rider.img} rating={previewAssignment.rider.rating} size={64} />
                              <div className="ra-info-row" style={{ flex: 1, gap: '1.5rem' }}>
                                   <div>
                                       <div style={{ fontSize: '0.8rem', color: '#94a3b8', fontWeight: '500', marginBottom: '0.3rem' }}>Full Name</div>
@@ -952,12 +931,7 @@ export const RideAssignment = () => {
                 <div style={{ marginBottom: '2rem' }}>
                    <h3 style={{ fontSize: '1.4rem', fontWeight: '800', marginBottom: '1rem', color: '#111827' }}>Driver Information</h3>
                    <div className="ra-flex-responsive" style={{ backgroundColor: 'white', padding: '1.5rem 2rem', borderRadius: '1.25rem', boxShadow: '0 1px 3px rgba(0,0,0,0.05)', border: '1px solid #f1f5f9' }}>
-                        <div style={{ position: 'relative', flexShrink: 0 }}>
-                           <img src={previewAssignment.driver.img} alt="" style={{ width: '64px', height: '64px', borderRadius: '50%', border: '2px solid #f1f5f9' }} />
-                           <div style={{ position: 'absolute', bottom: -6, left: '50%', transform: 'translateX(-50%)', backgroundColor: 'white', padding: '0.15rem 0.5rem', borderRadius: '1rem', fontSize: '0.7rem', color: '#111827', display: 'flex', alignItems: 'center', gap: '3px', whiteSpace: 'nowrap', boxShadow: '0 2px 4px rgba(0,0,0,0.05)', border: '1px solid #f1f5f9', fontWeight: '700' }}>
-                               <Star size={10} fill="#fbbf24" color="#fbbf24" /> {previewAssignment.driver.rating}
-                           </div>
-                        </div>
+                        <UserAvatar src={previewAssignment.driver.img} rating={previewAssignment.driver.rating} size={64} />
                         <div style={{ flex: 1 }}>
                              <div className="ra-info-row" style={{ gap: '1.5rem', marginBottom: '1.25rem' }}>
                                   <div>
@@ -1089,28 +1063,7 @@ export const RideAssignment = () => {
                     <div style={{ backgroundColor: 'white', padding: '2rem', borderRadius: '1.25rem', boxShadow: '0 1px 3px rgba(0,0,0,0.05)', border: '1px solid #f1f5f9' }}>
                          {/* Driver Profile Section */}
                          <div className="ra-flex-responsive" style={{ marginBottom: '2.5rem', justifyContent: 'center' }}>
-                              <div style={{ position: 'relative' }}>
-                                  <img src={previewAssignment.driver.img} alt="" style={{ width: '90px', height: '90px', borderRadius: '50%', objectFit: 'cover' }} />
-                                  <div style={{ 
-                                      position: 'absolute', 
-                                      bottom: -12, 
-                                      left: '50%', 
-                                      transform: 'translateX(-50%)', 
-                                      backgroundColor: 'white', 
-                                      padding: '3px 12px', 
-                                      borderRadius: '1rem', 
-                                      fontSize: '0.9rem', 
-                                      color: '#111827', 
-                                      display: 'flex', 
-                                      alignItems: 'center', 
-                                      gap: '5px', 
-                                      boxShadow: '0 4px 6px rgba(0,0,0,0.08)', 
-                                      border: '1px solid #f1f5f9', 
-                                      fontWeight: '600' 
-                                  }}>
-                                      <Star size={14} fill="#fbbf24" color="#fbbf24" /> {previewAssignment.driver.rating}
-                                  </div>
-                              </div>
+                              <UserAvatar src={previewAssignment.driver.img} rating={previewAssignment.driver.rating} size={90} />
                          </div>
 
                                                    <div className="ra-info-row" style={{ gap: '1rem', alignItems: 'center' }}>

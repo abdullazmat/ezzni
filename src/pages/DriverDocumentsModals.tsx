@@ -1,6 +1,7 @@
 
 import { useState } from 'react';
 import { ArrowLeft, ChevronDown, ChevronLeft, ChevronRight, Eye, Car, Bike, Download } from 'lucide-react';
+import { UserAvatar } from '../components/UserAvatar';
 
 // Status badge colors
 const statusColors: Record<string, { bg: string; color: string; border: string }> = {
@@ -378,8 +379,7 @@ export const ApplicationReviewModal = ({ doc, onClose, onApprove, onReject }: { 
                 <div style={{ border: '1px solid #f3f4f6', borderRadius: '16px', padding: '20px', marginBottom: '24px' }}>
                     <div className="adm-flex-responsive" style={{ alignItems: 'flex-start' }}>
                         <div style={{ position: 'relative', flexShrink: 0 }}>
-                            <img src={doc.avatar} style={{ width: '64px', height: '64px', borderRadius: '50%', objectFit: 'cover' }} alt="" />
-                            <div style={{ position: 'absolute', bottom: '-6px', left: '50%', transform: 'translateX(-50%)', backgroundColor: '#fbbf24', borderRadius: '6px', padding: '0 4px', fontSize: '10px', fontWeight: 'bold' }}>4.8</div>
+                            <UserAvatar src={doc.avatar} size={64} rating={4.8} />
                         </div>
                         <div className="adm-info-grid" style={{ flex: 1, textAlign: 'inherit' }}>
                             <div className="adm-info-item"><div style={{ color: '#9ca3af', fontSize: '11px', marginBottom: '2px' }}>Full Name</div><div style={{ fontWeight: '600' }}>{doc.driverName}</div></div>

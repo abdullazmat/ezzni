@@ -5,6 +5,7 @@ import {
     Filter, ChevronDown,
     Star, Plus
 } from 'lucide-react';
+import { UserAvatar } from '../components/UserAvatar';
 
 // Vehicle Icons
 import carIcon from '../assets/icons/car.png';
@@ -284,7 +285,7 @@ const TripsHistoryModalContent = ({ onViewTripSummary }: { onViewTripSummary: (t
 
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
                              <div style={{ display: 'flex', alignItems: 'center', gap: '0.8rem' }}>
-                                 <img src={`https://i.pravatar.cc/150?u=${trip.id + 10}`} style={{ width: 40, height: 40, borderRadius: '50%' }} />
+                                 <UserAvatar src={`https://i.pravatar.cc/150?u=${trip.id + 10}`} size={40} showBadge={false} />
                                  <div>
                                      <div style={{ fontWeight: 'bold', fontSize: '0.9rem' }}>{trip.name}</div>
                                      <div style={{ fontSize: '0.7rem', color: '#9ca3af' }}>{trip.date}</div>
@@ -450,13 +451,13 @@ export const Drivers = () => {
     // Top Level State
     const [activeStat, setActiveStat] = useState('Rental Company');
     const [searchTerm, setSearchTerm] = useState('');
-    
+
     // Filters
-    const [statusFilter, setStatusFilter] = useState('All'); 
+    const [statusFilter, setStatusFilter] = useState('All');
     const [regionFilter, setRegionFilter] = useState('All');
     const [cityFilter, setCityFilter] = useState('All');
     const [categoryFilter, setCategoryFilter] = useState('All');
-    
+
     // Modal State
     const [selectedDriver, setSelectedDriver] = useState<Driver | null>(null);
     const [modalSubView, setModalSubView] = useState<'Details' | 'Earnings' | 'History' | 'Edit'>('Details');
@@ -486,7 +487,7 @@ export const Drivers = () => {
         // Search — match against name, ID, driverId, email, or phone
         if (searchTerm) {
             const term = searchTerm.toLowerCase();
-            const matchesSearch = 
+            const matchesSearch =
                 driver.name.toLowerCase().includes(term) ||
                 driver.id.toLowerCase().includes(term) ||
                 driver.driverId.toLowerCase().includes(term) ||
@@ -494,18 +495,18 @@ export const Drivers = () => {
                 driver.phone.includes(term);
             if (!matchesSearch) return false;
         }
-        
+
         // Stats Filter — vehicle type category cards
         if (activeStat === 'Taxi Drivers' && driver.vehicleType !== 'Taxi') return false;
         if (activeStat === 'Motorcycle Drivers' && driver.vehicleType !== 'Motorcycle') return false;
         if (activeStat === 'Car Drivers' && driver.vehicleType !== 'Car') return false;
-        
+
         // Dropdown Filters
         if (statusFilter !== 'All' && driver.status !== statusFilter) return false;
         if (regionFilter !== 'All' && driver.region !== regionFilter) return false;
         if (cityFilter !== 'All' && driver.city !== cityFilter) return false;
         if (categoryFilter !== 'All' && driver.vehicleDetails.brand !== categoryFilter) return false;
-        
+
         return true;
     });
 
@@ -664,7 +665,7 @@ export const Drivers = () => {
                     gap: 10px;
                 }
             `}</style>
-            
+
             {/* Header Area */}
             <div className="dr-header-actions" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                 <div>
@@ -686,15 +687,15 @@ export const Drivers = () => {
                 ].map((stat) => {
                     const isActive = activeStat === stat.activeName;
                     return (
-                        <div 
+                        <div
                             key={stat.activeName}
                             onClick={() => setActiveStat(isActive ? 'Rental Company' : stat.activeName)}
-                            style={{ 
-                                padding: '1.5rem', borderRadius: '1.5rem', 
-                                backgroundColor: isActive ? '#38AC57' : 'white', 
+                            style={{
+                                padding: '1.5rem', borderRadius: '1.5rem',
+                                backgroundColor: isActive ? '#38AC57' : 'white',
                                 color: isActive ? 'white' : 'black',
-                                position: 'relative', 
-                                boxShadow: isActive ? '0 10px 15px -3px rgba(56, 172, 87, 0.4)' : '0 1px 3px rgba(0,0,0,0.05)', 
+                                position: 'relative',
+                                boxShadow: isActive ? '0 10px 15px -3px rgba(56, 172, 87, 0.4)' : '0 1px 3px rgba(0,0,0,0.05)',
                                 display: 'flex', flexDirection: 'column', justifyContent: 'space-between', height: '140px', cursor: 'pointer',
                                 transition: 'all 0.2s', transform: isActive ? 'translateY(-2px)' : 'none'
                             }}
@@ -709,7 +710,7 @@ export const Drivers = () => {
                              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '0.5rem' }}>
                                  <span style={{ fontSize: '0.7rem', textDecoration: 'underline', cursor: 'pointer' }}>View Details</span>
                                  <div style={{ backgroundColor: isActive ? 'white' : '#38AC57', borderRadius: '50%', padding: '0.4rem', color: isActive ? '#38AC57' : 'white', display: 'flex' }}>
-                                    <ArrowUpRight size={16} /> 
+                                    <ArrowUpRight size={16} />
                                 </div>
                              </div>
                         </div>
@@ -722,22 +723,22 @@ export const Drivers = () => {
                 <div className="dr-controls-container">
                      <div style={{ position: 'relative', width: '250px', flexShrink: 0 }}>
                         <Search size={18} color="#9ca3af" style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', zIndex: 1 }} />
-                        <input 
-                            type="text" 
-                            placeholder="Search drivers..." 
+                        <input
+                            type="text"
+                            placeholder="Search drivers..."
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
-                            style={{ width: '100%', padding: '0.7rem 1rem 0.7rem 2.8rem', borderRadius: '2rem', border: '1px solid #e5e7eb', outline: 'none', fontSize: '0.85rem', color: '#1f2937', backgroundColor: 'white', boxSizing: 'border-box' }} 
+                            style={{ width: '100%', padding: '0.7rem 1rem 0.7rem 2.8rem', borderRadius: '2rem', border: '1px solid #e5e7eb', outline: 'none', fontSize: '0.85rem', color: '#1f2937', backgroundColor: 'white', boxSizing: 'border-box' }}
                         />
                     </div>
-                    <button 
+                    <button
                         onClick={() => setShowFilters(!showFilters)}
-                        style={{ 
-                            padding: '0.6rem 1.2rem', borderRadius: '2rem', 
-                            border: activeFilterCount > 0 ? '1px solid #38AC57' : '1px solid #e5e7eb', 
-                            backgroundColor: activeFilterCount > 0 ? '#eef7f0' : showFilters ? '#f3f4f6' : 'white', 
-                            display: 'flex', alignItems: 'center', gap: '0.5rem', 
-                            fontSize: '0.85rem', color: activeFilterCount > 0 ? '#2d8a46' : '#374151', 
+                        style={{
+                            padding: '0.6rem 1.2rem', borderRadius: '2rem',
+                            border: activeFilterCount > 0 ? '1px solid #38AC57' : '1px solid #e5e7eb',
+                            backgroundColor: activeFilterCount > 0 ? '#eef7f0' : showFilters ? '#f3f4f6' : 'white',
+                            display: 'flex', alignItems: 'center', gap: '0.5rem',
+                            fontSize: '0.85rem', color: activeFilterCount > 0 ? '#2d8a46' : '#374151',
                             cursor: 'pointer', whiteSpace: 'nowrap', flexShrink: 0,
                             transition: 'all 0.2s'
                         }}
@@ -758,7 +759,7 @@ export const Drivers = () => {
                         </>
                     )}
                     {activeFilterCount > 0 && (
-                        <button 
+                        <button
                             onClick={clearAllFilters}
                             style={{ padding: '0.5rem 1rem', borderRadius: '2rem', border: 'none', backgroundColor: '#fee2e2', color: '#b91c1c', fontSize: '0.8rem', fontWeight: '600', cursor: 'pointer', whiteSpace: 'nowrap' }}
                         >
@@ -805,14 +806,9 @@ export const Drivers = () => {
                              </div>
                          ) : filteredDrivers.map((driver, idx) => (
                              <div key={idx} className="dr-table-row">
-                                 <div style={{ fontWeight: 'bold', fontSize: '0.95rem' }}>{driver.id}</div> 
+                                 <div style={{ fontWeight: 'bold', fontSize: '0.95rem' }}>{driver.id}</div>
                                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.8rem' }}>
-                                     <div style={{ position: 'relative' }}>
-                                         <img src={driver.avatar} style={{ width: 36, height: 36, borderRadius: '50%' }} />
-                                         <div style={{ position: 'absolute', bottom: -4, left: '50%', transform: 'translateX(-50%)', backgroundColor: 'black', color: 'white', fontSize: '0.6rem', padding: '0 0.2rem', borderRadius: '0.2rem', display: 'flex', gap: '2px' }}>
-                                             <span>★</span> {driver.rating}
-                                         </div>
-                                     </div>
+                                     <UserAvatar src={driver.avatar} rating={driver.rating} size={48} />
                                      <div>
                                          <div style={{ fontWeight: 'bold', fontSize: '0.9rem' }}>{driver.name}</div>
                                          <div style={{ fontSize: '0.7rem', color: '#6b7280' }}>{driver.location}</div>
@@ -823,8 +819,8 @@ export const Drivers = () => {
                                      <div style={{ fontSize: '0.7rem', color: '#6b7280' }}>{driver.email}</div>
                                  </div>
                                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.9rem', fontWeight: '600' }}>
-                                     {driver.vehicleType === 'Car' ? <img src={carIcon} alt="" style={{ height: '20px', width: 'auto' }} /> : 
-                                      driver.vehicleType === 'Taxi' ? <img src={taxiIcon} alt="" style={{ height: '20px', width: 'auto' }} /> : 
+                                     {driver.vehicleType === 'Car' ? <img src={carIcon} alt="" style={{ height: '20px', width: 'auto' }} /> :
+                                      driver.vehicleType === 'Taxi' ? <img src={taxiIcon} alt="" style={{ height: '20px', width: 'auto' }} /> :
                                       <img src={bikeIcon} alt="" style={{ height: '20px', width: 'auto' }} />}
                                      {driver.vehicleType}
                                  </div>
@@ -833,7 +829,7 @@ export const Drivers = () => {
                                       <StatusBadge status={driver.status} />
                                  </div>
                                  <div style={{ textAlign: 'center' }}>
-                                     <button 
+                                     <button
                                          onClick={() => { setSelectedDriver(driver); setModalSubView('Details'); }}
                                          style={{ background: 'white', border: '1px solid #e5e7eb', borderRadius: '2rem', padding: '0.4rem 0.8rem', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '0.3rem', fontSize: '0.8rem' }}
                                      >
@@ -855,26 +851,25 @@ export const Drivers = () => {
                             <button onClick={modalSubView === 'Details' ? () => setSelectedDriver(null) : () => setModalSubView('Details')} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, marginBottom: '1rem' }}>
                                 <ArrowLeft size={24} />
                             </button>
-                            
+
                             {modalSubView === 'Details' && (
                                 <>
                                     <h2 style={{ fontSize: '1.8rem', fontWeight: 'bold', margin: 0 }}>Driver Details</h2>
                                     <p style={{ color: '#6b7280', marginTop: '0.5rem' }}>Driver profile information</p>
-                                    
+
                                     <h3 style={{ fontSize: '1.2rem', fontWeight: 'bold', marginTop: '1.5rem', marginBottom: '1rem' }}>Driver Information</h3>
-                                    
+
                                     <div style={{ border: '1px solid #f3f4f6', borderRadius: '1rem', padding: '1.5rem' }}>
                                         <div className="dr-flex-responsive">
-                                            <div style={{ flexShrink: 0, position: 'relative' }}>
-                                                <img src={selectedDriver.avatar} style={{ width: 64, height: 64, borderRadius: '50%' }} />
-                                                <div style={{ position: 'absolute', bottom: -5, left: '50%', transform: 'translateX(-50%)', backgroundColor: '#fbbf24', padding: '0 0.4rem', borderRadius: '0.3rem', fontSize: '0.7rem', fontWeight: 'bold' }}>★ {selectedDriver.rating}</div>
+                                            <div style={{ flexShrink: 0 }}>
+                                                <UserAvatar src={selectedDriver.avatar} rating={selectedDriver.rating} size={64} />
                                             </div>
                                             <div className="dr-info-grid" style={{ flex: 1 }}>
                                                  <div style={{ gridColumn: 'span 1' }}><div style={{ fontSize: '0.75rem', color: '#9ca3af' }}>Full Name</div><div style={{ fontWeight: 'bold', fontSize: '0.9rem' }}>{selectedDriver.name}</div></div>
                                                  <div style={{ gridColumn: 'span 1' }}><div style={{ fontSize: '0.75rem', color: '#9ca3af' }}>Region</div><div style={{ fontWeight: 'bold', fontSize: '0.9rem' }}>{selectedDriver.region}</div></div>
                                                  <div style={{ gridColumn: 'span 1' }}><div style={{ fontSize: '0.75rem', color: '#9ca3af' }}>City</div><div style={{ fontWeight: 'bold', fontSize: '0.9rem' }}>{selectedDriver.city}</div></div>
                                                  <div style={{ gridColumn: 'span 1' }}><div style={{ fontSize: '0.75rem', color: '#9ca3af' }}>Total Trips</div><div style={{ fontWeight: 'bold', fontSize: '0.9rem' }}>256</div></div>
-                                                 
+
                                                  <div style={{ gridColumn: 'span 2' }}><div style={{ fontSize: '0.75rem', color: '#9ca3af' }}>Address</div><div style={{ fontWeight: 'bold', fontSize: '0.9rem' }}>783 Brant St Settat ON L7R 2J2</div></div>
                                                  <div style={{ gridColumn: 'span 1' }}><div style={{ fontSize: '0.75rem', color: '#9ca3af' }}>Phone</div><div style={{ fontWeight: 'bold', fontSize: '0.9rem' }}>{selectedDriver.phone.split(' ').slice(0,4).join(' ')}</div></div>
                                                  <div style={{ gridColumn: 'span 1' }}>

@@ -1,9 +1,10 @@
 import { useState, useRef, useEffect } from 'react';
 import { 
     Search, Eye, ArrowLeft, 
-    Check, ChevronDown, 
-    ArrowUpRight, MapPin
+    ChevronDown, MapPin, 
+    Check, ArrowUpRight
 } from 'lucide-react';
+import { UserAvatar } from '../components/UserAvatar';
 
 // Specialized Icons
 import totalReservationsIcon from '../assets/icons/Total Reservations.png';
@@ -572,10 +573,7 @@ export const Reservations = () => {
                                 <td style={{ padding: '1rem', fontWeight: '500' }}>{r.id}</td>
                                 <td style={{ padding: '1rem' }}>
                                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                                        <div style={{ position: 'relative' }}>
-                                             <img src={r.customer.avatar} alt="" style={{ width: '32px', height: '32px', borderRadius: '50%' }} />
-                                             <div style={{ position: 'absolute', bottom: -4, left: '50%', transform: 'translateX(-50%)', backgroundColor: '#fbbf24', padding: '0 0.2rem', borderRadius: '0.2rem', fontSize: '0.6rem', color: 'white', whiteSpace: 'nowrap' }}>★{r.customer.rating}</div>
-                                        </div>
+                                         <UserAvatar src={r.customer.avatar} rating={r.customer.rating} size={32} />
                                         <div>
                                             <div style={{ fontSize: '0.85rem', fontWeight: '600' }}>{r.customer.name}</div>
                                             <div style={{ fontSize: '0.7rem', color: '#9ca3af' }}>{r.customer.id}</div>
@@ -584,10 +582,7 @@ export const Reservations = () => {
                                 </td>
                                 <td style={{ padding: '1rem' }}>
                                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                                         <div style={{ position: 'relative' }}>
-                                             <img src={r.driver.avatar} alt="" style={{ width: '32px', height: '32px', borderRadius: '50%' }} />
-                                             <div style={{ position: 'absolute', bottom: -4, left: '50%', transform: 'translateX(-50%)', backgroundColor: '#fbbf24', padding: '0 0.2rem', borderRadius: '0.2rem', fontSize: '0.6rem', color: 'white', whiteSpace: 'nowrap' }}>★{r.driver.rating}</div>
-                                        </div>
+                                         <UserAvatar src={r.driver.avatar} rating={r.driver.rating} size={32} />
                                         <div>
                                             <div style={{ fontSize: '0.85rem', fontWeight: '600' }}>{r.driver.name}</div>
                                             <div style={{ fontSize: '0.7rem', color: '#9ca3af' }}>{r.driver.id}</div>
@@ -674,15 +669,7 @@ export const Reservations = () => {
                          <h3 style={{ fontSize: '1.3rem', fontWeight: '800', marginBottom: '1.25rem', color: '#1e293b' }}>Passenger Information</h3>
                         <div style={{ border: '1px solid #f3f4f6', borderRadius: '1.5rem', padding: '1.5rem', marginBottom: '2rem', backgroundColor: 'white' }}>
                             <div className="res-flex-responsive">
-                                <div style={{ position: 'relative', flexShrink: 0 }}>
-                                    <img src={selectedReservation.customer.avatar} alt="" style={{ width: '72px', height: '72px', borderRadius: '50%', objectFit: 'cover' }} />
-                                    <div style={{ 
-                                        position: 'absolute', bottom: -5, left: '50%', transform: 'translateX(-50%)', 
-                                        backgroundColor: '#fbbf24', padding: '0.2rem 0.6rem', borderRadius: '1rem', 
-                                        fontSize: '0.75rem', color: 'white', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '2px',
-                                        boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
-                                    }}>★ {selectedReservation.customer.rating}</div>
-                                </div>
+                                     <UserAvatar src={selectedReservation.customer.avatar} rating={selectedReservation.customer.rating} size={72} />
                                 <div className="res-info-grid">
                                     <div>
                                         <div style={{ fontSize: '0.75rem', color: '#94a3b8', fontWeight: '500', marginBottom: '0.4rem' }}>Full Name</div>
@@ -723,15 +710,7 @@ export const Reservations = () => {
                         <h3 style={{ fontSize: '1.3rem', fontWeight: '800', marginBottom: '1.25rem', color: '#1e293b' }}>Driver Information</h3>
                         <div style={{ border: '1px solid #f3f4f6', borderRadius: '1.5rem', padding: '1.5rem', marginBottom: '2rem', backgroundColor: 'white' }}>
                             <div className="res-flex-responsive">
-                                 <div style={{ position: 'relative', flexShrink: 0 }}>
-                                    <img src={selectedReservation.driver.avatar} alt="" style={{ width: '72px', height: '72px', borderRadius: '50%', objectFit: 'cover' }} />
-                                    <div style={{ 
-                                        position: 'absolute', bottom: -5, left: '50%', transform: 'translateX(-50%)', 
-                                        backgroundColor: '#fbbf24', padding: '0.2rem 0.6rem', borderRadius: '1rem', 
-                                        fontSize: '0.75rem', color: 'white', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '2px',
-                                        boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
-                                    }}>★ {selectedReservation.driver.rating}</div>
-                                </div>
+                                     <UserAvatar src={selectedReservation.driver.avatar} rating={selectedReservation.driver.rating} size={72} />
                                 <div className="res-info-grid">
                                     <div style={{ gridColumn: 'span 1' }}>
                                         <div style={{ fontSize: '0.75rem', color: '#94a3b8', fontWeight: '500', marginBottom: '0.4rem' }}>Full Name</div>

@@ -108,7 +108,7 @@ export const Header = ({ onLogout, onToggleSidebar, onNavigate }: { onLogout: ()
          <div style={{ position: 'relative', width: '100%' }}>
             <input 
                 type="text" 
-                placeholder="search by name, phone, or id" 
+                placeholder="Type here" 
                 value={searchQuery}
                 onChange={handleSearch}
                 style={{ 
@@ -270,7 +270,7 @@ export const Header = ({ onLogout, onToggleSidebar, onNavigate }: { onLogout: ()
                         width: '10px', 
                         height: '10px', 
                         borderRadius: '50%', 
-                        backgroundColor: '#ef4444', 
+                        backgroundColor: '#38AC57', 
                         border: '2px solid white' 
                     }}></span>
                 </button>
@@ -324,14 +324,16 @@ export const Header = ({ onLogout, onToggleSidebar, onNavigate }: { onLogout: ()
                 onClick={() => onNavigate('profile')}
             >
                 <img 
-                    src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" 
+                    src="https://i.pravatar.cc/150?u=paityn" 
                     alt="Profile" 
                     className="profile-img-header"
                     style={{ width: '56px', height: '56px', borderRadius: '50%', objectFit: 'cover', border: '2px solid white', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.1)' }}
                 />
                 <div className="user-info" style={{ display: 'block' }}>
                     <div style={{ fontWeight: '800', fontSize: '1.125rem', color: '#111827', whiteSpace: 'nowrap' }}>{user.name}</div>
-                    <div style={{ fontSize: '0.875rem', color: '#64748b' }}>User</div>
+                    <div style={{ fontSize: '0.875rem', color: '#64748b', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                      User <span style={{ color: '#38AC57', fontSize: '0.75rem', fontWeight: '500' }}>Manage Pass...</span>
+                    </div>
                 </div>
                 <button 
                     onClick={onLogout} 

@@ -1,8 +1,98 @@
-import { useState } from 'react';
-import { Camera, LogOut, Eye, EyeOff, CheckCircle } from 'lucide-react';
+import { useState, useEffect, useRef } from 'react';
+import { Camera, LogOut, Eye, EyeOff, CheckCircle, Loader2 } from 'lucide-react';
+import { 
+  AdminProfile,
+  EmploymentDetails,
+  getAdminProfileApi, 
+  getEmploymentDetailsApi,
+  getPrivacyPolicyApi,
+  getTeamMembersApi,
+  getTermsOfServiceApi,
+  TeamMember,
+  updateAdminLanguageApi,
+  updateAdminProfileApi,
+  updateAdminStatusApi, 
+  updateEmploymentDetailsApi
+} from '../services/api';
 
 export const Profile = () => {
   const [activeTab, setActiveTab] = useState('edit-profile');
+  const [profile, setProfile] = useState<AdminProfile | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [statusLoading, setStatusLoading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    setLoading(true);
+    try {
+      const response = await getAdminProfileApi();
+      if (response.ok) {
+        setProfile(response.data);
+      }
+    } catch (err) {
+      console.error('Failed to fetch profile', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleStatusToggle = async () => {
+    if (!profile || statusLoading) return;
+    const newStatus = profile.status === 'Available' ? 'Inactive' : 'Available';
+    setStatusLoading(true);
+    try {
+      const response = await updateAdminStatusApi(newStatus);
+      if (response.ok) {
+        setProfile({ ...profile, status: newStatus });
+      }
+    } catch (err) {
+      console.error('Failed to update status', err);
+    } finally {
+      setStatusLoading(false);
+    }
+  };
+
+  const handleAvatarClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file || !profile) return;
+
+    const formData = new FormData();
+    formData.append('avatar', file);
+    formData.append('name', profile.name);
+    formData.append('email', profile.email);
+    formData.append('role', profile.role);
+
+    try {
+      const response = await updateAdminProfileApi(formData);
+      if (response.ok) {
+        // Refresh profile to get new avatar URL
+        fetchData();
+      }
+    } catch (err) {
+      console.error('Failed to update avatar', err);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+        <Loader2 className="animate-spin" size={48} color="#38AC57" />
+      </div>
+    );
+  }
+
+  const avatarUrl = profile?.avatar 
+    ? `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/uploads/avatars/${profile.avatar}`
+    : "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80";
+
 
   const tabs = [
     { id: 'login-history', label: 'Login History' },
@@ -90,12 +180,22 @@ export const Profile = () => {
                     {/* Profile Image with Camera Icon */}
                     <div style={{ position: 'relative' }}>
                         <img 
-                            src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" 
+                            src={avatarUrl} 
                             alt="Profile" 
                             className="profile-img"
-                            style={{ width: '160px', height: '160px', borderRadius: '50%', border: '6px solid white', objectFit: 'cover' }}
+                            style={{ width: '160px', height: '160px', borderRadius: '50%', border: '6px solid white', objectFit: 'cover', cursor: 'pointer' }}
+                            onClick={handleAvatarClick}
                         />
-                        <button style={{ 
+                        <input 
+                          type="file" 
+                          ref={fileInputRef} 
+                          onChange={handleFileChange} 
+                          style={{ display: 'none' }} 
+                          accept="image/*"
+                        />
+                        <button 
+                          onClick={handleAvatarClick}
+                          style={{ 
                             position: 'absolute', 
                             bottom: '10px', 
                             right: '10px', 
@@ -115,21 +215,26 @@ export const Profile = () => {
  
                     {/* Name and Status */}
                     <div className="profile-name-status" style={{ marginTop: '4rem' }}>
-                        <h1 style={{ fontSize: '2.25rem', fontWeight: '800', margin: '0 0 0.5rem 0', color: '#111827' }}>Paityn Calzo</h1>
-                        <div style={{ 
+                        <h1 style={{ fontSize: '2.25rem', fontWeight: '800', margin: '0 0 0.5rem 0', color: '#111827' }}>{profile?.name}</h1>
+                        <div 
+                          onClick={handleStatusToggle}
+                          style={{ 
                             display: 'flex', 
                             alignItems: 'center', 
                             gap: '0.6rem', 
-                            backgroundColor: '#eef7f0', 
+                            backgroundColor: profile?.status === 'Available' ? '#eef7f0' : '#fef2f2', 
                             padding: '0.4rem 1rem', 
                             borderRadius: '2rem', 
                             width: 'fit-content',
-                            cursor: 'pointer',
-                            border: '1px solid #eef7f0',
-                            margin: '0 auto' // Center on mobile if text-align is center
+                            cursor: statusLoading ? 'not-allowed' : 'pointer',
+                            border: profile?.status === 'Available' ? '1px solid #eef7f0' : '1px solid #fecaca',
+                            margin: '0 auto',
+                            opacity: statusLoading ? 0.7 : 1
                         }}>
-                            <span style={{ height: '10px', width: '10px', backgroundColor: '#38AC57', borderRadius: '50%' }}></span>
-                            <span style={{ color: '#2d8a46', fontSize: '1rem', fontWeight: '700' }}>Available ⌄</span>
+                            <span style={{ height: '10px', width: '10px', backgroundColor: profile?.status === 'Available' ? '#38AC57' : '#dc2626', borderRadius: '50%' }}></span>
+                            <span style={{ color: profile?.status === 'Available' ? '#2d8a46' : '#dc2626', fontSize: '1rem', fontWeight: '700' }}>
+                              {profile?.status} {statusLoading ? '...' : '⌄'}
+                            </span>
                         </div>
                     </div>
                 </div>
@@ -198,62 +303,126 @@ export const Profile = () => {
  
       {/* Tab Content */}
       <div className="profile-content-wrapper" style={{ padding: '0 2rem 2rem 2rem' }}>
-          {activeTab === 'edit-profile' && <EditProfileForm />}
+           {activeTab === 'edit-profile' && <EditProfileForm initialProfile={profile} onUpdate={() => fetchData()} />}
           {activeTab === 'change-password' && <ChangePasswordForm />}
-          {activeTab === 'login-history' && <LoginHistory />}
-          {activeTab === 'language-timezone' && <LanguageTimezone />}
-          {activeTab === 'privacy-policy' && (
-              <div className="card" style={{ padding: '2rem', lineHeight: '1.6' }}>
-                  <h2 style={{ marginBottom: '1.5rem', color: '#111827' }}>Privacy Policy</h2>
-                  <p>Welcome to Ezzni. Your privacy is important to us. This policy explains how we collect, use, and protect your information.</p>
-                  <h3 style={{ marginTop: '1.5rem', color: '#374151' }}>1. Information We Collect</h3>
-                  <p>We collect information such as your name, contact details, location data for ride-sharing features, and payment information to provide our services.</p>
-                  <h3 style={{ marginTop: '1.5rem', color: '#374151' }}>2. How We Use Data</h3>
-                  <p>Data is used to facilitate ride assignments, process payments, and improve platform security for both drivers and riders.</p>
-                  <h3 style={{ marginTop: '1.5rem', color: '#374151' }}>3. Data Sharing</h3>
-                  <p>We only share data with third-party partners as required to complete service transactions or as mandated by law.</p>
-              </div>
-          )}
-          {activeTab === 'terms-of-service' && (
-            <div className="card" style={{ padding: '2rem', lineHeight: '1.6' }}>
-                <h2 style={{ marginBottom: '1.5rem', color: '#111827' }}>Terms of Service</h2>
-                <p>By using Ezzni, you agree to the following terms and conditions.</p>
-                <h3 style={{ marginTop: '1.5rem', color: '#374151' }}>1. User Responsibilities</h3>
-                <p>Users must provide accurate information and maintain the security of their accounts. Misuse of the platform may lead to suspension.</p>
-                <h3 style={{ marginTop: '1.5rem', color: '#374151' }}>2. Service Availability</h3>
-                <p>Ezzni strives to maintain high availability but does not guarantee uninterrupted service due to maintenance or third-party issues.</p>
-                <h3 style={{ marginTop: '1.5rem', color: '#374151' }}>3. Liability</h3>
-                <p>Ezzni is a platform connecting riders and drivers. While we vet our partners, we are not liable for individual conduct outside of platform mediated safety protocols.</p>
-            </div>
-          )}
+          {activeTab === 'login-history' && <TeamManagement />}
+          {activeTab === 'language-timezone' && <LanguageTimezone initialLanguage={profile?.language} onUpdate={fetchData} />}
+          {activeTab === 'privacy-policy' && <PolicyContent type="privacy" />}
+          {activeTab === 'terms-of-service' && <PolicyContent type="terms" />}
       </div>
 
     </div>
   );
 };
 
-const EditProfileForm = () => {
+const EditProfileForm = ({ initialProfile, onUpdate }: { initialProfile: AdminProfile | null; onUpdate: () => void }) => {
     const [showToast, setShowToast] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const [empDetails, setEmpDetails] = useState<EmploymentDetails | null>(null);
+    const [empLoading, setEmpLoading] = useState(true);
+    const [formData, setFormData] = useState({
+        name: initialProfile?.name || '',
+        email: initialProfile?.email || '',
+        role: initialProfile?.role || 'Admin'
+    });
 
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-        setShowToast(true);
-        setTimeout(() => setShowToast(false), 3000);
+    useEffect(() => {
+        fetchEmploymentDetails();
+    }, []);
+
+    const fetchEmploymentDetails = async () => {
+        setEmpLoading(true);
+        try {
+            const response = await getEmploymentDetailsApi();
+            if (response.ok) {
+                setEmpDetails(response.data);
+            }
+        } catch (err) {
+            console.error('Failed to fetch employment details', err);
+        } finally {
+            setEmpLoading(false);
+        }
     };
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setLoading(true);
+        try {
+            // Update basic profile
+            const profileFormData = new FormData();
+            profileFormData.append('name', formData.name);
+            profileFormData.append('email', formData.email);
+            profileFormData.append('role', formData.role);
+
+            const pResponse = await updateAdminProfileApi(profileFormData);
+            
+            // Update employment details
+            if (empDetails) {
+                await updateEmploymentDetailsApi(empDetails);
+            }
+
+            if (pResponse.ok) {
+                setShowToast(true);
+                onUpdate();
+                setTimeout(() => setShowToast(false), 3000);
+            }
+        } catch (err) {
+            console.error('Failed to update profile', err);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    if (empLoading) {
+        return <div style={{ padding: '2rem', textAlign: 'center' }}><Loader2 className="animate-spin" size={32} color="#38AC57" /></div>;
+    }
 
     return (
         <form onSubmit={handleSubmit} style={{ position: 'relative' }}>
             <div className="edit-profile-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem 2rem' }}>
-                <FormGroup label="Full Name" value="Paityn Calzo" />
-                <FormGroup label="Department" value="Product Design" />
-                <FormGroup label="Direct Manager" value="Michael Torres" />
-                <FormGroup label="Employee ID" value="ID01" />
-                <FormGroup label="Job Title" value="Developer" />
+                <div>
+                   <label style={{ display: 'block', fontWeight: 'bold', marginBottom: '0.5rem', fontSize: '0.9rem', color: '#374151' }}>Full Name</label>
+                   <input 
+                      type="text" 
+                      value={formData.name} 
+                      onChange={(e) => setFormData({...formData, name: e.target.value})}
+                      style={inputStyle} 
+                   />
+                </div>
+                <div>
+                   <label style={{ display: 'block', fontWeight: 'bold', marginBottom: '0.5rem', fontSize: '0.9rem', color: '#374151' }}>Department</label>
+                   <input 
+                      type="text" 
+                      value={empDetails?.department || ''} 
+                      onChange={(e) => setEmpDetails(empDetails ? {...empDetails, department: e.target.value} : null)}
+                      style={inputStyle} 
+                   />
+                </div>
+                <div>
+                   <label style={{ display: 'block', fontWeight: 'bold', marginBottom: '0.5rem', fontSize: '0.9rem', color: '#374151' }}>Direct Manager</label>
+                   <input 
+                      type="text" 
+                      value={empDetails?.manager || ''} 
+                      onChange={(e) => setEmpDetails(empDetails ? {...empDetails, manager: e.target.value} : null)}
+                      style={inputStyle} 
+                   />
+                </div>
+                <FormGroup label="Employee ID" value={`ID-${initialProfile?.id}`} disabled />
+                <div>
+                   <label style={{ display: 'block', fontWeight: 'bold', marginBottom: '0.5rem', fontSize: '0.9rem', color: '#374151' }}>Job Title</label>
+                   <input 
+                      type="text" 
+                      value={empDetails?.jobTitle || ''} 
+                      onChange={(e) => setEmpDetails(empDetails ? {...empDetails, jobTitle: e.target.value} : null)}
+                      style={inputStyle} 
+                   />
+                </div>
                 <div style={{ display: 'flex', flexDirection: 'column' }}>
                     <label style={{ display: 'block', fontWeight: 'bold', marginBottom: '0.5rem', fontSize: '0.9rem', color: '#1f2937' }}>Email</label>
                     <input 
-                        type="text" 
-                        defaultValue="your@mail.com" 
+                        type="email" 
+                        value={formData.email} 
+                        onChange={(e) => setFormData({...formData, email: e.target.value})}
                         style={{ ...inputStyle, border: '1px solid #38AC57', backgroundColor: 'white' }} 
                     />
                 </div>
@@ -263,10 +432,18 @@ const EditProfileForm = () => {
                      <label style={{ display: 'block', fontWeight: 'bold', fontSize: '0.9rem', color: '#374151' }}>Location & Time Zone</label>
                      <div className="location-timezone-flex" style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
                         <div className="location-input-wrapper" style={{ flex: '2', minWidth: '200px' }}>
-                             <input type="text" defaultValue="Hybrid · San Francisco HQ" style={inputStyle} />
+                             <input 
+                                type="text" 
+                                value={empDetails?.location || ''} 
+                                onChange={(e) => setEmpDetails(empDetails ? {...empDetails, location: e.target.value} : null)}
+                                style={inputStyle} 
+                             />
                         </div>
                         <div className="timezone-input-wrapper" style={{ flex: '1', minWidth: '150px' }}>
-                             <TimezoneSelect />
+                             <TimezoneSelect 
+                                value={empDetails?.timezone || ''} 
+                                onChange={(val) => setEmpDetails(empDetails ? {...empDetails, timezone: val} : null)} 
+                             />
                         </div>
                      </div>
                 </div>
@@ -274,17 +451,26 @@ const EditProfileForm = () => {
                 {/* Phone No */}
                 <div>
                     <label style={{ display: 'block', fontWeight: 'bold', marginBottom: '0.5rem', fontSize: '0.9rem', color: '#374151' }}>Phone No</label>
-                    <PhoneInput />
+                    <PhoneInput 
+                        value={empDetails?.phone || ''} 
+                        onChange={(val) => setEmpDetails(empDetails ? {...empDetails, phone: val} : null)} 
+                    />
                 </div>
 
                 <div style={{ gridColumn: '1 / -1' }}>
-                    <FormGroup label="On Boarding Date" value="14-02-2026" />
+                    <label style={{ display: 'block', fontWeight: 'bold', marginBottom: '0.5rem', fontSize: '0.9rem', color: '#374151' }}>On Boarding Date</label>
+                    <input 
+                        type="date" 
+                        value={empDetails?.onboardingDate ? new Date(empDetails.onboardingDate).toISOString().split('T')[0] : ''} 
+                        onChange={(e) => setEmpDetails(empDetails ? {...empDetails, onboardingDate: e.target.value} : null)}
+                        style={inputStyle} 
+                    />
                 </div>
             </div>
 
             <div style={{ marginTop: '2rem' }}>
-                <button type="submit" style={{ backgroundColor: '#38AC57', color: 'white', border: 'none', padding: '0.8rem 2rem', borderRadius: '2rem', cursor: 'pointer', fontWeight: '600', fontSize: '1rem' }}>
-                    Update Profile
+                <button type="submit" disabled={loading} style={{ backgroundColor: '#38AC57', color: 'white', border: 'none', padding: '0.8rem 2rem', borderRadius: '2rem', cursor: loading ? 'not-allowed' : 'pointer', fontWeight: '600', fontSize: '1rem', opacity: loading ? 0.7 : 1 }}>
+                    {loading ? 'Updating...' : 'Update Profile'}
                 </button>
             </div>
 
@@ -316,27 +502,90 @@ const EditProfileForm = () => {
 };
 
 const ChangePasswordForm = () => {
+    const [currentPassword, setCurrentPassword] = useState('');
+    const [newPassword, setNewPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
     const [showCurrent, setShowCurrent] = useState(false);
     const [showNew, setShowNew] = useState(false);
     const [showConfirm, setShowConfirm] = useState(false);
     const [errorType, setErrorType] = useState<'none' | 'incorrect' | 'mismatch'>('none');
+    const [errorMessage, setErrorMessage] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
+    const [showSuccess, setShowSuccess] = useState(false);
     
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        // Reset or simulate
         setErrorType('none');
+        setErrorMessage('');
+
+        // Client-side validation
+        if (!currentPassword || !newPassword || !confirmPassword) {
+            setErrorMessage('All fields are required');
+            return;
+        }
+
+        if (newPassword !== confirmPassword) {
+            setErrorType('mismatch');
+            return;
+        }
+
+        if (newPassword.length < 6) {
+            setErrorMessage('New password must be at least 6 characters');
+            return;
+        }
+
+        setIsLoading(true);
+
+        try {
+            const { changePasswordApi } = await import('../services/api');
+            const result = await changePasswordApi({
+                currentPassword,
+                newPassword,
+                confirmPassword,
+            });
+
+            if (!result.ok) {
+                const msg = result.data?.message || 'Failed to change password.';
+                // Check if server says current password is wrong
+                if (result.status === 401 || msg.toLowerCase().includes('current') || msg.toLowerCase().includes('incorrect')) {
+                    setErrorType('incorrect');
+                } else {
+                    setErrorMessage(msg);
+                }
+                return;
+            }
+
+            // Success
+            setShowSuccess(true);
+            setCurrentPassword('');
+            setNewPassword('');
+            setConfirmPassword('');
+            setTimeout(() => setShowSuccess(false), 3000);
+        } catch (err: unknown) {
+            const message = err instanceof Error ? err.message : 'An error occurred. Please try again.';
+            setErrorMessage(message);
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     return (
-        <form onSubmit={handleSubmit} style={{ maxWidth: '600px', display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+        <form onSubmit={handleSubmit} style={{ maxWidth: '600px', display: 'flex', flexDirection: 'column', gap: '1.5rem', position: 'relative' }}>
+             {errorMessage && (
+                <div style={{ backgroundColor: '#fef2f2', border: '1px solid #fecaca', borderRadius: '0.75rem', padding: '0.75rem 1rem', color: '#dc2626', fontSize: '0.875rem', fontWeight: '500' }}>
+                    {errorMessage}
+                </div>
+             )}
+
              <div style={{ marginBottom: '1rem' }}>
                 <h3 style={{ margin: '0 0 0.5rem 0', fontSize: '1rem', fontWeight: '800', color: '#111827' }}>Current Password</h3>
                 <div style={{ position: 'relative' }}>
                     <input 
                         type={showCurrent ? "text" : "password"} 
                         placeholder="Enter Your Current Password" 
+                        value={currentPassword}
+                        onChange={(e) => { setCurrentPassword(e.target.value); errorType === 'incorrect' && setErrorType('none'); }}
                         style={{ ...inputStyle, borderRadius: '0.75rem', border: errorType === 'incorrect' ? '1px solid #ef4444' : '1px solid #e5e7eb', backgroundColor: 'white' }} 
-                        onChange={() => errorType === 'incorrect' && setErrorType('none')}
                     />
                     <button 
                         type="button" 
@@ -355,6 +604,8 @@ const ChangePasswordForm = () => {
                     <input 
                         type={showNew ? "text" : "password"} 
                         placeholder="Enter Your New Password" 
+                        value={newPassword}
+                        onChange={(e) => setNewPassword(e.target.value)}
                         style={{ ...inputStyle, borderRadius: '0.75rem', border: '1px solid #111827', backgroundColor: 'white' }} 
                     />
                     <button 
@@ -373,8 +624,9 @@ const ChangePasswordForm = () => {
                     <input 
                         type={showConfirm ? "text" : "password"} 
                         placeholder="Confirm Your New Password" 
+                        value={confirmPassword}
+                        onChange={(e) => { setConfirmPassword(e.target.value); errorType === 'mismatch' && setErrorType('none'); }}
                         style={{ ...inputStyle, borderRadius: '0.75rem', border: errorType === 'mismatch' ? '1px solid #ef4444' : '1px solid #e5e7eb', backgroundColor: 'white' }} 
-                        onChange={() => errorType === 'mismatch' && setErrorType('none')}
                     />
                     <button 
                          type="button" 
@@ -388,28 +640,83 @@ const ChangePasswordForm = () => {
             </div>
 
             <div style={{ marginTop: '1rem' }}>
-                 <button type="submit" style={{ backgroundColor: '#38AC57', color: 'white', border: 'none', padding: '0.8rem 2rem', borderRadius: '2rem', cursor: 'pointer', fontWeight: '600', fontSize: '1rem' }}>
-                    Update Password
+                 <button 
+                    type="submit" 
+                    disabled={isLoading}
+                    style={{ 
+                        backgroundColor: '#38AC57', 
+                        color: 'white', 
+                        border: 'none', 
+                        padding: '0.8rem 2rem', 
+                        borderRadius: '2rem', 
+                        cursor: isLoading ? 'not-allowed' : 'pointer', 
+                        fontWeight: '600', 
+                        fontSize: '1rem',
+                        opacity: isLoading ? 0.7 : 1,
+                        transition: 'all 0.2s'
+                    }}
+                >
+                    {isLoading ? 'Updating...' : 'Update Password'}
                 </button>
             </div>
+
+            {/* Success Toast */}
+            {showSuccess && (
+                <div style={{ 
+                    position: 'fixed', 
+                    bottom: '2rem', 
+                    right: '2rem', 
+                    backgroundColor: 'white', 
+                    color: '#374151', 
+                    padding: '1rem 2rem', 
+                    borderRadius: '3rem', 
+                    boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.8rem',
+                    border: '1px solid #e5e7eb',
+                    zIndex: 1000,
+                    animation: 'slideIn 0.3s ease-out'
+                }}>
+                    <div style={{ backgroundColor: 'black', borderRadius: '50%', padding: '2px', display: 'flex' }}>
+                         <CheckCircle size={16} color="white" />
+                    </div>
+                    <span style={{ fontWeight: '500' }}>Password changed successfully</span>
+                </div>
+            )}
         </form>
     );
 }
 
-const LoginHistory = () => {
-    const historyData = [
-        { id: '1', displayId: 'ID-001', member: { name: 'Ahmed El Mansouri', email: 'ahmed.mansouri@hezzni.ma', img: 'https://i.pravatar.cc/150?u=12' }, role: 'Developer', status: 'Active', lastLogin: '2026-01-30 02:35 PM', lastLogout: '2026-01-30 05:35 PM' },
-        { id: '2', displayId: 'ID-002', member: { name: 'Fatima Zahra', email: 'fatima.zahra@hezzni.ma', img: 'https://i.pravatar.cc/150?u=13' }, role: 'Developer', status: 'Active', lastLogin: '2026-01-30 02:35 PM', lastLogout: '2026-01-30 05:35 PM' },
-        { id: '3', displayId: 'ID-003', member: { name: 'Youssef Benali', email: 'youssef.benali@hezzni.ma', img: 'https://i.pravatar.cc/150?u=14' }, role: 'Developer', status: 'Active', lastLogin: '2026-01-30 02:35 PM', lastLogout: '2026-01-30 05:35 PM' },
-        { id: '4', displayId: 'ID-004', member: { name: 'Sara Alami', email: 'sara.alami@hezzni.ma', img: 'https://i.pravatar.cc/150?u=15' }, role: 'Developer', status: 'Active', lastLogin: '2026-01-30 02:35 PM', lastLogout: '2026-01-30 05:35 PM' },
-        { id: '5', displayId: 'ID-005', member: { name: 'Omar Idrissi', email: 'omar.idrissi@hezzni.ma', img: 'https://i.pravatar.cc/150?u=16' }, role: 'Developer', status: 'Inactive', lastLogin: '2026-01-30 02:35 PM', lastLogout: '2026-01-30 05:35 PM' },
-    ];
+const TeamManagement = () => {
+    const [teamData, setTeamData] = useState<TeamMember[]>([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchTeam = async () => {
+            try {
+                const response = await getTeamMembersApi();
+                if (response.ok) {
+                    setTeamData(response.data);
+                }
+            } catch (err) {
+                console.error('Failed to fetch team members', err);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchTeam();
+    }, []);
+
+    if (loading) return <div style={{ padding: '2rem', textAlign: 'center' }}><Loader2 className="animate-spin" size={32} color="#38AC57" /></div>;
+
+    const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
     return (
         <div>
             <div style={{ marginBottom: '1.5rem' }}>
                 <h3 style={{ margin: 0, fontSize: '1.25rem', fontWeight: 'bold' }}>Team Management</h3>
-                <p style={{ margin: '0.2rem 0 0 0', color: 'var(--text-secondary)', fontSize: '0.9rem' }}>View your recent account activity</p>
+                <p style={{ margin: '0.2rem 0 0 0', color: '#64748b', fontSize: '0.9rem' }}>View and manage your team members</p>
             </div>
 
             <div style={{ overflowX: 'auto' }}>
@@ -425,15 +732,19 @@ const LoginHistory = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {historyData.map((row) => (
+                        {teamData.map((row) => (
                             <tr key={row.id} style={{ backgroundColor: 'white', boxShadow: '0 2px 4px rgba(0,0,0,0.02)' }}>
-                                <td style={{ padding: '1rem', borderTopLeftRadius: '0.5rem', borderBottomLeftRadius: '0.5rem', fontWeight: '500' }}>{row.displayId}</td>
+                                <td style={{ padding: '1rem', borderTopLeftRadius: '0.5rem', borderBottomLeftRadius: '0.5rem', fontWeight: '500' }}>#{row.id}</td>
                                 <td style={{ padding: '1rem' }}>
                                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.8rem' }}>
-                                        <img src={row.member.img} alt="" style={{ width: '36px', height: '36px', borderRadius: '50%' }} />
+                                        <img 
+                                           src={row.avatar ? `${API_URL}/uploads/avatars/${row.avatar}` : `https://i.pravatar.cc/150?u=${row.id}`} 
+                                           alt="" 
+                                           style={{ width: '36px', height: '36px', borderRadius: '50%', objectFit: 'cover' }} 
+                                        />
                                         <div style={{ display: 'flex', flexDirection: 'column' }}>
-                                            <span style={{ fontWeight: '600', fontSize: '0.9rem', color: '#111827' }}>{row.member.name}</span>
-                                            <span style={{ fontSize: '0.75rem', color: '#9ca3af' }}>{row.member.email}</span>
+                                            <span style={{ fontWeight: '600', fontSize: '0.9rem', color: '#111827' }}>{row.name}</span>
+                                            <span style={{ fontSize: '0.75rem', color: '#9ca3af' }}>{row.email}</span>
                                         </div>
                                     </div>
                                 </td>
@@ -442,8 +753,8 @@ const LoginHistory = () => {
                                 </td>
                                 <td style={{ padding: '1rem' }}>
                                      <span style={{ 
-                                         backgroundColor: row.status === 'Active' ? '#eef7f0' : '#f3f4f6', 
-                                         color: row.status === 'Active' ? '#2d8a46' : '#4b5563', 
+                                         backgroundColor: row.status === 'Available' ? '#eef7f0' : '#f3f4f6', 
+                                         color: row.status === 'Available' ? '#2d8a46' : '#4b5563', 
                                          padding: '0.3rem 0.8rem', 
                                          borderRadius: '1rem', 
                                          fontSize: '0.8rem', 
@@ -453,16 +764,20 @@ const LoginHistory = () => {
                                     </span>
                                 </td>
                                 <td style={{ padding: '1rem' }}>
-                                    <div style={{ fontSize: '0.85rem', fontWeight: '500' }}>
-                                        <div>{row.lastLogin.split(' ')[0]}</div>
-                                        <div style={{ fontSize: '0.75rem', color: '#9ca3af' }}>{row.lastLogin.split(' ').slice(1).join(' ')}</div>
-                                    </div>
+                                    {row.last_login ? (
+                                        <div style={{ fontSize: '0.85rem', fontWeight: '500' }}>
+                                            <div>{new Date(row.last_login).toLocaleDateString()}</div>
+                                            <div style={{ fontSize: '0.75rem', color: '#9ca3af' }}>{new Date(row.last_login).toLocaleTimeString()}</div>
+                                        </div>
+                                    ) : 'Never'}
                                 </td>
                                 <td style={{ padding: '1rem', borderTopRightRadius: '0.5rem', borderBottomRightRadius: '0.5rem' }}>
-                                    <div style={{ fontSize: '0.85rem', fontWeight: '500' }}>
-                                        <div>{row.lastLogout.split(' ')[0]}</div>
-                                        <div style={{ fontSize: '0.75rem', color: '#9ca3af' }}>{row.lastLogout.split(' ').slice(1).join(' ')}</div>
-                                    </div>
+                                    {row.last_logout ? (
+                                        <div style={{ fontSize: '0.85rem', fontWeight: '500' }}>
+                                            <div>{new Date(row.last_logout).toLocaleDateString()}</div>
+                                            <div style={{ fontSize: '0.75rem', color: '#9ca3af' }}>{new Date(row.last_logout).toLocaleTimeString()}</div>
+                                        </div>
+                                    ) : (row.last_login ? 'Active' : 'N/A')}
                                 </td>
                             </tr>
                         ))}
@@ -471,15 +786,65 @@ const LoginHistory = () => {
             </div>
         </div>
     );
-}
+};
 
-const LanguageTimezone = () => {
-    const [selectedLang, setSelectedLang] = useState('English');
+const PolicyContent = ({ type }: { type: 'privacy' | 'terms' }) => {
+    const [content, setContent] = useState('');
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchPolicy = async () => {
+            setLoading(true);
+            try {
+                const response = type === 'privacy' ? await getPrivacyPolicyApi() : await getTermsOfServiceApi();
+                if (response.ok) {
+                    setContent((response.data as any).content);
+                }
+            } catch (err) {
+                console.error(`Failed to fetch ${type}`, err);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchPolicy();
+    }, [type]);
+
+    if (loading) return <div style={{ padding: '2rem', textAlign: 'center' }}><Loader2 className="animate-spin" size={32} color="#38AC57" /></div>;
+
+    return (
+        <div className="card" style={{ padding: '2rem', lineHeight: '1.6' }}>
+            <h2 style={{ marginBottom: '1.5rem', color: '#111827' }}>{type === 'privacy' ? 'Privacy Policy' : 'Terms of Service'}</h2>
+            <div style={{ whiteSpace: 'pre-wrap' }}>
+                {content || `No ${type} content available.`}
+            </div>
+        </div>
+    );
+};
+
+const LanguageTimezone = ({ initialLanguage, onUpdate }: { initialLanguage?: 'EN' | 'AR' | 'FR'; onUpdate: () => void }) => {
+    const [selectedLang, setSelectedLang] = useState(initialLanguage || 'EN');
+    const [loading, setLoading] = useState(false);
+    
     const languages = [
         { code: 'EN', name: 'English', region: 'English (US)' },
         { code: 'AR', name: 'Arabic', region: 'العربية' },
         { code: 'FR', name: 'French', region: 'Français' },
     ];
+
+
+    const handleSave = async () => {
+        setLoading(true);
+        try {
+            const response = await updateAdminLanguageApi(selectedLang);
+            if (response.ok) {
+                onUpdate();
+            }
+        } catch (err) {
+            console.error('Failed to update language', err);
+        } finally {
+            setLoading(false);
+        }
+    };
 
     return (
         <div style={{ }}>
@@ -493,12 +858,12 @@ const LanguageTimezone = () => {
                             alignItems: 'center', 
                             justifyContent: 'space-between',
                             padding: '1rem 1.5rem', 
-                            border: `1px solid ${selectedLang === lang.name ? '#38AC57' : '#e5e7eb'}`, 
+                            border: `1px solid ${selectedLang === lang.code ? '#38AC57' : '#e5e7eb'}`, 
                             borderRadius: '0.75rem', 
                             cursor: 'pointer',
-                            backgroundColor: selectedLang === lang.name ? '#eef7f0' : 'white',
+                            backgroundColor: selectedLang === lang.code ? '#eef7f0' : 'white',
                             transition: 'all 0.2s',
-                            boxShadow: selectedLang === lang.name ? '0 1px 2px rgba(0,0,0,0.05)' : 'none'
+                            boxShadow: selectedLang === lang.code ? '0 1px 2px rgba(0,0,0,0.05)' : 'none'
                         }}
                     >
                         <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
@@ -521,23 +886,23 @@ const LanguageTimezone = () => {
                             </div>
                         </div>
                         <div style={{ display: 'flex', alignItems: 'center' }}>
-                             {selectedLang === lang.name && <span style={{ marginRight: '1rem', fontSize: '0.8rem', color: '#2d8a46', backgroundColor: '#eef7f0', padding: '0.2rem 0.6rem', borderRadius: '4px', fontWeight: '500' }}>current</span>}
+                             {selectedLang === lang.code && <span style={{ marginRight: '1rem', fontSize: '0.8rem', color: '#2d8a46', backgroundColor: '#eef7f0', padding: '0.2rem 0.6rem', borderRadius: '4px', fontWeight: '500' }}>current</span>}
                              <div style={{ 
                                  width: '20px', 
                                  height: '20px', 
                                  borderRadius: '50%', 
-                                 border: `2px solid ${selectedLang === lang.name ? '#38AC57' : '#d1d5db'}`,
+                                 border: `2px solid ${selectedLang === lang.code ? '#38AC57' : '#d1d5db'}`,
                                  display: 'flex',
                                  alignItems: 'center',
                                  justifyContent: 'center'
                              }}>
-                                 {selectedLang === lang.name && <div style={{ width: '10px', height: '10px', borderRadius: '50%', backgroundColor: '#38AC57' }}></div>}
+                                 {selectedLang === lang.code && <div style={{ width: '10px', height: '10px', borderRadius: '50%', backgroundColor: '#38AC57' }}></div>}
                              </div>
                              <input 
                                 type="radio" 
                                 name="language" 
-                                checked={selectedLang === lang.name} 
-                                onChange={() => setSelectedLang(lang.name)}
+                                checked={selectedLang === lang.code} 
+                                onChange={() => setSelectedLang(lang.code as any)}
                                 style={{ display: 'none' }}
                             />
                         </div>
@@ -545,16 +910,18 @@ const LanguageTimezone = () => {
                 ))}
             </div>
              <div style={{ marginTop: '2rem' }}>
-                <button style={{ backgroundColor: '#38AC57', color: 'white', border: 'none', padding: '0.8rem 2rem', borderRadius: '2rem', cursor: 'pointer', fontWeight: '600', fontSize: '1rem' }}>
-                    Save Changes
+                <button 
+                  onClick={handleSave} 
+                  disabled={loading}
+                  style={{ backgroundColor: '#38AC57', color: 'white', border: 'none', padding: '0.8rem 2rem', borderRadius: '2rem', cursor: loading ? 'not-allowed' : 'pointer', fontWeight: '600', fontSize: '1rem', opacity: loading ? 0.7 : 1 }}>
+                    {loading ? 'Saving...' : 'Save Changes'}
                 </button>
             </div>
         </div>
     );
 };
 
-const PhoneInput = () => {
-    const [phoneNumber, setPhoneNumber] = useState('605884449');
+const PhoneInput = ({ value, onChange }: { value: string; onChange: (val: string) => void }) => {
     const [selectedCountry, setSelectedCountry] = useState({ code: '+212', flag: '🇲🇦', name: 'Morocco' });
     const [showDropdown, setShowDropdown] = useState(false);
 
@@ -575,16 +942,6 @@ const PhoneInput = () => {
         { code: '+55', flag: '🇧🇷', name: 'Brazil' },
     ];
 
-    const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const val = e.target.value;
-        setPhoneNumber(val);
-        
-        // Auto-detect based on prefix
-        const detect = countries.find(c => val.startsWith(c.code.replace('+', '')) || val.startsWith(c.code));
-        if (detect) {
-            setSelectedCountry(detect);
-        }
-    };
 
     return (
         <div style={{ position: 'relative' }}>
@@ -598,8 +955,8 @@ const PhoneInput = () => {
                 </div>
                 <input 
                     type="text" 
-                    value={phoneNumber} 
-                    onChange={handlePhoneChange}
+                    value={value} 
+                    onChange={(e) => onChange(e.target.value)}
                     style={{ ...inputStyle, border: 'none', boxShadow: 'none', backgroundColor: 'transparent' }} 
                 />
             </div>
@@ -636,8 +993,7 @@ const PhoneInput = () => {
     );
 };
 
-const TimezoneSelect = () => {
-    const [selected, setSelected] = useState('(GMT-08:00) Pacific Time');
+const TimezoneSelect = ({ value, onChange }: { value: string; onChange: (val: string) => void }) => {
     const [show, setShow] = useState(false);
 
     const timezones = [
@@ -668,7 +1024,7 @@ const TimezoneSelect = () => {
                 onClick={() => setShow(!show)}
                 style={{ ...inputStyle, cursor: 'pointer', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
             >
-                <span style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{selected}</span>
+                <span style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{value || 'Select Timezone'}</span>
                 <span>⌄</span>
             </div>
             {show && (
@@ -688,7 +1044,7 @@ const TimezoneSelect = () => {
                     {timezones.map(tz => (
                         <div 
                             key={tz} 
-                            onClick={() => { setSelected(tz); setShow(false); }}
+                            onClick={() => { onChange(tz); setShow(false); }}
                             style={{ padding: '0.8rem 1rem', cursor: 'pointer', fontSize: '0.875rem' }}
                             onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#eef7f0'}
                             onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
@@ -713,13 +1069,14 @@ const inputStyle = {
     outline: 'none'
 };
 
-const FormGroup = ({ label, value }: { label: string; value: string }) => (
+const FormGroup = ({ label, value, disabled }: { label: string; value: string; disabled?: boolean }) => (
     <div>
         <label style={{ display: 'block', fontWeight: 'bold', marginBottom: '0.5rem', fontSize: '0.9rem', color: '#374151' }}>{label}</label>
         <input 
             type="text" 
             defaultValue={value} 
-            style={inputStyle} 
+            readOnly={disabled}
+            style={{ ...inputStyle, opacity: disabled ? 0.7 : 1, cursor: disabled ? 'not-allowed' : 'text' }} 
         />
     </div>
 );

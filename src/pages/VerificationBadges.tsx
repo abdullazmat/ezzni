@@ -3,6 +3,7 @@ import {
     Search, Eye, X, ArrowLeft, 
     Check, ChevronDown, AlertCircle, ArrowUpRight
 } from 'lucide-react';
+import { UserAvatar } from '../components/UserAvatar';
 
 // Specialized Icons
 import totalRidersDriversIcon from '../assets/icons/Total Riders  Drivers.png';
@@ -548,27 +549,7 @@ export const VerificationBadges = () => {
                                 </td>
                                 <td style={{ padding: '1rem' }}>
                                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.8rem' }}>
-                                    <div style={{ position: 'relative' }}>
-                                        <img src={user.avatar} alt="" style={{ width: '40px', height: '40px', borderRadius: '50%', objectFit: 'cover' }} />
-                                        {user.isVerified && (
-                                            <div style={{ 
-                                                position: 'absolute', 
-                                                top: -2, 
-                                                right: -2, 
-                                                backgroundColor: 'black', 
-                                                borderRadius: '50%', 
-                                                width: '14px', 
-                                                height: '14px', 
-                                                display: 'flex', 
-                                                alignItems: 'center', 
-                                                justifyContent: 'center',
-                                                border: '2px solid white'
-                                            }}>
-                                                <Check size={8} color="white" strokeWidth={4} />
-                                            </div>
-                                        )}
-                                        <div style={{ position: 'absolute', bottom: -5, left: '50%', transform: 'translateX(-50%)', backgroundColor: '#fbbf24', padding: '0.1rem 0.3rem', borderRadius: '0.3rem', fontSize: '0.6rem', color: 'white', display: 'flex', alignItems: 'center', gap: '2px', whiteSpace: 'nowrap' }}>★ {user.rating}</div>
-                                    </div>
+                                        <UserAvatar src={user.avatar} rating={user.rating} showBadge={user.isVerified} size={40} />
                                         <div>
                                             <div style={{ fontWeight: '600', fontSize: '0.9rem' }}>{user.name}</div>
                                             <div style={{ fontSize: '0.75rem', color: '#9ca3af' }}>{user.displayId}</div>
@@ -676,27 +657,7 @@ export const VerificationBadges = () => {
                         <h3 style={{ fontSize: '1.2rem', fontWeight: 'bold', marginBottom: '1rem' }}>{selectedUser.userType} Information</h3>
                         <div style={{ backgroundColor: 'white', padding: '2rem', borderRadius: '1rem', border: '1px solid #f3f4f6', boxShadow: '0 1px 3px rgba(0,0,0,0.05)', marginBottom: '2rem' }}>
                             <div className="vb-flex-responsive">
-                                <div style={{ position: 'relative', height: 'fit-content' }}>
-                                    <img src={selectedUser.avatar} alt="" style={{ width: '80px', height: '80px', borderRadius: '50%', objectFit: 'cover' }} />
-                                    {selectedUser.isVerified && (
-                                        <div style={{ 
-                                            position: 'absolute', 
-                                            top: -2, 
-                                            right: -2, 
-                                            backgroundColor: 'black', 
-                                            borderRadius: '50%', 
-                                            width: '20px', 
-                                            height: '20px', 
-                                            display: 'flex', 
-                                            alignItems: 'center', 
-                                            justifyContent: 'center',
-                                            border: '2px solid white'
-                                        }}>
-                                            <Check size={12} color="white" strokeWidth={4} />
-                                        </div>
-                                    )}
-                                    <div style={{ position: 'absolute', bottom: -5, left: '50%', transform: 'translateX(-50%)', backgroundColor: '#fbbf24', padding: '0.1rem 0.6rem', borderRadius: '1rem', fontSize: '0.75rem', color: 'white', display: 'flex', alignItems: 'center', gap: '2px', whiteSpace: 'nowrap' }}>★ {selectedUser.rating}</div>
-                                </div>
+                                    <UserAvatar src={selectedUser.avatar} rating={selectedUser.rating} showBadge={selectedUser.isVerified} size={80} />
                                 <div style={{ flex: 1 }}>
                                     <div className="vb-info-grid" style={{ marginBottom: '1.5rem' }}>
                                         <div><div style={{ fontSize: '0.8rem', color: '#9ca3af', marginBottom: '0.3rem' }}>User ID</div><div style={{ fontWeight: 'bold', fontSize: '1rem' }}>{selectedUser.id}</div></div>
@@ -739,27 +700,7 @@ export const VerificationBadges = () => {
                             <h3 style={{ fontSize: '1.2rem', fontWeight: 'bold', marginBottom: '1rem' }}>Performance Metrics</h3>
                             <div style={{ backgroundColor: 'white', padding: '2rem', borderRadius: '1rem', border: '1px solid #f3f4f6', boxShadow: '0 1px 3px rgba(0,0,0,0.05)', marginBottom: '2rem' }}>
                                 <div className="vb-flex-responsive" style={{ alignItems: 'center' }}>
-                                     <div style={{ position: 'relative' }}>
-                                        <img src={selectedUser.avatar} alt="" style={{ width: '64px', height: '64px', borderRadius: '50%', objectFit: 'cover' }} />
-                                        {selectedUser.isVerified && (
-                                            <div style={{ 
-                                                position: 'absolute', 
-                                                top: -2, 
-                                                right: -2, 
-                                                backgroundColor: 'black', 
-                                                borderRadius: '50%', 
-                                                width: '18px', 
-                                                height: '18px', 
-                                                display: 'flex', 
-                                                alignItems: 'center', 
-                                                justifyContent: 'center',
-                                                border: '2px solid white'
-                                            }}>
-                                                <Check size={10} color="white" strokeWidth={4} />
-                                            </div>
-                                        )}
-                                        <div style={{ position: 'absolute', bottom: -5, left: '50%', transform: 'translateX(-50%)', backgroundColor: '#fbbf24', padding: '0.1rem 0.4rem', borderRadius: '0.3rem', fontSize: '0.7rem', color: 'white', display: 'flex', alignItems: 'center', gap: '2px', whiteSpace: 'nowrap' }}>★ {selectedUser.rating}</div>
-                                     </div>
+                                      <UserAvatar src={selectedUser.avatar} rating={selectedUser.rating} showBadge={selectedUser.isVerified} size={64} />
                                      <div className="vb-metrics-grid" style={{ flex: 1, textAlign: 'left' }}>
                                          <div><div style={{ fontSize: '0.8rem', color: '#9ca3af', marginBottom: '0.3rem' }}>Trip count</div><div style={{ fontWeight: 'bold', fontSize: '1.1rem' }}>{selectedUser.totalTrips}+</div></div>
                                          <div><div style={{ fontSize: '0.8rem', color: '#9ca3af', marginBottom: '0.3rem' }}>Vehicle Type</div><div style={{ fontWeight: 'bold', fontSize: '1.1rem' }}>{selectedUser.vehicleType}</div></div>

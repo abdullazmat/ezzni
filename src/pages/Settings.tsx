@@ -5,8 +5,7 @@ import {
   Layout, 
   MapPin,
   FileText,
-  Gift,
-  Bell
+  Gift
 } from 'lucide-react';
 
 // Sub-components
@@ -70,7 +69,7 @@ export const Settings = ({ onNavigate }: SettingsProps) => {
         .vp-settings-header {
             display: flex;
             justify-content: space-between;
-            align-items: flex-start;
+            align-items: center;
             gap: 2rem;
             margin-bottom: 2rem;
             flex-wrap: wrap;
@@ -91,103 +90,23 @@ export const Settings = ({ onNavigate }: SettingsProps) => {
             font-weight: 500;
         }
 
-        .vp-settings-actions {
-            display: flex;
-            align-items: center;
-            gap: 1.5rem;
-            flex-wrap: wrap;
-        }
-
-        .vp-header-search {
-            position: relative;
-            width: 400px;
-            max-width: 100%;
-        }
-
-        .vp-header-search input {
-            width: 100%;
-            padding: 0.875rem 5rem 0.875rem 1.75rem;
-            border-radius: 100px;
-            border: 1px solid #e2e8f0;
-            font-size: 1rem;
-            font-weight: 500;
-            outline: none;
-            transition: all 0.2s;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
-        }
-
-        .vp-header-search input:focus {
-            border-color: #38AC57;
-            box-shadow: 0 0 0 4px rgba(56, 172, 87, 0.1);
-        }
-
-        .vp-header-search button {
-            position: absolute;
-            right: 6px;
-            top: 6px;
+        .vp-analytics-btn {
             background-color: #38AC57;
             color: white;
             border: none;
-            padding: 0.65rem 1.75rem;
-            border-radius: 100px;
-            font-weight: 800;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .vp-header-profile {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            background: white;
-            padding: 0.5rem 1.5rem 0.5rem 0.5rem;
-            border-radius: 100px;
-            border: 1px solid #e2e8f0;
-            cursor: pointer;
-            transition: all 0.2s;
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
-        }
-
-        .vp-header-profile:hover {
-            border-color: #38AC57;
-            transform: translateY(-1px);
-        }
-
-        .vp-profile-text .name {
-            font-size: 1rem;
-            font-weight: 800;
-            color: #1e293b;
-        }
-
-        .vp-profile-text .role {
-            font-size: 0.8rem;
-            color: #38AC57;
-            font-weight: 700;
-        }
-
-        .vp-analytics-bar {
-            display: flex;
-            justify-content: flex-end;
-            margin-bottom: 2.5rem;
-        }
-
-        .vp-analytics-btn {
-            background-color: #111827;
-            color: white;
-            border: none;
-            padding: 1rem 2.25rem;
+            padding: 0.875rem 2.25rem;
             border-radius: 100px;
             font-weight: 800;
             font-size: 1rem;
             cursor: pointer;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 10px 15px -3px rgba(17, 24, 39, 0.2);
+            box-shadow: 0 4px 12px rgba(56, 172, 87, 0.2);
         }
 
         .vp-analytics-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 20px 25px -5px rgba(17, 24, 39, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(56, 172, 87, 0.3);
+            background-color: #2e8a46;
         }
 
         .vp-settings-tabs {
@@ -288,39 +207,13 @@ export const Settings = ({ onNavigate }: SettingsProps) => {
         </div>
         
         <div className="vp-settings-actions">
-          <div className="vp-header-search">
-            <input type="text" placeholder="Search settings..." />
-            <button onClick={() => alert('Searching settings...')}>Search</button>
-          </div>
-          
-          <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
-            <div 
-              className="vp-notification-badge"
-              onClick={() => alert('No new notifications')}
-              style={{ position: 'relative', cursor: 'pointer' }}
-            >
-              <Bell size={26} color="#64748b" />
-              <span style={{ position: 'absolute', top: '-1px', right: '-1px', width: '12px', height: '12px', backgroundColor: '#38AC57', borderRadius: '50%', border: '2.5px solid white' }}></span>
-            </div>
-
-            <div className="vp-header-profile" onClick={() => alert('Opening Profile...')}>
-              <img src="https://i.pravatar.cc/150?u=paityn" alt="User" style={{ width: '44px', height: '44px', borderRadius: '50%' }} />
-              <div className="vp-profile-text">
-                <div className="name">Paityn Calzo</div>
-                <div className="role">Platform Admin</div>
-              </div>
-            </div>
-          </div>
+          <button 
+            className="vp-analytics-btn"
+            onClick={() => onNavigate ? onNavigate('report') : alert('Loading Analytics...')}
+          >
+            Review Analytics
+          </button>
         </div>
-      </div>
-
-      <div className="vp-analytics-bar">
-        <button 
-          className="vp-analytics-btn"
-          onClick={() => onNavigate ? onNavigate('report') : alert('Loading Analytics...')}
-        >
-          Review Analytics
-        </button>
       </div>
 
       {/* Tab Navigation */}

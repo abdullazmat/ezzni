@@ -4,6 +4,7 @@ import {
     ArrowUpRight, 
     Filter, ChevronDown
 } from 'lucide-react';
+import { UserAvatar } from '../components/UserAvatar';
 
 // Icons
 import totalDeliveriesIcon from '../assets/icons/Total Deliveries.png';
@@ -487,20 +488,14 @@ export const DeliveryServices = () => {
                                 </span>
                             </div>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '0.8rem' }}>
-                                <div style={{ position: 'relative' }}>
-                                    <img src={item.rider.avatar} alt="" style={{ width: 36, height: 36, borderRadius: '50%' }} />
-                                    <div style={{ position: 'absolute', bottom: -4, left: '50%', transform: 'translateX(-50%)', backgroundColor: '#fbbf24', color: 'white', fontSize: '0.6rem', padding: '0 0.2rem', borderRadius: '0.2rem' }}>★{item.rider.rating}</div>
-                                </div>
+                                     <UserAvatar src={item.rider.avatar} rating={item.rider.rating} size={36} />
                                 <div>
                                     <div style={{ fontSize: '0.85rem', fontWeight: '600' }}>{item.rider.name}</div>
                                     <div style={{ fontSize: '0.7rem', color: '#9ca3af' }}>{item.rider.id}</div>
                                 </div>
                             </div>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '0.8rem' }}>
-                                <div style={{ position: 'relative' }}>
-                                    <img src={item.driver.avatar} alt="" style={{ width: 36, height: 36, borderRadius: '50%' }} />
-                                    <div style={{ position: 'absolute', bottom: -4, left: '50%', transform: 'translateX(-50%)', backgroundColor: '#fbbf24', color: 'white', fontSize: '0.6rem', padding: '0 0.2rem', borderRadius: '0.2rem' }}>★{item.driver.rating}</div>
-                                </div>
+                                     <UserAvatar src={item.driver.avatar} rating={item.driver.rating} size={36} />
                                 <div>
                                     <div style={{ fontSize: '0.85rem', fontWeight: '600' }}>{item.driver.name}</div>
                                     <div style={{ fontSize: '0.7rem', color: '#9ca3af' }}>{item.driver.id}</div>
@@ -562,10 +557,7 @@ export const DeliveryServices = () => {
             <div className="ds-people-grid">
                 {filteredDriverRiders.map((person, idx) => (
                    <div key={idx} className="card" style={{ padding: '1rem', display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                       <div style={{ position: 'relative' }}>
-                            <img src={person.avatar} alt="" style={{ width: 50, height: 50, borderRadius: '50%' }} />
-                            <div style={{ position: 'absolute', bottom: -5, left: '50%', transform: 'translateX(-50%)', backgroundColor: '#fbbf24', padding: '0 0.3rem', borderRadius: '0.3rem', fontSize: '0.6rem', color: 'white', whiteSpace: 'nowrap' }}>★ {person.rating}</div>
-                       </div>
+                        <UserAvatar src={person.avatar} rating={person.rating} size={50} />
                        <div style={{ flex: 1 }}>
                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                                <div>
@@ -598,15 +590,7 @@ export const DeliveryServices = () => {
                         <h3 style={{ fontSize: '1.25rem', fontWeight: '800', marginBottom: '1.25rem', color: '#1e293b' }}>Customer Information</h3>
                         <div style={{ border: '1px solid #f3f4f6', borderRadius: '1.5rem', padding: '1.5rem', marginBottom: '2rem', backgroundColor: 'white' }}>
                             <div className="ds-flex-responsive">
-                                <div style={{ position: 'relative', flexShrink: 0 }}>
-                                    <img src={selectedDelivery.rider.avatar} alt="" style={{ width: '72px', height: '72px', borderRadius: '50%', objectFit: 'cover' }} />
-                                    <div style={{ 
-                                        position: 'absolute', bottom: -5, left: '50%', transform: 'translateX(-50%)', 
-                                        backgroundColor: '#fbbf24', padding: '0.2rem 0.6rem', borderRadius: '1rem', 
-                                        fontSize: '0.75rem', color: 'white', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '2px',
-                                        boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
-                                    }}>★ {selectedDelivery.rider.rating}</div>
-                                </div>
+                                     <UserAvatar src={selectedDelivery.rider.avatar} rating={selectedDelivery.rider.rating} size={72} />
                                 <div className="ds-info-grid">
                                     <div>
                                         <div style={{ fontSize: '0.75rem', color: '#94a3b8', fontWeight: '500', marginBottom: '0.4rem' }}>Full Name</div>
@@ -651,15 +635,7 @@ export const DeliveryServices = () => {
                         <h3 style={{ fontSize: '1.25rem', fontWeight: '800', marginBottom: '1.25rem', color: '#1e293b' }}>Driver Information</h3>
                         <div style={{ border: '1px solid #f3f4f6', borderRadius: '1.5rem', padding: '1.5rem', marginBottom: '2rem', backgroundColor: 'white' }}>
                             <div className="ds-flex-responsive">
-                                <div style={{ position: 'relative', flexShrink: 0 }}>
-                                    <img src={selectedDelivery.driver.avatar} alt="" style={{ width: '72px', height: '72px', borderRadius: '50%', objectFit: 'cover' }} />
-                                    <div style={{ 
-                                        position: 'absolute', bottom: -5, left: '50%', transform: 'translateX(-50%)', 
-                                        backgroundColor: '#fbbf24', padding: '0.2rem 0.6rem', borderRadius: '1rem', 
-                                        fontSize: '0.75rem', color: 'white', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '2px',
-                                        boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
-                                    }}>★ {selectedDelivery.driver.rating}</div>
-                                </div>
+                                     <UserAvatar src={selectedDelivery.driver.avatar} rating={selectedDelivery.driver.rating} size={72} />
                                 <div className="ds-info-grid">
                                     <div>
                                         <div style={{ fontSize: '0.75rem', color: '#94a3b8', fontWeight: '500', marginBottom: '0.4rem' }}>Name</div>
@@ -776,10 +752,7 @@ export const DeliveryServices = () => {
                         <h3 style={{ fontSize: '1.1rem', fontWeight: 'bold', marginBottom: '1rem' }}>Payment Information</h3>
                         <div style={{ border: '1px solid #f3f4f6', borderRadius: '1rem', padding: '1.5rem', marginBottom: '1.5rem' }}>
                              <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '1rem' }}>
-                                <div style={{ position: 'relative' }}>
-                                    <img src={selectedDelivery.rider.avatar} alt="" style={{ width: '56px', height: '56px', borderRadius: '50%' }} />
-                                    <div style={{ position: 'absolute', bottom: -5, left: '50%', transform: 'translateX(-50%)', backgroundColor: '#fbbf24', padding: '0.1rem 0.5rem', borderRadius: '1rem', fontSize: '0.7rem', color: 'white', display: 'flex', alignItems: 'center', gap: '2px', whiteSpace: 'nowrap' }}>★ {selectedDelivery.rider.rating}</div>
-                                </div>
+                                     <UserAvatar src={selectedDelivery.rider.avatar} rating={selectedDelivery.rider.rating} size={56} />
                              </div>
 
                              <div className="ds-payment-grid">
