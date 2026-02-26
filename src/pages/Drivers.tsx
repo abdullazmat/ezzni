@@ -3,7 +3,7 @@ import {
     Search, Eye, ArrowLeft, 
     ArrowUpRight, 
     Filter, ChevronDown,
-    Star, Plus
+    Star, Plus, CheckCircle2
 } from 'lucide-react';
 import { UserAvatar } from '../components/UserAvatar';
 
@@ -11,6 +11,8 @@ import { UserAvatar } from '../components/UserAvatar';
 import carIcon from '../assets/icons/car.png';
 import taxiIcon from '../assets/icons/taxi.png';
 import bikeIcon from '../assets/icons/bike.png';
+import pickupIcon from '../assets/icons/pickup.png';
+import destinationIcon from '../assets/icons/destination.png';
 
 
 import { ChangeCategoryModal, RidePreferencesModal, SuspendDriverModal, TripSummaryModal } from './DriverModals';
@@ -285,9 +287,11 @@ const TripsHistoryModalContent = ({ onViewTripSummary }: { onViewTripSummary: (t
 
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
                              <div style={{ display: 'flex', alignItems: 'center', gap: '0.8rem' }}>
-                                 <UserAvatar src={`https://i.pravatar.cc/150?u=${trip.id + 10}`} size={40} showBadge={false} />
+                                 <UserAvatar src={`https://i.pravatar.cc/150?u=${trip.id + 10}`} rating={trip.rating} size={48} showBadge={false} />
                                  <div>
-                                     <div style={{ fontWeight: 'bold', fontSize: '0.9rem' }}>{trip.name}</div>
+                                     <div style={{ fontWeight: 'bold', fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                                         {trip.name} <CheckCircle2 size={12} fill="#3b82f6" color="white" />
+                                     </div>
                                      <div style={{ fontSize: '0.7rem', color: '#9ca3af' }}>{trip.date}</div>
                                  </div>
                              </div>
@@ -296,16 +300,26 @@ const TripsHistoryModalContent = ({ onViewTripSummary }: { onViewTripSummary: (t
                              </div>
                         </div>
 
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                                <div style={{ width: 10, height: 10, borderRadius: '50%', backgroundColor: '#38AC5720', border: '3px solid #38AC57' }}></div>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.8rem', position: 'relative', paddingLeft: '4px' }}>
+                            {/* Vertical dashed line */}
+                            <div style={{ 
+                                position: 'absolute', 
+                                left: '11px', 
+                                top: '15px', 
+                                bottom: '15px', 
+                                borderLeft: '2px dashed #e5e7eb',
+                                zIndex: 0
+                            }}></div>
+                            
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', position: 'relative', zIndex: 1 }}>
+                                <img src={pickupIcon} alt="pickup" style={{ width: '14px', height: '14px', objectFit: 'contain' }} />
                                 <div>
                                     <div style={{ fontSize: '0.65rem', color: '#9ca3af' }}>From</div>
                                     <div style={{ fontSize: '0.8rem', fontWeight: 'bold' }}>Current Location, Marrakech</div>
                                 </div>
                             </div>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                                 <div style={{ width: 10, height: 10, borderRadius: '50%', border: '2px solid #38AC57' }}></div>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', position: 'relative', zIndex: 1 }}>
+                                 <img src={destinationIcon} alt="destination" style={{ width: '14px', height: '14px', objectFit: 'contain' }} />
                                  <div>
                                     <div style={{ fontSize: '0.65rem', color: '#9ca3af' }}>To</div>
                                     <div style={{ fontSize: '0.8rem', fontWeight: 'bold' }}>Current Location, Marrakech</div>

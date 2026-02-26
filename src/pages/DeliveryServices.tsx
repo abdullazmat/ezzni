@@ -18,6 +18,8 @@ import visaIcon from '../assets/icons/visa.png';
 import mastercardIcon from '../assets/icons/mastercard.png';
 import cashIcon from '../assets/icons/cash.png';
 import taxiIcon from '../assets/icons/taxi.png';
+import pickupIcon from '../assets/icons/pickup.png';
+import destinationIcon from '../assets/icons/destination.png';
 
 // --- Types ---
 
@@ -730,20 +732,24 @@ export const DeliveryServices = () => {
                         
                         {/* Route Details */}
                         <h3 style={{ fontSize: '1.1rem', fontWeight: 'bold', marginBottom: '1rem' }}>Route Details</h3>
-                        <div style={{ border: '1px solid #f3f4f6', borderRadius: '1rem', padding: '1rem', marginBottom: '1.5rem', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                                <div style={{ width: 12, height: 12, borderRadius: '50%', border: '4px solid #eef7f0', backgroundColor: '#38AC57', flexShrink: 0 }}></div>
+                        <div style={{ border: '1px solid #f3f4f6', borderRadius: '1rem', padding: '1rem', marginBottom: '1.5rem', display: 'flex', flexDirection: 'column', gap: '1rem', position: 'relative' }}>
+                            {/* Vertical dashed line */}
+                            <div style={{ 
+                                position: 'absolute', 
+                                left: '19px', 
+                                top: '25px', 
+                                bottom: '25px', 
+                                borderLeft: '2px dashed #e5e7eb',
+                                zIndex: 0
+                            }}></div>
+
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', position: 'relative', zIndex: 1 }}>
+                                <img src={pickupIcon} alt="pickup" style={{ width: '18px', height: '18px', objectFit: 'contain' }} />
                                 <div><div style={{ fontSize: '0.75rem', color: '#9ca3af' }}>Pickup</div><div style={{ fontWeight: '600' }}>{selectedDelivery.pickup}</div></div>
                             </div>
                             
-                            <div style={{ paddingLeft: 18 }}>
-                                <div style={{ width: 30, height: 30, borderRadius: '50%', border: '1px solid #f3f4f6', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                    <span style={{ color: '#38AC57', fontSize: '0.8rem' }}>⇅</span>
-                                </div>
-                            </div>
-
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                                <div style={{ width: 12, height: 12, borderRadius: '50%', border: '2px solid #38AC57', flexShrink: 0 }}></div>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', position: 'relative', zIndex: 1 }}>
+                                <img src={destinationIcon} alt="destination" style={{ width: '18px', height: '18px', objectFit: 'contain' }} />
                                 <div><div style={{ fontSize: '0.75rem', color: '#9ca3af' }}>Destination</div><div style={{ fontWeight: '600' }}>{selectedDelivery.destination}</div></div>
                             </div>
                         </div>

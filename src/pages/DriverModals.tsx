@@ -1,6 +1,11 @@
 
 import { useState } from 'react';
-import { ArrowLeft, Car, CheckCircle2, Star, MapPin, Bike } from 'lucide-react';
+import { ArrowLeft, CheckCircle2, Star } from 'lucide-react';
+import { UserAvatar } from '../components/UserAvatar';
+import pickupIcon from '../assets/icons/pickup.png';
+import destinationIcon from '../assets/icons/destination.png';
+import bikeIcon from '../assets/icons/bike.png';
+import carIcon from '../assets/icons/car.png';
 
 // --- Types ---
 // You might want to move these shared types to a common file
@@ -20,7 +25,10 @@ const VehicleIcon = ({ type, selected }: { type: string, selected: boolean }) =>
         display: 'flex', alignItems: 'center', justifyContent: 'center',
         marginRight: '1rem'
     }}>
-        {type === 'Motorcycle' ? <Bike size={24} color={selected ? "#2d8a46" : "#374151"} /> : <Car size={24} color={selected ? "#2d8a46" : "#374151"} />}
+        {type === 'Motorcycle' ? 
+            <img src={bikeIcon} alt="motorbike" style={{ width: '32px', height: 'auto', filter: selected ? 'none' : 'grayscale(1)' }} /> : 
+            <img src={carIcon} alt="car" style={{ width: '32px', height: 'auto', filter: selected ? 'none' : 'grayscale(1)' }} />
+        }
     </div>
 );
 
@@ -121,7 +129,9 @@ export const RidePreferencesModal = ({ onClose }: ModalProps) => {
                         marginBottom: '2rem'
                     }}
                 >
-                    <div style={{ marginRight: '1rem' }}><Bike size={32} /></div>
+                    <div style={{ marginRight: '1rem' }}>
+                        <img src={bikeIcon} alt="motorbike" style={{ width: '48px', height: 'auto' }} />
+                    </div>
                     <div style={{ flex: 1 }}>
                         <div style={{ fontWeight: 'bold' }}>Motorcycle</div>
                         <div style={{ fontSize: '0.8rem', color: '#6b7280' }}>Affordable everyday rides</div>
@@ -244,12 +254,12 @@ export const TripSummaryModal = ({ onClose, trip }: ModalProps) => {
                     {/* Driver Card */}
                     <div style={{ border: '1px solid #e5e7eb', borderRadius: '1rem', padding: '1rem', display: 'flex', alignItems: 'center', marginBottom: '1rem', justifyContent: 'space-between' }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                             <div style={{ position: 'relative' }}>
-                                <img src={`https://i.pravatar.cc/150?u=a`} style={{ width: 50, height: 50, borderRadius: '50%' }} />
-                                <div style={{ position: 'absolute', bottom: -5, left: '50%', transform: 'translateX(-50%)', backgroundColor: '#fbbf24', padding: '0 0.3rem', borderRadius: '0.3rem', fontSize: '0.6rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '2px', border: '1px solid white' }}>
-                                    <Star size={8} fill="black" stroke="none" /> {mockTripData.rating}
-                                </div>
-                            </div>
+                             <UserAvatar 
+                                src={`https://i.pravatar.cc/150?u=a`} 
+                                rating={mockTripData.rating} 
+                                size={54} 
+                                showBadge={false} 
+                             />
                             <div>
                                 <div style={{ fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                                     {mockTripData.driverName} 
@@ -283,23 +293,32 @@ export const TripSummaryModal = ({ onClose, trip }: ModalProps) => {
                              <div style={{ backgroundColor: 'black', color: 'white', fontSize: '0.7rem', padding: '0.2rem 0.5rem', borderRadius: '1rem', display: 'inline-block', marginTop: '0.5rem' }}>{mockTripData.car.id}</div>
                         </div>
                         {/* Mock Car Image */}
-                        <div style={{ fontSize: '3rem' }}>🏍</div> 
+                        <img src={bikeIcon} alt="motorbike" style={{ width: '80px', height: 'auto', objectFit: 'contain' }} />
                     </div>
 
                     {/* Timeline */}
                     <div style={{ border: '1px solid #e5e7eb', borderRadius: '1rem', padding: '1rem', marginBottom: '1rem' }}>
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', position: 'relative' }}>
+                            {/* Vertical dashed line */}
+                            <div style={{ 
+                                position: 'absolute', 
+                                left: '8px', 
+                                top: '15px', 
+                                bottom: '15px', 
+                                borderLeft: '2px dashed #e5e7eb',
+                                zIndex: 0
+                            }}></div>
+
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', position: 'relative', zIndex: 1 }}>
                                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.8rem' }}>
-                                     <div style={{ width: 10, height: 10, borderRadius: '50%', border: '3px solid #38AC57' }}></div>
+                                     <img src={pickupIcon} alt="pickup" style={{ width: '18px', height: '18px', objectFit: 'contain' }} />
                                      <div style={{ fontSize: '0.9rem', fontWeight: '600' }}>{mockTripData.pickup.location}</div>
                                  </div>
                                  <div style={{ fontSize: '0.7rem', color: '#6b7280' }}>{mockTripData.pickup.time}</div>
                             </div>
-                            <div style={{ paddingLeft: '4px' }}><div style={{ height: '20px', borderLeft: '2px dashed #e5e7eb' }}></div></div>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', position: 'relative', zIndex: 1 }}>
                                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.8rem' }}>
-                                     <MapPin size={18} fill="#38AC57" color="#38AC57" />
+                                     <img src={destinationIcon} alt="destination" style={{ width: '18px', height: '18px', objectFit: 'contain' }} />
                                      <div style={{ fontSize: '0.9rem', fontWeight: '600' }}>{mockTripData.dropoff.location}</div>
                                  </div>
                                  <div style={{ fontSize: '0.7rem', color: '#6b7280' }}>{mockTripData.dropoff.time}</div>

@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { 
     Search, Eye, ArrowLeft, 
-    MapPin, ChevronDown, ArrowUpRight, Check
+    ChevronDown, ArrowUpRight, Check
 } from 'lucide-react';
 
 // Specialized Icons
@@ -16,6 +16,8 @@ import commissionIcon from '../assets/icons/comission.png';
 import carIcon from '../assets/icons/car.png';
 import taxiIcon from '../assets/icons/taxi.png';
 import bikeIcon from '../assets/icons/bike.png';
+import pickupIcon from '../assets/icons/pickup.png';
+import destinationIcon from '../assets/icons/destination.png';
 
 // Components
 import { UserAvatar } from '../components/UserAvatar';
@@ -772,24 +774,30 @@ export const ArchiveTrips = () => {
                             {/* Route Information */}
                             <div style={{ backgroundColor: 'white', padding: '1.5rem', borderRadius: '1rem', boxShadow: '0 1px 3px rgba(0,0,0,0.05)', border: '1px solid #f3f4f6', marginBottom: '1.5rem' }}>
                                 <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', position: 'relative' }}>
-                                    <div>
-                                        <div style={{ fontSize: '0.75rem', color: '#9ca3af', display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.2rem' }}>
-                                            <span style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#38AC57' }}></span> Pickup
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', position: 'relative', zIndex: 1 }}>
+                                        <img src={pickupIcon} alt="pickup" style={{ width: '24px', height: '24px', objectFit: 'contain' }} />
+                                        <div>
+                                            <div style={{ fontSize: '0.75rem', color: '#9ca3af' }}>Pickup</div>
+                                            <div style={{ fontWeight: '600', fontSize: '1rem' }}>{selectedTrip.route.from}</div>
                                         </div>
-                                        <div style={{ fontWeight: '600', fontSize: '1rem', marginLeft: '1rem' }}>{selectedTrip.route.from}</div>
                                     </div>
                                     
                                     {/* Connector */}
-                                    <div style={{ position: 'absolute', left: '3px', top: '20px', bottom: '20px', width: '2px', backgroundColor: '#e5e7eb', zIndex: 0 }}></div>
-                                    <div style={{ position: 'absolute', left: '-12px', top: '45%', backgroundColor: 'white', borderRadius: '50%', padding: '4px', border: '1px solid #e5e7eb', zIndex: 1 }}>
-                                        <ArrowUpRight size={14} color="#38AC57" />
-                                    </div>
+                                    <div style={{ 
+                                        position: 'absolute', 
+                                        left: '11px', 
+                                        top: '24px', 
+                                        bottom: '24px', 
+                                        borderLeft: '2px dashed #e5e7eb',
+                                        zIndex: 0 
+                                    }}></div>
 
-                                    <div>
-                                        <div style={{ fontSize: '0.75rem', color: '#9ca3af', display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.2rem' }}>
-                                            <MapPin size={12} color="#38AC57" /> Destination
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', position: 'relative', zIndex: 1 }}>
+                                        <img src={destinationIcon} alt="destination" style={{ width: '24px', height: '24px', objectFit: 'contain' }} />
+                                        <div>
+                                            <div style={{ fontSize: '0.75rem', color: '#9ca3af' }}>Destination</div>
+                                            <div style={{ fontWeight: '600', fontSize: '1rem' }}>{selectedTrip.route.to}</div>
                                         </div>
-                                        <div style={{ fontWeight: '600', fontSize: '1rem', marginLeft: '1rem' }}>{selectedTrip.route.to}</div>
                                     </div>
                                 </div>
                             </div>
@@ -799,10 +807,7 @@ export const ArchiveTrips = () => {
                                 <h3 style={{ fontSize: '1.1rem', fontWeight: 'bold', marginBottom: '0.75rem' }}>Payment Information</h3>
                                  <div style={{ backgroundColor: 'white', padding: '1.5rem', borderRadius: '1rem', boxShadow: '0 1px 3px rgba(0,0,0,0.05)', border: '1px solid #f3f4f6', marginBottom: '1.5rem' }}>
                                     <div className="at-flex-responsive" style={{ marginBottom: '1.5rem', justifyContent: 'center' }}>
-                                        <div style={{ position: 'relative', display: 'inline-block' }}>
-                                                <img src={selectedTrip.driver.img} alt="" style={{ width: '64px', height: '64px', borderRadius: '50%' }} />
-                                                <div style={{ position: 'absolute', bottom: -5, left: '50%', transform: 'translateX(-50%)', backgroundColor: 'white', border: '1px solid #e5e7eb', padding: '0.1rem 0.5rem', borderRadius: '1rem', fontSize: '0.7rem', color: 'black', display: 'flex', alignItems: 'center', gap: '2px', whiteSpace: 'nowrap' }}>★ {selectedTrip.driver.rating}</div>
-                                        </div>
+                                        <UserAvatar src={selectedTrip.driver.img} rating={selectedTrip.driver.rating} size={64} />
                                     </div>
                                     <div className="at-info-row at-payment-grid">
                                         <div>

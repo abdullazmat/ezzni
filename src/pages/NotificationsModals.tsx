@@ -12,40 +12,39 @@ interface ModalProps {
   onClose: () => void;
 }
 
-export const CreateNotificationModal = ({ isOpen, onClose }: ModalProps) => {
-  const [step, setStep] = useState(1);
-  const [formData, setFormData] = useState({
-    title: '',
-    message: '',
-    target: 'Drivers',
-    status: 'All Drivers',
-    vehicle: 'All Vehicle',
-    city: 'All City'
-  });
-
-  if (!isOpen) return null;
-
-  return (
-    <div className="modal-overlay" style={{
-        position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
-        backgroundColor: 'rgba(0, 0, 0, 0.4)', display: 'flex',
-        alignItems: 'flex-start', justifyContent: 'center', zIndex: 1000,
-        backdropFilter: 'blur(4px)', padding: '20px', overflowY: 'auto'
-    }}>
-      <style>{`
+const ModalStyles = () => (
+    <style>{`
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.4);
+            display: flex;
+            align-items: center; /* Centered vertically */
+            justify-content: center;
+            z-index: 1100;
+            backdrop-filter: blur(8px);
+            padding: 20px;
+            overflow-Y: auto;
+        }
         .nom-container {
             background-color: white;
             border-radius: 32px;
             width: 100%;
             max-width: 650px;
-            margin-top: 20px;
-            margin-bottom: 20px;
             position: relative;
             padding: 3rem;
             color: #111827;
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
             display: flex;
             flex-direction: column;
+            animation: modalAppear 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        @keyframes modalAppear {
+            from { opacity: 0; transform: translateY(20px) scale(0.98); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
         }
         .nom-back-btn {
             border: none;
@@ -118,6 +117,10 @@ export const CreateNotificationModal = ({ isOpen, onClose }: ModalProps) => {
             cursor: pointer;
             font-size: 1rem;
             transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
         }
         .nom-btn-outline {
             background: white;
@@ -130,11 +133,24 @@ export const CreateNotificationModal = ({ isOpen, onClose }: ModalProps) => {
             color: white;
             box-shadow: 0 8px 16px -4px rgba(56, 172, 87, 0.3);
         }
+        .nom-btn-primary:hover {
+            background: #2e8f47;
+            transform: translateY(-2px);
+            box-shadow: 0 12px 20px -4px rgba(56, 172, 87, 0.4);
+        }
         .nom-detail-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 1.5rem;
             margin-top: 1.5rem;
+        }
+        .nom-chip {
+            padding: 6px 16px;
+            border-radius: 100px;
+            font-size: 0.85rem;
+            font-weight: 800;
+            display: inline-flex;
+            align-items: center;
         }
 
         @media (max-width: 768px) {
@@ -160,7 +176,25 @@ export const CreateNotificationModal = ({ isOpen, onClose }: ModalProps) => {
                 grid-template-columns: 1fr;
             }
         }
-      `}</style>
+    `}</style>
+);
+
+export const CreateNotificationModal = ({ isOpen, onClose }: ModalProps) => {
+  const [step, setStep] = useState(1);
+  const [formData, setFormData] = useState({
+    title: '',
+    message: '',
+    target: 'Drivers',
+    status: 'All Drivers',
+    vehicle: 'All Vehicle',
+    city: 'All City'
+  });
+
+  if (!isOpen) return null;
+
+  return (
+    <div className="modal-overlay" onClick={onClose}>
+      <ModalStyles />
       <div className="nom-container" onClick={e => e.stopPropagation()}>
         <button className="nom-back-btn" onClick={onClose}>
           <ArrowLeft size={22} />
@@ -330,12 +364,8 @@ export const TeamNotificationModal = ({ isOpen, onClose }: ModalProps) => {
   if (!isOpen) return null;
 
   return (
-    <div className="modal-overlay" style={{
-        position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
-        backgroundColor: 'rgba(0, 0, 0, 0.4)', display: 'flex',
-        alignItems: 'flex-start', justifyContent: 'center', zIndex: 1000,
-        backdropFilter: 'blur(4px)', padding: '20px', overflowY: 'auto'
-    }}>
+    <div className="modal-overlay" onClick={onClose}>
+      <ModalStyles />
       <div className="nom-container" onClick={e => e.stopPropagation()}>
         <button className="nom-back-btn" onClick={onClose}>
           <ArrowLeft size={22} />
@@ -465,57 +495,63 @@ export const NotificationDetailsModal = ({ isOpen, onClose, notification }: Moda
   if (!isOpen || !notification) return null;
 
   return (
-    <div className="modal-overlay" style={{
-        position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
-        backgroundColor: 'rgba(0, 0, 0, 0.4)', display: 'flex',
-        alignItems: 'flex-start', justifyContent: 'center', zIndex: 1000,
-        backdropFilter: 'blur(4px)', padding: '20px', overflowY: 'auto'
-    }}>
-      <div className="nom-container" onClick={e => e.stopPropagation()} style={{ maxWidth: '550px' }}>
+    <div className="modal-overlay" onClick={onClose}>
+      <ModalStyles />
+      <div className="nom-container" onClick={e => e.stopPropagation()} style={{ maxWidth: '600px' }}>
         <button className="nom-back-btn" onClick={onClose}>
           <ArrowLeft size={22} />
         </button>
         
         <h2 style={{ fontSize: '1.75rem', fontWeight: '900', margin: '0 0 1.5rem 0' }}>Notification Insight</h2>
         
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.75rem' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
           <div>
-            <h3 style={{ fontSize: '1.35rem', fontWeight: '900', margin: '0 0 0.75rem 0', color: '#111827' }}>{notification.title}</h3>
+            <h3 style={{ fontSize: '1.5rem', fontWeight: '900', margin: '0 0 1rem 0', color: '#111827' }}>{notification.title}</h3>
             <div style={{ display: 'flex', gap: '0.75rem' }}>
-              <span style={{ padding: '6px 16px', borderRadius: '8px', backgroundColor: '#EFF6FF', color: '#3B82F6', fontSize: '0.85rem', fontWeight: '800' }}>{notification.category}</span>
-              <span style={{ padding: '6px 16px', borderRadius: '8px', backgroundColor: '#eef7f0', color: '#38AC57', fontSize: '0.85rem', fontWeight: '800' }}>{notification.status}</span>
+              <span className="nom-chip" style={{ backgroundColor: '#DBEAFE', color: '#3B82F6' }}>{notification.category}</span>
+              <span className="nom-chip" style={{ backgroundColor: '#eef7f0', color: '#38AC57' }}>{notification.status}</span>
             </div>
           </div>
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
-            <label style={{ fontWeight: '900', color: '#111827', fontSize: '0.95rem' }}>Full Message Content</label>
-            <div style={{ padding: '1.5rem', borderRadius: '20px', border: '1.5px solid #E5E7EB', backgroundColor: '#F9FAFB', color: '#374151', fontSize: '1.1rem', lineHeight: '1.6', fontWeight: '600' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+            <label style={{ fontWeight: '800', color: '#111827', fontSize: '0.95rem', opacity: 0.6 }}>Full Message Content</label>
+            <div style={{ 
+              padding: '1.5rem', 
+              borderRadius: '24px', 
+              border: '1.5px solid #E5E7EB', 
+              backgroundColor: 'white', 
+              color: '#374151', 
+              fontSize: '1.1rem', 
+              lineHeight: '1.6', 
+              fontWeight: '600',
+              boxShadow: '0 4px 6px -1px rgba(0,0,0,0.05)'
+            }}>
               {notification.message}
             </div>
           </div>
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
-             <label style={{ fontWeight: '900', color: '#111827', fontSize: '0.95rem' }}>Recipient Segment</label>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+             <label style={{ fontWeight: '800', color: '#111827', fontSize: '0.95rem', opacity: 0.6 }}>Recipient Segment</label>
              <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-               {(notification.departments || [notification.target || 'All Users']).map(dept => (
-                 <span key={dept} style={{ padding: '8px 18px', borderRadius: '10px', backgroundColor: '#F0F9FF', color: '#0EA5E9', fontSize: '0.9rem', fontWeight: '800', border: '1px solid #BAE6FD' }}>{dept}</span>
+               {(notification.departments || [notification.target || 'All Users']).map((dept: any) => (
+                 <span key={dept} className="nom-chip" style={{ backgroundColor: 'white', color: '#0EA5E9', border: '1.5px solid #BAE6FD', padding: '10px 20px' }}>{dept}</span>
                ))}
              </div>
           </div>
 
           <div className="nom-detail-grid">
-            <div style={{ textAlign: 'center', padding: '1.5rem', borderRadius: '20px', backgroundColor: '#fcfdfc', border: '1.5px solid #eef7f0' }}>
-              <p style={{ fontSize: '2.5rem', fontWeight: '900', margin: 0, color: '#111827' }}>{notification.deliveryCount}</p>
-              <p style={{ fontSize: '0.9rem', color: '#6B7280', margin: '0.2rem 0 0 0', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Delivered</p>
+            <div style={{ textAlign: 'center', padding: '2rem', borderRadius: '24px', backgroundColor: 'white', border: '1.5px solid #eef7f0', boxShadow: '0 4px 12px rgba(56, 172, 87, 0.05)' }}>
+              <p style={{ fontSize: '3rem', fontWeight: '900', margin: 0, color: '#111827', lineHeight: 1 }}>{notification.deliveryCount}</p>
+              <p style={{ fontSize: '0.8rem', color: '#6B7280', margin: '0.75rem 0 0 0', fontWeight: '900', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Delivered</p>
             </div>
-            <div style={{ textAlign: 'center', padding: '1.5rem', borderRadius: '20px', backgroundColor: '#fcfdfc', border: '1.5px solid #eef7f0' }}>
-              <p style={{ fontSize: '2.5rem', fontWeight: '900', margin: 0, color: '#111827' }}>{notification.readCount}</p>
-              <p style={{ fontSize: '0.9rem', color: '#6B7280', margin: '0.2rem 0 0 0', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Estimated Views</p>
+            <div style={{ textAlign: 'center', padding: '2rem', borderRadius: '24px', backgroundColor: 'white', border: '1.5px solid #eef7f0', boxShadow: '0 4px 12px rgba(56, 172, 87, 0.05)' }}>
+              <p style={{ fontSize: '3rem', fontWeight: '900', margin: 0, color: '#111827', lineHeight: 1 }}>{notification.readCount}</p>
+              <p style={{ fontSize: '0.8rem', color: '#6B7280', margin: '0.75rem 0 0 0', fontWeight: '900', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Estimated Views</p>
             </div>
           </div>
         </div>
 
-        <button className="nom-btn nom-btn-primary" style={{ marginTop: '2rem' }} onClick={onClose}>Dismiss Insights</button>
+        <button className="nom-btn nom-btn-primary" style={{ marginTop: '3rem', width: '100%' }} onClick={onClose}>Dismiss Insights</button>
       </div>
     </div>
   );
@@ -533,12 +569,8 @@ export const SystemStatusModal = ({ isOpen, onClose }: ModalProps) => {
   ];
 
   return (
-    <div className="modal-overlay" style={{
-        position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
-        backgroundColor: 'rgba(0, 0, 0, 0.4)', display: 'flex',
-        alignItems: 'flex-start', justifyContent: 'center', zIndex: 1000,
-        backdropFilter: 'blur(4px)', padding: '20px', overflowY: 'auto'
-    }}>
+    <div className="modal-overlay" onClick={onClose}>
+      <ModalStyles />
       <div className="nom-container" onClick={e => e.stopPropagation()} style={{ maxWidth: '600px' }}>
         <button className="nom-back-btn" onClick={onClose}>
           <ArrowLeft size={22} />

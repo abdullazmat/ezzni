@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { 
     Search, Eye, ArrowLeft, 
-    ChevronDown, MapPin, 
+    ChevronDown, 
     Check, ArrowUpRight
 } from 'lucide-react';
 import { UserAvatar } from '../components/UserAvatar';
@@ -13,6 +13,8 @@ import confirmedIcon from '../assets/icons/Confirmed.png';
 import todaysBookingsIcon from '../assets/icons/Today\'s Bookings.png';
 import bikeIcon from '../assets/icons/bike.png';
 import carIcon from '../assets/icons/car.png';
+import pickupIcon from '../assets/icons/pickup.png';
+import destinationIcon from '../assets/icons/destination.png';
 import taxiIcon from '../assets/icons/taxi.png';
 
 // --- Types ---
@@ -315,8 +317,8 @@ export const Reservations = () => {
                     left: 0;
                     right: 0;
                     bottom: 0;
-                    backgroundColor: rgba(0,0,0,0.5);
-                    zIndex: 1000;
+                    background-color: rgba(0,0,0,0.5);
+                    z-index: 1000;
                     display: flex;
                     align-items: center;
                     justify-content: center;
@@ -788,12 +790,7 @@ export const Reservations = () => {
                                 backgroundColor: 'white', border: '1px solid #f3f4f6', borderRadius: '1.5rem', 
                                 padding: '1.5rem 2rem', display: 'flex', alignItems: 'center', gap: '1.5rem'
                             }}>
-                                <div style={{ 
-                                    width: '36px', height: '36px', borderRadius: '50%', backgroundColor: '#eef7f0', 
-                                    display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0
-                                }}>
-                                    <div style={{ width: '12px', height: '12px', borderRadius: '50%', backgroundColor: '#38AC57', border: '2px solid white' }}></div>
-                                </div>
+                                 <img src={pickupIcon} alt="pickup" style={{ width: '36px', height: '36px', objectFit: 'contain' }} />
                                 <div>
                                     <div style={{ fontSize: '0.8rem', color: '#94a3b8', fontWeight: '600', textTransform: 'uppercase', marginBottom: '0.25rem' }}>Pickup</div>
                                     <div style={{ fontWeight: '700', fontSize: '1.1rem', color: '#1e293b' }}>{selectedReservation.pickup}</div>
@@ -817,12 +814,7 @@ export const Reservations = () => {
                                 backgroundColor: 'white', border: '1px solid #f3f4f6', borderRadius: '1.5rem', 
                                 padding: '1.5rem 2rem', display: 'flex', alignItems: 'center', gap: '1.5rem'
                             }}>
-                                <div style={{ 
-                                    width: '36px', height: '36px', borderRadius: '50%', backgroundColor: '#f9fafb', 
-                                    border: '1px solid #f3f4f6', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0
-                                }}>
-                                    <MapPin size={20} color="#38AC57" />
-                                </div>
+                                 <img src={destinationIcon} alt="destination" style={{ width: '36px', height: '36px', objectFit: 'contain' }} />
                                 <div>
                                     <div style={{ fontSize: '0.8rem', color: '#94a3b8', fontWeight: '600', textTransform: 'uppercase', marginBottom: '0.25rem' }}>Destination</div>
                                     <div style={{ fontWeight: '700', fontSize: '1.1rem', color: '#1e293b' }}>{selectedReservation.destination}</div>
@@ -834,14 +826,7 @@ export const Reservations = () => {
                         <h3 style={{ fontSize: '1.3rem', fontWeight: '800', marginBottom: '1.25rem', color: '#1e293b' }}>Payment Information</h3>
                         <div style={{ border: '1px solid #f3f4f6', borderRadius: '1.5rem', padding: '2rem', marginBottom: '2.5rem', backgroundColor: 'white' }}>
                              <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '2rem' }}>
-                                <div style={{ position: 'relative' }}>
-                                    <img src={selectedReservation.customer.avatar} alt="" style={{ width: '80px', height: '80px', borderRadius: '50%', objectFit: 'cover' }} />
-                                    <div style={{ 
-                                        position: 'absolute', bottom: -5, left: '50%', transform: 'translateX(-50%)', 
-                                        backgroundColor: '#fbbf24', padding: '0.25rem 0.75rem', borderRadius: '1rem', 
-                                        fontSize: '0.85rem', color: 'white', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '4px'
-                                    }}>★ {selectedReservation.customer.rating}</div>
-                                </div>
+                                    <UserAvatar src={selectedReservation.customer.avatar} rating={selectedReservation.customer.rating} size={84} />
                              </div>
 
                              <div className="res-payment-grid">

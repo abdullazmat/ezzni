@@ -1,10 +1,13 @@
 
 import { useState } from 'react';
 import { 
-    Star, MapPin, 
+    Star, 
     CheckCircle2, X, ChevronDown
 } from 'lucide-react';
 import { UserAvatar } from '../components/UserAvatar';
+import pickupIcon from '../assets/icons/pickup.png';
+import destinationIcon from '../assets/icons/destination.png';
+import bikeIcon from '../assets/icons/bike.png';
 
 // --- Status Badge ---
 const StatusBadge = ({ status }: { status: string }) => {
@@ -454,16 +457,26 @@ export const TripsHistoryContent = ({ onViewSummary }: { onViewSummary: (tripId:
                             </div>
                         </div>
 
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                                <div style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#38AC5720', border: '2px solid #38AC57' }}></div>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', position: 'relative', paddingLeft: '8px' }}>
+                            {/* Vertical dashed line */}
+                            <div style={{ 
+                                position: 'absolute', 
+                                left: '15px', 
+                                top: '18px', 
+                                bottom: '18px', 
+                                borderLeft: '2px dashed #e5e7eb',
+                                zIndex: 0
+                            }}></div>
+                            
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', position: 'relative', zIndex: 1 }}>
+                                <img src={pickupIcon} alt="pickup" style={{ width: '16px', height: '16px', objectFit: 'contain' }} />
                                 <div style={{ fontSize: '12px' }}>
                                     <span style={{ color: '#9ca3af', marginRight: '4px' }}>From</span>
                                     <span style={{ fontWeight: '600' }}>Current Location, Marrakech</span>
                                 </div>
                             </div>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                                <div style={{ width: '8px', height: '8px', borderRadius: '50%', border: '2px solid #38AC57' }}></div>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', position: 'relative', zIndex: 1 }}>
+                                <img src={destinationIcon} alt="destination" style={{ width: '16px', height: '16px', objectFit: 'contain' }} />
                                 <div style={{ fontSize: '12px' }}>
                                     <span style={{ color: '#9ca3af', marginRight: '4px' }}>To</span>
                                     <span style={{ fontWeight: '600' }}>Current Location, Marrakech</span>
@@ -491,7 +504,7 @@ export const TripSummaryContent = () => {
 
             {/* Driver Info */}
             <div className="rm-flex-responsive" style={{ border: '1px solid #f3f4f6', borderRadius: '16px', padding: '16px', alignItems: 'center', marginBottom: '16px' }}>
-                <UserAvatar src="https://i.pravatar.cc/150?u=ahmed" rating={4.8} size={50} />
+                <UserAvatar src="https://i.pravatar.cc/150?u=ahmed" rating={4.8} size={50} showBadge={false} />
                 <div style={{ flex: 1, textAlign: 'inherit' }}>
                     <div style={{ fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '4px', justifyContent: 'inherit' }}>
                         Ahmed Hassan <CheckCircle2 size={14} color="#3b82f6" fill="#3b82f6" stroke="#fff" />
@@ -523,22 +536,32 @@ export const TripSummaryContent = () => {
                         ID No C-0003
                     </div>
                 </div>
-                <div style={{ fontSize: '32px' }}>🚗</div>
+                <img src={bikeIcon} alt="motorbike" style={{ width: '80px', height: 'auto', objectFit: 'contain' }} />
             </div>
 
             {/* Route */}
             <div style={{ border: '1px solid #f3f4f6', borderRadius: '16px', padding: '16px', marginBottom: '16px' }}>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', position: 'relative' }}>
+                    {/* Vertical dashed line */}
+                    <div style={{ 
+                        position: 'absolute', 
+                        left: '8px', 
+                        top: '18px', 
+                        bottom: '18px', 
+                        borderLeft: '2px dashed #e5e7eb',
+                        zIndex: 0
+                    }}></div>
+
+                    <div style={{ display: 'flex', justifyContent: 'space-between', position: 'relative', zIndex: 1 }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                            <div style={{ width: '10px', height: '10px', borderRadius: '50%', backgroundColor: '#38AC5720', border: '3px solid #38AC57' }}></div>
+                            <img src={pickupIcon} alt="pickup" style={{ width: '18px', height: '18px', objectFit: 'contain' }} />
                             <div style={{ fontSize: '14px', fontWeight: '600' }}>Current Location, Marrakech</div>
                         </div>
                         <div style={{ fontSize: '12px', color: '#9ca3af' }}>7:15 PM</div>
                     </div>
-                    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', position: 'relative', zIndex: 1 }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                            <MapPin size={18} color="#38AC57" />
+                            <img src={destinationIcon} alt="destination" style={{ width: '18px', height: '18px', objectFit: 'contain' }} />
                             <div style={{ fontSize: '14px', fontWeight: '600' }}>Current Location, Marrakech</div>
                         </div>
                         <div style={{ fontSize: '12px', color: '#9ca3af' }}>8:30 PM</div>
