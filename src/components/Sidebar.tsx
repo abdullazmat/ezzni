@@ -53,6 +53,7 @@ export const Sidebar = ({ activePage, onNavigate, isOpen, onClose }: SidebarProp
     { id: 'settings', label: 'Settings', icon: settingsIcon },
   ];
 
+
   return (
     <div className={`sidebar ${isOpen ? 'open' : ''}`} style={{ overflowY: 'auto' }}>
       <div className="sidebar-header" style={{ marginBottom: '2rem', padding: '0 0.5rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>

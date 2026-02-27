@@ -11,6 +11,143 @@ import motorcycleIcon from '../assets/icons/bike.png';
 import rentalCarIcon from '../assets/icons/rental car.png';
 import taxiIcon from '../assets/icons/taxi.png';
 
+// --- Shared Styles ---
+const sharedStyles = `
+  .pm-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    z-index: 1000;
+    backdrop-filter: blur(6px);
+    padding: 20px;
+    overflow-y: auto;
+  }
+  .pm-container {
+    background-color: white;
+    border-radius: 32px;
+    width: 100%;
+    max-width: 800px;
+    margin: 40px auto;
+    position: relative;
+    padding: 2.5rem;
+    color: #111827;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    display: flex;
+    flex-direction: column;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  .pm-header-btn {
+    border: none;
+    background: #f3f4f6;
+    cursor: pointer;
+    padding: 10px;
+    border-radius: 14px;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: fit-content;
+    transition: all 0.2s;
+  }
+  .pm-header-btn:hover {
+    background-color: #e5e7eb;
+  }
+  .pm-section-card {
+    background-color: #f9fafb;
+    border-radius: 24px;
+    padding: 2rem;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+    border: 1px solid #f3f4f6;
+  }
+  .pm-services-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-bottom: 2.5rem;
+  }
+  .pm-footer-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+  .pm-action-btn {
+    flex: 1;
+    padding: 16px;
+    border-radius: 100px;
+    font-weight: 800;
+    font-size: 1.1rem;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s;
+  }
+  .pm-input-label {
+    font-size: 13px;
+    color: #6B7280;
+    font-weight: 700;
+    margin-bottom: 8px;
+    display: block;
+  }
+  .pm-input {
+    width: 100%;
+    padding: 12px 16px;
+    border-radius: 12px;
+    border: 1px solid #e5e7eb;
+    font-size: 14px;
+    font-weight: 500;
+    outline: none;
+    background-color: white;
+    transition: border-color 0.2s;
+  }
+  .pm-input:focus {
+    border-color: #38AC57;
+  }
+  .pm-col-span-2 { grid-column: span 2; }
+  .pm-col-span-4 { grid-column: span 4; }
+
+  /* Create Specific */
+  .cpm-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2.5rem;
+    margin-bottom: 2rem;
+  }
+  .cpm-service-select {
+    flex: 1;
+    padding: 1.5rem 1rem;
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    min-width: 120px;
+    background-color: #fff;
+    border: 1px solid #f3f4f6;
+  }
+  .cpm-service-select:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+  }
+  
+  @media (max-width: 768px) {
+    .pm-container { padding: 1.5rem; border-radius: 24px; }
+    .pm-section-card { grid-template-columns: 1fr 1fr; padding: 1.25rem; gap: 1.25rem; }
+    .pm-col-span-2, .pm-col-span-4 { grid-column: span 1; }
+    .pm-footer-actions { flex-direction: column; }
+    .cpm-grid { grid-template-columns: 1fr; gap: 1.5rem; }
+  }
+`;
+
 interface CouponsModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -27,7 +164,7 @@ export const CouponsModal = ({ isOpen, onClose, promotion, onUpdate, onDelete }:
   useEffect(() => {
     if (promotion) {
       setEditedPromo(promotion);
-      setIsEditing(false); // Reset editing state when promotion changes
+      setIsEditing(false);
     }
   }, [promotion]);
 
@@ -63,133 +200,9 @@ export const CouponsModal = ({ isOpen, onClose, promotion, onUpdate, onDelete }:
     { id: 'Taxi', label: 'Taxi', icon: taxiIcon }
   ];
 
-  const inputStyle: React.CSSProperties = {
-    width: '100%',
-    padding: '8px 12px',
-    borderRadius: '8px',
-    border: '1px solid #e5e7eb',
-    fontSize: '14px',
-    fontWeight: '500',
-    outline: 'none'
-  };
-
   return (
-    <div 
-      className="pm-overlay"
-      onClick={handleBackdropClick}
-      style={{
-        position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
-        backgroundColor: 'rgba(0, 0, 0, 0.4)', display: 'flex',
-        alignItems: 'flex-start', justifyContent: 'center', zIndex: 1000,
-        backdropFilter: 'blur(4px)', padding: '20px', overflowY: 'auto'
-      }}
-    >
-      <style>{`
-        .pm-container {
-            background-color: white;
-            border-radius: 32px;
-            width: 100%;
-            max-width: 750px;
-            margin-top: 20px;
-            margin-bottom: 20px;
-            position: relative;
-            padding: 2.5rem;
-            color: #111827;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-            display: flex;
-            flex-direction: column;
-        }
-        .pm-header-btn {
-            border: none;
-            background: #f3f4f6;
-            cursor: pointer;
-            padding: 10px;
-            border-radius: 14px;
-            margin-bottom: 1.5rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: fit-content;
-            transition: all 0.2s;
-        }
-        .pm-header-btn:hover {
-            background-color: #e5e7eb;
-        }
-        .pm-section-card {
-            background-color: #f9fafb;
-            border-radius: 24px;
-            padding: 2rem;
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-            border: 1px solid #f3f4f6;
-        }
-        .pm-services-grid {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.75rem;
-            margin-bottom: 2.5rem;
-        }
-        .pm-footer-actions {
-            display: flex;
-            gap: 1rem;
-            margin-top: 1rem;
-        }
-        .pm-action-btn {
-            flex: 1;
-            padding: 16px;
-            border-radius: 100px;
-            font-weight: 800;
-            font-size: 1.1rem;
-            cursor: pointer;
-            border: none;
-            transition: all 0.2s;
-        }
-        .pm-input-label {
-            font-size: 12px;
-            color: #6B7280;
-            font-weight: 700;
-            margin-bottom: 6px;
-        }
-
-        .pm-col-span-2 {
-            grid-column: span 2;
-        }
-        .pm-col-span-4 {
-            grid-column: span 4;
-        }
-
-        @media (max-width: 768px) {
-            .pm-container {
-                padding: 1.5rem;
-                border-radius: 24px;
-            }
-            .pm-section-card {
-                grid-template-columns: 1fr 1fr;
-                padding: 1.25rem;
-                gap: 1.25rem;
-            }
-            .pm-col-span-2, .pm-col-span-4 {
-                grid-column: span 1;
-            }
-            .pm-footer-actions {
-                flex-direction: column;
-            }
-            .pm-action-btn {
-                width: 100%;
-            }
-            .pm-services-grid {
-                justify-content: center;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .pm-section-card {
-                grid-template-columns: 1fr;
-            }
-        }
-      `}</style>
+    <div className="pm-overlay" onClick={handleBackdropClick}>
+      <style>{sharedStyles}</style>
       <div className="pm-container" onClick={e => e.stopPropagation()}>
         <button onClick={onClose} className="pm-header-btn">
           <ArrowLeft size={22} />
@@ -209,9 +222,9 @@ export const CouponsModal = ({ isOpen, onClose, promotion, onUpdate, onDelete }:
             <div className="pm-input-label">Status</div>
             {isEditing ? (
               <select 
+                className="pm-input"
                 value={editedPromo.status} 
-                onChange={(e) => editedPromo && setEditedPromo({...editedPromo, status: e.target.value as any})}
-                style={inputStyle}
+                onChange={(e) => setEditedPromo({...editedPromo, status: e.target.value as any})}
               >
                 <option value="Active">Active</option>
                 <option value="Expired">Expired</option>
@@ -230,9 +243,9 @@ export const CouponsModal = ({ isOpen, onClose, promotion, onUpdate, onDelete }:
             <div className="pm-input-label">Promotion Name</div>
             {isEditing ? (
               <input 
+                className="pm-input"
                 value={editedPromo.name} 
-                onChange={(e) => editedPromo && setEditedPromo({...editedPromo, name: e.target.value})}
-                style={inputStyle}
+                onChange={(e) => setEditedPromo({...editedPromo, name: e.target.value})}
               />
             ) : (
               <div style={{ fontWeight: '800', fontSize: '15px' }}>{editedPromo.name}</div>
@@ -242,9 +255,9 @@ export const CouponsModal = ({ isOpen, onClose, promotion, onUpdate, onDelete }:
             <div className="pm-input-label">Promo Code</div>
             {isEditing ? (
               <input 
+                className="pm-input"
                 value={editedPromo.code} 
-                onChange={(e) => editedPromo && setEditedPromo({...editedPromo, code: e.target.value})}
-                style={inputStyle}
+                onChange={(e) => setEditedPromo({...editedPromo, code: e.target.value})}
               />
             ) : (
               <div style={{ fontWeight: '800', fontSize: '15px' }}>{editedPromo.code}</div>
@@ -254,9 +267,9 @@ export const CouponsModal = ({ isOpen, onClose, promotion, onUpdate, onDelete }:
             <div className="pm-input-label">Discount</div>
             {isEditing ? (
               <input 
+                className="pm-input"
                 value={editedPromo.discount} 
-                onChange={(e) => editedPromo && setEditedPromo({...editedPromo, discount: e.target.value})}
-                style={inputStyle}
+                onChange={(e) => setEditedPromo({...editedPromo, discount: e.target.value})}
               />
             ) : (
               <div style={{ fontWeight: '800', fontSize: '15px' }}>{editedPromo.discount}</div>
@@ -267,9 +280,9 @@ export const CouponsModal = ({ isOpen, onClose, promotion, onUpdate, onDelete }:
             {isEditing ? (
               <input 
                 type="date"
+                className="pm-input"
                 value={editedPromo.validUntil} 
-                onChange={(e) => editedPromo && setEditedPromo({...editedPromo, validUntil: e.target.value})}
-                style={inputStyle}
+                onChange={(e) => setEditedPromo({...editedPromo, validUntil: e.target.value})}
               />
             ) : (
               <div style={{ fontWeight: '800', fontSize: '15px' }}>{editedPromo.validUntil}</div>
@@ -279,9 +292,9 @@ export const CouponsModal = ({ isOpen, onClose, promotion, onUpdate, onDelete }:
             <div className="pm-input-label">Min Order Amount</div>
             {isEditing ? (
               <input 
+                className="pm-input"
                 value={editedPromo.minOrderAmount} 
-                onChange={(e) => editedPromo && setEditedPromo({...editedPromo, minOrderAmount: e.target.value})}
-                style={inputStyle}
+                onChange={(e) => setEditedPromo({...editedPromo, minOrderAmount: e.target.value})}
               />
             ) : (
               <div style={{ fontWeight: '800', fontSize: '15px' }}>{editedPromo.minOrderAmount}</div>
@@ -297,7 +310,7 @@ export const CouponsModal = ({ isOpen, onClose, promotion, onUpdate, onDelete }:
         <textarea 
           value={editedPromo.description}
           readOnly={!isEditing}
-          onChange={(e) => editedPromo && setEditedPromo({...editedPromo, description: e.target.value})}
+          onChange={(e) => setEditedPromo({...editedPromo, description: e.target.value})}
           style={{ 
             width: '100%',
             backgroundColor: '#f9fafb',
@@ -431,68 +444,11 @@ export const CreatePromotionModal = ({ isOpen, onClose, onCreate }: CreatePromot
     }, 500);
   };
 
-  const inputStyle: React.CSSProperties = {
-    width: '100%', padding: '14px 16px', borderRadius: '12px', border: '1px solid #e5e7eb',
-    fontSize: '15px', marginTop: '8px', outline: 'none', backgroundColor: 'white'
-  };
-
-  const labelStyle: React.CSSProperties = {
-    fontSize: '15px', fontWeight: '700', color: '#111827'
-  };
-
   return (
-    <div 
-      onClick={handleBackdropClick}
-      style={{
-        position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
-        backgroundColor: 'rgba(0, 0, 0, 0.4)', display: 'flex',
-        alignItems: 'center', justifyContent: 'center', zIndex: 1000,
-        backdropFilter: 'blur(4px)'
-      }}
-    >
-        <style>{`
-            .cpm-grid {
-                display: grid;
-                grid-template-columns: 1fr 1fr;
-                gap: 2.5rem;
-            }
-            .cpm-service-select {
-                flex: 1;
-                padding: 1.5rem 1rem;
-                border-radius: 16px;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                gap: 12px;
-                cursor: pointer;
-                transition: all 0.2s;
-                min-width: 100px;
-            }
-            .cpm-footer {
-                display: flex;
-                gap: 1rem;
-                justify-content: flex-end;
-            }
-
-            @media (max-width: 768px) {
-                .cpm-grid {
-                    grid-template-columns: 1fr;
-                    gap: 1.5rem;
-                }
-                .cpm-footer {
-                    flex-direction: column;
-                }
-                .cpm-footer button {
-                    width: 100%;
-                    padding: 14px 20px !important;
-                }
-                .pm-container {
-                    padding: 1.5rem;
-                }
-            }
-        `}</style>
+    <div className="pm-overlay" onClick={handleBackdropClick}>
+        <style>{sharedStyles}</style>
         <div className="pm-container" onClick={e => e.stopPropagation()}>
-          <button onClick={onClose} style={{ border: 'none', background: '#f3f4f6', cursor: 'pointer', padding: '10px', borderRadius: '12px', marginBottom: '1.5rem' }}>
+          <button onClick={onClose} className="pm-header-btn">
             <ArrowLeft size={22} />
           </button>
 
@@ -504,16 +460,16 @@ export const CreatePromotionModal = ({ isOpen, onClose, onCreate }: CreatePromot
             <div>
               <h3 style={{ fontSize: '1.25rem', fontWeight: '800', marginBottom: '1.5rem' }}>Basic Information</h3>
               <div style={{ marginBottom: '1.25rem' }}>
-                <label style={labelStyle}>Promotion Name</label>
-                <input type="text" placeholder="Type here" style={inputStyle} value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} />
+                <label className="pm-input-label">Promotion Name</label>
+                <input type="text" placeholder="Type here" className="pm-input" value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} />
               </div>
               <div style={{ marginBottom: '1.25rem' }}>
-                <label style={labelStyle}>Promo Code</label>
-                <input type="text" placeholder="Type here" style={inputStyle} value={formData.code} onChange={e => setFormData({...formData, code: e.target.value})} />
+                <label className="pm-input-label">Promo Code</label>
+                <input type="text" placeholder="Type here" className="pm-input" value={formData.code} onChange={e => setFormData({...formData, code: e.target.value})} />
               </div>
               <div style={{ marginBottom: '1.25rem' }}>
-                <label style={labelStyle}>Description</label>
-                <textarea placeholder="Type here" style={{...inputStyle, minHeight: '100px', resize: 'none'}} value={formData.description} onChange={e => setFormData({...formData, description: e.target.value})} />
+                <label className="pm-input-label">Description</label>
+                <textarea placeholder="Type here" className="pm-input" style={{minHeight: '100px', resize: 'none'}} value={formData.description} onChange={e => setFormData({...formData, description: e.target.value})} />
               </div>
             </div>
 
@@ -522,24 +478,24 @@ export const CreatePromotionModal = ({ isOpen, onClose, onCreate }: CreatePromot
               <h3 style={{ fontSize: '1.25rem', fontWeight: '800', marginBottom: '1.5rem' }}>Discount Settings</h3>
               <div style={{ display: 'flex', gap: '1rem', marginBottom: '1.25rem' }}>
                 <div style={{ flex: 1 }}>
-                  <label style={labelStyle}>Discount Type</label>
-                  <select style={inputStyle} value={formData.discountType} onChange={e => setFormData({...formData, discountType: e.target.value as any})}>
+                  <label className="pm-input-label">Discount Type</label>
+                  <select className="pm-input" value={formData.discountType} onChange={e => setFormData({...formData, discountType: e.target.value as any})}>
                     <option value="Percentage">Percentage</option>
                     <option value="Fixed Amount">Fixed Amount</option>
                   </select>
                 </div>
                 <div style={{ flex: 1 }}>
-                  <label style={labelStyle}>Discount Amount</label>
-                  <input type="text" placeholder="Type here" style={inputStyle} value={formData.discountValue} onChange={e => setFormData({...formData, discountValue: e.target.value})} />
+                  <label className="pm-input-label">Discount Amount</label>
+                  <input type="text" placeholder="Type here" className="pm-input" value={formData.discountValue} onChange={e => setFormData({...formData, discountValue: e.target.value})} />
                 </div>
               </div>
               <div style={{ marginBottom: '1.25rem' }}>
-                <label style={labelStyle}>Expire Date</label>
-                <input type="date" style={inputStyle} value={formData.validUntil} onChange={e => setFormData({...formData, validUntil: e.target.value})} />
+                <label className="pm-input-label">Expire Date</label>
+                <input type="date" className="pm-input" value={formData.validUntil} onChange={e => setFormData({...formData, validUntil: e.target.value})} />
               </div>
               <div style={{ marginBottom: '1.25rem' }}>
-                <label style={labelStyle}>Status</label>
-                <select style={inputStyle} value={formData.status} onChange={e => setFormData({...formData, status: e.target.value as any})}>
+                <label className="pm-input-label">Status</label>
+                <select className="pm-input" value={formData.status} onChange={e => setFormData({...formData, status: e.target.value as any})}>
                   <option value="Active">Active</option>
                   <option value="Inactive">Inactive</option>
                 </select>
@@ -547,15 +503,15 @@ export const CreatePromotionModal = ({ isOpen, onClose, onCreate }: CreatePromot
             </div>
           </div>
 
-        <h3 style={{ fontSize: '1.25rem', fontWeight: '800', margin: '2rem 0 1.5rem 0' }}>Usage Limits & Requirements</h3>
+        <h3 style={{ fontSize: '1.25rem', fontWeight: '800', margin: '1rem 0 1.5rem 0' }}>Usage Limits & Requirements</h3>
         <div style={{ display: 'flex', gap: '1rem', marginBottom: '2rem' }}>
           <div style={{ flex: 1 }}>
-            <label style={labelStyle}>Maximum *</label>
-            <input type="number" placeholder="Type here" style={inputStyle} value={formData.maxUsage} onChange={e => setFormData({...formData, maxUsage: parseInt(e.target.value)})} />
+            <label className="pm-input-label">Maximum *</label>
+            <input type="number" placeholder="Type here" className="pm-input" value={formData.maxUsage} onChange={e => setFormData({...formData, maxUsage: parseInt(e.target.value)})} />
           </div>
           <div style={{ flex: 1 }}>
-            <label style={labelStyle}>Minimum Oder Amount (MAD)</label>
-            <input type="text" placeholder="Type here" style={inputStyle} value={formData.minOrderAmount} onChange={e => setFormData({...formData, minOrderAmount: e.target.value})} />
+            <label className="pm-input-label">Minimum Oder Amount (MAD)</label>
+            <input type="text" placeholder="Type here" className="pm-input" value={formData.minOrderAmount} onChange={e => setFormData({...formData, minOrderAmount: e.target.value})} />
           </div>
         </div>
 
@@ -573,7 +529,7 @@ export const CreatePromotionModal = ({ isOpen, onClose, onCreate }: CreatePromot
                 backgroundColor: formData.eligibleServices?.includes(service.id) ? '#eef7f0' : 'white',
               }}
             >
-              <div style={{ padding: '6px', backgroundColor: '#f9fafb', borderRadius: '12px' }}>
+              <div style={{ padding: '8px', backgroundColor: '#f9fafb', borderRadius: '12px' }}>
                 <img src={service.icon} alt="" style={{ width: '40px', height: '40px', objectFit: 'contain' }} />
               </div>
               <span style={{ fontSize: '13px', fontWeight: '800', color: '#374151', textAlign: 'center' }}>{service.label}</span>
@@ -581,12 +537,12 @@ export const CreatePromotionModal = ({ isOpen, onClose, onCreate }: CreatePromot
           ))}
         </div>
 
-        <div className="cpm-footer">
+        <div className="pm-footer-actions">
           <button 
             onClick={onClose}
             style={{ 
-              padding: '16px 64px', borderRadius: '100px', border: '1px solid #e5e7eb',
-              backgroundColor: 'white', fontWeight: '800', fontSize: '1rem', cursor: 'pointer'
+              flex: 1, padding: '16px', borderRadius: '100px', border: '1px solid #e5e7eb',
+              backgroundColor: 'white', fontWeight: '800', fontSize: '1.1rem', cursor: 'pointer'
             }}
           >
             Cancel
@@ -594,8 +550,8 @@ export const CreatePromotionModal = ({ isOpen, onClose, onCreate }: CreatePromot
           <button 
             onClick={handleCreate}
             style={{ 
-              padding: '16px 64px', borderRadius: '100px', border: 'none',
-              backgroundColor: '#38AC57', color: 'white', fontWeight: '800', fontSize: '1rem', cursor: 'pointer'
+              flex: 1, padding: '16px', borderRadius: '100px', border: 'none',
+              backgroundColor: '#38AC57', color: 'white', fontWeight: '800', fontSize: '1.1rem', cursor: 'pointer'
             }}
           >
             Create Promotion

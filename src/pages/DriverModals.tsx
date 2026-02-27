@@ -367,3 +367,147 @@ export const TripSummaryModal = ({ onClose, trip }: ModalProps) => {
         </div>
     );
 };
+
+// --- Add New Driver Modal ---
+
+export const AddDriverModal = ({ onClose }: ModalProps) => {
+    const [formData, setFormData] = useState({
+        name: '',
+        phone: '',
+        email: '',
+        cityId: '',
+        gender: 'MALE',
+        serviceTypeId: '1', // Default to Car
+        status: 'pending'
+    });
+    const [loading, setLoading] = useState(false);
+
+    const handleChange = (field: string, value: string) => {
+        setFormData(prev => ({ ...prev, [field]: value }));
+    };
+
+    const handleSubmit = async () => {
+        if (!formData.name || !formData.phone) {
+            alert('Name and Phone are required');
+            return;
+        }
+
+        setLoading(true);
+        try {
+            // In a real app, import and call createDriverApi
+            // For now, we'll simulate it to avoid complex imports if not already there
+            const response = await fetch('http://localhost:5000/api/drivers', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                },
+                body: JSON.stringify({
+                    ...formData,
+                    cityId: formData.cityId ? parseInt(formData.cityId) : null,
+                    serviceTypeId: parseInt(formData.serviceTypeId)
+                })
+            });
+
+            if (response.ok) {
+                alert('Driver added successfully!');
+                onClose();
+            } else {
+                const err = await response.json();
+                alert(err.message || 'Failed to add driver');
+            }
+        } catch (err) {
+            console.error(err);
+            alert('Error adding driver');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const inputStyle = {
+        width: '100%',
+        padding: '0.8rem 1rem',
+        borderRadius: '0.75rem',
+        border: '1px solid #e5e7eb',
+        outline: 'none',
+        fontSize: '0.9rem'
+    };
+
+    const labelStyle = {
+        display: 'block',
+        fontSize: '0.8rem',
+        fontWeight: 'bold',
+        marginBottom: '0.4rem',
+        color: '#374151'
+    };
+
+    return (
+        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.5)', zIndex: 1200, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <div style={{ width: '500px', backgroundColor: 'white', borderRadius: '1.5rem', padding: '1.5rem' }}>
+                <div style={{ display: 'flex', alignItems: 'center', marginBottom: '1.5rem' }}>
+                    <button onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer', marginRight: '1rem' }}>
+                        <ArrowLeft size={24} />
+                    </button>
+                    <div>
+                        <h2 style={{ fontSize: '1.4rem', fontWeight: 'bold', margin: 0 }}>Add New Driver</h2>
+                        <p style={{ color: '#6b7280', fontSize: '0.8rem' }}>Enter background details for the new driver</p>
+                    </div>
+                </div>
+
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1rem' }}>
+                    <div>
+                        <label style={labelStyle}>Full Name*</label>
+                        <input style={inputStyle} value={formData.name} onChange={e => handleChange('name', e.target.value)} placeholder="e.g. John Doe" />
+                    </div>
+                    <div>
+                        <label style={labelStyle}>Phone Number*</label>
+                        <input style={inputStyle} value={formData.phone} onChange={e => handleChange('phone', e.target.value)} placeholder="+923001234567" />
+                    </div>
+                </div>
+
+                <div style={{ marginBottom: '1rem' }}>
+                    <label style={labelStyle}>Email Address</label>
+                    <input style={inputStyle} value={formData.email} onChange={e => handleChange('email', e.target.value)} placeholder="email@example.com" />
+                </div>
+
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1rem' }}>
+                    <div>
+                        <label style={labelStyle}>Gender</label>
+                        <select style={inputStyle} value={formData.gender} onChange={e => handleChange('gender', e.target.value)}>
+                            <option value="MALE">Male</option>
+                            <option value="FEMALE">Female</option>
+                            <option value="OTHER">Other</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label style={labelStyle}>City ID</label>
+                        <input type="number" style={inputStyle} value={formData.cityId} onChange={e => handleChange('cityId', e.target.value)} placeholder="1" />
+                    </div>
+                </div>
+
+                <div style={{ marginBottom: '2rem' }}>
+                    <label style={labelStyle}>Service Type</label>
+                    <select style={inputStyle} value={formData.serviceTypeId} onChange={e => handleChange('serviceTypeId', e.target.value)}>
+                        <option value="1">Car Rides</option>
+                        <option value="2">Motorcycle</option>
+                        <option value="3">Taxi</option>
+                        <option value="4">Rental Cars</option>
+                    </select>
+                </div>
+
+                <button 
+                    onClick={handleSubmit}
+                    disabled={loading}
+                    style={{ 
+                        width: '100%', padding: '1rem', borderRadius: '2rem', border: 'none', 
+                        backgroundColor: '#38AC57', color: 'white', fontWeight: 'bold', fontSize: '1rem',
+                        cursor: loading ? 'not-allowed' : 'pointer', opacity: loading ? 0.7 : 1
+                    }}
+                >
+                    {loading ? 'Adding...' : 'Add Driver'}
+                </button>
+            </div>
+        </div>
+    );
+};
+

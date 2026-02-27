@@ -25,6 +25,8 @@ import { AllServices } from './pages/AllServices';
 import { Profile } from './pages/Profile';
 import './index.css';
 
+
+
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
     return !!localStorage.getItem('token');
@@ -100,6 +102,8 @@ function App() {
       case 'profile':
         return <Profile />;
       default:
+
+
         return (
           <div style={{ padding: '2rem', textAlign: 'center' }}>
             <h2>Page Under Construction</h2>

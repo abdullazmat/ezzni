@@ -15,7 +15,8 @@ import pickupIcon from '../assets/icons/pickup.png';
 import destinationIcon from '../assets/icons/destination.png';
 
 
-import { ChangeCategoryModal, RidePreferencesModal, SuspendDriverModal, TripSummaryModal } from './DriverModals';
+import { ChangeCategoryModal, RidePreferencesModal, SuspendDriverModal, TripSummaryModal, AddDriverModal } from './DriverModals';
+
 // We'll mock the chart if library not installed, or use simple div bars
 
 // --- Types ---
@@ -481,7 +482,9 @@ export const Drivers = () => {
     const [showRidePreferencesModal, setShowRidePreferencesModal] = useState(false);
     const [showSuspendModal, setShowSuspendModal] = useState(false);
     const [showTripSummaryModal, setShowTripSummaryModal] = useState(false);
+    const [showAddDriverModal, setShowAddDriverModal] = useState(false);
     const [selectedTripIndex, setSelectedTripIndex] = useState<number | null>(null);
+
 
     // Track if filters panel is shown
     const [showFilters, setShowFilters] = useState(true);
@@ -686,9 +689,10 @@ export const Drivers = () => {
                     <h1 style={{ fontSize: '1.8rem', fontWeight: 'bold', margin: '0 0 0.5rem 0' }}>Driver</h1>
                     <p style={{ color: '#6b7280', margin: 0 }}>Manage driver accounts and generate IDs by vehicle type</p>
                 </div>
-                <button onClick={() => alert('Add New Driver form coming soon!')} style={{ backgroundColor: '#38AC57', color: 'white', border: 'none', padding: '0.8rem 1.5rem', borderRadius: '2rem', display: 'flex', alignItems: 'center', gap: '0.5rem', fontWeight: '600', cursor: 'pointer', fontSize: '1rem' }}>
+                <button onClick={() => setShowAddDriverModal(true)} style={{ backgroundColor: '#38AC57', color: 'white', border: 'none', padding: '0.8rem 1.5rem', borderRadius: '2rem', display: 'flex', alignItems: 'center', gap: '0.5rem', fontWeight: '600', cursor: 'pointer', fontSize: '1rem' }}>
                     <Plus size={20} /> Add New Drivers
                 </button>
+
             </div>
 
             {/* Stats Cards */}
@@ -1000,6 +1004,12 @@ export const Drivers = () => {
                     trip={{ index: selectedTripIndex }}
                 />
             )}
+            {showAddDriverModal && (
+                <AddDriverModal 
+                    onClose={() => setShowAddDriverModal(false)}
+                />
+            )}
         </div>
+
     );
 };

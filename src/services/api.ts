@@ -353,3 +353,622 @@ export async function getTopRidersApi(params?: { region?: string }): Promise<Api
   const query = params ? `?${new URLSearchParams(params).toString()}` : '';
   return request<TopRider[]>(`/api/admin/dashboard/top-riders${query}`);
 }
+
+export async function createDriverApi(payload: any): Promise<ApiResponse<{ message: string; id: number }>> {
+  return request<{ message: string; id: number }>('/api/drivers', {
+    method: 'POST',
+    body: JSON.stringify(payload),
+  });
+}
+
+export async function getRidersApi(): Promise<ApiResponse<Passenger[]>> {
+
+  return request<Passenger[]>('/api/riders');
+}
+
+// ─── Passenger Endpoints ───────────────────────────────────────────────────
+
+export interface Passenger {
+  id: number;
+  phone: string;
+  name: string;
+  email: string;
+  imageUrl: string | null;
+  dob: string | null;
+  gender: 'MALE' | 'FEMALE' | 'OTHER' | null;
+  cityId: number | null;
+  isRegistered: boolean;
+  createdAt: string;
+}
+
+export interface PassengerLoginResponse {
+  status: string;
+  message: string;
+  data: {
+    token: string;
+    user: Passenger;
+    isRegistered: boolean;
+  };
+  timestamp: string;
+}
+
+export interface PassengerProfileResponse {
+  status: string;
+  message: string;
+  data: {
+    user: Passenger;
+  };
+  timestamp: string;
+}
+
+export interface PassengerService {
+  id: number;
+  name: string;
+  icon_url: string | null;
+}
+
+export interface RideOption {
+  id: number;
+  ridePreference: string;
+  ridePreferenceKey: string;
+  description: string;
+  price: number;
+}
+
+export interface CalculateRidePriceRequest {
+  pickup: {
+    latitude: number;
+    longitude: number;
+    address: string;
+  };
+  dropoff: {
+    latitude: number;
+    longitude: number;
+    address: string;
+  };
+  passengerServiceId: number;
+  couponCode?: string;
+}
+
+export interface CalculateRidePriceResponse {
+  status: string;
+  message: string;
+  data: {
+    passengerService: PassengerService;
+    distance: number;
+    estimatedDuration: number;
+    pickup: CalculateRidePriceRequest['pickup'];
+    dropoff: CalculateRidePriceRequest['dropoff'];
+    options: RideOption[];
+    coupon?: {
+      id: number;
+      code: string;
+      discountAmount: number;
+    };
+  };
+  timestamp: string;
+}
+
+export interface City {
+  id: number;
+  name: string;
+  status: string;
+}
+
+/**
+ * POST /api/passenger/login
+ */
+export async function passengerLoginApi(phone: string): Promise<ApiResponse<PassengerLoginResponse>> {
+  return request<PassengerLoginResponse>('/api/passenger/login', {
+    method: 'POST',
+    body: JSON.stringify({ phone }),
+  });
+}
+
+/**
+ * POST /api/passenger/complete-registration
+ */
+export async function completePassengerRegistrationApi(formData: FormData): Promise<ApiResponse<PassengerProfileResponse>> {
+  return request<PassengerProfileResponse>('/api/passenger/complete-registration', {
+    method: 'POST',
+    body: formData,
+  });
+}
+
+/**
+ * GET /api/passenger/profile
+ */
+export async function getPassengerProfileApi(): Promise<ApiResponse<PassengerProfileResponse>> {
+  return request<PassengerProfileResponse>('/api/passenger/profile', {
+    method: 'GET',
+  });
+}
+
+/**
+ * PUT /api/passenger/profile
+ */
+export async function updatePassengerProfileApi(formData: FormData): Promise<ApiResponse<PassengerProfileResponse>> {
+  return request<PassengerProfileResponse>('/api/passenger/profile', {
+    method: 'PUT',
+    body: formData,
+  });
+}
+
+/**
+ * GET /api/passenger/services
+ */
+export async function getPassengerServicesApi(): Promise<ApiResponse<{ status: string; data: PassengerService[] }>> {
+  return request<{ status: string; data: PassengerService[] }>('/api/passenger/services', {
+    method: 'GET',
+  });
+}
+
+/**
+ * POST /api/passenger/calculate-ride-price
+ */
+export async function calculateRidePriceApi(payload: CalculateRidePriceRequest): Promise<ApiResponse<CalculateRidePriceResponse>> {
+  return request<CalculateRidePriceResponse>('/api/passenger/calculate-ride-price', {
+    method: 'POST',
+    body: JSON.stringify(payload),
+  });
+}
+
+/**
+ * POST /api/coupons/seed
+ */
+export async function seedCouponApi(): Promise<ApiResponse<{ status: string; message: string; data: any }>> {
+  return request<{ status: string; message: string; data: any }>('/api/coupons/seed', {
+    method: 'POST',
+  });
+}
+
+/**
+ * GET /api/coupons/validate/:code
+ */
+export async function validateCouponApi(code: string, price: number): Promise<ApiResponse<{ status: string; message: string; data: any }>> {
+  return request<{ status: string; message: string; data: any }>(`/api/coupons/validate/${code}?price=${price}`, {
+    method: 'GET',
+  });
+}
+
+/**
+ * GET /api/cities
+ */
+export async function getCitiesApi(): Promise<ApiResponse<{ status: string; data: City[] }>> {
+  return request<{ status: string; data: City[] }>('/api/cities', {
+    method: 'GET',
+  });
+}
+
+// ─── Driver Endpoints ──────────────────────────────────────────────────────
+
+export interface DriverServiceType {
+  id: number;
+  name: string;
+  displayName: string;
+}
+
+export interface DriverStatus {
+  status: 'PENDING' | 'APPROVED' | 'REJECTED';
+  isNationalIdCompleted?: boolean;
+  isDriverLicenseCompleted?: boolean;
+  isProfessionalCardCompleted?: boolean;
+  isVehicleRegistrationCompleted?: boolean;
+  isVehicleInsuranceCompleted?: boolean;
+  isVehicleDetailsCompleted?: boolean;
+  isVehiclePhotosCompleted?: boolean;
+  isFaceVerificationCompleted?: boolean;
+  isTaxiLicenseCompleted?: boolean;
+  rejectionReason?: string;
+}
+
+export interface Driver {
+  id: number;
+  phone: string;
+  name: string;
+  email: string;
+  imageUrl: string | null;
+  dob: string | null;
+  gender: 'MALE' | 'FEMALE' | 'OTHER' | null;
+  cityId: number | null;
+  isRegistered: boolean;
+  serviceType: DriverServiceType | null;
+  createdAt: string;
+  carRideStatus?: DriverStatus;
+  motorcycleStatus?: DriverStatus;
+  taxiStatus?: DriverStatus;
+  rentalProfile?: any;
+}
+
+export interface DriverLoginResponse {
+  status: string;
+  message: string;
+  data: {
+    token: string;
+    user: Driver;
+    isRegistered: boolean;
+  };
+  timestamp: string;
+}
+
+export interface DriverProfileResponse {
+  status: string;
+  message: string;
+  data: {
+    user: Driver;
+  };
+  timestamp: string;
+}
+
+/**
+ * POST /api/driver/login
+ */
+export async function driverLoginApi(phone: string): Promise<ApiResponse<DriverLoginResponse>> {
+  return request<DriverLoginResponse>('/api/driver/login', {
+    method: 'POST',
+    body: JSON.stringify({ phone }),
+  });
+}
+
+/**
+ * POST /api/driver/complete-registration
+ */
+export async function completeDriverRegistrationApi(formData: FormData): Promise<ApiResponse<DriverProfileResponse>> {
+  return request<DriverProfileResponse>('/api/driver/complete-registration', {
+    method: 'POST',
+    body: formData,
+  });
+}
+
+/**
+ * GET /api/driver/profile
+ */
+export async function getDriverProfileApi(): Promise<ApiResponse<DriverProfileResponse>> {
+  return request<DriverProfileResponse>('/api/driver/profile', {
+    method: 'GET',
+  });
+}
+
+/**
+ * PUT /api/driver/profile
+ */
+export async function updateDriverProfileApi(formData: FormData): Promise<ApiResponse<DriverProfileResponse>> {
+  return request<DriverProfileResponse>('/api/driver/profile', {
+    method: 'PUT',
+    body: formData,
+  });
+}
+
+/**
+ * GET /api/driver/services
+ */
+export async function getDriverServicesApi(): Promise<ApiResponse<{ status: string; data: DriverServiceType[] }>> {
+  return request<{ status: string; data: DriverServiceType[] }>('/api/driver/services', {
+    method: 'GET',
+  });
+}
+
+/**
+ * POST /api/driver/select-service
+ */
+export async function selectDriverServiceApi(serviceTypeId: number): Promise<ApiResponse<DriverProfileResponse>> {
+  return request<DriverProfileResponse>('/api/driver/select-service', {
+    method: 'POST',
+    body: JSON.stringify({ serviceTypeId }),
+  });
+}
+
+/**
+ * GET /api/driver/preferences
+ */
+export async function getDriverPreferencesApi(): Promise<ApiResponse<{ status: string; data: any[] }>> {
+  return request<{ status: string; data: any[] }>('/api/driver/preferences', {
+    method: 'GET',
+  });
+}
+
+/**
+ * POST /api/driver/status/online
+ */
+export async function goOnlineApi(preferenceIds: number[]): Promise<ApiResponse<{ status: string; message: string }>> {
+  return request<{ status: string; message: string }>('/api/driver/status/online', {
+    method: 'POST',
+    body: JSON.stringify({ preferenceIds }),
+  });
+}
+
+/**
+ * POST /api/driver/status/offline
+ */
+export async function goOfflineApi(): Promise<ApiResponse<{ status: string; message: string }>> {
+  return request<{ status: string; message: string }>('/api/driver/status/offline', {
+    method: 'POST',
+  });
+}
+
+/**
+ * POST /api/driver/rental/profile
+ */
+export async function createRentalProfileApi(formData: FormData): Promise<ApiResponse<{ status: string; message: string; data: any }>> {
+  return request<{ status: string; message: string; data: any }>('/api/driver/rental/profile', {
+    method: 'POST',
+    body: formData,
+  });
+}
+
+/**
+ * GET /api/driver/rental/profile
+ */
+export async function getRentalProfileApi(): Promise<ApiResponse<{ status: string; message: string; data: any }>> {
+  return request<{ status: string; message: string; data: any }>('/api/driver/rental/profile', {
+    method: 'GET',
+  });
+}
+/**
+ * GET /api/driver/car-rides/status
+ */
+export async function getCarRidesStatusApi(): Promise<ApiResponse<{
+  status: string;
+  isNationalIdCompleted: boolean;
+  isDriverLicenseCompleted: boolean;
+  isProfessionalCardCompleted: boolean;
+  isVehicleRegistrationCompleted: boolean;
+  isVehicleInsuranceCompleted: boolean;
+  isVehicleDetailsCompleted: boolean;
+  isVehiclePhotosCompleted: boolean;
+  isFaceVerificationCompleted: boolean;
+}>> {
+  return request<any>('/api/driver/car-rides/status', { method: 'GET' });
+}
+
+/**
+ * POST /api/driver/car-rides/national-id
+ */
+export async function uploadNationalIdApi(formData: FormData): Promise<ApiResponse<any>> {
+  return request<any>('/api/driver/car-rides/national-id', { method: 'POST', body: formData });
+}
+
+/**
+ * POST /api/driver/car-rides/driver-license
+ */
+export async function uploadDriverLicenseApi(formData: FormData): Promise<ApiResponse<any>> {
+  return request<any>('/api/driver/car-rides/driver-license', { method: 'POST', body: formData });
+}
+
+/**
+ * POST /api/driver/car-rides/professional-card
+ */
+export async function uploadProfessionalCardApi(formData: FormData): Promise<ApiResponse<any>> {
+  return request<any>('/api/driver/car-rides/professional-card', { method: 'POST', body: formData });
+}
+
+/**
+ * POST /api/driver/car-rides/vehicle-registration
+ */
+export async function uploadVehicleRegistrationApi(formData: FormData): Promise<ApiResponse<any>> {
+  return request<any>('/api/driver/car-rides/vehicle-registration', { method: 'POST', body: formData });
+}
+
+/**
+ * POST /api/driver/car-rides/insurance
+ */
+export async function uploadVehicleInsuranceApi(formData: FormData): Promise<ApiResponse<any>> {
+  return request<any>('/api/driver/car-rides/insurance', { method: 'POST', body: formData });
+}
+
+/**
+ * POST /api/driver/car-rides/vehicle-details
+ */
+export async function updateVehicleDetailsApi(payload: any): Promise<ApiResponse<any>> {
+  return request<any>('/api/driver/car-rides/vehicle-details', {
+    method: 'POST',
+    body: JSON.stringify(payload),
+  });
+}
+
+/**
+ * POST /api/driver/car-rides/vehicle-photos
+ */
+export async function uploadVehiclePhotosApi(formData: FormData): Promise<ApiResponse<any>> {
+  return request<any>('/api/driver/car-rides/vehicle-photos', { method: 'POST', body: formData });
+}
+
+/**
+ * POST /api/driver/car-rides/face-verification
+ */
+export async function uploadFaceVerificationApi(formData: FormData): Promise<ApiResponse<any>> {
+  return request<any>('/api/driver/car-rides/face-verification', { method: 'POST', body: formData });
+}
+
+/**
+ * GET /api/driver/motorcycle/status
+ */
+export async function getMotorcycleStatusApi(): Promise<ApiResponse<{
+  status: string;
+  isNationalIdCompleted: boolean;
+  isDriverLicenseCompleted: boolean;
+  isProfessionalCardCompleted: boolean;
+  isVehicleRegistrationCompleted: boolean;
+  isVehicleInsuranceCompleted: boolean;
+  isVehicleDetailsCompleted: boolean;
+  isVehiclePhotosCompleted: boolean;
+  isFaceVerificationCompleted: boolean;
+}>> {
+  return request<any>('/api/driver/motorcycle/status', { method: 'GET' });
+}
+
+/**
+ * POST /api/driver/motorcycle/national-id
+ */
+export async function uploadMotorcycleNationalIdApi(formData: FormData): Promise<ApiResponse<any>> {
+  return request<any>('/api/driver/motorcycle/national-id', { method: 'POST', body: formData });
+}
+
+/**
+ * POST /api/driver/motorcycle/driver-license
+ */
+export async function uploadMotorcycleDriverLicenseApi(formData: FormData): Promise<ApiResponse<any>> {
+  return request<any>('/api/driver/motorcycle/driver-license', { method: 'POST', body: formData });
+}
+
+/**
+ * POST /api/driver/motorcycle/professional-card
+ */
+export async function uploadMotorcycleProfessionalCardApi(formData: FormData): Promise<ApiResponse<any>> {
+  return request<any>('/api/driver/motorcycle/professional-card', { method: 'POST', body: formData });
+}
+
+/**
+ * POST /api/driver/motorcycle/vehicle-registration
+ */
+export async function uploadMotorcycleVehicleRegistrationApi(formData: FormData): Promise<ApiResponse<any>> {
+  return request<any>('/api/driver/motorcycle/vehicle-registration', { method: 'POST', body: formData });
+}
+
+/**
+ * POST /api/driver/motorcycle/insurance
+ */
+export async function uploadMotorcycleVehicleInsuranceApi(formData: FormData): Promise<ApiResponse<any>> {
+  return request<any>('/api/driver/motorcycle/insurance', { method: 'POST', body: formData });
+}
+
+/**
+ * POST /api/driver/motorcycle/vehicle-details
+ */
+export async function updateMotorcycleVehicleDetailsApi(payload: any): Promise<ApiResponse<any>> {
+  return request<any>('/api/driver/motorcycle/vehicle-details', {
+    method: 'POST',
+    body: JSON.stringify(payload),
+  });
+}
+
+/**
+ * POST /api/driver/motorcycle/vehicle-photos
+ */
+export async function uploadMotorcycleVehiclePhotosApi(formData: FormData): Promise<ApiResponse<any>> {
+  return request<any>('/api/driver/motorcycle/vehicle-photos', { method: 'POST', body: formData });
+}
+
+/**
+ * POST /api/driver/motorcycle/face-verification
+ */
+export async function uploadMotorcycleFaceVerificationApi(formData: FormData): Promise<ApiResponse<any>> {
+  return request<any>('/api/driver/motorcycle/face-verification', { method: 'POST', body: formData });
+}
+
+// ─── Taxi Onboarding ───────────────────────────────────────────────────────
+
+export async function getTaxiStatusApi(): Promise<ApiResponse<any>> {
+  return request<any>('/api/driver/taxi/status', { method: 'GET' });
+}
+
+export async function uploadTaxiNationalIdApi(formData: FormData): Promise<ApiResponse<any>> {
+  return request<any>('/api/driver/taxi/national-id', { method: 'POST', body: formData });
+}
+
+export async function uploadTaxiDriverLicenseApi(formData: FormData): Promise<ApiResponse<any>> {
+  return request<any>('/api/driver/taxi/driver-license', { method: 'POST', body: formData });
+}
+
+export async function uploadTaxiLicenseApi(formData: FormData): Promise<ApiResponse<any>> {
+  return request<any>('/api/driver/taxi/taxi-license', { method: 'POST', body: formData });
+}
+
+export async function uploadTaxiProfessionalCardApi(formData: FormData): Promise<ApiResponse<any>> {
+  return request<any>('/api/driver/taxi/professional-card', { method: 'POST', body: formData });
+}
+
+export async function uploadTaxiVehicleRegistrationApi(formData: FormData): Promise<ApiResponse<any>> {
+  return request<any>('/api/driver/taxi/vehicle-registration', { method: 'POST', body: formData });
+}
+
+export async function uploadTaxiVehicleInsuranceApi(formData: FormData): Promise<ApiResponse<any>> {
+  return request<any>('/api/driver/taxi/insurance', { method: 'POST', body: formData });
+}
+
+export async function updateTaxiVehicleDetailsApi(payload: any): Promise<ApiResponse<any>> {
+  return request<any>('/api/driver/taxi/vehicle-details', {
+    method: 'POST',
+    body: JSON.stringify(payload),
+  });
+}
+
+export async function uploadTaxiVehiclePhotosApi(formData: FormData): Promise<ApiResponse<any>> {
+  return request<any>('/api/driver/taxi/vehicle-photos', { method: 'POST', body: formData });
+}
+
+export async function uploadTaxiFaceVerificationApi(formData: FormData): Promise<ApiResponse<any>> {
+  return request<any>('/api/driver/taxi/face-verification', { method: 'POST', body: formData });
+}
+
+// ─── Reviews ───────────────────────────────────────────────────────────────
+
+export interface ReviewPayload {
+  rideRequestId: number;
+  revieweeId: number;
+  rating: number;
+  comment?: string;
+}
+
+export interface ReviewItem {
+  id: number;
+  rideRequestId: number;
+  reviewerId: number;
+  reviewerType: 'PASSENGER' | 'DRIVER';
+  rating: number;
+  comment: string | null;
+  createdAt: string;
+}
+
+export interface ReviewsListResponse {
+  averageRating: number | null;
+  totalReviews: number;
+  reviews: ReviewItem[];
+}
+
+/** POST /api/reviews/driver — Passenger reviews a driver */
+export async function reviewDriverApi(payload: ReviewPayload): Promise<ApiResponse<any>> {
+  return request<any>('/api/reviews/driver', {
+    method: 'POST',
+    body: JSON.stringify(payload),
+  });
+}
+
+/** POST /api/reviews/passenger — Driver reviews a passenger */
+export async function reviewPassengerApi(payload: ReviewPayload): Promise<ApiResponse<any>> {
+  return request<any>('/api/reviews/passenger', {
+    method: 'POST',
+    body: JSON.stringify(payload),
+  });
+}
+
+/** GET /api/reviews/driver/:driverId */
+export async function getDriverReviewsApi(driverId: number): Promise<ApiResponse<ReviewsListResponse>> {
+  return request<ReviewsListResponse>(`/api/reviews/driver/${driverId}`);
+}
+
+/** GET /api/reviews/passenger/:passengerId */
+export async function getPassengerReviewsApi(passengerId: number): Promise<ApiResponse<ReviewsListResponse>> {
+  return request<ReviewsListResponse>(`/api/reviews/passenger/${passengerId}`);
+}
+
+/** GET /api/reviews/received/passenger */
+export async function getReceivedPassengerReviewsApi(): Promise<ApiResponse<ReviewItem[]>> {
+  return request<ReviewItem[]>('/api/reviews/received/passenger');
+}
+
+/** GET /api/reviews/given/passenger */
+export async function getGivenPassengerReviewsApi(): Promise<ApiResponse<ReviewItem[]>> {
+  return request<ReviewItem[]>('/api/reviews/given/passenger');
+}
+
+/** GET /api/reviews/received/driver */
+export async function getReceivedDriverReviewsApi(): Promise<ApiResponse<ReviewItem[]>> {
+  return request<ReviewItem[]>('/api/reviews/received/driver');
+}
+
+/** GET /api/reviews/given/driver */
+export async function getGivenDriverReviewsApi(): Promise<ApiResponse<ReviewItem[]>> {
+  return request<ReviewItem[]>('/api/reviews/given/driver');
+}
+
