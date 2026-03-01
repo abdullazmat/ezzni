@@ -99,7 +99,7 @@ export const RiderDetailsContent = ({ rider, onViewSpending, onViewHistory, onSu
             <style>{`
                 @media (max-width: 640px) {
                     .rm-modal-grid-3 { grid-template-columns: 1fr !important; }
-                    .rm-flex-res { flex-direction: column !important; align-items: center !important; text-align: center !important; }
+                    .rm-flex-res { flex-direction: column !important; align-items: flex-start !important; text-align: left !important; }
                 }
             `}</style>
 

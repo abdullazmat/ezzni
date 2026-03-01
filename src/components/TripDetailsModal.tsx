@@ -18,7 +18,7 @@ interface TripDetailsModalProps {
 
 export const TripDetailsModal = ({ trip, onClose }: TripDetailsModalProps) => {
   return (
-    <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.6)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem', backdropFilter: 'blur(8px)' }}>
+    <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.6)', zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem', backdropFilter: 'blur(8px)' }}>
       <style dangerouslySetInnerHTML={{ __html: `
         .modal-card {
             width: 100%;
@@ -30,6 +30,19 @@ export const TripDetailsModal = ({ trip, onClose }: TripDetailsModalProps) => {
             border-radius: 2rem;
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
             position: relative;
+        }
+        @media (max-width: 1024px) {
+            .modal-card {
+                max-width: 95%;
+                padding: 2rem;
+            }
+        }
+        @media (max-width: 768px) {
+            .modal-card {
+                padding: 1.25rem;
+                padding-top: 3.5rem;
+                border-radius: 1.5rem;
+            }
         }
         .section-card {
             background-color: white;
@@ -101,7 +114,7 @@ export const TripDetailsModal = ({ trip, onClose }: TripDetailsModalProps) => {
             }
             .info-layout {
                 flex-direction: column;
-                align-items: center;
+                align-items: flex-start;
                 gap: 2rem;
             }
             .info-fields-grid {
@@ -129,11 +142,11 @@ export const TripDetailsModal = ({ trip, onClose }: TripDetailsModalProps) => {
             }
             .stats-bar > div {
                 min-width: 100%;
-                text-align: center;
+                text-align: left;
             }
             .info-item {
-                align-items: center;
-                text-align: center;
+                align-items: flex-start;
+                text-align: left;
             }
         }
       `}} />

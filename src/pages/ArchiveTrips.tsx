@@ -384,7 +384,7 @@ export const ArchiveTrips = () => {
                     position: relative;
                     background-color: #ffffff;
                     box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-                    z-index: 1001;
+                    z-index: 9999;
                 }
                 .at-info-row {
                     display: grid;
@@ -433,7 +433,7 @@ export const ArchiveTrips = () => {
                     }
                     .at-flex-responsive {
                         flex-direction: column;
-                        align-items: center;
+                        align-items: flex-start;
                     }
                     .at-flex-responsive > div:last-child {
                         width: 100%;
@@ -615,7 +615,7 @@ export const ArchiveTrips = () => {
 
             {/* Detail Modal */}
             {selectedTrip && (
-                 <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.5)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem' }}>
+                 <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.5)', zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem' }}>
                       <div className="at-modal-card">
                           {/* Header */}
                           <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1.5rem' }}>

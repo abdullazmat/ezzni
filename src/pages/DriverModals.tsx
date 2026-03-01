@@ -52,7 +52,7 @@ export const ChangeCategoryModal = ({ onClose, driver }: ModalProps) => {
     // The screenshot 3 implies selectable options.
     
     return (
-        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.5)', zIndex: 1100, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.5)', zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <div className="card" style={{ width: '500px', backgroundColor: 'white', borderRadius: '1.5rem', padding: '1.5rem', position: 'relative' }}>
                 <div style={{ display: 'flex', alignItems: 'center', marginBottom: '1.5rem' }}>
                     <button onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer', marginRight: '1rem' }}>
@@ -113,7 +113,7 @@ export const RidePreferencesModal = ({ onClose }: ModalProps) => {
 
     
     return (
-        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.5)', zIndex: 1100, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.5)', zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <div className="card" style={{ width: '500px', backgroundColor: 'white', borderRadius: '1.5rem', padding: '1.5rem' }}>
                  <div style={{ display: 'flex', alignItems: 'center', marginBottom: '2rem' }}>
                     <button onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer', marginRight: '1rem' }}>
@@ -150,7 +150,7 @@ export const SuspendDriverModal = ({ onClose }: ModalProps) => {
     const [hours, setHours] = useState('24 Hours');
 
     return (
-        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.5)', zIndex: 1100, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.5)', zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <div className="card" style={{ width: '500px', backgroundColor: 'white', borderRadius: '1.5rem', padding: '1.5rem' }}>
                  <div style={{ display: 'flex', alignItems: 'center', marginBottom: '1.5rem' }}>
                     <button onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer', marginRight: '1rem' }}>
@@ -238,7 +238,7 @@ export const TripSummaryModal = ({ onClose, trip }: ModalProps) => {
     };
 
     return (
-        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.5)', zIndex: 1200, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.5)', zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <div className="card" style={{ width: '600px', backgroundColor: 'white', borderRadius: '1.5rem', padding: '0', maxHeight: '90vh', overflowY: 'auto' }}>
                 <div style={{ padding: '1.5rem 1.5rem 0.5rem 1.5rem' }}>
                     <div style={{ display: 'flex', alignItems: 'flex-start', marginBottom: '1rem' }}>
@@ -442,7 +442,7 @@ export const AddDriverModal = ({ onClose }: ModalProps) => {
     };
 
     return (
-        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.5)', zIndex: 1200, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.5)', zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <div style={{ width: '500px', backgroundColor: 'white', borderRadius: '1.5rem', padding: '1.5rem' }}>
                 <div style={{ display: 'flex', alignItems: 'center', marginBottom: '1.5rem' }}>
                     <button onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer', marginRight: '1rem' }}>

@@ -289,7 +289,7 @@ export const VerificationBadges = () => {
                     right: 0;
                     bottom: 0;
                     background-color: rgba(0,0,0,0.5);
-                    z-index: 1000;
+                    z-index: 9999;
                     display: flex;
                     align-items: center;
                     justify-content: center;
@@ -297,12 +297,13 @@ export const VerificationBadges = () => {
                 }
                 .vb-settings-modal {
                     width: 600px;
-                    max-width: 100%;
+                    max-width: 95%;
                     background-color: white;
                     border-radius: 1.5rem;
-                    padding: 2rem;
+                    padding: 2.5rem;
                     max-height: 90vh;
                     overflow-y: auto;
+                    z-index: 9999;
                 }
                 .vb-preview-modal {
                     width: 950px;
@@ -313,6 +314,8 @@ export const VerificationBadges = () => {
                     max-height: 95vh;
                     overflow-y: auto;
                     position: relative;
+                    z-index: 9999;
+                    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
                 }
                 .vb-info-grid {
                     display: grid;
@@ -351,6 +354,7 @@ export const VerificationBadges = () => {
                 @media (max-width: 992px) {
                     .vb-preview-modal {
                         padding: 1.5rem;
+                        max-width: 95%;
                     }
                     .vb-info-grid {
                         grid-template-columns: repeat(2, 1fr);
@@ -376,8 +380,8 @@ export const VerificationBadges = () => {
                     }
                     .vb-flex-responsive {
                         flex-direction: column;
-                        align-items: center;
-                        text-align: center;
+                        align-items: flex-start;
+                        text-align: left;
                         gap: 1.5rem;
                     }
                     .vb-info-grid {
@@ -399,13 +403,15 @@ export const VerificationBadges = () => {
                     }
                     .vb-status-banner {
                         flex-direction: column;
-                        gap: 1rem;
-                        text-align: center;
+                        gap: 1.5rem;
+                        text-align: left;
+                        align-items: flex-start !important;
                     }
                     .vb-status-banner > div {
                         flex-direction: column;
+                        align-items: flex-start;
+                        gap: 0.5rem;
                     }
-                }
             `}</style>
             {/* Header */}
             <div>
@@ -699,9 +705,9 @@ export const VerificationBadges = () => {
 
                             <h3 style={{ fontSize: '1.2rem', fontWeight: 'bold', marginBottom: '1rem' }}>Performance Metrics</h3>
                             <div style={{ backgroundColor: 'white', padding: '2rem', borderRadius: '1rem', border: '1px solid #f3f4f6', boxShadow: '0 1px 3px rgba(0,0,0,0.05)', marginBottom: '2rem' }}>
-                                <div className="vb-flex-responsive" style={{ alignItems: 'center' }}>
+                                <div className="vb-flex-responsive">
                                       <UserAvatar src={selectedUser.avatar} rating={selectedUser.rating} showBadge={selectedUser.isVerified} size={64} />
-                                     <div className="vb-metrics-grid" style={{ flex: 1, textAlign: 'left' }}>
+                                     <div className="vb-metrics-grid" style={{ flex: 1 }}>
                                          <div><div style={{ fontSize: '0.8rem', color: '#9ca3af', marginBottom: '0.3rem' }}>Trip count</div><div style={{ fontWeight: 'bold', fontSize: '1.1rem' }}>{selectedUser.totalTrips}+</div></div>
                                          <div><div style={{ fontSize: '0.8rem', color: '#9ca3af', marginBottom: '0.3rem' }}>Vehicle Type</div><div style={{ fontWeight: 'bold', fontSize: '1.1rem' }}>{selectedUser.vehicleType}</div></div>
                                          <div><div style={{ fontSize: '0.8rem', color: '#9ca3af', marginBottom: '0.3rem' }}>Vehicle ID</div><div style={{ fontWeight: 'bold', fontSize: '1.1rem' }}>{selectedUser.vehicleId}</div></div>
@@ -737,7 +743,7 @@ export const VerificationBadges = () => {
                             )}
                         </div>
 
-                        <div className="vb-modal-footer" style={{ display: 'flex', gap: '1.5rem', justifyContent: 'center' }}>
+                        <div className="vb-modal-footer" style={{ display: 'flex', gap: '1.5rem', justifyContent: 'flex-end' }}>
                             <button 
                                 onClick={() => setSelectedUser(null)}
                                 style={{ padding: '1rem 4rem', borderRadius: '2rem', border: '1px solid #e5e7eb', backgroundColor: 'white', fontWeight: 'bold', cursor: 'pointer', fontSize: '1rem', color: '#374151' }}

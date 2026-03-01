@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ArrowUpRight, MoreVertical } from 'lucide-react';
+import { ArrowUpRight, MoreVertical, Edit2, Trash2 } from 'lucide-react';
 
 // Specialized Icons
 import dailyBonusIcon from '../../assets/icons/Daily Bonus Earned.png';
@@ -10,6 +10,9 @@ export const DailyBonus = () => {
   const [dailyBonusEnabled, setDailyBonusEnabled] = useState(true);
 
   const [selectedCard, setSelectedCard] = useState<string>('Daily Ride Target');
+  const [selectedRule, setSelectedRule] = useState<any>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState<number | null>(null);
 
   const statsCards = [
     { 
@@ -46,12 +49,29 @@ export const DailyBonus = () => {
     },
   ];
 
-  const bonusRules = [
-    { action: 'Daily Ride Target', description: 'Bonus per ride toward daily target', amount: '0.25', unit: 'MAD', userType: 'Driver', condition: '0.25 MAD per ride, 30 rides = 7.5 MAD total', status: true },
-    { action: 'Peak Hour Rides', description: 'Bonus per ride toward daily target', amount: '0.25', unit: 'MAD', userType: 'Driver', condition: 'Additional 0.50 MAD during peak hours (7...', status: true },
-    { action: 'Weekend Target', description: 'Bonus per ride toward daily target', amount: '0.25', unit: 'MAD', userType: 'Driver', condition: '0.35 MAD per ride on weekends', status: true },
-    { action: 'Driver Referral', description: 'Bonus per ride toward daily target', amount: '0.25', unit: 'MAD', userType: 'Driver', condition: '50.00 MAD when referred driver completes 10 trips', status: false },
-  ];
+  const [rules, setRules] = useState([
+    { id: 1, action: 'Daily Ride Target', description: 'Bonus per ride toward daily target', amount: '0.25', unit: 'MAD', userType: 'Driver', condition: '0.25 MAD per ride, 30 rides = 7.5 MAD total', status: true },
+    { id: 2, action: 'Peak Hour Rides', description: 'Bonus per ride toward daily target', amount: '0.25', unit: 'MAD', userType: 'Driver', condition: 'Additional 0.50 MAD during peak hours (7...', status: true },
+    { id: 3, action: 'Weekend Target', description: 'Bonus per ride toward daily target', amount: '0.25', unit: 'MAD', userType: 'Driver', condition: '0.35 MAD per ride on weekends', status: true },
+    { id: 4, action: 'Driver Referral', description: 'Bonus per ride toward daily target', amount: '0.25', unit: 'MAD', userType: 'Driver', condition: '50.00 MAD when referred driver completes 10 trips', status: false },
+  ]);
+
+  const handleToggleStatus = (id: number) => {
+    setRules(prev => prev.map(r => r.id === id ? { ...r, status: !r.status } : r));
+  };
+
+  const handleEditRule = (rule: any) => {
+    setSelectedRule(rule);
+    setIsModalOpen(true);
+    setIsMenuOpen(null);
+  };
+
+  const handleSaveRule = (e: React.FormEvent) => {
+    e.preventDefault();
+    setRules(prev => prev.map(r => r.id === selectedRule.id ? selectedRule : r));
+    setIsModalOpen(false);
+  };
+
 
   return (
     <div className="vp-daily-bonus-container">
@@ -398,6 +418,134 @@ export const DailyBonus = () => {
                 padding: 1.5rem;
             }
         }
+
+        .vp-rule-modal-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(8px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            padding: 1.5rem;
+        }
+
+        .vp-rule-modal {
+            background: white;
+            border-radius: 32px;
+            width: 100%;
+            max-width: 500px;
+            padding: 2.5rem;
+            position: relative;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.3);
+            animation: slideUp 0.3s ease-out;
+        }
+
+        .vp-rule-modal h3 {
+            font-size: 1.5rem;
+            font-weight: 900;
+            margin: 0 0 0.5rem 0;
+            color: #1e293b;
+        }
+
+        .vp-rule-modal p {
+            color: #64748b;
+            margin: 0 0 2rem 0;
+            font-weight: 600;
+        }
+
+        .vp-rule-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .vp-rule-form .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .vp-rule-form label {
+            font-weight: 800;
+            font-size: 0.9rem;
+            color: #475569;
+        }
+
+        .vp-rule-form input {
+            padding: 1rem 1.25rem;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            font-weight: 700;
+            outline: none;
+        }
+
+        .vp-rule-form input:focus {
+            border-color: #38AC57;
+        }
+
+        .vp-modal-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .vp-modal-btn {
+            flex: 1;
+            padding: 1rem;
+            border-radius: 100px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+        }
+
+        .vp-modal-btn.cancel {
+            background: #f1f5f9;
+            color: #64748b;
+        }
+
+        .vp-modal-btn.save {
+            background: #38AC57;
+            color: white;
+            box-shadow: 0 10px 15px -3px rgba(56, 172, 87, 0.2);
+        }
+
+        .vp-manage-menu {
+            position: absolute;
+            right: 0;
+            top: 100%;
+            background: white;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+            z-index: 50;
+            padding: 0.5rem;
+            min-width: 150px;
+        }
+
+        .vp-menu-item {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: none;
+            background: transparent;
+            text-align: left;
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: #475569;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            border-radius: 8px;
+        }
+
+        .vp-menu-item:hover {
+            background: #f8fafc;
+            color: #38AC57;
+        }
+
       `}</style>
 
       {/* Stats Grid */}
@@ -513,7 +661,7 @@ export const DailyBonus = () => {
                </tr>
             </thead>
             <tbody>
-               {bonusRules.map((rule, i) => (
+                {rules.map((rule, i) => (
                  <tr key={i}>
                     <td>
                        <div style={{ fontWeight: '800', fontSize: '1.05rem', color: '#1e293b' }}>{rule.action}</div>
@@ -534,19 +682,30 @@ export const DailyBonus = () => {
                     <td>
                        <div 
                          className="vp-switch"
-                         onClick={() => alert('Toggle status')}
+                         onClick={() => handleToggleStatus(rule.id)}
                          style={{ backgroundColor: rule.status ? '#38AC57' : '#e2e8f0', width: '44px', height: '24px' }}
                        >
                           <div className="knob" style={{ width: '18px', height: '18px', left: rule.status ? '23px' : '3px' }}></div>
                        </div>
                     </td>
-                    <td>
+                    <td style={{ position: 'relative' }}>
                        <button 
                         className="vp-trend-indicator"
                         style={{ background: 'white', border: '1px solid #e2e8f0', cursor: 'pointer' }}
+                        onClick={() => setIsMenuOpen(isMenuOpen === rule.id ? null : rule.id)}
                        >
                           <MoreVertical size={20} />
                        </button>
+                       {isMenuOpen === rule.id && (
+                         <div className="vp-manage-menu">
+                            <button className="vp-menu-item" onClick={() => handleEditRule(rule)}>
+                               <Edit2 size={16} /> Edit Rule
+                            </button>
+                            <button className="vp-menu-item" style={{ color: '#ef4444' }} onClick={() => setIsMenuOpen(null)}>
+                               <Trash2 size={16} /> Disable
+                            </button>
+                         </div>
+                       )}
                     </td>
                  </tr>
                ))}
@@ -554,6 +713,46 @@ export const DailyBonus = () => {
           </table>
         </div>
       </div>
+
+      {/* Edit Rule Modal */}
+      {isModalOpen && selectedRule && (
+        <div className="vp-rule-modal-overlay">
+          <div className="vp-rule-modal">
+            <h3>Edit Bonus Rule</h3>
+            <p>Modify conditions and rewards for this rule</p>
+            <form className="vp-rule-form" onSubmit={handleSaveRule}>
+              <div className="input-group">
+                <label>Action Subtitle</label>
+                <input 
+                  type="text" 
+                  value={selectedRule.action} 
+                  onChange={(e) => setSelectedRule({ ...selectedRule, action: e.target.value })} 
+                />
+              </div>
+              <div className="input-group">
+                <label>Bonus Amount ({selectedRule.unit})</label>
+                <input 
+                  type="text" 
+                  value={selectedRule.amount} 
+                  onChange={(e) => setSelectedRule({ ...selectedRule, amount: e.target.value })} 
+                />
+              </div>
+              <div className="input-group">
+                <label>Conditions</label>
+                <input 
+                  type="text" 
+                  value={selectedRule.condition} 
+                  onChange={(e) => setSelectedRule({ ...selectedRule, condition: e.target.value })} 
+                />
+              </div>
+              <div className="vp-modal-actions">
+                <button type="button" className="vp-modal-btn cancel" onClick={() => setIsModalOpen(false)}>Cancel</button>
+                <button type="submit" className="vp-modal-btn save">Save Changes</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

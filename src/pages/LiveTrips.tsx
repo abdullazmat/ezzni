@@ -497,7 +497,7 @@ export const LiveTrips = () => {
                                 </td>
                                 <td style={{ padding: '1rem 1.5rem' }}>
                                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                                             <UserAvatar src={trip.rider.img} rating={trip.rider.rating} size={48} />
+                                             <UserAvatar src={trip.rider.img} rating={trip.rider.rating} size={48} showBadge={true} />
                                         <div>
                                             <div style={{ fontWeight: '700', fontSize: '0.95rem', color: '#111827' }}>{trip.rider.name}</div>
                                             <div style={{ fontSize: '0.8rem', color: '#94a3b8', fontWeight: '500' }}>{trip.rider.id}</div>
@@ -506,7 +506,7 @@ export const LiveTrips = () => {
                                 </td>
                                 <td className="hide-on-tablet" style={{ padding: '1rem 1.5rem' }}>
                                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                                             <UserAvatar src={trip.driver.img} rating={trip.driver.rating} size={48} />
+                                             <UserAvatar src={trip.driver.img} rating={trip.driver.rating} size={48} showBadge={true} />
                                         <div>
                                             <div style={{ fontWeight: '700', fontSize: '0.95rem', color: '#111827' }}>{trip.driver.name}</div>
                                             <div style={{ fontSize: '0.8rem', color: '#94a3b8', fontWeight: '500' }}>{trip.driver.id}</div>

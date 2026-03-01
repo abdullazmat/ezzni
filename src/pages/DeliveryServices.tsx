@@ -291,7 +291,7 @@ export const DeliveryServices = () => {
                     right: 0;
                     bottom: 0;
                     background-color: rgba(0,0,0,0.5);
-                    z-index: 1000;
+                    z-index: 9999;
                     display: flex;
                     align-items: center;
                     justify-content: center;
@@ -323,7 +323,7 @@ export const DeliveryServices = () => {
                     display: flex;
                     justify-content: space-between;
                     align-items: flex-end;
-                    text-align: center;
+                    text-align: left;
                 }
                 .ds-summary-grid {
                     display: grid;
@@ -333,7 +333,7 @@ export const DeliveryServices = () => {
                 .ds-flex-responsive {
                     display: flex;
                     gap: 2rem;
-                    align-items: center;
+                    align-items: flex-start;
                 }
 
                 @media (max-width: 1024px) {
@@ -361,7 +361,8 @@ export const DeliveryServices = () => {
                     }
                     .ds-flex-responsive {
                         flex-direction: column;
-                        text-align: center;
+                        text-align: left;
+                        align-items: flex-start;
                     }
                     .ds-info-grid, .ds-vehicle-grid, .ds-summary-grid {
                         grid-template-columns: 1fr;
@@ -757,8 +758,8 @@ export const DeliveryServices = () => {
                         {/* Payment Information */}
                         <h3 style={{ fontSize: '1.1rem', fontWeight: 'bold', marginBottom: '1rem' }}>Payment Information</h3>
                         <div style={{ border: '1px solid #f3f4f6', borderRadius: '1rem', padding: '1.5rem', marginBottom: '1.5rem' }}>
-                             <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '1rem' }}>
-                                     <UserAvatar src={selectedDelivery.rider.avatar} rating={selectedDelivery.rider.rating} size={56} />
+                             <div style={{ display: 'flex', justifyContent: 'flex-start', marginBottom: '1rem' }}>
+                                 <UserAvatar src={selectedDelivery.rider.avatar} rating={selectedDelivery.rider.rating} size={56} />
                              </div>
 
                              <div className="ds-payment-grid">
@@ -766,11 +767,11 @@ export const DeliveryServices = () => {
                                 <div><div style={{ fontSize: '0.75rem', color: '#9ca3af' }}>Service fee</div><div style={{ fontWeight: '600' }}>{selectedDelivery.serviceFee.toFixed(2)} MAD</div></div>
                                  <div>
                                     <div style={{ fontSize: '0.75rem', color: '#9ca3af' }}>Payment Method</div>
-                                    <div style={{ fontWeight: '600', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.2rem', marginTop: '4px' }}>
-                                        {selectedDelivery.paymentMethod === 'Visa' && <img src={visaIcon} alt="Visa" style={{ height: '12px', objectFit: 'contain' }} />}
-                                        {selectedDelivery.paymentMethod === 'Mastercard' && <img src={mastercardIcon} alt="Mastercard" style={{ height: '16px', objectFit: 'contain' }} />}
-                                        {selectedDelivery.paymentMethod === 'Cash' && <img src={cashIcon} alt="Cash" style={{ height: '16px', objectFit: 'contain' }} />}
-                                    </div>
+                                     <div style={{ fontWeight: '600', display: 'flex', alignItems: 'center', justifyContent: 'flex-start', gap: '0.2rem', marginTop: '4px' }}>
+                                         {selectedDelivery.paymentMethod === 'Visa' && <img src={visaIcon} alt="Visa" style={{ height: '12px', objectFit: 'contain' }} />}
+                                         {selectedDelivery.paymentMethod === 'Mastercard' && <img src={mastercardIcon} alt="Mastercard" style={{ height: '16px', objectFit: 'contain' }} />}
+                                         {selectedDelivery.paymentMethod === 'Cash' && <img src={cashIcon} alt="Cash" style={{ height: '16px', objectFit: 'contain' }} />}
+                                     </div>
                                 </div>
                                 <div><div style={{ fontSize: '0.75rem', color: '#9ca3af' }}>Discount</div><div style={{ fontWeight: '600' }}>{selectedDelivery.discount}</div></div>
                                 <div><div style={{ fontSize: '0.75rem', color: '#9ca3af' }}>Total Amount</div><div style={{ fontWeight: '900', fontSize: '1.1rem' }}>{selectedDelivery.fare.toFixed(2)} <span style={{ fontSize: '0.7rem', fontWeight: 'normal' }}>MAD</span></div></div>

@@ -95,7 +95,7 @@ export const CommissionRules = () => {
 
         .vp-commission-item input {
             width: 100%;
-            padding: 1rem 1.25rem;
+            padding: 1rem 3rem 1rem 1.25rem;
             border-radius: 12px;
             border: 1px solid #e2e8f0;
             background-color: white;
@@ -104,6 +104,7 @@ export const CommissionRules = () => {
             outline: none;
             transition: all 0.2s;
             color: #1e293b;
+            box-sizing: border-box;
         }
 
         .vp-commission-item input:disabled {
@@ -157,13 +158,22 @@ export const CommissionRules = () => {
         @media (max-width: 768px) {
             .vp-commission-card {
                 padding: 1.5rem;
+                border-radius: 20px;
             }
             .vp-commission-grid {
                 grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+            .vp-commission-item {
+                padding: 1.25rem;
+            }
+            .vp-commission-header h2 {
+                font-size: 1.5rem;
             }
             .vp-save-btn {
                 width: 100%;
                 justify-content: center;
+                margin-top: 2rem;
             }
         }
       `}</style>

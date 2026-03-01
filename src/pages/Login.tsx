@@ -9,8 +9,8 @@ interface LoginProps {
 }
 
 export const Login = ({ onLogin, onForgotPassword }: LoginProps) => {
-  const [email, setEmail] = useState('admin@hezzni.com');
-  const [password, setPassword] = useState('Admin@123');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [errors, setErrors] = useState({ email: '', password: '' });
   const [isLoading, setIsLoading] = useState(false);
 
@@ -84,7 +84,7 @@ export const Login = ({ onLogin, onForgotPassword }: LoginProps) => {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="admin@hezzni.com"
+                placeholder="Email address"
                 style={{
                   width: '100%',
                   padding: '0.875rem 1rem',

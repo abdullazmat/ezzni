@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Plus, ArrowUpRight, Search, CheckCircle2, Filter, ChevronDown, Eye, Edit2, Trash2 } from 'lucide-react';
+import { UserAvatar } from '../../components/UserAvatar';
 
 // Specialized Icons
 import activeDriversIcon from '../../assets/icons/Active Drivers.png';
@@ -15,6 +16,12 @@ export const TeamManagement = () => {
         { id: '2', name: 'Youssef Alami', email: 'youssef@gmail.com', role: 'Super Admin', department: 'Super Admin', status: 'Pending', twoFactorAuth: false, lastLogin: '5 hours ago', img: 'https://i.pravatar.cc/150?u=hassan' },
         { id: '3', name: 'Sara Nassiri', email: 'sara@gmail.com', role: 'Super Admin', department: 'Super Admin', status: 'Active', twoFactorAuth: true, lastLogin: '1 day ago', img: 'https://i.pravatar.cc/150?u=ahmed2' },
     ]);
+
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [modalMode, setModalMode] = useState<'add' | 'edit' | 'view'>('view');
+    const [selectedMember, setSelectedMember] = useState<any>(null);
+    const [formData, setFormData] = useState({ name: '', email: '', role: 'Admin', department: 'Operations' });
+
 
     const dynamicStats = [
         { label: 'Total Members', value: members.length.toString().padStart(2, '0'), color: '#ffffff', textColor: '#111827', icon: activeDriversIcon },
@@ -35,25 +42,44 @@ export const TeamManagement = () => {
 
     const [lastAction, setLastAction] = useState<string | null>(null);
 
-    const handleAddMember = () => {
-        const name = prompt('Enter Member Name:');
-        if (name) {
-            const email = prompt('Enter Member Email:');
+    const handleAddClick = () => {
+        setFormData({ name: '', email: '', role: 'Admin', department: 'Operations' });
+        setModalMode('add');
+        setIsModalOpen(true);
+    };
+
+    const handleEditClick = (member: any) => {
+        setSelectedMember(member);
+        setFormData({ name: member.name, email: member.email, role: member.role, department: member.department });
+        setModalMode('edit');
+        setIsModalOpen(true);
+    };
+
+    const handleViewClick = (member: any) => {
+        setSelectedMember(member);
+        setModalMode('view');
+        setIsModalOpen(true);
+    };
+
+    const handleSaveMember = (e: React.FormEvent) => {
+        e.preventDefault();
+        if (modalMode === 'add') {
             const newMember = {
                 id: Math.random().toString(36).substr(2, 9),
-                name,
-                email: email || 'user@ezzni.com',
-                role: 'Admin',
-                department: 'Operations',
+                ...formData,
                 status: 'Active',
                 twoFactorAuth: false,
                 lastLogin: 'Just now',
-                img: `https://i.pravatar.cc/150?u=${name}`
+                img: `https://i.pravatar.cc/150?u=${formData.name}`
             };
             setMembers(prev => [...prev, newMember]);
-            setLastAction(`Added new member: ${name}`);
-            setTimeout(() => setLastAction(null), 3000);
+            setLastAction(`Added new member: ${formData.name}`);
+        } else if (modalMode === 'edit' && selectedMember) {
+            setMembers(prev => prev.map(m => m.id === selectedMember.id ? { ...m, ...formData } : m));
+            setLastAction(`Updated member: ${formData.name}`);
         }
+        setIsModalOpen(false);
+        setTimeout(() => setLastAction(null), 3000);
     };
 
     const handleDelete = (id: string, name: string) => {
@@ -64,10 +90,6 @@ export const TeamManagement = () => {
         }
     };
 
-    const handleAction = (action: string, name: string) => {
-        setLastAction(`${action} ${name}...`);
-        setTimeout(() => setLastAction(null), 3000);
-    };
 
   return (
     <div className="vp-team-container">
@@ -167,17 +189,28 @@ export const TeamManagement = () => {
         }
 
         .vp-controls-bar {
-            display: flex;
-            justify-content: space-between;
+            display: grid;
+            grid-template-columns: 1fr auto auto;
             align-items: center;
             gap: 1.5rem;
-            flex-wrap: wrap;
+            margin-bottom: 3rem;
+        }
+
+        @media (max-width: 1200px) {
+            .vp-controls-bar {
+                grid-template-columns: 1fr auto;
+            }
+            .vp-add-btn {
+                grid-row: 2;
+                grid-column: span 2;
+                justify-content: center;
+            }
         }
 
         .vp-search-box {
             position: relative;
-            flex: 1;
-            min-width: 300px;
+            max-width: 600px;
+            width: 100%;
         }
 
         .vp-search-box input {
@@ -199,7 +232,6 @@ export const TeamManagement = () => {
         .vp-filter-group {
             display: flex;
             gap: 0.75rem;
-            flex-wrap: wrap;
         }
 
         .vp-filter-btn {
@@ -215,6 +247,8 @@ export const TeamManagement = () => {
             align-items: center;
             gap: 0.625rem;
             transition: all 0.2s;
+            white-space: nowrap;
+            flex-shrink: 0;
         }
 
         .vp-filter-btn:hover {
@@ -358,6 +392,9 @@ export const TeamManagement = () => {
             font-weight: 700;
             color: #1e293b;
             border: 1px solid #e2e8f0;
+            white-space: nowrap;
+            display: inline-block;
+            width: max-content;
         }
 
         .vp-action-btn-group {
@@ -367,14 +404,23 @@ export const TeamManagement = () => {
 
         @media (max-width: 768px) {
             .vp-controls-bar {
+                display: flex;
                 flex-direction: column;
                 align-items: stretch;
+                gap: 1.25rem;
             }
             .vp-search-box {
+                max-width: none;
                 width: 100%;
             }
             .vp-filter-group {
-                justify-content: center;
+                justify-content: flex-start;
+                overflow-x: auto;
+                padding-bottom: 0.5rem;
+                scrollbar-width: none;
+            }
+            .vp-filter-group::-webkit-scrollbar {
+                display: none;
             }
             .vp-add-btn {
                 width: 100%;
@@ -385,6 +431,138 @@ export const TeamManagement = () => {
                 text-align: center;
             }
         }
+
+        .vp-team-modal-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(8px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            padding: 1.5rem;
+        }
+
+        .vp-team-modal {
+            background: white;
+            border-radius: 32px;
+            width: 100%;
+            max-width: 500px;
+            position: relative;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.3);
+            animation: slideUp 0.3s ease-out;
+            overflow: hidden;
+        }
+
+        .vp-modal-header {
+            padding: 2rem 2.5rem;
+            border-bottom: 1px solid #f1f5f9;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .vp-modal-header h3 {
+            font-size: 1.5rem;
+            font-weight: 900;
+            margin: 0;
+            color: #1e293b;
+        }
+
+        .vp-modal-body {
+            padding: 2.5rem;
+        }
+
+        .vp-team-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .vp-team-form .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .vp-team-form label {
+            font-weight: 800;
+            font-size: 0.9rem;
+            color: #475569;
+        }
+
+        .vp-team-form input, .vp-team-form select {
+            padding: 1rem 1.25rem;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            font-weight: 600;
+            font-size: 1rem;
+            outline: none;
+            background: #f8fafc;
+        }
+
+        .vp-team-form input:focus {
+             border-color: #38AC57;
+             background: white;
+        }
+
+        .vp-modal-footer {
+            padding: 1.5rem 2.5rem 2.5rem 2.5rem;
+            border-top: 1px solid #f1f5f9;
+            display: flex;
+            gap: 1rem;
+        }
+
+        .vp-modal-btn {
+            flex: 1;
+            padding: 1rem;
+            border-radius: 100px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+            font-size: 1rem;
+        }
+
+        .vp-modal-btn.cancel {
+            background: #f1f5f9;
+            color: #64748b;
+        }
+
+        .vp-modal-btn.save {
+            background: #38AC57;
+            color: white;
+        }
+
+        .vp-view-details {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            align-items: center;
+            text-align: center;
+        }
+        
+        .vp-detail-row {
+            width: 100%;
+            text-align: left;
+        }
+
+        .vp-detail-row label {
+            display: block;
+            font-size: 0.8rem;
+            font-weight: 800;
+            color: #64748b;
+            text-transform: uppercase;
+            margin-bottom: 0.4rem;
+        }
+
+        .vp-detail-row .value {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #1e293b;
+        }
+
       `}</style>
 
       {/* Stats Grid */}
@@ -427,23 +605,23 @@ export const TeamManagement = () => {
         </div>
         
         <div className="vp-filter-group">
-          <button className="vp-filter-btn" onClick={() => handleAction('Filtering by', 'Status')}>
+          <button className="vp-filter-btn" onClick={() => { setActiveFilter('Status Filter Active'); setLastAction('Filtering by Status...') }}>
             Status <ChevronDown size={18} />
           </button>
-          <button className="vp-filter-btn" onClick={() => handleAction('Filtering by', 'Category')}>
+          <button className="vp-filter-btn" onClick={() => { setActiveFilter('Category Filter Active'); setLastAction('Filtering by Category...') }}>
             Category <ChevronDown size={18} />
           </button>
-          <button className="vp-filter-btn" onClick={() => handleAction('Opening', 'Advanced Filters')}>
+          <button className="vp-filter-btn" onClick={() => { setActiveFilter('Advanced Filters Active'); setLastAction('Opening Filters...') }}>
             <Filter size={18} /> Filters
           </button>
           {activeFilter !== 'Total Members' && (
-            <button className="vp-filter-btn" style={{ background: '#f1f5f9', color: '#64748b' }} onClick={() => setActiveFilter('Total Members')}>
+            <button className="vp-filter-btn" style={{ background: '#f1f5f9', color: '#64748b' }} onClick={() => { setActiveFilter('Total Members'); setLastAction('Filters Cleared') }}>
               Clear: {activeFilter} ×
             </button>
           )}
         </div>
 
-        <button className="vp-add-btn" onClick={handleAddMember}>
+        <button className="vp-add-btn" onClick={handleAddClick}>
           <Plus size={22} />
           Add Team Member
         </button>
@@ -473,7 +651,7 @@ export const TeamManagement = () => {
                 <tr key={member.id}>
                   <td>
                     <div className="vp-member-cell">
-                      <img src={member.img} alt="" className="vp-member-avatar" />
+                      <UserAvatar src={member.img} size={52} showBadge={true} />
                       <div className="vp-member-info">
                         <span className="name">{member.name}</span>
                         <span className="email">{member.email}</span>
@@ -500,10 +678,10 @@ export const TeamManagement = () => {
                   </td>
                   <td>
                     <div className="vp-action-btn-group">
-                      <button className="vp-filter-btn" onClick={() => handleAction('Viewing', member.name)}>
+                      <button className="vp-filter-btn" onClick={() => handleViewClick(member)}>
                         <Eye size={16} />
                       </button>
-                      <button className="vp-filter-btn" onClick={() => handleAction('Editing', member.name)}>
+                      <button className="vp-filter-btn" onClick={() => handleEditClick(member)}>
                         <Edit2 size={16} />
                       </button>
                       <button className="vp-filter-btn" style={{ borderColor: '#fee2e2', color: '#ef4444' }} onClick={() => handleDelete(member.id, member.name)}>
@@ -523,6 +701,81 @@ export const TeamManagement = () => {
           </table>
         </div>
       </div>
+
+      {/* Team Member Modal */}
+      {isModalOpen && (
+        <div className="vp-team-modal-overlay" onClick={() => setIsModalOpen(false)}>
+          <div className="vp-team-modal" onClick={e => e.stopPropagation()}>
+            <div className="vp-modal-header">
+              <h3>{modalMode === 'add' ? 'Add Member' : modalMode === 'edit' ? 'Edit Member' : 'Member Profile'}</h3>
+            </div>
+
+            <div className="vp-modal-body">
+              {modalMode === 'view' && selectedMember ? (
+                <div className="vp-view-details">
+                   <UserAvatar src={selectedMember.img} size={100} showBadge={true} />
+                   <div className="vp-detail-row">
+                      <label>Full Name</label>
+                      <div className="value">{selectedMember.name}</div>
+                   </div>
+                   <div className="vp-detail-row">
+                      <label>Email Address</label>
+                      <div className="value">{selectedMember.email}</div>
+                   </div>
+                   <div className="vp-detail-row">
+                      <label>Department / Role</label>
+                      <div className="value">{selectedMember.department}</div>
+                   </div>
+                </div>
+              ) : (
+                <form className="vp-team-form" onSubmit={handleSaveMember}>
+                   <div className="input-group">
+                      <label>Full Name</label>
+                      <input 
+                        type="text" 
+                        value={formData.name} 
+                        onChange={e => setFormData({...formData, name: e.target.value})}
+                        required
+                      />
+                   </div>
+                   <div className="input-group">
+                      <label>Email Address</label>
+                      <input 
+                        type="email" 
+                        value={formData.email} 
+                        onChange={e => setFormData({...formData, email: e.target.value})}
+                        required
+                      />
+                   </div>
+                   <div className="input-group">
+                      <label>Department</label>
+                      <select 
+                        value={formData.department} 
+                        onChange={e => setFormData({...formData, department: e.target.value})}
+                      >
+                         <option value="Super Admin">Super Admin</option>
+                         <option value="Admin">Admin</option>
+                         <option value="Operations">Operations</option>
+                         <option value="Support">Support</option>
+                      </select>
+                   </div>
+                </form>
+              )}
+            </div>
+
+            <div className="vp-modal-footer">
+              <button className="vp-modal-btn cancel" onClick={() => setIsModalOpen(false)}>
+                {modalMode === 'view' ? 'Close' : 'Cancel'}
+              </button>
+              {modalMode !== 'view' && (
+                <button className="vp-modal-btn save" onClick={handleSaveMember}>
+                  {modalMode === 'add' ? 'Add Member' : 'Save Changes'}
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Toast */}
       {lastAction && (
@@ -545,6 +798,8 @@ export const TeamManagement = () => {
     </div>
   );
 };
+
+
 
 
 

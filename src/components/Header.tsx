@@ -1,14 +1,28 @@
-import { Menu, LogOut, Bell, Check } from 'lucide-react';
-import { useState } from 'react';
+import { Menu, Bell, Check } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { UserAvatar } from './UserAvatar';
 
 // Import custom icons
 import bellIcon from '../assets/icons/notification-bell.png';
 
 export const Header = ({ onLogout, onToggleSidebar, onNavigate }: { onLogout: () => void, onToggleSidebar: () => void, onNavigate: (page: string) => void }) => {
-  const [user] = useState(() => {
+  const [user, setUser] = useState(() => {
     const savedUser = localStorage.getItem('user');
-    return savedUser ? JSON.parse(savedUser) : { name: 'Paityn Calzo', email: 'paityn@ezzni.com' };
+    return savedUser ? JSON.parse(savedUser) : { name: 'Admin', email: 'admin@ezzni.com' };
   });
+
+  useEffect(() => {
+    const handleUpdate = () => {
+      const savedUser = localStorage.getItem('user');
+      if (savedUser) setUser(JSON.parse(savedUser));
+    };
+    window.addEventListener('userUpdated', handleUpdate);
+    window.addEventListener('storage', handleUpdate); // Also sync across tabs
+    return () => {
+      window.removeEventListener('userUpdated', handleUpdate);
+      window.removeEventListener('storage', handleUpdate);
+    };
+  }, []);
 
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState<{ id: number; name: string; type: string; phone: string; code: string; img: string; rating: string }[]>([]);
@@ -320,41 +334,31 @@ export const Header = ({ onLogout, onToggleSidebar, onNavigate }: { onLogout: ()
             <div style={{ height: '32px', width: '1px', backgroundColor: '#e2e8f0', margin: '0 0.25rem' }}></div>
             
             <div 
-                style={{ display: 'flex', alignItems: 'center', gap: '1.25rem', cursor: 'pointer' }}
+                style={{ 
+                    display: 'flex', 
+                    alignItems: 'center', 
+                    gap: '1rem', 
+                    cursor: 'pointer',
+                    padding: '6px 16px 6px 8px',
+                    borderRadius: '3rem',
+                    border: '1.5px solid #38AC57',
+                    backgroundColor: 'white',
+                    transition: 'all 0.2s',
+                    boxShadow: '0 2px 4px rgba(0,0,0,0.02)'
+                }}
                 onClick={() => onNavigate('profile')}
+                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#f0fff4'}
+                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'white'}
             >
-                <img 
-                    src="https://i.pravatar.cc/150?u=paityn" 
-                    alt="Profile" 
+                <UserAvatar 
+                    src={user.avatar ? `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/uploads/avatars/${user.avatar}` : "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"} 
+                    size={44} 
+                    showBadge={false}
                     className="profile-img-header"
-                    style={{ width: '56px', height: '56px', borderRadius: '50%', objectFit: 'cover', border: '2px solid white', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.1)' }}
                 />
-                <div className="user-info" style={{ display: 'block' }}>
-                    <div style={{ fontWeight: '800', fontSize: '1.125rem', color: '#111827', whiteSpace: 'nowrap' }}>{user.name}</div>
-                    <div style={{ fontSize: '0.875rem', color: '#64748b', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                      User <span style={{ color: '#38AC57', fontSize: '0.75rem', fontWeight: '500' }}>Manage Pass...</span>
-                    </div>
+                <div style={{ fontWeight: '800', fontSize: '1.05rem', color: '#111827', whiteSpace: 'nowrap' }}>
+                    {user.name}
                 </div>
-                <button 
-                    onClick={onLogout} 
-                    title="Logout"
-                    style={{ 
-                        background: '#f1f5f9', 
-                        border: 'none', 
-                        cursor: 'pointer', 
-                        padding: '10px', 
-                        borderRadius: '0.75rem', 
-                        display: 'flex', 
-                        alignItems: 'center', 
-                        justifyContent: 'center',
-                        transition: 'all 0.2s',
-                        color: '#64748b'
-                    }}
-                    onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#fee2e2'}
-                    onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#f1f5f9'}
-                >
-                    <LogOut size={20} />
-                </button>
             </div>
         </div>
       </div>

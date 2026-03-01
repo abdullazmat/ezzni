@@ -578,7 +578,7 @@ export const Drivers = () => {
                     right: 0;
                     bottom: 0;
                     background-color: rgba(0,0,0,0.5);
-                    z-index: 1000;
+                    z-index: 9999;
                     display: flex;
                     align-items: center;
                     justify-content: center;
@@ -647,8 +647,8 @@ export const Drivers = () => {
                     }
                     .dr-flex-responsive {
                         flex-direction: column;
-                        align-items: center;
-                        text-align: center;
+                        align-items: flex-start;
+                        text-align: left;
                     }
                     .dr-info-grid, .dr-vehicle-grid, .dr-edit-grid {
                         grid-template-columns: 1fr;
@@ -826,7 +826,7 @@ export const Drivers = () => {
                              <div key={idx} className="dr-table-row">
                                  <div style={{ fontWeight: 'bold', fontSize: '0.95rem' }}>{driver.id}</div>
                                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.8rem' }}>
-                                     <UserAvatar src={driver.avatar} rating={driver.rating} size={48} />
+                                     <UserAvatar src={driver.avatar} rating={driver.rating} size={48} showBadge={true} />
                                      <div>
                                          <div style={{ fontWeight: 'bold', fontSize: '0.9rem' }}>{driver.name}</div>
                                          <div style={{ fontSize: '0.7rem', color: '#6b7280' }}>{driver.location}</div>
@@ -880,7 +880,7 @@ export const Drivers = () => {
                                     <div style={{ border: '1px solid #f3f4f6', borderRadius: '1rem', padding: '1.5rem' }}>
                                         <div className="dr-flex-responsive">
                                             <div style={{ flexShrink: 0 }}>
-                                                <UserAvatar src={selectedDriver.avatar} rating={selectedDriver.rating} size={64} />
+                                                 <UserAvatar src={selectedDriver.avatar} rating={selectedDriver.rating} size={64} showBadge={true} />
                                             </div>
                                             <div className="dr-info-grid" style={{ flex: 1 }}>
                                                  <div style={{ gridColumn: 'span 1' }}><div style={{ fontSize: '0.75rem', color: '#9ca3af' }}>Full Name</div><div style={{ fontWeight: 'bold', fontSize: '0.9rem' }}>{selectedDriver.name}</div></div>

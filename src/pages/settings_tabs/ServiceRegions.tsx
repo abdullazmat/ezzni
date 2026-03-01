@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { MoreVertical, Plane, Globe, Users } from 'lucide-react';
 
 // Vehicle Icons
@@ -6,6 +7,9 @@ import taxiIcon from '../../assets/icons/taxi.png';
 import bikeIcon from '../../assets/icons/bike.png';
 
 export const ServiceRegions = () => {
+    const [selectedRegion, setSelectedRegion] = useState<any>(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
     const regions = [
         { name: 'Casablanca-Settat', drivers: '1,245', trips: '12.5K', commission: 'Enabled', status: 'Active' },
         { name: 'Rabat-Salé-Kénitra', drivers: '1,245', trips: '12.5K', commission: 'Enabled', status: 'Active' },
@@ -131,6 +135,8 @@ export const ServiceRegions = () => {
             color: #64748b;
             cursor: pointer;
             transition: all 0.2s;
+            position: relative;
+            z-index: 10;
         }
 
         .vp-more-btn:hover {
@@ -206,6 +212,135 @@ export const ServiceRegions = () => {
                 grid-template-columns: repeat(2, 1fr);
             }
         }
+
+        .vp-region-modal-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(8px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            padding: 1.5rem;
+        }
+
+        .vp-region-modal {
+            background: white;
+            border-radius: 32px;
+            width: 100%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.3);
+            animation: slideUp 0.3s ease-out;
+        }
+
+        .vp-modal-header {
+            padding: 2.5rem 2.5rem 1.5rem 2.5rem;
+            border-bottom: 1px solid #f1f5f9;
+            position: sticky;
+            top: 0;
+            background: white;
+            z-index: 10;
+        }
+
+        .vp-modal-header h3 {
+            font-size: 1.5rem;
+            font-weight: 900;
+            margin: 0;
+            color: #1e293b;
+        }
+
+        .vp-modal-content {
+            padding: 2.5rem;
+        }
+
+        .vp-config-group {
+            margin-bottom: 2rem;
+        }
+
+        .vp-config-group label {
+            display: block;
+            font-weight: 800;
+            font-size: 0.95rem;
+            color: #475569;
+            margin-bottom: 1rem;
+        }
+
+        .vp-toggle-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .vp-toggle-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            background: #f8fafc;
+            border-radius: 16px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .vp-toggle-item span {
+            font-weight: 700;
+            color: #1e293b;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .vp-modal-footer {
+            padding: 1.5rem 2.5rem 2.5rem 2.5rem;
+            border-top: 1px solid #f1f5f9;
+            display: flex;
+            gap: 1rem;
+        }
+
+        .vp-modal-btn {
+            flex: 1;
+            padding: 1rem;
+            border-radius: 100px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+            font-size: 1rem;
+        }
+
+        .vp-modal-btn.cancel {
+            background: #f1f5f9;
+            color: #64748b;
+        }
+
+        .vp-modal-btn.save {
+            background: #38AC57;
+            color: white;
+            box-shadow: 0 10px 15px -3px rgba(56, 172, 87, 0.2);
+        }
+
+        .vp-switch-sm {
+            width: 40px;
+            height: 22px;
+            border-radius: 100px;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .vp-switch-sm .knob {
+            width: 16px;
+            height: 16px;
+            background: white;
+            border-radius: 50%;
+            position: absolute;
+            top: 3px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
       `}</style>
 
       <div className="vp-regions-header">
@@ -218,7 +353,10 @@ export const ServiceRegions = () => {
           <div 
             key={index} 
             className={`vp-region-card ${region.status !== 'Active' ? 'inactive' : ''}`}
-            onClick={() => alert(`Opening Settings for ${region.name}...`)}
+            onClick={() => {
+                setSelectedRegion(region);
+                setIsModalOpen(true);
+            }}
           >
             <div className="vp-region-card-header">
               <div className="vp-region-info">
@@ -231,7 +369,8 @@ export const ServiceRegions = () => {
                 className="vp-more-btn"
                 onClick={(e) => {
                   e.stopPropagation();
-                  alert(`Managing options for ${region.name}`);
+                  setSelectedRegion(region);
+                  setIsModalOpen(true);
                 }}
               >
                 <MoreVertical size={20} />
@@ -267,6 +406,65 @@ export const ServiceRegions = () => {
           </div>
         ))}
       </div>
+
+      {/* Region Management Modal */}
+      {isModalOpen && selectedRegion && (
+        <div className="vp-region-modal-overlay" onClick={() => setIsModalOpen(false)}>
+          <div className="vp-region-modal" onClick={e => e.stopPropagation()}>
+            <div className="vp-modal-header">
+              <h3>Region Settings: {selectedRegion.name}</h3>
+            </div>
+            
+            <div className="vp-modal-content">
+              <div className="vp-config-group">
+                <label>Regional Status</label>
+                <div className="vp-toggle-item">
+                  <span>Operation Status</span>
+                  <div 
+                    className="vp-switch-sm" 
+                    style={{ background: selectedRegion.status === 'Active' ? '#38AC57' : '#e2e8f0' }}
+                    onClick={() => setSelectedRegion({ ...selectedRegion, status: selectedRegion.status === 'Active' ? 'Inactive' : 'Active' })}
+                  >
+                    <div className="knob" style={{ left: selectedRegion.status === 'Active' ? '21px' : '3px' }}></div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="vp-config-group">
+                <label>Service Availability</label>
+                <div className="vp-toggle-list">
+                  {services.map((service, i) => (
+                    <div key={i} className="vp-toggle-item">
+                      <span>{service.icon} {service.label}</span>
+                      <div className="vp-switch-sm" style={{ background: '#38AC57' }}>
+                        <div className="knob" style={{ left: '21px' }}></div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="vp-config-group">
+                <label>Regional Commission (%)</label>
+                <div className="vp-toggle-item" style={{ background: 'white' }}>
+                   <input 
+                    type="number" 
+                    defaultValue="30" 
+                    style={{ width: '100%', border: 'none', outline: 'none', fontWeight: '800', fontSize: '1.25rem', color: '#1e293b' }} 
+                   />
+                   <span style={{ color: '#64748b' }}>%</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="vp-modal-footer">
+              <button className="vp-modal-btn cancel" onClick={() => setIsModalOpen(false)}>Cancel</button>
+              <button className="vp-modal-btn save" onClick={() => setIsModalOpen(false)}>Save Settings</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
+

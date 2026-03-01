@@ -1,6 +1,11 @@
-import { Eye, Edit2, Trash2 } from 'lucide-react';
+import { useState } from 'react';
+import { Eye, Edit2, Trash2, X } from 'lucide-react';
 
 export const DocumentRequirements = () => {
+    const [selectedDoc, setSelectedDoc] = useState<any>(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [modalMode, setModalMode] = useState<'view' | 'edit'>('view');
+
     const documentTypes = [
         { name: 'National ID (CIN)', description: 'Moroccan National Identity Card', types: ['Driver', 'Rider'], limits: 'Max: 5MB', formats: 'JPG, PNG, PDF' },
         { name: 'Driving License', description: 'Valid Moroccan driving license', types: ['Driver'], limits: 'Max: 5MB', formats: 'JPG, PNG, PDF' },
@@ -182,6 +187,143 @@ export const DocumentRequirements = () => {
                 border-radius: 20px;
             }
         }
+
+        .vp-doc-modal-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(8px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            padding: 1.5rem;
+        }
+
+        .vp-doc-modal {
+            background: white;
+            border-radius: 32px;
+            width: 100%;
+            max-width: 550px;
+            position: relative;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.3);
+            animation: slideUp 0.3s ease-out;
+            overflow: hidden;
+        }
+
+        .vp-modal-header {
+            padding: 2rem 2.5rem;
+            border-bottom: 1px solid #f1f5f9;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .vp-modal-header h3 {
+            font-size: 1.5rem;
+            font-weight: 900;
+            margin: 0;
+            color: #1e293b;
+        }
+
+        .vp-modal-close {
+            background: #f1f5f9;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: #64748b;
+        }
+
+        .vp-modal-body {
+            padding: 2.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .vp-info-block label {
+            display: block;
+            font-size: 0.9rem;
+            font-weight: 800;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.75rem;
+        }
+
+        .vp-info-block .content {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #1e293b;
+            line-height: 1.5;
+        }
+
+        .vp-edit-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .vp-edit-form .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .vp-edit-form label {
+            font-weight: 800;
+            font-size: 0.9rem;
+            color: #475569;
+        }
+
+        .vp-edit-form input, .vp-edit-form textarea {
+            padding: 1rem 1.25rem;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            font-weight: 600;
+            font-size: 1rem;
+            outline: none;
+            background: #f8fafc;
+        }
+
+        .vp-edit-form input:focus {
+             border-color: #38AC57;
+             background: white;
+        }
+
+        .vp-modal-footer {
+            padding: 1.5rem 2.5rem 2.5rem 2.5rem;
+            border-top: 1px solid #f1f5f9;
+            display: flex;
+            gap: 1rem;
+        }
+
+        .vp-modal-btn {
+            flex: 1;
+            padding: 1rem;
+            border-radius: 100px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+            font-size: 1rem;
+        }
+
+        .vp-modal-btn.cancel {
+            background: #f1f5f9;
+            color: #64748b;
+        }
+
+        .vp-modal-btn.save {
+            background: #38AC57;
+            color: white;
+        }
+
       `}</style>
 
       <div className="vp-documents-header">
@@ -224,13 +366,27 @@ export const DocumentRequirements = () => {
                   </td>
                   <td>
                     <div className="vp-action-group">
-                      <button className="vp-action-btn view" onClick={() => alert(`Viewing ${doc.name}...`)}>
+                      <button 
+                        className="vp-action-btn view" 
+                        onClick={() => {
+                            setSelectedDoc(doc);
+                            setModalMode('view');
+                            setIsModalOpen(true);
+                        }}
+                      >
                         <Eye size={18} /> View
                       </button>
-                      <button className="vp-action-btn edit" onClick={() => alert(`Editing ${doc.name}...`)}>
+                      <button 
+                        className="vp-action-btn edit" 
+                        onClick={() => {
+                            setSelectedDoc(doc);
+                            setModalMode('edit');
+                            setIsModalOpen(true);
+                        }}
+                      >
                         <Edit2 size={18} />
                       </button>
-                      <button className="vp-action-btn delete" onClick={() => alert(`Deleting ${doc.name}...`)}>
+                      <button className="vp-action-btn delete" onClick={() => confirm(`Are you sure you want to delete ${doc.name}?`) && alert('Deleted!')}>
                         <Trash2 size={18} />
                       </button>
                     </div>
@@ -241,7 +397,75 @@ export const DocumentRequirements = () => {
           </table>
         </div>
       </div>
+
+      {/* Document Modal */}
+      {isModalOpen && selectedDoc && (
+        <div className="vp-doc-modal-overlay" onClick={() => setIsModalOpen(false)}>
+          <div className="vp-doc-modal" onClick={e => e.stopPropagation()}>
+            <div className="vp-modal-header">
+              <h3>{modalMode === 'view' ? 'Document Details' : 'Edit Requirement'}</h3>
+              <button className="vp-modal-close" onClick={() => setIsModalOpen(false)}>
+                <X size={20} />
+              </button>
+            </div>
+
+            <div className="vp-modal-body">
+              {modalMode === 'view' ? (
+                <>
+                  <div className="vp-info-block">
+                    <label>Document Name</label>
+                    <div className="content">{selectedDoc.name}</div>
+                  </div>
+                  <div className="vp-info-block">
+                    <label>Description</label>
+                    <div className="content">{selectedDoc.description}</div>
+                  </div>
+                  <div className="vp-info-block">
+                    <label>User Types</label>
+                    <div className="vp-badge-group" style={{ marginTop: '0.5rem' }}>
+                      {selectedDoc.types.map((t: string, i: number) => (
+                        <span key={i} className="vp-type-badge">{t}</span>
+                      ))}
+                    </div>
+                  </div>
+                  <div className="vp-info-block">
+                    <label>File Requirements</label>
+                    <div className="content">{selectedDoc.limits} • {selectedDoc.formats}</div>
+                  </div>
+                </>
+              ) : (
+                <form className="vp-edit-form" onSubmit={e => { e.preventDefault(); setIsModalOpen(false); }}>
+                  <div className="input-group">
+                    <label>Document Name</label>
+                    <input type="text" defaultValue={selectedDoc.name} />
+                  </div>
+                  <div className="input-group">
+                    <label>Description</label>
+                    <textarea defaultValue={selectedDoc.description} rows={3} />
+                  </div>
+                  <div className="input-group">
+                    <label>Size Limit (MB)</label>
+                    <input type="text" defaultValue="5" />
+                  </div>
+                </form>
+              )}
+            </div>
+
+            <div className="vp-modal-footer">
+              <button className="vp-modal-btn cancel" onClick={() => setIsModalOpen(false)}>
+                {modalMode === 'view' ? 'Close' : 'Cancel'}
+              </button>
+              {modalMode === 'edit' && (
+                <button className="vp-modal-btn save" onClick={() => setIsModalOpen(false)}>
+                  Save Changes
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
+
 

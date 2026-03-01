@@ -318,7 +318,7 @@ export const Reservations = () => {
                     right: 0;
                     bottom: 0;
                     background-color: rgba(0,0,0,0.5);
-                    z-index: 1000;
+                    z-index: 9999;
                     display: flex;
                     align-items: center;
                     justify-content: center;
@@ -343,8 +343,8 @@ export const Reservations = () => {
                     padding: 1.25rem;
                     background-color: #f9fafb;
                     border: 1px solid #f3f4f6;
-                    borderRadius: 1.25rem;
-                    alignItems: center;
+                    border-radius: 1.25rem;
+                    align-items: flex-start;
                 }
                 .res-info-grid {
                     display: grid;
@@ -370,7 +370,7 @@ export const Reservations = () => {
                 .res-flex-responsive {
                     display: flex;
                     gap: 2rem;
-                    align-items: center;
+                    align-items: flex-start;
                 }
                 .res-footer {
                     display: flex;
@@ -404,7 +404,8 @@ export const Reservations = () => {
                     }
                     .res-flex-responsive {
                         flex-direction: column;
-                        text-align: center;
+                        text-align: left;
+                        align-items: flex-start;
                     }
                     .res-info-grid, .res-vehicle-grid, .res-payment-grid, .res-archive-grid {
                         grid-template-columns: 1fr;
@@ -432,6 +433,9 @@ export const Reservations = () => {
                     }
                     .res-route-exchange {
                         display: none !important;
+                    }
+                    .res-info-bar {
+                        align-items: flex-start !important;
                     }
                 }
 

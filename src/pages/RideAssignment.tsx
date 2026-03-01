@@ -328,16 +328,29 @@ export const RideAssignment = () => {
           align-items: center;
         }
         .ra-modal-card {
-          width: 900px;
-          max-width: 100%;
+          width: 100%;
+          max-width: 900px;
           max-height: 95vh;
           overflow-y: auto;
           padding: 2.5rem;
-          border-radius: 1.5rem;
+          border-radius: 2rem;
           position: relative;
-          background-color: #ffffff;
-          box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-          z-index: 1001;
+          background-color: #f8fafc;
+          box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
+          z-index: 9999;
+        }
+        @media (max-width: 1024px) {
+            .ra-modal-card {
+                max-width: 95%;
+                padding: 2rem;
+            }
+        }
+        @media (max-width: 768px) {
+            .ra-modal-card {
+                padding: 1.25rem;
+                padding-top: 3.5rem;
+                border-radius: 1.5rem;
+            }
         }
         .ra-table-container {
           overflow-x: auto;
@@ -420,7 +433,7 @@ export const RideAssignment = () => {
           }
           .ra-flex-responsive {
             flex-direction: column;
-            align-items: center;
+            align-items: flex-start;
           }
           .ra-flex-responsive > div:last-child {
             padding-left: 0 !important;
@@ -451,6 +464,16 @@ export const RideAssignment = () => {
           }
           .ra-modal-footer button {
             width: 100%;
+          }
+          .ra-status-bar {
+            flex-direction: column !important;
+            align-items: flex-start !important;
+            gap: 1rem !important;
+          }
+          .ra-status-bar > div:last-child {
+            margin-left: 0 !important;
+            width: 100%;
+            text-align: center;
           }
         }
 
@@ -832,7 +855,7 @@ export const RideAssignment = () => {
 
        {/* Assignment Modal */}
        {showPreviewModal && previewAssignment && (
-        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.5)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem' }}>
+        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.5)', zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem' }}>
             <div className="ra-modal-card">
                 
                 {/* Header */}
@@ -848,7 +871,7 @@ export const RideAssignment = () => {
                 </div>
 
                 {/* Status Bar */}
-                <div style={{ backgroundColor: 'white', padding: '1.25rem 2rem', borderRadius: '1.25rem', display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '2rem', marginBottom: '2rem', boxShadow: '0 1px 3px rgba(0,0,0,0.05)', border: '1px solid #f1f5f9' }}>
+                <div className="ra-status-bar" style={{ backgroundColor: 'white', padding: '1.25rem 2rem', borderRadius: '1.25rem', display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '2rem', marginBottom: '2rem', boxShadow: '0 1px 3px rgba(0,0,0,0.05)', border: '1px solid #f1f5f9' }}>
                      <div>
                          <div style={{ fontSize: '0.8rem', color: '#94a3b8', fontWeight: '500', marginBottom: '0.2rem' }}>Start Time</div>
                          <div style={{ fontWeight: '800', fontSize: '1.1rem', color: '#111827' }}>{previewAssignment.startTime}</div>
@@ -1062,7 +1085,7 @@ export const RideAssignment = () => {
                     <h3 style={{ fontSize: '1.4rem', fontWeight: '600', marginBottom: '1rem', color: '#111827' }}>Payment Information</h3>
                     <div style={{ backgroundColor: 'white', padding: '2rem', borderRadius: '1.25rem', boxShadow: '0 1px 3px rgba(0,0,0,0.05)', border: '1px solid #f1f5f9' }}>
                          {/* Driver Profile Section */}
-                         <div className="ra-flex-responsive" style={{ marginBottom: '2.5rem', justifyContent: 'center' }}>
+                         <div className="ra-flex-responsive" style={{ marginBottom: '2.5rem' }}>
                               <UserAvatar src={previewAssignment.driver.img} rating={previewAssignment.driver.rating} size={90} />
                          </div>
 

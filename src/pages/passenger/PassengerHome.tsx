@@ -108,6 +108,7 @@ export const PassengerHome: React.FC = () => {
             <button onClick={applyCoupon}>Apply</button>
           </div>
 
+          {loading && <p className="loading-text">Calculating prices...</p>}
           {error && <p className="error-text">{error}</p>}
 
           <button className="btn-confirm-ride">Request Ride</button>

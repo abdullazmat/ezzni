@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
-import { ArrowUpRight, Loader2 } from 'lucide-react';
+import { ArrowUpRight } from 'lucide-react';
+import { PageLoader } from '../components/PageLoader';
 import { 
     getDashboardMetricsApi, 
     getRegionsPerformanceApi, 
@@ -15,6 +16,7 @@ import {
     TopDriver,
     TopRider
 } from '../services/api';
+import { UserAvatar } from '../components/UserAvatar';
 
 // Import custom icons
 import totalTripsIcon from '../assets/icons/Total Trips Today.png';
@@ -110,11 +112,7 @@ export const Dashboard = () => {
   };
 
   if (loading) {
-    return (
-        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '80vh' }}>
-            <Loader2 className="animate-spin" size={48} color="#38AC57" />
-        </div>
-    );
+    return <PageLoader label="Loading dashboard..." />;
   }
 
   const stats = {
@@ -512,10 +510,7 @@ export const Dashboard = () => {
                                 <div key={idx} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '1rem', backgroundColor: 'white', border: '1px solid #f1f5f9', borderRadius: '1.25rem', boxShadow: '0 2px 4px rgba(0,0,0,0.02)' }}>
                                     <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
                                         <div style={{ position: "relative" }}>
-                                            <img src={`https://i.pravatar.cc/150?u=${idx + 10}`} alt={person.name} style={{ width: '60px', height: '60px', borderRadius: '1.25rem', objectFit: 'cover' }} />
-                                            <div style={{ position: 'absolute', bottom: '-8px', left: '50%', transform: 'translateX(-50%)', backgroundColor: 'white', padding: '0.1rem 0.5rem', borderRadius: '1rem', boxShadow: '0 2px 4px rgba(0,0,0,0.1)', display: 'flex', alignItems: 'center', gap: '0.2rem', fontSize: '0.75rem', fontWeight: 'bold' }}>
-                                                <span style={{ color: '#eab308' }}>★</span> {Number(person.rating).toFixed(1)}
-                                            </div>
+                                            <UserAvatar src={`https://i.pravatar.cc/150?u=${idx + 10}`} rating={Number(person.rating)} size={64} showBadge={true} />
                                         </div>
                                         <div>
                                             <div style={{ fontWeight: '800', fontSize: '1.125rem', color: '#111827' }}>{person.name}</div>
@@ -548,10 +543,7 @@ export const Dashboard = () => {
                                 <div key={idx} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '1rem', backgroundColor: 'white', border: '1px solid #f1f5f9', borderRadius: '1.25rem', boxShadow: '0 0 10px rgba(0,0,0,0.05)' }}>
                                     <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
                                         <div style={{ position: 'relative' }}>
-                                            <img src={`https://i.pravatar.cc/150?u=${idx + 20}`} alt={person.name} style={{ width: '60px', height: '60px', borderRadius: '1.25rem', objectFit: 'cover' }} />
-                                            <div style={{ position: 'absolute', bottom: '-8px', left: '50%', transform: 'translateX(-50%)', backgroundColor: 'white', padding: '0.1rem 0.5rem', borderRadius: '1rem', boxShadow: '0 2px 4px rgba(0,0,0,0.1)', display: 'flex', alignItems: 'center', gap: '0.2rem', fontSize: '0.75rem', fontWeight: 'bold' }}>
-                                                <span style={{ color: '#eab308' }}>★</span> {Number(person.rating).toFixed(1)}
-                                            </div>
+                                            <UserAvatar src={`https://i.pravatar.cc/150?u=${idx + 20}`} rating={Number(person.rating)} size={64} showBadge={true} />
                                         </div>
                                         <div>
                                             <div style={{ fontWeight: '800', fontSize: '1.125rem', color: '#111827' }}>{person.name}</div>
@@ -619,10 +611,7 @@ export const Dashboard = () => {
                                 <div key={idx} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '1rem', backgroundColor: 'white', border: '1px solid #f1f5f9', borderRadius: '1.25rem', boxShadow: '0 2px 4px rgba(0,0,0,0.02)' }}>
                                     <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
                                         <div style={{ position: 'relative' }}>
-                                            <img src={`https://i.pravatar.cc/150?u=${person.idNumber}`} alt={person.name} style={{ width: '60px', height: '60px', borderRadius: '1.25rem', objectFit: 'cover' }} />
-                                            <div style={{ position: 'absolute', bottom: '-8px', left: '50%', transform: 'translateX(-50%)', backgroundColor: 'white', padding: '0.1rem 0.5rem', borderRadius: '1rem', boxShadow: '0 2px 4px rgba(0,0,0,0.1)', display: 'flex', alignItems: 'center', gap: '0.2rem', fontSize: '0.75rem', fontWeight: 'bold' }}>
-                                                <span style={{ color: '#eab308' }}>★</span> {Number(person.rating).toFixed(1)}
-                                            </div>
+                                            <UserAvatar src={`https://i.pravatar.cc/150?u=${person.idNumber}`} rating={Number(person.rating)} size={64} showBadge={true} />
                                         </div>
                                         <div>
                                             <div style={{ fontWeight: '800', fontSize: '1.125rem', color: '#111827' }}>{person.name}</div>

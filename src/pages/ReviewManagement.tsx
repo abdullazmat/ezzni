@@ -6,11 +6,11 @@ import {
   ArrowUpRight, 
   Star, 
   ChevronDown,
-  X,
-  CheckCircle2
+  X
 } from 'lucide-react';
 import { Review } from './ReviewTypes';
 import { ReviewsModal } from './ReviewManagementModals';
+import { UserAvatar } from '../components/UserAvatar';
 
 // Specialized Icons
 import totalReviewsIcon from '../assets/icons/Daily Bonus Earned.png';
@@ -577,17 +577,15 @@ export const ReviewManagement = () => {
                 </td>
                 <td>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                    <div style={{ position: 'relative', flexShrink: 0 }}>
-                      <img src={review.userInfo.avatar} alt="" style={{ width: '44px', height: '44px', borderRadius: '50%', objectFit: 'cover', border: '2px solid white', boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }} />
-                      <div style={{ position: 'absolute', bottom: '-4px', right: '-4px', backgroundColor: 'white', borderRadius: '12px', padding: '2px 6px', display: 'flex', alignItems: 'center', gap: '2px', border: '1px solid #f3f4f6', boxShadow: '0 1px 2px rgba(0,0,0,0.1)' }}>
-                         <Star size={10} fill="#FBBF24" color="#FBBF24" />
-                         <span style={{ fontSize: '10px', fontWeight: '900' }}>{review.rating}</span>
-                      </div>
-                    </div>
+                    <UserAvatar 
+                         src={review.userInfo.avatar} 
+                         rating={review.rating} 
+                         size={44} 
+                         showBadge={true} 
+                    />
                     <div>
                       <div style={{ fontWeight: '800', fontSize: '14px', color: '#111827', display: 'flex', alignItems: 'center', gap: '4px' }}>
                         {review.userInfo.name}
-                        <CheckCircle2 size={12} fill="#38AC57" color="white" />
                       </div>
                       <div style={{ fontSize: '12px', color: '#6B7280', fontWeight: '600' }}>{review.userInfo.id}</div>
                     </div>

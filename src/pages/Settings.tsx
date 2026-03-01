@@ -18,12 +18,10 @@ import {
   TeamManagement 
 } from './settings_tabs';
 
-interface SettingsProps {
-  onNavigate?: (page: string) => void;
-}
 
-export const Settings = ({ onNavigate }: SettingsProps) => {
-  const [activeTab, setActiveTab] = useState('daily-bonus');
+
+export const Settings = ({ compact = false }: { compact?: boolean }) => {
+  const [activeTab, setActiveTab] = useState('commission-rules');
 
   const tabs = [
     { id: 'commission-rules', label: 'Commission Rules', icon: <Percent size={18} /> },
@@ -57,13 +55,10 @@ export const Settings = ({ onNavigate }: SettingsProps) => {
     <div className="vp-settings-wrapper">
       <style>{`
         .vp-settings-wrapper {
-            padding: 2.5rem;
-            max-width: 1600px;
-            margin: 0 auto;
-            width: 100%;
-            background-color: #f8fafc;
-            min-height: 100vh;
+            background-color: ${compact ? 'transparent' : '#f8fafc'};
+            min-height: ${compact ? 'auto' : '100vh'};
             box-sizing: border-box;
+            padding: ${compact ? '0' : '2.5rem'};
         }
 
         .vp-settings-header {
@@ -200,21 +195,15 @@ export const Settings = ({ onNavigate }: SettingsProps) => {
       `}</style>
 
       {/* Header */}
-      <div className="vp-settings-header">
-        <div className="vp-settings-title">
-          <h1>Settings</h1>
-          <p>Configure platform settings and preferences</p>
+      {!compact && (
+        <div className="vp-settings-header">
+          <div className="vp-settings-title">
+            <h1>Settings</h1>
+            <p>Configure platform settings and preferences</p>
+          </div>
+          
         </div>
-        
-        <div className="vp-settings-actions">
-          <button 
-            className="vp-analytics-btn"
-            onClick={() => onNavigate ? onNavigate('report') : alert('Loading Analytics...')}
-          >
-            Review Analytics
-          </button>
-        </div>
-      </div>
+      )}
 
       {/* Tab Navigation */}
       <div className="vp-settings-tabs">

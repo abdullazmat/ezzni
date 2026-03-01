@@ -217,8 +217,8 @@ export const ComplaintDetailsModal = ({ isOpen, onClose, complaint, onUpdate }: 
         @media (max-width: 768px) {
             .csm-user-info-container {
                 flex-direction: column;
-                align-items: center;
-                text-align: center;
+                align-items: flex-start;
+                text-align: left;
             }
             .csm-user-info-grid {
                 grid-template-columns: 1fr 1fr;

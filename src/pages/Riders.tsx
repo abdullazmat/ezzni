@@ -1,5 +1,6 @@
 
 import { useState, useRef, useEffect } from 'react';
+import { PageLoader } from '../components/PageLoader';
 import { 
     Search, Eye, 
     ChevronDown, ArrowLeft, X
@@ -264,11 +265,7 @@ export const Riders = () => {
     ];
 
     if (loading) {
-        return (
-            <div style={{ padding: '24px', display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-                <p>Loading riders...</p>
-            </div>
-        );
+        return <PageLoader label="Loading riders..." />;
     }
 
     return (
@@ -279,10 +276,10 @@ export const Riders = () => {
                 .rm-table-container { width: 100%; overflow-x: auto; border-radius: 12px; }
                 .rm-table-header { display: grid; grid-template-columns: minmax(200px, 1.5fr) 1.5fr 1fr 1fr 1fr 1fr; padding: 16px 24px; background-color: #38AC57; color: white; border-radius: 12px; font-weight: bold; font-size: 14px; margin-bottom: 16px; min-width: 900px; }
                 .rm-table-row { display: grid; grid-template-columns: minmax(200px, 1.5fr) 1.5fr 1fr 1fr 1fr 1fr; padding: 16px 24px; background-color: white; border-radius: 16px; align-items: center; box-shadow: 0 1px 2px rgba(0,0,0,0.05); margin-bottom: 12px; min-width: 900px; transition: all 0.2s; }
-                .rm-modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0,0,0,0.4); backdrop-filter: blur(4px); z-index: 1000; display: flex; align-items: flex-start; justify-content: center; padding: 20px; overflow-y: auto; }
+                .rm-modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0,0,0,0.4); backdrop-filter: blur(4px); z-index: 9999; display: flex; align-items: flex-start; justify-content: center; padding: 20px; overflow-y: auto; }
                 .rm-modal-content { background-color: white; border-radius: 24px; width: 100%; max-width: 750px; margin-top: 20px; margin-bottom: 20px; position: relative; padding: 32px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); }
                 @media (max-width: 1024px) { .rm-stats-grid { grid-template-columns: repeat(2, 1fr); } }
-                @media (max-width: 768px) { .rm-stats-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; } .rm-controls-container { flex-direction: column; } }
+                @media (max-width: 768px) { .rm-stats-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; } .rm-controls-container { flex-direction: column; align-items: stretch; text-align: left; } }
             `}</style>
             
             {showSuspensionBanner && <SuspensionBanner onClose={() => setShowSuspensionBanner(false)} />}
@@ -360,7 +357,7 @@ export const Riders = () => {
                 ) : filteredRidersList.map((rider) => (
                     <div key={rider.id} className="rm-table-row">
                         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                            <UserAvatar src={rider.avatar} rating={rider.rating} size={48} />
+                            <UserAvatar src={rider.avatar} rating={rider.rating} size={48} showBadge={true} />
                             <div>
                                 <div style={{ fontWeight: 'bold' }}>{rider.name}</div>
                                 <div style={{ fontSize: '12px', color: '#9ca3af' }}>ID {rider.id}</div>

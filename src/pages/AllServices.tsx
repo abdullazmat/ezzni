@@ -5,7 +5,9 @@ import {
   CheckCircle2, 
   ChevronLeft,
   Star,
+  Activity
 } from 'lucide-react';
+import { Settings } from './Settings';
 
 // Specialized Icons
 import allServicesIcon from '../assets/icons/All Services.png';
@@ -48,18 +50,7 @@ interface ServiceMember {
 }
 
 export const AllServices = () => {
-  const [activeStat, setActiveStat] = useState<string>('Enabled');
-  const [selectedService, setSelectedService] = useState<ServiceMember | null>(null);
-  const [activeChart, setActiveChart] = useState<'revenue' | 'growth' | null>(null);
-
-  const stats = [
-    { label: 'Total Services', value: '12', icon: allServicesIcon },
-    { label: 'Enabled', value: '30', icon: completedIcon },
-    { label: 'Disabled', value: '32', icon: cancelledIcon },
-    { label: 'Active Requests', value: '348', icon: activeAssignmentsIcon },
-  ];
-
-  const services: ServiceMember[] = [
+  const initialServices: ServiceMember[] = [
     {
       id: '1',
       name: 'Ride',
@@ -241,6 +232,29 @@ export const AllServices = () => {
       stats: { totalRequests: 0, activeNow: 0, completed: 0, cancelled: 0 }
     }
   ];
+
+  const [activeStat, setActiveStat] = useState<string>('Enabled');
+  const [selectedService, setSelectedService] = useState<ServiceMember | null>(null);
+  const [activeChart, setActiveChart] = useState<'revenue' | 'growth' | null>(null);
+  const [services, setServices] = useState<ServiceMember[]>(initialServices);
+
+  const toggleServiceStatus = (id: string) => {
+    setServices(prev => prev.map(s => 
+      s.id === id ? { ...s, status: s.status === 'Enabled' ? 'Disabled' : 'Enabled' } : s
+    ));
+  };
+
+  const stats = [
+    { label: 'Total Services', value: String(services.length), icon: allServicesIcon },
+    { label: 'Enabled', value: String(services.filter(s => s.status === 'Enabled').length), icon: completedIcon },
+    { label: 'Disabled', value: String(services.filter(s => s.status === 'Disabled').length), icon: cancelledIcon },
+    { label: 'Active Requests', value: '348', icon: activeAssignmentsIcon },
+  ];
+
+  const [showStatusMonitor, setShowStatusMonitor] = useState(false);
+  const [showGlobalSettings, setShowGlobalSettings] = useState(false);
+
+
 
   const enabledServices = services.filter(s => s.status === 'Enabled');
   const disabledServices = services.filter(s => s.status === 'Disabled');
@@ -655,15 +669,15 @@ export const AllServices = () => {
             }
             .vp-header {
                 flex-direction: column;
-                align-items: center;
-                text-align: center;
+                align-items: flex-start;
+                text-align: left;
             }
             .vp-title-section h1 {
                 font-size: 2rem !important;
             }
             .vp-header-actions {
                 width: 100%;
-                justify-content: center;
+                justify-content: flex-start;
             }
             .vp-btn {
                 width: 100%;
@@ -678,18 +692,30 @@ export const AllServices = () => {
             .vp-card-header {
                 flex-direction: column;
                 gap: 1.5rem;
-                align-items: center;
-                text-align: center;
+                align-items: flex-start;
+                text-align: left;
+            }
+            .vp-switch-container {
+                width: 100%;
+                justify-content: flex-start;
+                gap: 2rem;
+                z-index: 10;
+                position: relative;
+                margin-top: 1rem;
+                padding: 0.5rem 0;
             }
             .vp-service-info {
-                flex-direction: column;
+                flex-direction: row;
                 gap: 1rem;
+                align-items: center;
+                width: 100%;
+                justify-content: flex-start;
             }
             .vp-card-footer-metrics {
                 flex-direction: column;
                 gap: 0.75rem;
-                align-items: center;
-                text-align: center;
+                align-items: flex-start;
+                text-align: left;
             }
             .vp-card-bottom {
                 flex-direction: column;
@@ -713,13 +739,13 @@ export const AllServices = () => {
         <div className="vp-header-actions">
           <button 
             className="vp-btn vp-btn-white"
-            onClick={() => alert('Opening Service Status Monitor...')}
+            onClick={() => setShowStatusMonitor(true)}
           >
             Service Status Monitor
           </button>
           <button 
             className="vp-btn vp-btn-green"
-            onClick={() => alert('Opening Global Service Settings...')}
+            onClick={() => setShowGlobalSettings(true)}
           >
             Global Settings
           </button>
@@ -778,7 +804,8 @@ export const AllServices = () => {
                 <div className="vp-switch-container">
                   <div 
                     className="vp-switch"
-                    style={{ backgroundColor: service.status === 'Enabled' ? '#38AC57' : '#e2e8f0' }}
+                    style={{ backgroundColor: service.status === 'Enabled' ? '#38AC57' : '#e2e8f0', cursor: 'pointer' }}
+                    onClick={() => toggleServiceStatus(service.id)}
                   >
                     <div className="knob" style={{ left: service.status === 'Enabled' ? '25px' : '3px' }} />
                   </div>
@@ -854,7 +881,8 @@ export const AllServices = () => {
                 <div className="vp-switch-container">
                   <div 
                     className="vp-switch"
-                    style={{ backgroundColor: service.status === 'Enabled' ? '#38AC57' : '#e2e8f0' }}
+                    style={{ backgroundColor: service.status === 'Enabled' ? '#38AC57' : '#e2e8f0', cursor: 'pointer' }}
+                    onClick={() => toggleServiceStatus(service.id)}
                   >
                     <div className="knob" style={{ left: service.status === 'Enabled' ? '25px' : '3px' }} />
                   </div>
@@ -904,7 +932,7 @@ export const AllServices = () => {
 
       {/* Revenue Modal */}
       {activeChart === 'revenue' && (
-        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(8px)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1100, padding: '1rem' }}>
+        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(8px)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 9999, padding: '1rem' }}>
           <div onClick={() => setActiveChart(null)} style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }}></div>
           <div style={{ backgroundColor: 'white', padding: '2rem', borderRadius: '2rem', width: '100%', maxWidth: '500px', position: 'relative', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)', overflow: 'hidden' }}>
             <h3 style={{ fontSize: '1.5rem', fontWeight: '900', marginBottom: '2rem', marginTop: 0, color: '#1e293b' }}>Weekly Revenue</h3>
@@ -945,7 +973,7 @@ export const AllServices = () => {
           display: 'flex', 
           alignItems: 'center', 
           justifyContent: 'center', 
-          zIndex: 1000,
+          zIndex: 9999,
           padding: '1.5rem'
         }}>
           <div onClick={() => setSelectedService(null)} style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }}></div>
@@ -1034,12 +1062,193 @@ export const AllServices = () => {
         </div>
       )}
 
+      {/* Service Status Monitor Modal */}
+      {showStatusMonitor && (
+        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.5)', border: 'none', backdropFilter: 'blur(8px)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 9999, padding: '1rem' }}>
+          <div onClick={() => setShowStatusMonitor(false)} style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }}></div>
+          <div style={{ backgroundColor: 'white', padding: '2.5rem', borderRadius: '2.5rem', width: '100%', maxWidth: '800px', position: 'relative', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.3)', maxHeight: '90vh', overflowY: 'auto' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2.5rem' }}>
+              <div>
+                <h3 style={{ fontSize: '1.75rem', fontWeight: '900', margin: 0, color: '#1e293b' }}>Service Status Monitor</h3>
+                <p style={{ color: '#64748b', margin: '0.5rem 0 0 0', fontWeight: '600' }}>Real-time health check of all platform services</p>
+              </div>
+              <button 
+                onClick={() => setShowStatusMonitor(false)} 
+                style={{ width: '40px', height: '40px', borderRadius: '50%', border: 'none', background: '#f1f5f9', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+              >
+                <ArrowUpRight size={20} style={{ transform: 'rotate(135deg)' }} />
+              </button>
+            </div>
+
+            <div style={{ display: 'grid', gap: '1.5rem' }}>
+              {services.map(service => (
+                <div key={service.id} style={{ display: 'flex', alignItems: 'center', padding: '1.5rem', background: '#f8fafc', borderRadius: '24px', border: '1px solid #e2e8f0', flexWrap: 'wrap', gap: '1.5rem' }}>
+                  <img src={service.icon} alt="" style={{ width: '40px', height: '40px', objectFit: 'contain' }} />
+                  <div style={{ flex: 1, minWidth: '150px' }}>
+                    <div style={{ fontWeight: '900', color: '#1e293b', fontSize: '1.1rem' }}>{service.name}</div>
+                    <div style={{ color: '#64748b', fontSize: '0.85rem', fontWeight: '700' }}>{service.type}</div>
+                  </div>
+                  <div style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap' }}>
+                    <div>
+                      <div style={{ fontSize: '0.75rem', color: '#64748b', fontWeight: '800', textTransform: 'uppercase', marginBottom: '0.25rem' }}>Latency</div>
+                      <div style={{ fontWeight: '900', color: '#111827' }}>124ms</div>
+                    </div>
+                    <div>
+                      <div style={{ fontSize: '0.75rem', color: '#64748b', fontWeight: '800', textTransform: 'uppercase', marginBottom: '0.25rem' }}>Uptime</div>
+                      <div style={{ fontWeight: '900', color: '#111827' }}>99.9%</div>
+                    </div>
+                  </div>
+                  <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: '0.5rem', background: '#f0fdf4', padding: '0.5rem 1rem', borderRadius: '100px', color: '#38AC57', fontWeight: '800', fontSize: '0.85rem' }}>
+                    <Activity size={16} /> Healthy
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Global Settings Modal */}
+      {showGlobalSettings && (
+        <div className="vp-modal-overlay">
+          <div onClick={() => setShowGlobalSettings(false)} className="vp-modal-backdrop"></div>
+          <div className="vp-modal-card">
+            <div className="vp-modal-header">
+               <div className="header-info">
+                  <h3>Global Platform Settings</h3>
+                  <p>Configure platform rules, commissions, and regions</p>
+               </div>
+               <button 
+                onClick={() => setShowGlobalSettings(false)} 
+                className="close-btn"
+               >
+                 Close
+               </button>
+            </div>
+            <div className="vp-modal-body">
+              <Settings compact={true} />
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Navigation Helper */}
       <div className="vp-navigation-helper">
         <span>#ALLSERVICES</span>
         <span>•</span>
         <span>MANAGEMENT HUB v1.0</span>
       </div>
+      
+      <style>{`
+        .vp-modal-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: rgba(0,0,0,0.5);
+            backdrop-filter: blur(8px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            padding: 1rem;
+        }
+
+        .vp-modal-backdrop {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            cursor: pointer;
+        }
+
+        .vp-modal-card {
+            background-color: white;
+            border-radius: 2.5rem;
+            width: 100%;
+            max-width: 1000px;
+            position: relative;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.3);
+            max-height: 95vh;
+            overflow-y: auto;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .vp-modal-header {
+            padding: 2rem 2.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            background: white;
+            z-index: 10;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .vp-modal-header h3 {
+            font-size: 1.75rem;
+            font-weight: 900;
+            margin: 0;
+            color: #1e293b;
+        }
+
+        .vp-modal-header p {
+            color: #64748b;
+            margin: 0.5rem 0 0 0;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .vp-modal-header .close-btn {
+            padding: 0.875rem 2rem;
+            border-radius: 100px;
+            border: none;
+            background: #1e293b;
+            color: white;
+            font-weight: 800;
+            cursor: pointer;
+            font-size: 0.95rem;
+            transition: all 0.2s;
+        }
+
+        .vp-modal-header .close-btn:hover {
+            background: #000;
+            transform: scale(1.05);
+        }
+
+        .vp-modal-body {
+            padding: 0;
+        }
+
+        .vp-settings-wrapper {
+            padding: 2.5rem;
+            background: transparent;
+            min-height: auto;
+        }
+
+        @media (max-width: 768px) {
+            .vp-modal-card {
+                border-radius: 1.5rem;
+                max-height: 100vh;
+            }
+            .vp-modal-header {
+                padding: 1.5rem;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1.5rem;
+            }
+            .vp-modal-header .close-btn {
+                width: 100%;
+                justify-content: center;
+            }
+            .vp-modal-header h3 {
+                font-size: 1.4rem;
+            }
+            .vp-modal-header p {
+                font-size: 0.9rem;
+            }
+            .vp-settings-wrapper {
+                padding: 1.5rem;
+            }
+        }
+      `}</style>
     </div>
   );
 };

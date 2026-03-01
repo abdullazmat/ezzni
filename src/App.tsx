@@ -100,7 +100,18 @@ function App() {
       case 'all-services':
         return <AllServices />;
       case 'profile':
-        return <Profile />;
+        return <Profile onLogout={async () => {
+          try {
+            const { logoutApi } = await import('./services/api');
+            await logoutApi();
+          } catch {
+            // Logout locally even if API fails
+          }
+          localStorage.removeItem('token');
+          localStorage.removeItem('user');
+          setIsAuthenticated(false);
+          setAuthView('login');
+        }} />;
       default:
 
 
