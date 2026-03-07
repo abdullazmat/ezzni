@@ -1,7 +1,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { Search, Eye, ArrowUpRight, ChevronDown, Plus } from 'lucide-react';
-import { ApplicationReviewModal } from './DriverDocumentsModals';
+import { ApplicationReviewModal, AddNewDriverModal } from './DriverDocumentsModals';
 import { UserAvatar } from '../components/UserAvatar';
 
 // Specialized Icons
@@ -88,7 +88,8 @@ export const DriverDocuments = () => {
     const [statusFilter, setStatusFilter] = useState('All');
     const [activeStat, setActiveStat] = useState('Total Applications');
     const [selectedDoc, setSelectedDoc] = useState<DocRecord | null>(null);
-    const [banner, setBanner] = useState<{ type: 'approve' | 'reject'; msg: string } | null>(null);
+    const [showAddModal, setShowAddModal] = useState(false);
+    const [banner, setBanner] = useState<{ type: 'approve' | 'reject' | 'success'; msg: string } | null>(null);
 
     const totalApps = mockDocs.length;
     const pending = mockDocs.filter(d => d.status === 'Pending').length;
@@ -240,16 +241,16 @@ export const DriverDocuments = () => {
             {/* Banner */}
             {banner && (
                 <div style={{
-                    backgroundColor: banner.type === 'approve' ? '#eef7f0' : '#fef2f2',
-                    border: `1px solid ${banner.type === 'approve' ? '#eef7f0' : '#fecaca'}`,
+                    backgroundColor: (banner.type === 'approve' || banner.type === 'success') ? '#eef7f0' : '#fef2f2',
+                    border: `1px solid ${(banner.type === 'approve' || banner.type === 'success') ? '#eef7f0' : '#fecaca'}`,
                     borderRadius: '12px', padding: '14px 24px', marginBottom: '20px',
                     display: 'flex', alignItems: 'center', justifyContent: 'space-between', animation: 'slideDown 0.3s ease'
                 }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                         <span style={{
-                            backgroundColor: banner.type === 'approve' ? '#38AC57' : '#dc2626', color: 'white',
+                            backgroundColor: (banner.type === 'approve' || banner.type === 'success') ? '#38AC57' : '#dc2626', color: 'white',
                             padding: '4px 12px', borderRadius: '6px', fontSize: '12px', fontWeight: '700'
-                        }}>{banner.type === 'approve' ? '✓ Approved' : '✗ Rejected'}</span>
+                        }}>{banner.type === 'approve' ? '✓ Approved' : banner.type === 'success' ? '✓ Success' : '✗ Rejected'}</span>
                         <span style={{ fontSize: '14px', color: '#374151' }}>{banner.msg}</span>
                     </div>
                     <button onClick={() => setBanner(null)} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '18px', color: '#6b7280' }}>✕</button>
@@ -288,7 +289,7 @@ export const DriverDocuments = () => {
                     <h1 style={{ fontSize: '28px', fontWeight: 'bold', margin: 0 }}>Driver Documents</h1>
                     <p style={{ color: '#6b7280', margin: '4px 0 0 0', fontSize: '14px' }}>Review and manage driver document submissions and registration requests with Moroccan documentation standards</p>
                 </div>
-                <button onClick={() => alert('Add New Driver flow coming soon!')} style={{
+                <button onClick={() => setShowAddModal(true)} style={{
                     display: 'flex', alignItems: 'center', gap: '8px', padding: '10px 20px', borderRadius: '24px', border: 'none',
                     backgroundColor: '#38AC57', color: 'white', fontWeight: '600', fontSize: '14px', cursor: 'pointer', transition: 'background-color 0.2s', whiteSpace: 'nowrap',
                     justifyContent: 'center'
@@ -374,6 +375,17 @@ export const DriverDocuments = () => {
                     onClose={() => setSelectedDoc(null)}
                     onApprove={() => { setSelectedDoc(null); setBanner({ type: 'approve', msg: 'Application has been approved successfully.' }); setTimeout(() => setBanner(null), 5000); }}
                     onReject={() => { setSelectedDoc(null); setBanner({ type: 'reject', msg: 'Application has been rejected.' }); setTimeout(() => setBanner(null), 5000); }}
+                />
+            )}
+
+            {/* Add New Driver Modal */}
+            {showAddModal && (
+                <AddNewDriverModal
+                    onClose={() => setShowAddModal(false)}
+                    onAdd={(newDriver) => {
+                        setBanner({ type: 'success', msg: `Driver ${newDriver.name} has been added successfully!` });
+                        setTimeout(() => setBanner(null), 5000);
+                    }}
                 />
             )}
         </div>

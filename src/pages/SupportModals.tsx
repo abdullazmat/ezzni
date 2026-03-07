@@ -144,12 +144,12 @@ export const ComplaintDetailsModal = ({ isOpen, onClose, complaint, onUpdate }: 
   };
 
   return (
-    <div className="modal-overlay" style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'flex-start', justifyContent: 'center', zIndex: 1000, backdropFilter: 'blur(4px)', padding: '20px', overflowY: 'auto' }} onClick={onClose}>
+    <div className="modal-overlay" style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.6)', display: 'flex', alignItems: 'flex-start', justifyContent: 'center', zIndex: 10000, backdropFilter: 'blur(8px)', padding: '20px', overflowY: 'auto' }} onClick={onClose}>
       <style>{`
         .csm-modal-content {
             background-color: white;
             border-radius: 28px;
-            width: 100%;
+            width: 95%;
             max-width: 1200px;
             margin-top: 20px;
             margin-bottom: 20px;
@@ -160,6 +160,11 @@ export const ComplaintDetailsModal = ({ isOpen, onClose, complaint, onUpdate }: 
             min-height: 500px;
             max-height: none;
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            animation: csm-slide-up 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        @keyframes csm-slide-up {
+            from { transform: translateY(30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
         }
         .csm-layout {
             display: flex;
@@ -183,7 +188,7 @@ export const ComplaintDetailsModal = ({ isOpen, onClose, complaint, onUpdate }: 
         }
         .csm-complaint-info-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr 1fr 1.25fr 1.5fr;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
             gap: 1rem;
         }
         .csm-status-grid {
@@ -194,6 +199,12 @@ export const ComplaintDetailsModal = ({ isOpen, onClose, complaint, onUpdate }: 
         .csm-flex-responsive {
             display: flex;
             gap: 1rem;
+        }
+
+        @media (max-width: 1280px) {
+            .csm-chat-panel {
+                width: 320px;
+            }
         }
 
         @media (max-width: 1024px) {
@@ -215,17 +226,20 @@ export const ComplaintDetailsModal = ({ isOpen, onClose, complaint, onUpdate }: 
         }
 
         @media (max-width: 768px) {
+            .csm-modal-content {
+                border-radius: 20px;
+            }
             .csm-user-info-container {
                 flex-direction: column;
-                align-items: flex-start;
-                text-align: left;
+                align-items: center !important;
+                text-align: center !important;
             }
             .csm-user-info-grid {
-                grid-template-columns: 1fr 1fr;
+                grid-template-columns: repeat(2, 1fr);
                 width: 100%;
             }
             .csm-complaint-info-grid {
-                grid-template-columns: 1fr 1fr;
+                grid-template-columns: repeat(2, 1fr);
             }
             .csm-status-grid {
                 grid-template-columns: 1fr;

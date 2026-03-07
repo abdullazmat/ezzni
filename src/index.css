@@ -103,7 +103,7 @@ body {
   display: flex;
   flex-direction: column;
   padding: 1.5rem;
-  z-index: 1001;
+  z-index: 50; /* Lowered to allow modals to overlap if needed */
   transition: transform 0.3s ease;
 }
 
@@ -115,6 +115,7 @@ body {
     bottom: 0;
     width: 280px;
     transform: translateX(-100%);
+    z-index: 1001; /* Keep high for mobile drawer */
   }
 
   .sidebar.open {
@@ -124,9 +125,12 @@ body {
 }
 
 .main-content {
+  position: relative;
   overflow-y: auto;
   padding: 2rem;
   background-color: var(--background-light);
+  min-height: 100vh;
+  z-index: 100; /* Higher than sidebar to ensure modals aren't trapped */
 }
 
 @media (max-width: 768px) {

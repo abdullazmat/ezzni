@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import { ArrowLeft, ChevronDown, ChevronLeft, ChevronRight, Eye, Car, Bike, Download } from 'lucide-react';
 import { UserAvatar } from '../components/UserAvatar';
+import { createDriverApi } from '../services/api';
 
 // Status badge colors
 const statusColors: Record<string, { bg: string; color: string; border: string }> = {
@@ -33,8 +34,8 @@ const ModalStyles = () => (
             right: 0;
             bottom: 0;
             background-color: rgba(0,0,0,0.4);
-            backdrop-filter: blur(4px);
-            z-index: 1000;
+            backdrop-filter: blur(8px);
+            z-index: 10000;
             display: flex;
             align-items: flex-start;
             justify-content: center;
@@ -44,22 +45,27 @@ const ModalStyles = () => (
         .adm-modal-content {
             background-color: white;
             border-radius: 24px;
-            width: 100%;
+            width: 95%;
             max-width: 900px;
             margin-top: 20px;
             margin-bottom: 20px;
             position: relative;
-            padding: 32px;
+            padding: 2.5rem;
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            animation: adm-slide-up 0.4s ease-out;
+        }
+        @keyframes adm-slide-up {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
         }
         .adm-info-grid {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
             gap: 1.5rem;
         }
         .adm-docs-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
             gap: 16px;
         }
         .adm-flex-responsive {
@@ -79,7 +85,7 @@ const ModalStyles = () => (
 
         @media (max-width: 768px) {
             .adm-modal-content {
-                padding: 20px;
+                padding: 1.5rem;
                 margin-top: 10px;
                 margin-bottom: 10px;
             }
@@ -127,7 +133,7 @@ export const SelectCategoryModal = ({ onClose, onConfirm }: { onClose: () => voi
     return (
         <div className="adm-modal-overlay">
             <ModalStyles />
-            <div className="adm-modal-content" style={{ maxWidth: '500px' }}>
+            <div className="adm-modal-content" style={{ maxWidth: '500px', width: '95%' }}>
                 <button onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer', marginBottom: '16px', display: 'flex', alignItems: 'center' }}>
                     <ArrowLeft size={24} />
                 </button>
@@ -236,7 +242,7 @@ export const DocumentPreviewModal = ({ docName, onClose }: { docName: string; on
     return (
         <div className="adm-modal-overlay">
             <ModalStyles />
-            <div className="adm-modal-content" style={{ maxWidth: '520px' }}>
+            <div className="adm-modal-content" style={{ maxWidth: '520px', width: '95%' }}>
                 <button onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer', marginBottom: '16px', display: 'flex', alignItems: 'center' }}>
                     <ArrowLeft size={24} />
                 </button>
@@ -525,6 +531,237 @@ export const ApplicationReviewModal = ({ doc, onClose, onApprove, onReject }: { 
             {/* Sub-modals */}
             {showCategoryModal && <SelectCategoryModal onClose={() => setShowCategoryModal(false)} onConfirm={setSelectedCategory} />}
             {showDocPreview && <DocumentPreviewModal docName={showDocPreview} onClose={() => setShowDocPreview(null)} />}
+        </div>
+    );
+};
+
+// ============ ADD NEW DRIVER MODAL ============
+export const AddNewDriverModal = ({ onClose, onAdd }: { onClose: () => void; onAdd: (driver: any) => void }) => {
+    const [formData, setFormData] = useState({
+        name: '',
+        phone: '',
+        email: '',
+        city: 'Casablanca-Settat',
+        gender: 'Male',
+        serviceType: 'Taxi',
+        vehicleMake: '',
+        vehicleModel: '',
+        vehicleYear: new Date().getFullYear().toString(),
+        licensePlate: '',
+        dob: ''
+    });
+
+    const [loading, setLoading] = useState(false);
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+        const { name, value } = e.target;
+        setFormData(prev => ({ ...prev, [name]: value }));
+    };
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!formData.name || !formData.phone) {
+            alert('Full Name and Phone Number are required.');
+            return;
+        }
+
+        setLoading(true);
+        try {
+            // Mapping UI labels to API expected values if necessary
+            // The API expects: name, phone, email, dob, gender, cityId, status, serviceTypeId
+            // For now, we'll send a mapping or the raw data if it fits
+            
+            const cityMapping: Record<string, number> = {
+                'Casablanca-Settat': 1,
+                'Rabat-Salé-Kénitra': 2,
+                'Marrakesh-Safi': 3,
+                'Fès-Meknès': 4,
+                'Tanger-Tetouan-Al Hoceima': 5
+            };
+
+            const serviceMapping: Record<string, number> = {
+                'Hezzni Standard': 1,
+                'Hezzni Comfort': 1, // Same as standard for now or maps to another
+                'Hezzni XL': 1,
+                'Taxi': 3,
+                'Motorcycle': 2
+            };
+
+            const payload = {
+                name: formData.name,
+                phone: formData.phone,
+                email: formData.email,
+                dob: formData.dob,
+                gender: formData.gender.toUpperCase(),
+                cityId: cityMapping[formData.city] || null,
+                serviceTypeId: serviceMapping[formData.serviceType] || 1,
+                status: 'pending'
+            };
+
+            const response = await createDriverApi(payload);
+            
+            if (response.ok) {
+                onAdd(formData);
+                onClose();
+            } else {
+                const errorData = response.data as any;
+                alert(errorData.message || 'Failed to add driver. Please try again.');
+            }
+        } catch (err) {
+            console.error('Error adding driver:', err);
+            alert('An unexpected error occurred. Please try again later.');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const inputWrapperStyle: React.CSSProperties = {
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '6px'
+    };
+
+    const labelStyle: React.CSSProperties = {
+        fontSize: '13px',
+        fontWeight: '600',
+        color: '#374151'
+    };
+
+    const inputStyle: React.CSSProperties = {
+        padding: '12px 16px',
+        borderRadius: '12px',
+        border: '1px solid #e5e7eb',
+        fontSize: '14px',
+        outline: 'none',
+        transition: 'border-color 0.2s',
+        backgroundColor: '#f9fafb'
+    };
+
+    const selectStyle: React.CSSProperties = {
+        ...inputStyle,
+        appearance: 'none',
+        backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E")`,
+        backgroundRepeat: 'no-repeat',
+        backgroundPosition: 'right 12px center',
+        paddingRight: '40px'
+    };
+
+    return (
+        <div className="adm-modal-overlay">
+            <ModalStyles />
+            <div className="adm-modal-content" style={{ maxWidth: '800px' }}>
+                <button onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer', marginBottom: '16px', display: 'flex', alignItems: 'center' }}>
+                    <ArrowLeft size={24} />
+                </button>
+                <h2 style={{ fontSize: '28px', fontWeight: '900', margin: '0 0 8px 0', letterSpacing: '-0.02em' }}>Add New Driver</h2>
+                <p style={{ color: '#6b7280', fontSize: '15px', margin: '0 0 32px 0' }}>Enter personal and vehicle details to register a new driver in the system.</p>
+
+                <form onSubmit={handleSubmit}>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '24px', marginBottom: '32px' }}>
+                        {/* Personal Information */}
+                        <div style={{ gridColumn: '1 / -1' }}>
+                            <h3 style={{ fontSize: '18px', fontWeight: '800', margin: '0 0 16px 0', borderBottom: '1px solid #f3f4f6', paddingBottom: '12px', color: '#111827' }}>Personal Information</h3>
+                        </div>
+                        
+                        <div style={inputWrapperStyle}>
+                            <label style={labelStyle}>Full Name*</label>
+                            <input name="name" value={formData.name} onChange={handleChange} placeholder="e.g. Ahmed Hassan" style={inputStyle} required />
+                        </div>
+
+                        <div style={inputWrapperStyle}>
+                            <label style={labelStyle}>Phone Number*</label>
+                            <input name="phone" value={formData.phone} onChange={handleChange} placeholder="+212 600-000000" style={inputStyle} required />
+                        </div>
+
+                        <div style={inputWrapperStyle}>
+                            <label style={labelStyle}>Email Address</label>
+                            <input name="email" type="email" value={formData.email} onChange={handleChange} placeholder="ahmed@example.com" style={inputStyle} />
+                        </div>
+
+                        <div style={inputWrapperStyle}>
+                            <label style={labelStyle}>Date of Birth</label>
+                            <input name="dob" type="date" value={formData.dob} onChange={handleChange} style={inputStyle} />
+                        </div>
+
+                        <div style={inputWrapperStyle}>
+                            <label style={labelStyle}>City</label>
+                            <select name="city" value={formData.city} onChange={handleChange} style={selectStyle}>
+                                <option>Casablanca-Settat</option>
+                                <option>Rabat-Salé-Kénitra</option>
+                                <option>Marrakesh-Safi</option>
+                                <option>Fès-Meknès</option>
+                                <option>Tanger-Tetouan-Al Hoceima</option>
+                            </select>
+                        </div>
+
+                        <div style={inputWrapperStyle}>
+                            <label style={labelStyle}>Gender</label>
+                            <select name="gender" value={formData.gender} onChange={handleChange} style={selectStyle}>
+                                <option>Male</option>
+                                <option>Female</option>
+                                <option>Other</option>
+                            </select>
+                        </div>
+
+                        {/* Vehicle Information */}
+                        <div style={{ gridColumn: '1 / -1', marginTop: '12px' }}>
+                            <h3 style={{ fontSize: '16px', fontWeight: 'bold', margin: '0 0 16px 0', borderBottom: '1px solid #f3f4f6', paddingBottom: '8px' }}>Vehicle Information</h3>
+                        </div>
+
+                        <div style={inputWrapperStyle}>
+                            <label style={labelStyle}>Service Category</label>
+                            <select name="serviceType" value={formData.serviceType} onChange={handleChange} style={selectStyle}>
+                                <option>Hezzni Standard</option>
+                                <option>Hezzni Comfort</option>
+                                <option>Hezzni XL</option>
+                                <option>Taxi</option>
+                                <option>Motorcycle</option>
+                            </select>
+                        </div>
+
+                        <div style={inputWrapperStyle}>
+                            <label style={labelStyle}>Vehicle Make</label>
+                            <input name="vehicleMake" value={formData.vehicleMake} onChange={handleChange} placeholder="e.g. Dacia" style={inputStyle} />
+                        </div>
+
+                        <div style={inputWrapperStyle}>
+                            <label style={labelStyle}>Vehicle Model</label>
+                            <input name="vehicleModel" value={formData.vehicleModel} onChange={handleChange} placeholder="e.g. Logan" style={inputStyle} />
+                        </div>
+
+                        <div style={inputWrapperStyle}>
+                            <label style={labelStyle}>Vehicle Year</label>
+                            <input name="vehicleYear" type="number" value={formData.vehicleYear} onChange={handleChange} placeholder="2020" style={inputStyle} />
+                        </div>
+
+                        <div style={inputWrapperStyle}>
+                            <label style={labelStyle}>License Plate Number</label>
+                            <input name="licensePlate" value={formData.licensePlate} onChange={handleChange} placeholder="12345 | A | 1" style={inputStyle} />
+                        </div>
+                    </div>
+
+                    <div className="adm-footer-actions" style={{ marginTop: '12px' }}>
+                        <button type="button" onClick={onClose} style={{
+                            flex: 1, padding: '14px', borderRadius: '32px', border: '1px solid #e5e7eb',
+                            backgroundColor: 'white', fontWeight: 'bold', fontSize: '15px', cursor: 'pointer', transition: 'all 0.2s'
+                        }}
+                        onMouseEnter={e => e.currentTarget.style.backgroundColor = '#f9fafb'}
+                        onMouseLeave={e => e.currentTarget.style.backgroundColor = 'white'}
+                        >Cancel</button>
+                        
+                        <button type="submit" disabled={loading} style={{
+                            flex: 1, padding: '14px', borderRadius: '32px', border: 'none',
+                            backgroundColor: '#38AC57', color: 'white', fontWeight: 'bold', fontSize: '15px', cursor: 'pointer', transition: 'background-color 0.2s',
+                            opacity: loading ? 0.7 : 1
+                        }}
+                        onMouseEnter={e => !loading && (e.currentTarget.style.backgroundColor = '#2d8a46')}
+                        onMouseLeave={e => !loading && (e.currentTarget.style.backgroundColor = '#38AC57')}
+                        >
+                            {loading ? 'Adding Driver...' : 'Add Driver'}
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
     );
 };

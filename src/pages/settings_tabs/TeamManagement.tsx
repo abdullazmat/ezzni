@@ -12,9 +12,9 @@ export const TeamManagement = () => {
     const [activeFilter, setActiveFilter] = useState('Total Members');
     
     const [members, setMembers] = useState([
-        { id: '1', name: 'Ahmed Hassan', email: 'ahmed@gmail.com', role: 'Super Admin', department: 'Super Admin', status: 'Active', twoFactorAuth: true, lastLogin: '2 hours ago', img: 'https://i.pravatar.cc/150?u=ahmed' },
-        { id: '2', name: 'Youssef Alami', email: 'youssef@gmail.com', role: 'Super Admin', department: 'Super Admin', status: 'Pending', twoFactorAuth: false, lastLogin: '5 hours ago', img: 'https://i.pravatar.cc/150?u=hassan' },
-        { id: '3', name: 'Sara Nassiri', email: 'sara@gmail.com', role: 'Super Admin', department: 'Super Admin', status: 'Active', twoFactorAuth: true, lastLogin: '1 day ago', img: 'https://i.pravatar.cc/150?u=ahmed2' },
+        { id: '1', name: 'Ahmed Hassan', email: 'ahmed@gmail.com', role: 'Super Admin', department: 'Super Admin', status: 'Active', twoFactorAuth: true, lastLogin: '2 hours ago', img: 'https://i.pravatar.cc/150?u=ahmed', rating: 5.0 },
+        { id: '2', name: 'Youssef Alami', email: 'youssef@gmail.com', role: 'Super Admin', department: 'Super Admin', status: 'Pending', twoFactorAuth: false, lastLogin: '5 hours ago', img: 'https://i.pravatar.cc/150?u=hassan', rating: 5.0 },
+        { id: '3', name: 'Sara Nassiri', email: 'sara@gmail.com', role: 'Super Admin', department: 'Super Admin', status: 'Active', twoFactorAuth: true, lastLogin: '1 day ago', img: 'https://i.pravatar.cc/150?u=ahmed2', rating: 4.9 },
     ]);
 
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -70,12 +70,13 @@ export const TeamManagement = () => {
                 status: 'Active',
                 twoFactorAuth: false,
                 lastLogin: 'Just now',
-                img: `https://i.pravatar.cc/150?u=${formData.name}`
+                img: `https://i.pravatar.cc/150?u=${formData.name}`,
+                rating: 5.0
             };
             setMembers(prev => [...prev, newMember]);
             setLastAction(`Added new member: ${formData.name}`);
         } else if (modalMode === 'edit' && selectedMember) {
-            setMembers(prev => prev.map(m => m.id === selectedMember.id ? { ...m, ...formData } : m));
+            setMembers(prev => prev.map(m => m.id === selectedMember.id ? { ...m, ...formData, rating: m.rating || 5.0 } : m));
             setLastAction(`Updated member: ${formData.name}`);
         }
         setIsModalOpen(false);
@@ -651,7 +652,7 @@ export const TeamManagement = () => {
                 <tr key={member.id}>
                   <td>
                     <div className="vp-member-cell">
-                      <UserAvatar src={member.img} size={52} showBadge={true} />
+                      <UserAvatar src={member.img} size={52} rating={member.rating} showBadge={true} />
                       <div className="vp-member-info">
                         <span className="name">{member.name}</span>
                         <span className="email">{member.email}</span>
@@ -713,7 +714,7 @@ export const TeamManagement = () => {
             <div className="vp-modal-body">
               {modalMode === 'view' && selectedMember ? (
                 <div className="vp-view-details">
-                   <UserAvatar src={selectedMember.img} size={100} showBadge={true} />
+                   <UserAvatar src={selectedMember.img} size={100} rating={selectedMember.rating} showBadge={true} />
                    <div className="vp-detail-row">
                       <label>Full Name</label>
                       <div className="value">{selectedMember.name}</div>

@@ -19,21 +19,21 @@ const sharedStyles = `
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 0.6);
     display: flex;
     align-items: flex-start;
     justify-content: center;
-    z-index: 1000;
-    backdrop-filter: blur(6px);
+    z-index: 10000;
+    backdrop-filter: blur(8px);
     padding: 20px;
     overflow-y: auto;
   }
   .pm-container {
     background-color: white;
     border-radius: 32px;
-    width: 100%;
-    max-width: 800px;
-    margin: 40px auto;
+    width: 95%;
+    max-width: 850px;
+    margin: 20px auto;
     position: relative;
     padding: 2.5rem;
     color: #111827;
@@ -41,6 +41,11 @@ const sharedStyles = `
     display: flex;
     flex-direction: column;
     border: 1px solid rgba(255, 255, 255, 0.1);
+    animation: pm-slide-up 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  @keyframes pm-slide-up {
+    from { transform: translateY(30px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
   }
   .pm-header-btn {
     border: none;
@@ -57,6 +62,7 @@ const sharedStyles = `
   }
   .pm-header-btn:hover {
     background-color: #e5e7eb;
+    transform: translateX(-4px);
   }
   .pm-section-card {
     background-color: #f9fafb;
@@ -106,9 +112,11 @@ const sharedStyles = `
     outline: none;
     background-color: white;
     transition: border-color 0.2s;
+    box-sizing: border-box;
   }
   .pm-input:focus {
     border-color: #38AC57;
+    box-shadow: 0 0 0 4px rgba(56, 172, 87, 0.1);
   }
   .pm-col-span-2 { grid-column: span 2; }
   .pm-col-span-4 { grid-column: span 4; }
@@ -117,12 +125,12 @@ const sharedStyles = `
   .cpm-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 2.5rem;
+    gap: 2rem;
     margin-bottom: 2rem;
   }
   .cpm-service-select {
     flex: 1;
-    padding: 1.5rem 1rem;
+    padding: 1.25rem 1rem;
     border-radius: 16px;
     display: flex;
     flex-direction: column;
@@ -130,22 +138,31 @@ const sharedStyles = `
     gap: 12px;
     cursor: pointer;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    min-width: 120px;
+    min-width: 110px;
     background-color: #fff;
     border: 1px solid #f3f4f6;
   }
   .cpm-service-select:hover {
     transform: translateY(-4px);
     box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+    border-color: #38AC57;
   }
   
-  @media (max-width: 768px) {
-    .pm-container { padding: 1.5rem; border-radius: 24px; }
-    .pm-section-card { grid-template-columns: 1fr 1fr; padding: 1.25rem; gap: 1.25rem; }
-    .pm-col-span-2, .pm-col-span-4 { grid-column: span 1; }
-    .pm-footer-actions { flex-direction: column; }
-    .cpm-grid { grid-template-columns: 1fr; gap: 1.5rem; }
+  @media (max-width: 1024px) {
+    .pm-container { max-width: 700px; }
+    .pm-section-card { grid-template-columns: repeat(2, 1fr); padding: 1.5rem; }
   }
+
+  @media (max-width: 768px) {
+    .pm-container { padding: 1.5rem; border-radius: 24px; margin: 10px auto; }
+    .pm-section-card { grid-template-columns: 1fr; padding: 1.25rem; gap: 1rem; }
+    .pm-col-span-2, .pm-col-span-4 { grid-column: span 1; }
+    .pm-footer-actions { flex-direction: column; gap: 0.75rem; }
+    .cpm-grid { grid-template-columns: 1fr; gap: 1.5rem; }
+    .pm-services-grid { justify-content: center; }
+    .pm-action-btn { font-size: 1rem; padding: 14px; }
+  }
+
 `;
 
 interface CouponsModalProps {

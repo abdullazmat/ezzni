@@ -43,7 +43,8 @@ export const UserAvatar: React.FC<UserAvatarProps> = ({
                     borderRadius: '50%', 
                     objectFit: 'cover',
                     display: 'block',
-                    border: '1px solid #f0f0f0',
+                    border: '2px solid white',
+                    boxShadow: '0 0 0 1px #f0f0f0',
                     boxSizing: 'border-box'
                 }} 
             />
@@ -60,11 +61,14 @@ export const UserAvatar: React.FC<UserAvatarProps> = ({
                     filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.1))',
                     display: 'flex',
                     alignItems: 'center',
-                    justifyContent: 'center'
+                    justifyContent: 'center',
+                    backgroundColor: 'white',
+                    borderRadius: '50%',
+                    padding: '1px'
                 }}>
                     <svg width="100%" height="100%" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M12 2L14.5 4.5H18V8L20.5 10.5V13.5L18 16V19.5H14.5L12 22L9.5 19.5H6V16L3.5 13.5V10.5L6 8V4.5H9.5L12 2Z" fill="#3b82f6"/>
-                        <path d="M9 12L11 14L15 10" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+                        <circle cx="12" cy="12" r="12" fill="#3b82f6"/>
+                        <path d="M7 12L10.5 15.5L17 9" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
                     </svg>
                 </div>
             )}
@@ -78,14 +82,14 @@ export const UserAvatar: React.FC<UserAvatarProps> = ({
                     backgroundColor: 'white',
                     padding: `${Math.round(size * 0.04)}px ${Math.round(size * 0.12)}px`,
                     borderRadius: '24px',
-                    boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
+                    boxShadow: '0 4px 12px rgba(0,0,0,0.18)',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
                     gap: '2px',
                     fontSize: `${Math.round(size * 0.22)}px`,
                     fontWeight: '800',
-                    border: '1px solid #f1f5f9',
+                    border: '1.5px solid white',
                     whiteSpace: 'nowrap',
                     zIndex: 2,
                     boxSizing: 'border-box'

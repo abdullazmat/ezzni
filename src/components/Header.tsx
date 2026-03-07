@@ -1,4 +1,4 @@
-import { Menu, Bell, Check } from 'lucide-react';
+import { Menu, Bell, Check, LogOut } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { UserAvatar } from './UserAvatar';
 
@@ -360,6 +360,28 @@ export const Header = ({ onLogout, onToggleSidebar, onNavigate }: { onLogout: ()
                     {user.name}
                 </div>
             </div>
+
+            <button 
+                onClick={(e) => { e.stopPropagation(); onLogout(); }}
+                style={{ 
+                    background: 'white', 
+                    border: '1.5px solid #ef4444', 
+                    padding: '10px', 
+                    borderRadius: '50%', 
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: '#ef4444',
+                    transition: 'all 0.2s',
+                    boxShadow: '0 2px 4px rgba(0,0,0,0.02)'
+                }}
+                title="Log Out"
+                onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#fef2f2'; }}
+                onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'white'; }}
+            >
+                <LogOut size={20} strokeWidth={2.5} />
+            </button>
         </div>
       </div>
     </header>

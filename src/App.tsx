@@ -96,7 +96,7 @@ function App() {
       case 'report':
         return <Reports />;
       case 'settings':
-        return <Settings onNavigate={setCurrentPage} />;
+        return <Settings />;
       case 'all-services':
         return <AllServices />;
       case 'profile':
